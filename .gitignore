@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+/cbs-web/target/
+/cbs-web/.mvn/
+/cbs-biz/.mvn/
+/cbs-biz/target/
+/cbs-api/target/
+/.mvn
+/cbs-web/src/main/resources/application-dev.yml
