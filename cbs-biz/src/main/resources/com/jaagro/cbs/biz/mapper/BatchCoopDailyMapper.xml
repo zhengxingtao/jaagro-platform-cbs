@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jaagro.cbs.biz.mapper.BatchCoopDailyMapperExt" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BatchCoopDaily" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="coop_id" property="coopId" jdbcType="INTEGER" />
+    <result column="day_age" property="dayAge" jdbcType="INTEGER" />
+    <result column="start_amount" property="startAmount" jdbcType="INTEGER" />
+    <result column="current_amount" property="currentAmount" jdbcType="INTEGER" />
+    <result column="dead_amount" property="deadAmount" jdbcType="INTEGER" />
+    <result column="sale_amount" property="saleAmount" jdbcType="INTEGER" />
+    <result column="fodder_times" property="fodderTimes" jdbcType="INTEGER" />
+    <result column="fodder_amount" property="fodderAmount" jdbcType="DECIMAL" />
+    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, batch_no, coop_id, day_age, start_amount, current_amount, dead_amount, sale_amount, 
+    fodder_times, fodder_amount, enable, create_time, create_user_id, modify_time, modify_user_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BatchCoopDailyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from batch_coop_daily
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from batch_coop_daily
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from batch_coop_daily
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BatchCoopDaily" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into batch_coop_daily (batch_no, coop_id, day_age, 
+      start_amount, current_amount, dead_amount, 
+      sale_amount, fodder_times, fodder_amount, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
+    values (#{batchNo,jdbcType=VARCHAR}, #{coopId,jdbcType=INTEGER}, #{dayAge,jdbcType=INTEGER}, 
+      #{startAmount,jdbcType=INTEGER}, #{currentAmount,jdbcType=INTEGER}, #{deadAmount,jdbcType=INTEGER}, 
+      #{saleAmount,jdbcType=INTEGER}, #{fodderTimes,jdbcType=INTEGER}, #{fodderAmount,jdbcType=DECIMAL}, 
+      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BatchCoopDaily" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into batch_coop_daily
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="coopId != null" >
+        coop_id,
+      </if>
+      <if test="dayAge != null" >
+        day_age,
+      </if>
+      <if test="startAmount != null" >
+        start_amount,
+      </if>
+      <if test="currentAmount != null" >
+        current_amount,
+      </if>
+      <if test="deadAmount != null" >
+        dead_amount,
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount,
+      </if>
+      <if test="fodderTimes != null" >
+        fodder_times,
+      </if>
+      <if test="fodderAmount != null" >
+        fodder_amount,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="coopId != null" >
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="dayAge != null" >
+        #{dayAge,jdbcType=INTEGER},
+      </if>
+      <if test="startAmount != null" >
+        #{startAmount,jdbcType=INTEGER},
+      </if>
+      <if test="currentAmount != null" >
+        #{currentAmount,jdbcType=INTEGER},
+      </if>
+      <if test="deadAmount != null" >
+        #{deadAmount,jdbcType=INTEGER},
+      </if>
+      <if test="saleAmount != null" >
+        #{saleAmount,jdbcType=INTEGER},
+      </if>
+      <if test="fodderTimes != null" >
+        #{fodderTimes,jdbcType=INTEGER},
+      </if>
+      <if test="fodderAmount != null" >
+        #{fodderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BatchCoopDailyExample" resultType="java.lang.Integer" >
+    select count(*) from batch_coop_daily
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BatchCoopDaily" >
+    update batch_coop_daily
+    <set >
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="coopId != null" >
+        coop_id = #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="dayAge != null" >
+        day_age = #{dayAge,jdbcType=INTEGER},
+      </if>
+      <if test="startAmount != null" >
+        start_amount = #{startAmount,jdbcType=INTEGER},
+      </if>
+      <if test="currentAmount != null" >
+        current_amount = #{currentAmount,jdbcType=INTEGER},
+      </if>
+      <if test="deadAmount != null" >
+        dead_amount = #{deadAmount,jdbcType=INTEGER},
+      </if>
+      <if test="saleAmount != null" >
+        sale_amount = #{saleAmount,jdbcType=INTEGER},
+      </if>
+      <if test="fodderTimes != null" >
+        fodder_times = #{fodderTimes,jdbcType=INTEGER},
+      </if>
+      <if test="fodderAmount != null" >
+        fodder_amount = #{fodderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BatchCoopDaily" >
+    update batch_coop_daily
+    set batch_no = #{batchNo,jdbcType=VARCHAR},
+      coop_id = #{coopId,jdbcType=INTEGER},
+      day_age = #{dayAge,jdbcType=INTEGER},
+      start_amount = #{startAmount,jdbcType=INTEGER},
+      current_amount = #{currentAmount,jdbcType=INTEGER},
+      dead_amount = #{deadAmount,jdbcType=INTEGER},
+      sale_amount = #{saleAmount,jdbcType=INTEGER},
+      fodder_times = #{fodderTimes,jdbcType=INTEGER},
+      fodder_amount = #{fodderAmount,jdbcType=DECIMAL},
+      enable = #{enable,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
