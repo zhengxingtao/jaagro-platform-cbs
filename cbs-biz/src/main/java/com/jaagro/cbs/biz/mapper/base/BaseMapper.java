@@ -4,8 +4,8 @@ import org.apache.ibatis.annotations.Param;
 
 import javax.annotation.Resource;
 import java.util.List;
+
 /**
- *
  * @author : generator
  * @date : 2019/2/21
  */
@@ -34,4 +34,4 @@ public interface BaseMapper<D, E> {
 
     int updateByPrimaryKey(D record);
 
-    }
+}
