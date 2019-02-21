@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by src on 2018/6/25.
  * 放在Dao层下面
  */
-public class Generator {
+public class MybatisGenerator {
 
     //Model + ModelExample 存放的路径和包名
     private static String targetProjectModel = "cbs-biz";
