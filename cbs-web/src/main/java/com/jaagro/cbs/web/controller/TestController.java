@@ -3,6 +3,7 @@ package com.jaagro.cbs.web.controller;
 import com.jaagro.cbs.biz.mapper.ProductMapperExt;
 import com.jaagro.cbs.biz.model.Product;
 import com.jaagro.cbs.biz.model.ProductExample;
+import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ public class TestController {
 
     @Autowired
     private ProductMapperExt productMapperExt;
+    @Autowired
+    private SequenceCodeUtils sequenceCodeUtils;
 
     @PostMapping("/createProduct")
     public void createProduct() {
@@ -41,4 +44,10 @@ public class TestController {
         return productMapperExt.selectByExample(productExample);
     }
 
+    @GetMapping("/test1")
+    public void test1() {
+        String at = sequenceCodeUtils.genSeqCode("CC");
+        System.out.println(at);
+        return;
+    }
 }
