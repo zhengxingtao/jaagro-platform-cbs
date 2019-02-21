@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author gaoxin
+ * @author @Gao.
  * <p>
  * 生成序列单号
  */
@@ -26,7 +26,8 @@ public class SequenceCodeUtils {
     private static final int startLength = 9;
 
     /**
-     * 生成唯一长度的序列号
+     * 生成唯一长度的序列号 格式 前缀+时间日期+随机数+自增键
+     *
      * @param prefix
      * @return
      */
