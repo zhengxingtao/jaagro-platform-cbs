@@ -42,7 +42,7 @@ public class Generator {
     private static String TABLE_PREFIX = "";
 
     //创建人
-    private static String author = "tonyZheng";
+    private static String author = "generator";
 
     //数据库链接信息
     private static String JDBC_DRIVER = PropertiesFileUtil.getInstance("generator").get("generator.jdbc.driver");

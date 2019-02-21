@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jaagro.cbs.biz.mapper.PlanLogMapperExt" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.PlanLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="old_status" property="oldStatus" jdbcType="INTEGER" />
+    <result column="new_status" property="newStatus" jdbcType="INTEGER" />
+    <result column="log_info" property="logInfo" jdbcType="VARCHAR" />
+    <result column="biz_reference_id" property="bizReferenceId" jdbcType="INTEGER" />
+    <result column="biz_reference_type" property="bizReferenceType" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, plan_id, old_status, new_status, log_info, biz_reference_id, biz_reference_type, 
+    enable, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.PlanLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from plan_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from plan_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from plan_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.PlanLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into plan_log (plan_id, old_status, new_status, 
+      log_info, biz_reference_id, biz_reference_type, 
+      enable, create_time)
+    values (#{planId,jdbcType=INTEGER}, #{oldStatus,jdbcType=INTEGER}, #{newStatus,jdbcType=INTEGER}, 
+      #{logInfo,jdbcType=VARCHAR}, #{bizReferenceId,jdbcType=INTEGER}, #{bizReferenceType,jdbcType=INTEGER}, 
+      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.PlanLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into plan_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="oldStatus != null" >
+        old_status,
+      </if>
+      <if test="newStatus != null" >
+        new_status,
+      </if>
+      <if test="logInfo != null" >
+        log_info,
+      </if>
+      <if test="bizReferenceId != null" >
+        biz_reference_id,
+      </if>
+      <if test="bizReferenceType != null" >
+        biz_reference_type,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="oldStatus != null" >
+        #{oldStatus,jdbcType=INTEGER},
+      </if>
+      <if test="newStatus != null" >
+        #{newStatus,jdbcType=INTEGER},
+      </if>
+      <if test="logInfo != null" >
+        #{logInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="bizReferenceId != null" >
+        #{bizReferenceId,jdbcType=INTEGER},
+      </if>
+      <if test="bizReferenceType != null" >
+        #{bizReferenceType,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.PlanLogExample" resultType="java.lang.Integer" >
+    select count(*) from plan_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.PlanLog" >
+    update plan_log
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="oldStatus != null" >
+        old_status = #{oldStatus,jdbcType=INTEGER},
+      </if>
+      <if test="newStatus != null" >
+        new_status = #{newStatus,jdbcType=INTEGER},
+      </if>
+      <if test="logInfo != null" >
+        log_info = #{logInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="bizReferenceId != null" >
+        biz_reference_id = #{bizReferenceId,jdbcType=INTEGER},
+      </if>
+      <if test="bizReferenceType != null" >
+        biz_reference_type = #{bizReferenceType,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.PlanLog" >
+    update plan_log
+    set plan_id = #{planId,jdbcType=INTEGER},
+      old_status = #{oldStatus,jdbcType=INTEGER},
+      new_status = #{newStatus,jdbcType=INTEGER},
+      log_info = #{logInfo,jdbcType=VARCHAR},
+      biz_reference_id = #{bizReferenceId,jdbcType=INTEGER},
+      biz_reference_type = #{bizReferenceType,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
