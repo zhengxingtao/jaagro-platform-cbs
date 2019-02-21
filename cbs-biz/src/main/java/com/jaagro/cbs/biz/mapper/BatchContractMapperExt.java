@@ -1,6 +1,7 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
+
 import com.jaagro.cbs.biz.model.BatchContract;
 import com.jaagro.cbs.biz.model.BatchContractExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
@@ -8,12 +9,12 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 /**
  * BatchContractMapperExt接口
+ *
  * @author :generator
  * @date :2019/2/21
  */
 @Resource
-public interface BatchContractMapperExt extends BaseMapper<BatchContract,BatchContractExample> {
-
+public interface BatchContractMapperExt extends BaseMapper<BatchContract, BatchContractExample> {
 
 
 }
