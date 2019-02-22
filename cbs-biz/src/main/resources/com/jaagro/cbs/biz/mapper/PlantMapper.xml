@@ -76,7 +76,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from plant
     where id = #{id,jdbcType=INTEGER}
@@ -89,16 +89,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into plant (tenant_id, customer_id, plant_name, 
-      plant_type, equity_type, durable_years, 
-      expandable, province, city, 
-      county, enable, create_time, 
+    insert into plant (tenant_id, customer_id, plant_name,
+      plant_type, equity_type, durable_years,
+      expandable, province, city,
+      county, enable, create_time,
       create_user_id, modify_time, modify_user_id
       )
-    values (#{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{plantName,jdbcType=VARCHAR}, 
-      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=INTEGER}, #{durableYears,jdbcType=INTEGER}, 
-      #{expandable,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{county,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{plantName,jdbcType=VARCHAR},
+      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=INTEGER}, #{durableYears,jdbcType=INTEGER},
+      #{expandable,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+      #{county,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>

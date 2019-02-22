@@ -3,7 +3,16 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.PlantImageMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
+    <select id="listByPlantId" parameterType="java.lang.Integer"
+            resultType="com.jaagro.cbs.api.dto.plant.ReturnPlantImageDto">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        plant_image
+        where
+        plant_id = #{plantIds}
+        and enable = 1
+    </select>
 
 
 </mapper>

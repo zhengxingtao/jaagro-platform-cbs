@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author baiyiran
@@ -60,4 +61,10 @@ public class CreatePlantDto implements Serializable {
      * 区县
      */
     private String county;
+
+    /**
+     * 养殖场照片
+     */
+    private List<CreatePlantImageDto> imageDtoList;
+
 }
