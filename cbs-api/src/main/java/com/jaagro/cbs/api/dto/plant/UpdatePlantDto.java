@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.breedingPlant;
+package com.jaagro.cbs.api.dto.plant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
