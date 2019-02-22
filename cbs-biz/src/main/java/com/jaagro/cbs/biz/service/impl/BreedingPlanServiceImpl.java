@@ -1,6 +1,7 @@
 package com.jaagro.cbs.biz.service.impl;
 
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
@@ -47,7 +48,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 .setBatchNo(batchNo)
                 .setCreateUserId(null)
                 .setCreateUserName(null)
-                .setPlanStatus(0);
+                .setPlanStatus(PlanStatusEnum.ENTER_CONTRACT.getCode());
         BeanUtils.copyProperties(dto, breedingPlan);
         //插入养殖计划
         breedingPlanMapper.insertSelective(breedingPlan);
@@ -60,6 +61,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setBatchNo(batchNo)
                         .setCreateUserId(null)
                         .setPlantId(plantsId);
+                batchPlantCoopMapper.insertSelective(batchPlantCoop);
             }
         }
     }
