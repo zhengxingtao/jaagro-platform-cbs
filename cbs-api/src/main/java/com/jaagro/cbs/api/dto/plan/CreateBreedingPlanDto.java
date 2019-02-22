@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author @Gao.
@@ -20,8 +21,7 @@ public class CreateBreedingPlanDto implements Serializable {
     /**
      * 养殖场id
      */
-    private Integer plantsId;
-
+    private List<Integer> plantsId;
 
     /**
      * 租户id
