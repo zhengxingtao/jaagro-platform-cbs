@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.breedingPlant;
+package com.jaagro.cbs.api.dto.plant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,17 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UpdatePlantDto implements Serializable {
-    /**
-     * 养殖场id
-     */
-    private Integer id;
-
-    /**
-     * 租户id
-     */
-    private Integer tenantId;
-
+public class CreatePlantDto implements Serializable {
     /**
      * 养殖户id
      */

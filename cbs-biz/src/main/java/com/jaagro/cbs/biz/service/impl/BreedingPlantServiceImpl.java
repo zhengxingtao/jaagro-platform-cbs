@@ -1,8 +1,8 @@
 package com.jaagro.cbs.biz.service.impl;
 
-import com.jaagro.cbs.api.dto.breedingPlant.CreatePlantDto;
-import com.jaagro.cbs.api.dto.breedingPlant.ReturnPlantDto;
-import com.jaagro.cbs.api.dto.breedingPlant.UpdatePlantDto;
+import com.jaagro.cbs.api.dto.plant.CreatePlantDto;
+import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
+import com.jaagro.cbs.api.dto.plant.UpdatePlantDto;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.biz.mapper.PlantMapperExt;
 import com.jaagro.cbs.biz.model.Plant;
