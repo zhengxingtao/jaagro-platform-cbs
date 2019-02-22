@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author @Gao.
@@ -16,20 +17,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class CreateBreedingPlanDto implements Serializable {
-    /**
-     * 计划id
-     */
-    private Integer id;
 
     /**
      * 养殖场id
      */
-    private Integer plantsId;
-
-    /**
-     * 批次号
-     */
-    private String batchNo;
+    private List<Integer> plantsId;
 
     /**
      * 租户id
