@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author baiyiran
  * @Date 2019/2/21
@@ -41,10 +43,24 @@ public class BreedingPlantController {
         if (StringUtils.isEmpty(plantDto.getPlantType())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场类型不能为空");
         }
-        if (StringUtils.isEmpty(plantDto.getPlantType())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场类型不能为空");
+        if (StringUtils.isEmpty(plantDto.getDurableYears())) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "使用年限不能为空");
         }
-        return BaseResponse.service(breedingPlantService.createPlant(plantDto));
+        if (StringUtils.isEmpty(plantDto.getExpandable())) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "未选择是否可以扩建");
+        }
+        if (StringUtils.isEmpty(plantDto.getDurableYears())) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "截止年份不能为空");
+        }
+        Map<String, Object> result;
+        try {
+            result = breedingPlantService.createPlant(plantDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResponse.errorInstance(e.getMessage());
+        }
+
+        return BaseResponse.service(result);
     }
 
     /**

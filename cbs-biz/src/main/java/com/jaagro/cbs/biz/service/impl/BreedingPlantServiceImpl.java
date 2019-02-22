@@ -5,6 +5,9 @@ import com.jaagro.cbs.api.dto.breedingPlant.ReturnPlantDto;
 import com.jaagro.cbs.api.dto.breedingPlant.UpdatePlantDto;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.biz.mapper.PlantMapperExt;
+import com.jaagro.cbs.biz.model.Plant;
+import com.jaagro.utils.ServiceResult;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +33,15 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
      */
     @Override
     public Map<String, Object> createPlant(CreatePlantDto plantDto) {
-        return null;
+        Plant plant = new Plant();
+        BeanUtils.copyProperties(plantDto, plant);
+        try {
+            plantMapper.insertSelective(plant);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ServiceResult.error(e.getMessage());
+        }
+        return ServiceResult.toResult("创建成功");
     }
 
     /**
