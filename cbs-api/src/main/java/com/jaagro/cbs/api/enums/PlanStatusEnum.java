@@ -17,13 +17,13 @@ public enum PlanStatusEnum {
     DONE(5, "DONE", "已完成"),
     CANCEL(6, "CANCEL", "已取消");
     private int code;
-    private String desc;
     private String type;
+    private String desc;
 
     PlanStatusEnum(int code, String type, String desc) {
         this.code = code;
-        this.desc = desc;
         this.type = type;
+        this.desc = desc;
     }
 
     public static String getDescByCode(int code) {
