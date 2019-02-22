@@ -16,20 +16,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class CreateBreedingPlanDto implements Serializable {
-    /**
-     * 计划id
-     */
-    private Integer id;
 
     /**
      * 养殖场id
      */
     private Integer plantsId;
 
-    /**
-     * 批次号
-     */
-    private String batchNo;
 
     /**
      * 租户id
