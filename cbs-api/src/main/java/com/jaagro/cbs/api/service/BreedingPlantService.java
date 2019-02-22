@@ -1,8 +1,6 @@
 package com.jaagro.cbs.api.service;
 
-import com.jaagro.cbs.api.dto.plant.CreatePlantDto;
-import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
-import com.jaagro.cbs.api.dto.plant.UpdatePlantDto;
+import com.jaagro.cbs.api.dto.plant.*;
 
 import java.util.List;
 import java.util.Map;
@@ -46,4 +44,20 @@ public interface BreedingPlantService {
      * @return
      */
     List<ReturnPlantDto> listPlantByCustomerId(Integer customerId);
+
+    /**
+     * 新增鸡舍
+     *
+     * @param coopDto
+     * @return
+     */
+    Map<String, Object> createCoop(CreateCoopDto coopDto);
+
+    /**
+     * 通过养殖场id获得鸡舍列表
+     *
+     * @param plantId
+     * @return
+     */
+    List<ReturnCoopDto> listCoopByPlantId(Integer plantId);
 }
