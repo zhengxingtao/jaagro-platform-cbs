@@ -36,20 +36,21 @@ public class SequenceCodeUtils {
         String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         RedisAtomicLong entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
         if (entityIdCounter == null) {
+            entityIdCounter.expire(48, TimeUnit.HOURS);
             log.info("O genSeqCode entityIdCounter param is null");
             throw new RuntimeException("生成序列号失败");
         }
         Long incrementId = entityIdCounter.getAndIncrement() + 1;
-        if (null == incrementId || incrementId.longValue() == 1) {
+        if (incrementId.longValue() == 1) {
             entityIdCounter.expire(48, TimeUnit.HOURS);
         }
         int strLength = startLength - incrementId.toString().length();
-        String fixLenthString = getFixLenthString(strLength);
-        genSeqCode.append(prefix).append(currentDate).append(fixLenthString).append(incrementId);
+        String fixLengthString = fixLengthString(strLength);
+        genSeqCode.append(prefix).append(currentDate).append(fixLengthString).append(incrementId);
         return genSeqCode.toString();
     }
 
-    private String getFixLenthString(int strLength) {
+    private String fixLengthString(int strLength) {
         Random rm = new Random();
         // 获得随机数
         double pross = (1 + rm.nextDouble()) * Math.pow(10, strLength);
