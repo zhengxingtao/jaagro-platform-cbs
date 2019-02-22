@@ -22,16 +22,6 @@ public class UpdatePlantDto implements Serializable {
     private Integer id;
 
     /**
-     * 租户id
-     */
-    private Integer tenantId;
-
-    /**
-     * 养殖户id
-     */
-    private Integer customerId;
-
-    /**
      * 养殖场名称
      */
     private String plantName;

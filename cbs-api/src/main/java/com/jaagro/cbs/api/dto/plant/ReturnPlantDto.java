@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author baiyiran
@@ -95,4 +96,14 @@ public class ReturnPlantDto {
      * 修改人
      */
     private Integer modifyUserId;
+
+    /**
+     * 养殖场图片
+     */
+    private List<ReturnPlantImageDto> plantImageDtoList;
+
+    /**
+     * 鸡舍数量
+     */
+    private Integer coopCount;
 }
