@@ -2,6 +2,7 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
+import com.jaagro.cbs.api.enums.CoopStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
@@ -198,6 +199,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         Coop coop = new Coop();
         BeanUtils.copyProperties(coopDto, coop);
         coop
+                .setCoopStatus(CoopStatusEnum.LEISURE.getCode())
                 .setCustomerId(plant.getCustomerId())
                 .setCreateUserId(currentUserService.getCurrentUser().getId());
         Integer result = coopMapperExt.insertSelective(coop);
@@ -205,5 +207,27 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
             return ServiceResult.toResult("创建成功");
         }
         return ServiceResult.error("创建失败");
+    }
+
+    /**
+     * 通过养殖场id获得鸡舍列表
+     *
+     * @param plantId
+     * @return
+     */
+    @Override
+    public List<ReturnCoopDto> listCoopByPlantId(Integer plantId) {
+        CoopExample coopExample = new CoopExample();
+        coopExample.createCriteria().andPlantIdEqualTo(plantId);
+        List<Coop> coops = coopMapperExt.selectByExample(coopExample);
+        List<ReturnCoopDto> returnCoopDtoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(coops)) {
+            for (Coop coop : coops) {
+                ReturnCoopDto returnCoopDto = new ReturnCoopDto();
+                BeanUtils.copyProperties(coop, returnCoopDto);
+                returnCoopDtoList.add(returnCoopDto);
+            }
+        }
+        return returnCoopDtoList;
     }
 }

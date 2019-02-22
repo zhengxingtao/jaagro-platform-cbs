@@ -1,9 +1,6 @@
 package com.jaagro.cbs.web.controller;
 
-import com.jaagro.cbs.api.dto.plant.CreateCoopDto;
-import com.jaagro.cbs.api.dto.plant.CreatePlantDto;
-import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
-import com.jaagro.cbs.api.dto.plant.UpdatePlantDto;
+import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
@@ -129,7 +126,7 @@ public class BreedingPlantController {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍名称不能为空");
         }
         if (StringUtils.isEmpty(coopDto.getCapacity())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "使用年限不能为空");
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "可养数量不能为空");
         }
         Map<String, Object> result;
         try {
@@ -139,6 +136,18 @@ public class BreedingPlantController {
             return BaseResponse.errorInstance(e.getMessage());
         }
         return BaseResponse.service(result);
+    }
+
+    /**
+     * 鸡舍-通过养殖场id获得列表
+     *
+     * @param coopDto
+     * @return
+     */
+    @ApiOperation("鸡舍-通过养殖场id获得列表")
+    @GetMapping("/coop/{plantId}")
+    public BaseResponse<List<ReturnCoopDto>> createPlant(@PathVariable("plantId") Integer plantId) {
+        return BaseResponse.successInstance(breedingPlantService.listCoopByPlantId(plantId));
     }
 
 }
