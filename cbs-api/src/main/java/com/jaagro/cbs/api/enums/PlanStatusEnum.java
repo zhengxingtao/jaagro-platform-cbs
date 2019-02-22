@@ -85,4 +85,10 @@ public enum PlanStatusEnum {
     public void setType(String type) {
         this.type = type;
     }
+
+    public static void main(String[] args) {
+        System.out.println(getDescByCode(0));
+
+        System.out.println(PlanStatusEnum.BREEDING.getCode());
+    }
 }
