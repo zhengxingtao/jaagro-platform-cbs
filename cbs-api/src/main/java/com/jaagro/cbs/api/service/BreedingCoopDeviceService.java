@@ -13,11 +13,6 @@ public interface BreedingCoopDeviceService {
      */
     Boolean bindDeviceToCoop();
 
-    /**
-     * 新增设备
-     * @return
-     */
-    Boolean createDevice();
 
     /**
      * 定时把数据从device_value_history表更新最新值到device_value表
