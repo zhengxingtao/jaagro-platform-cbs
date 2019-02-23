@@ -6,7 +6,7 @@
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="plan_status" property="planStatus" jdbcType="VARCHAR" />
     <result column="tracking_info" property="trackingInfo" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -86,7 +86,7 @@
       enable, create_time, create_user_id, 
       modify_time, modify_user_id)
     values (#{planId,jdbcType=INTEGER}, #{planStatus,jdbcType=VARCHAR}, #{trackingInfo,jdbcType=VARCHAR}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PlanTracking" >
@@ -131,7 +131,7 @@
         #{trackingInfo,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -166,7 +166,7 @@
         tracking_info = #{trackingInfo,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -188,7 +188,7 @@
     set plan_id = #{planId,jdbcType=INTEGER},
       plan_status = #{planStatus,jdbcType=VARCHAR},
       tracking_info = #{trackingInfo,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

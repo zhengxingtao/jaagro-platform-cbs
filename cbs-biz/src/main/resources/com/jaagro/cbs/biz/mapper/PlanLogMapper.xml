@@ -9,7 +9,7 @@
     <result column="log_info" property="logInfo" jdbcType="VARCHAR" />
     <result column="biz_reference_id" property="bizReferenceId" jdbcType="INTEGER" />
     <result column="biz_reference_type" property="bizReferenceType" jdbcType="INTEGER" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -87,7 +87,7 @@
       enable, create_time)
     values (#{planId,jdbcType=INTEGER}, #{oldStatus,jdbcType=INTEGER}, #{newStatus,jdbcType=INTEGER}, 
       #{logInfo,jdbcType=VARCHAR}, #{bizReferenceId,jdbcType=INTEGER}, #{bizReferenceType,jdbcType=INTEGER}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PlanLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -140,7 +140,7 @@
         #{bizReferenceType,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -175,7 +175,7 @@
         biz_reference_type = #{bizReferenceType,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -191,7 +191,7 @@
       log_info = #{logInfo,jdbcType=VARCHAR},
       biz_reference_id = #{bizReferenceId,jdbcType=INTEGER},
       biz_reference_type = #{bizReferenceType,jdbcType=INTEGER},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

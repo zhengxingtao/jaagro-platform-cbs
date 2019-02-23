@@ -95,7 +95,7 @@ public class BatchContract implements Serializable {
     /**
      * 是否有效
      */
-    private Byte enable;
+    private Boolean enable;
 
     /**
      * 创建时间

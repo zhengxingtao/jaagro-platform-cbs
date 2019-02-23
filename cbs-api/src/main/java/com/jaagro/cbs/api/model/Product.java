@@ -46,5 +46,10 @@ public class Product implements Serializable {
      */
     private Date createTime;
 
+    /**
+     * 是否有效（1-有效 0 -无效）
+     */
+    private Boolean enable;
+
     private static final long serialVersionUID = 1L;
 }

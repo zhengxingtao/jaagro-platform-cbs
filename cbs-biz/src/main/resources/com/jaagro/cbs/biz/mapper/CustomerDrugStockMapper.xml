@@ -10,7 +10,7 @@
     <result column="stock_quantity" property="stockQuantity" jdbcType="INTEGER" />
     <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
     <result column="alarm" property="alarm" jdbcType="TINYINT" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -93,7 +93,7 @@
       )
     values (#{customerId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, 
       #{drugName,jdbcType=VARCHAR}, #{stockQuantity,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, 
-      #{alarm,jdbcType=TINYINT}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{alarm,jdbcType=TINYINT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
@@ -163,7 +163,7 @@
         #{alarm,jdbcType=TINYINT},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -210,7 +210,7 @@
         alarm = #{alarm,jdbcType=TINYINT},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -236,7 +236,7 @@
       stock_quantity = #{stockQuantity,jdbcType=INTEGER},
       purchase_price = #{purchasePrice,jdbcType=DECIMAL},
       alarm = #{alarm,jdbcType=TINYINT},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

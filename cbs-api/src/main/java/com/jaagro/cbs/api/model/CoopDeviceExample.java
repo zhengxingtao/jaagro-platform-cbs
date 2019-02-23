@@ -1,7 +1,6 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -639,66 +638,6 @@ public class CoopDeviceExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andCurrentValueIsNull() {
-            addCriterion("current_value is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueIsNotNull() {
-            addCriterion("current_value is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueEqualTo(BigDecimal value) {
-            addCriterion("current_value =", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueNotEqualTo(BigDecimal value) {
-            addCriterion("current_value <>", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueGreaterThan(BigDecimal value) {
-            addCriterion("current_value >", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("current_value >=", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueLessThan(BigDecimal value) {
-            addCriterion("current_value <", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("current_value <=", value, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueIn(List<BigDecimal> values) {
-            addCriterion("current_value in", values, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueNotIn(List<BigDecimal> values) {
-            addCriterion("current_value not in", values, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("current_value between", value1, value2, "currentValue");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentValueNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("current_value not between", value1, value2, "currentValue");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -936,6 +875,66 @@ public class CoopDeviceExample implements Serializable {
 
         public Criteria andModifyUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("modify_user_id not between", value1, value2, "modifyUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNull() {
+            addCriterion("enable is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNotNull() {
+            addCriterion("enable is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableEqualTo(Boolean value) {
+            addCriterion("enable =", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotEqualTo(Boolean value) {
+            addCriterion("enable <>", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThan(Boolean value) {
+            addCriterion("enable >", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("enable >=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThan(Boolean value) {
+            addCriterion("enable <", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThanOrEqualTo(Boolean value) {
+            addCriterion("enable <=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIn(List<Boolean> values) {
+            addCriterion("enable in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotIn(List<Boolean> values) {
+            addCriterion("enable not in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableBetween(Boolean value1, Boolean value2) {
+            addCriterion("enable between", value1, value2, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("enable not between", value1, value2, "enable");
             return (Criteria) this;
         }
     }

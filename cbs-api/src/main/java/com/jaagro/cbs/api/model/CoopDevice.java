@@ -1,7 +1,6 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -58,11 +57,6 @@ public class CoopDevice implements Serializable {
     private Integer coopDeviceStatus;
 
     /**
-     * 当前值
-     */
-    private BigDecimal currentValue;
-
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -81,6 +75,11 @@ public class CoopDevice implements Serializable {
      * 更新人
      */
     private Integer modifyUserId;
+
+    /**
+     * 是否有效（1-有效 0-无效）
+     */
+    private Boolean enable;
 
     private static final long serialVersionUID = 1L;
 }

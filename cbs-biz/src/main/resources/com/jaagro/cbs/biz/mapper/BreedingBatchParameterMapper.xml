@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingBatchParameter" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="param_id" property="paramId" jdbcType="INTEGER" />
     <result column="param_name" property="paramName" jdbcType="VARCHAR" />
@@ -15,7 +16,7 @@
     <result column="unit" property="unit" jdbcType="VARCHAR" />
     <result column="alarm" property="alarm" jdbcType="TINYINT" />
     <result column="dynamic_medicine" property="dynamicMedicine" jdbcType="TINYINT" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -51,7 +52,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, batch_no, param_id, param_name, day_age, param_type, value_type, 
+    id, customer_id, plan_id, batch_no, param_id, param_name, day_age, param_type, value_type, 
     lower_limit, upper_limit, unit, alarm, dynamic_medicine, enable, create_time, create_user_id, 
     modify_time, modify_user_id
   </sql>
@@ -92,18 +93,20 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_batch_parameter (customer_id, batch_no, param_id, 
-      param_name, day_age, param_type, 
-      value_type, lower_limit, upper_limit, 
-      unit, alarm, dynamic_medicine, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
-    values (#{customerId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{paramId,jdbcType=INTEGER}, 
-      #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, #{paramType,jdbcType=INTEGER}, 
-      #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, #{upperLimit,jdbcType=DECIMAL}, 
-      #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=TINYINT}, #{dynamicMedicine,jdbcType=TINYINT}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+    insert into breeding_batch_parameter (customer_id, plan_id, batch_no, 
+      param_id, param_name, day_age, 
+      param_type, value_type, lower_limit, 
+      upper_limit, unit, alarm, 
+      dynamic_medicine, enable, create_time, 
+      create_user_id, modify_time, modify_user_id
+      )
+    values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
+      #{paramId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
+      #{paramType,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, 
+      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=TINYINT}, 
+      #{dynamicMedicine,jdbcType=TINYINT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingBatchParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -113,6 +116,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
         customer_id,
+      </if>
+      <if test="planId != null" >
+        plan_id,
       </if>
       <if test="batchNo != null" >
         batch_no,
@@ -167,6 +173,9 @@
       <if test="customerId != null" >
         #{customerId,jdbcType=INTEGER},
       </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -201,7 +210,7 @@
         #{dynamicMedicine,jdbcType=TINYINT},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -228,6 +237,9 @@
     <set >
       <if test="customerId != null" >
         customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
       </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
@@ -263,7 +275,7 @@
         dynamic_medicine = #{dynamicMedicine,jdbcType=TINYINT},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -283,6 +295,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingBatchParameter" >
     update breeding_batch_parameter
     set customer_id = #{customerId,jdbcType=INTEGER},
+      plan_id = #{planId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
       param_id = #{paramId,jdbcType=INTEGER},
       param_name = #{paramName,jdbcType=VARCHAR},
@@ -294,7 +307,7 @@
       unit = #{unit,jdbcType=VARCHAR},
       alarm = #{alarm,jdbcType=TINYINT},
       dynamic_medicine = #{dynamicMedicine,jdbcType=TINYINT},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

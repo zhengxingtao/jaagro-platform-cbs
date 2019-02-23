@@ -216,6 +216,66 @@ public class BatchInfoExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andPlanIdIsNull() {
+            addCriterion("plan_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdIsNotNull() {
+            addCriterion("plan_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdEqualTo(Integer value) {
+            addCriterion("plan_id =", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdNotEqualTo(Integer value) {
+            addCriterion("plan_id <>", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdGreaterThan(Integer value) {
+            addCriterion("plan_id >", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("plan_id >=", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdLessThan(Integer value) {
+            addCriterion("plan_id <", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdLessThanOrEqualTo(Integer value) {
+            addCriterion("plan_id <=", value, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdIn(List<Integer> values) {
+            addCriterion("plan_id in", values, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdNotIn(List<Integer> values) {
+            addCriterion("plan_id not in", values, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdBetween(Integer value1, Integer value2) {
+            addCriterion("plan_id between", value1, value2, "planId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("plan_id not between", value1, value2, "planId");
+            return (Criteria) this;
+        }
+
         public Criteria andBatchNoIsNull() {
             addCriterion("batch_no is null");
             return (Criteria) this;
@@ -1206,52 +1266,52 @@ public class BatchInfoExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andEnableEqualTo(Byte value) {
+        public Criteria andEnableEqualTo(Boolean value) {
             addCriterion("enable =", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableNotEqualTo(Byte value) {
+        public Criteria andEnableNotEqualTo(Boolean value) {
             addCriterion("enable <>", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableGreaterThan(Byte value) {
+        public Criteria andEnableGreaterThan(Boolean value) {
             addCriterion("enable >", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableGreaterThanOrEqualTo(Byte value) {
+        public Criteria andEnableGreaterThanOrEqualTo(Boolean value) {
             addCriterion("enable >=", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableLessThan(Byte value) {
+        public Criteria andEnableLessThan(Boolean value) {
             addCriterion("enable <", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableLessThanOrEqualTo(Byte value) {
+        public Criteria andEnableLessThanOrEqualTo(Boolean value) {
             addCriterion("enable <=", value, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableIn(List<Byte> values) {
+        public Criteria andEnableIn(List<Boolean> values) {
             addCriterion("enable in", values, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableNotIn(List<Byte> values) {
+        public Criteria andEnableNotIn(List<Boolean> values) {
             addCriterion("enable not in", values, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableBetween(Byte value1, Byte value2) {
+        public Criteria andEnableBetween(Boolean value1, Boolean value2) {
             addCriterion("enable between", value1, value2, "enable");
             return (Criteria) this;
         }
 
-        public Criteria andEnableNotBetween(Byte value1, Byte value2) {
+        public Criteria andEnableNotBetween(Boolean value1, Boolean value2) {
             addCriterion("enable not between", value1, value2, "enable");
             return (Criteria) this;
         }

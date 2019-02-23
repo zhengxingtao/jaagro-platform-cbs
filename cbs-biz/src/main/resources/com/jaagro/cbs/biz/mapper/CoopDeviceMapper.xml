@@ -10,11 +10,11 @@
     <result column="producer" property="producer" jdbcType="VARCHAR" />
     <result column="model_number" property="modelNumber" jdbcType="VARCHAR" />
     <result column="coop_device_status" property="coopDeviceStatus" jdbcType="INTEGER" />
-    <result column="current_value" property="currentValue" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -47,7 +47,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, coop_id, plant_id, device_type, device_name, producer, model_number, coop_device_status, 
-    current_value, create_time, create_user_id, modify_time, modify_user_id
+    create_time, create_user_id, modify_time, modify_user_id, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.CoopDeviceExample" >
     select
@@ -88,13 +88,13 @@
     </selectKey>
     insert into coop_device (coop_id, plant_id, device_type, 
       device_name, producer, model_number, 
-      coop_device_status, current_value, create_time, 
-      create_user_id, modify_time, modify_user_id
+      coop_device_status, create_time, create_user_id, 
+      modify_time, modify_user_id, enable
       )
     values (#{coopId,jdbcType=INTEGER}, #{plantId,jdbcType=INTEGER}, #{deviceType,jdbcType=INTEGER}, 
       #{deviceName,jdbcType=VARCHAR}, #{producer,jdbcType=VARCHAR}, #{modelNumber,jdbcType=VARCHAR}, 
-      #{coopDeviceStatus,jdbcType=INTEGER}, #{currentValue,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      #{coopDeviceStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.CoopDevice" >
@@ -124,9 +124,6 @@
       <if test="coopDeviceStatus != null" >
         coop_device_status,
       </if>
-      <if test="currentValue != null" >
-        current_value,
-      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -138,6 +135,9 @@
       </if>
       <if test="modifyUserId != null" >
         modify_user_id,
+      </if>
+      <if test="enable != null" >
+        enable,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -162,9 +162,6 @@
       <if test="coopDeviceStatus != null" >
         #{coopDeviceStatus,jdbcType=INTEGER},
       </if>
-      <if test="currentValue != null" >
-        #{currentValue,jdbcType=DECIMAL},
-      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -176,6 +173,9 @@
       </if>
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -209,9 +209,6 @@
       <if test="coopDeviceStatus != null" >
         coop_device_status = #{coopDeviceStatus,jdbcType=INTEGER},
       </if>
-      <if test="currentValue != null" >
-        current_value = #{currentValue,jdbcType=DECIMAL},
-      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -223,6 +220,9 @@
       </if>
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -236,11 +236,11 @@
       producer = #{producer,jdbcType=VARCHAR},
       model_number = #{modelNumber,jdbcType=VARCHAR},
       coop_device_status = #{coopDeviceStatus,jdbcType=INTEGER},
-      current_value = #{currentValue,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
