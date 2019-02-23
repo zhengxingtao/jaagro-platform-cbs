@@ -2,7 +2,9 @@ package com.jaagro.cbs.api.service;
 
 
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.BreedingStandardParameterDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,7 +28,18 @@ public interface BreedingStandardService {
      */
     Boolean updateBreedingTemplate(BreedingStandardDto dto);
 
+    /**
+     * 根据养殖模板ID获取养殖模板详情
+     * @param id
+     * @return
+     */
     BreedingStandardDto getBreedingStandardById(Integer id);
 
+    /**
+     * 根据标准模板的ID获取该模板所有的参数
+     * @param standardId
+     * @return
+     */
+    //List<BreedingStandardParameterDto> getStandardParameterById(Integer standardId);
 
 }

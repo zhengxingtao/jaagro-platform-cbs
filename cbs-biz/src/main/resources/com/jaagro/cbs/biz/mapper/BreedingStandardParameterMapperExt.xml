@@ -5,5 +5,8 @@
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
 
-
+<delete id="deleteByStandardId"  parameterType="java.lang.Integer" >
+    delete from breeding_standard_parameter
+    where standard_id = #{id,jdbcType=INTEGER}
+  </delete>
 </mapper>

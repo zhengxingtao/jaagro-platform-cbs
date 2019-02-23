@@ -14,6 +14,10 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 @Resource
 public interface BreedingStandardParameterMapperExt extends BaseMapper<BreedingStandardParameter,BreedingStandardParameterExample> {
 
-
+    /**
+     * 根据养殖模板删除模板参数
+     * @param id
+     */
+    void deleteByStandardId(Integer id);
 
 }

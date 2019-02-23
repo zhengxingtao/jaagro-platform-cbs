@@ -19,7 +19,7 @@ public interface BreedingPlantService {
      * @param plantDto
      * @return
      */
-    Map<String, Object> createPlant(CreatePlantDto plantDto);
+    Boolean createPlant(CreatePlantDto plantDto);
 
     /**
      * 修改
