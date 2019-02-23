@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * @author :Gvin
+ * @author :Gavin
  * @date :2019/02/22
  */
 @Data
@@ -18,7 +19,11 @@ import java.io.Serializable;
 public class BreedingStandardDto implements Serializable {
 
 
-    private static final long serialVersionUID = 2812871526550180621L;
+    private static final long serialVersionUID = -7384357842932479972L;
+    /**
+     * 养殖标准方案表id
+     */
+    private Integer id;
     /**
      * 标准方案名称
      */
@@ -33,4 +38,8 @@ public class BreedingStandardDto implements Serializable {
      * 养殖天数
      */
     private Integer breedingDays;
+    /**
+     * 模板的标准参数
+     */
+    private List<BreedingStandardParameterDto> standardParameterDtos;
 }
