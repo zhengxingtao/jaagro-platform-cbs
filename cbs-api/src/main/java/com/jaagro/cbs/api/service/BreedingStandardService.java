@@ -17,14 +17,14 @@ public interface BreedingStandardService {
      *
      * @param dto
      */
-    Map<String,Object> createBreedingTemplate(BreedingStandardDto dto);
+    Boolean createBreedingTemplate(BreedingStandardDto dto);
 
     /**
      * 修改养殖模版与参数
      * @param dto
      * @return
      */
-    Map<String,Object> updateBreedingTemplate(BreedingStandardDto dto);
+    Boolean updateBreedingTemplate(BreedingStandardDto dto);
 
     BreedingStandardDto getBreedingStandardById(Integer id);
 
