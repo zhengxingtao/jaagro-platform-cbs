@@ -150,6 +150,9 @@ public class BreedingPlantController {
     @ApiOperation("鸡舍-通过养殖场id获得列表")
     @GetMapping("/coop/{plantId}")
     public BaseResponse<List<ReturnCoopDto>> createPlant(@PathVariable("plantId") Integer plantId) {
+        if (plantId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
+        }
         return BaseResponse.successInstance(breedingPlantService.listCoopByPlantId(plantId));
     }
 
@@ -159,21 +162,31 @@ public class BreedingPlantController {
      *
      * @param dto
      * @return
+     * @author @Gao.
      */
     @ApiOperation("鸡舍与设备关联")
     @GetMapping("/bindDeviceToCoop")
     public BaseResponse bindDeviceToCoop(@RequestBody CreateCoopDeviceDto dto) {
+        if (dto.getCoopId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+        }
         breedingCoopDeviceService.bindDeviceToCoop(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
     /**
-     * @param dto
+     * 根据养殖场id 查询出鸡舍与设备列表相关信息
+     *
+     * @param
      * @return
+     * @author @Gao.
      */
-    @ApiOperation("鸡舍设备列表")
-    @GetMapping("/listBreedingCoopDevice")
-    public BaseResponse listBreedingCoopDevice(@RequestBody CreateCoopDeviceDto dto) {
-        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    @ApiOperation("鸡舍与设备列表")
+    @GetMapping("/listBreedingCoopDevice/{plantId}")
+    public BaseResponse listBreedingCoopDevice(@PathVariable("plantId") Integer plantId) {
+        if (plantId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
+        }
+        return BaseResponse.successInstance(breedingCoopDeviceService.listBreedingCoopDevice(plantId));
     }
 }

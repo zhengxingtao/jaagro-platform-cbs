@@ -2,12 +2,12 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.jaagro.cbs.api.dto.plant.CreateCoopDeviceDto;
 import com.jaagro.cbs.api.dto.plant.ReturnCoopDeviceDto;
+
+import com.jaagro.cbs.api.model.Coop;
+import com.jaagro.cbs.api.model.CoopDevice;
 import com.jaagro.cbs.api.service.BreedingCoopDeviceService;
 import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
-import com.jaagro.cbs.biz.model.Coop;
-import com.jaagro.cbs.biz.model.CoopDevice;
-import com.jaagro.cbs.biz.model.CoopDeviceExample;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +31,7 @@ public class BreedingCoopDeviceServiceImpl implements BreedingCoopDeviceService 
      * 给鸡舍新增设备进行绑定
      *
      * @return
+     * @author @Gao.
      */
     @Override
     public void bindDeviceToCoop(CreateCoopDeviceDto dto) {
@@ -43,21 +44,16 @@ public class BreedingCoopDeviceServiceImpl implements BreedingCoopDeviceService 
     }
 
     /**
-     * 鸡舍与设备列表页
+     * 根据养殖场id 查询鸡舍与设备信息
      *
      * @return
+     * @author @Gao.
      */
     @Override
-    public List<ReturnCoopDeviceDto> listBreedingCoopDevice(Integer coopId) {
-        //鸡舍信息
-        Coop coop = coopMapper.selectByPrimaryKey(coopId);
-        //设备信息
-        CoopDeviceExample coopDeviceExample = new CoopDeviceExample();
-        coopDeviceExample
-                .createCriteria()
-                .andCoopIdEqualTo(coopId);
-        List<CoopDevice> coopDevices = coopDeviceMapper.selectByExample(coopDeviceExample);
-        return null;
+    public List<ReturnCoopDeviceDto> listBreedingCoopDevice(Integer plantId) {
+        Coop coop = new Coop();
+        coop.setPlantId(plantId);
+        return coopMapper.listCoopDeviceByCoopExample(coop);
     }
 
     /**

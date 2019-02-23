@@ -1,13 +1,14 @@
 package com.jaagro.cbs.api.dto.plant;
 
+import com.jaagro.cbs.api.model.CoopDevice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author @Gao.
@@ -18,44 +19,73 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ReturnCoopDeviceDto implements Serializable {
-
     /**
-     * 鸡舍设备表id
+     * 客户鸡舍信息表id
      */
     private Integer id;
 
     /**
-     * 设备类型(1-温感设备,2-湿感设备)
+     * 客户id
      */
-    private Integer deviceType;
+    private Integer customerId;
 
     /**
-     * 设备名称
+     * 养殖场id
      */
-    private String deviceName;
+    private Integer plantId;
 
     /**
-     * 生产商
+     * 鸡舍位置
      */
-    private String producer;
+    private Integer homeNumber;
 
     /**
-     * 设备型号（生产商家的型号）
+     * 容量
      */
-    private String modelNumber;
+    private Integer capacity;
 
     /**
-     * 设备状态（0-拆除，1-正常 2-故障）
+     * 在养数量
      */
-    private Integer coopDeviceStatus;
+    private Integer breedingValue;
 
     /**
-     * 当前值
+     * 绑定硬件的数量
      */
-    private BigDecimal currentValue;
+    private Integer deviceQuantity;
+
+    /**
+     * 状态(0-维护中,1-空闲,2-饲养中)
+     */
+    private Integer coopStatus;
+
+    /**
+     * 上次起始时间
+     */
+    private Date lastStartDate;
+
+    /**
+     * 上次截止时间
+     */
+    private Date lastEndDate;
+
+    /**
+     * 备注
+     */
+    private String notes;
 
     /**
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 创建人
+     */
+    private Integer createUserId;
+
+    /**
+     * 养殖设备
+     */
+    private List<CoopDevice> coopDevices;
 }

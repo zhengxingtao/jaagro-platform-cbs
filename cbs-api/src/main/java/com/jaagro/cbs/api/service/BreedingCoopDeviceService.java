@@ -3,6 +3,7 @@ package com.jaagro.cbs.api.service;
 
 import com.jaagro.cbs.api.dto.plant.CreateCoopDeviceDto;
 import com.jaagro.cbs.api.dto.plant.ReturnCoopDeviceDto;
+import com.jaagro.cbs.api.model.Coop;
 
 import java.util.List;
 
@@ -19,11 +20,11 @@ public interface BreedingCoopDeviceService {
     void bindDeviceToCoop(CreateCoopDeviceDto dto);
 
     /**
-     * 鸡舍设备列表页
+     * 根据养殖场id 查询鸡舍与设备信息
      *
      * @return
      */
-    List<ReturnCoopDeviceDto> listBreedingCoopDevice(Integer coopId);
+    List<ReturnCoopDeviceDto> listBreedingCoopDevice(Integer plantId);
 
     /**
      * 定时把数据从device_value_history表更新最新值到device_value表
