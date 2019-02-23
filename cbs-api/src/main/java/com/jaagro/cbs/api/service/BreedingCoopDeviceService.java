@@ -1,7 +1,5 @@
 package com.jaagro.cbs.api.service;
 
-import java.util.Map;
-
 /**
  *  养殖鸡舍设备服务相关api
  */
