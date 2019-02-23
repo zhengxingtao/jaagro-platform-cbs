@@ -1,6 +1,7 @@
 package com.jaagro.cbs.web.controller;
 
 import com.jaagro.cbs.api.dto.plant.*;
+import com.jaagro.cbs.api.service.BreedingCoopDeviceService;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
@@ -26,6 +27,8 @@ public class BreedingPlantController {
 
     @Autowired
     private BreedingPlantService breedingPlantService;
+    @Autowired
+    private BreedingCoopDeviceService breedingCoopDeviceService;
 
     /**
      * 养殖场-新增
@@ -141,7 +144,7 @@ public class BreedingPlantController {
     /**
      * 鸡舍-通过养殖场id获得列表
      *
-     * @param coopDto
+     * @param
      * @return
      */
     @ApiOperation("鸡舍-通过养殖场id获得列表")
@@ -150,4 +153,27 @@ public class BreedingPlantController {
         return BaseResponse.successInstance(breedingPlantService.listCoopByPlantId(plantId));
     }
 
+    /**
+     * 鸡舍与设备进行关联
+     * (新增鸡舍设备)
+     *
+     * @param dto
+     * @return
+     */
+    @ApiOperation("鸡舍与设备关联")
+    @GetMapping("/bindDeviceToCoop")
+    public BaseResponse bindDeviceToCoop(@RequestBody CreateCoopDeviceDto dto) {
+        breedingCoopDeviceService.bindDeviceToCoop(dto);
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
+
+    /**
+     * @param dto
+     * @return
+     */
+    @ApiOperation("鸡舍设备列表")
+    @GetMapping("/listBreedingCoopDevice")
+    public BaseResponse listBreedingCoopDevice(@RequestBody CreateCoopDeviceDto dto) {
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
 }

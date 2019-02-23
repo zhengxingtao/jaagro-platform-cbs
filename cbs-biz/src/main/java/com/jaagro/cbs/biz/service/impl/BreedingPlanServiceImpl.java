@@ -41,6 +41,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * 创建养殖计划
      *
      * @param dto
+     * @author @Gao.
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -57,7 +58,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //插入养殖计划
         breedingPlanMapper.insertSelective(breedingPlan);
         //插入养殖关联表
-        if (CollectionUtils.isEmpty(dto.getPlantsId())) {
+        if (!CollectionUtils.isEmpty(dto.getPlantsId())) {
             List<Integer> plantsIds = dto.getPlantsId();
             for (Integer plantsId : plantsIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
