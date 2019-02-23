@@ -2,8 +2,8 @@ package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
 
-import com.jaagro.cbs.biz.model.BatchContract;
-import com.jaagro.cbs.biz.model.BatchContractExample;
+import com.jaagro.cbs.api.model.BatchContract;
+import com.jaagro.cbs.api.model.BatchContractExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 

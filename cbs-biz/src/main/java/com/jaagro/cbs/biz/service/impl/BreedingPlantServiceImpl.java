@@ -7,7 +7,7 @@ import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantMapperExt;
-import com.jaagro.cbs.biz.model.*;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
 import com.jaagro.utils.ServiceResult;

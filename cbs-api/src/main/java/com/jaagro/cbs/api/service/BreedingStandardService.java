@@ -29,5 +29,4 @@ public interface BreedingStandardService {
 
     BreedingStandardDto getBreedingStandardById(Integer id);
 
-
 }
