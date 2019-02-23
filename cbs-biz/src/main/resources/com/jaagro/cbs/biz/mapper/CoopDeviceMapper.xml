@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.CoopDevice" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.CoopDevice" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="coop_id" property="coopId" jdbcType="INTEGER" />
     <result column="plant_id" property="plantId" jdbcType="INTEGER" />
@@ -49,7 +49,7 @@
     id, coop_id, plant_id, device_type, device_name, producer, model_number, coop_device_status, 
     current_value, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.CoopDeviceExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.CoopDeviceExample" >
     select
     <if test="distinct" >
       distinct
@@ -82,7 +82,7 @@
     delete from coop_device
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.CoopDevice" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.CoopDevice" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -97,7 +97,7 @@
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.CoopDevice" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.CoopDevice" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -179,13 +179,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.CoopDeviceExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.CoopDeviceExample" resultType="java.lang.Integer" >
     select count(*) from coop_device
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.CoopDevice" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.CoopDevice" >
     update coop_device
     <set >
       <if test="coopId != null" >
@@ -227,7 +227,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.CoopDevice" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.CoopDevice" >
     update coop_device
     set coop_id = #{coopId,jdbcType=INTEGER},
       plant_id = #{plantId,jdbcType=INTEGER},
