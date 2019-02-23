@@ -14,8 +14,8 @@ import java.util.Map;
 public class MybatisGenerator {
 
     //Model + ModelExample 存放的路径和包名
-    private static String targetProjectModel = "cbs-biz";
-    private static String modelPack = "com.jaagro.cbs.biz.model";
+    private static String targetProjectModel = "cbs-api";
+    private static String modelPack = "com.jaagro.cbs.api.model";
 
     //Mapper.java + Mapper.xml 存放路径和包名
     private static String targetProjectDao = "cbs-biz";

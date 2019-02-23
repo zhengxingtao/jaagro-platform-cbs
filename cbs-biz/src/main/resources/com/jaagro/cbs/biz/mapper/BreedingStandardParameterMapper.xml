@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="standard_id" property="standardId" jdbcType="INTEGER" />
     <result column="param_name" property="paramName" jdbcType="VARCHAR" />
@@ -51,7 +51,7 @@
     id, standard_id, param_name, day_age, param_type, value_type, lower_limit, upper_limit, 
     unit, alarm, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameterExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameterExample" >
     select
     <if test="distinct" >
       distinct
@@ -84,7 +84,7 @@
     delete from breeding_standard_parameter
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -99,7 +99,7 @@
       #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -193,13 +193,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameterExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameterExample" resultType="java.lang.Integer" >
     select count(*) from breeding_standard_parameter
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     update breeding_standard_parameter
     <set >
       <if test="standardId != null" >
@@ -247,7 +247,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     update breeding_standard_parameter
     set standard_id = #{standardId,jdbcType=INTEGER},
       param_name = #{paramName,jdbcType=VARCHAR},

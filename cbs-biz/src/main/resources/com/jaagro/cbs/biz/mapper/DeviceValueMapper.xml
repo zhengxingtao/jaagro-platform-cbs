@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.DeviceValueMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.DeviceValue" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.DeviceValue" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="device_id" property="deviceId" jdbcType="INTEGER" />
     <result column="value_type" property="valueType" jdbcType="INTEGER" />
@@ -40,7 +40,7 @@
   <sql id="Base_Column_List" >
     id, device_id, value_type, current_value, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.DeviceValueExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.DeviceValueExample" >
     select
     <if test="distinct" >
       distinct
@@ -73,7 +73,7 @@
     delete from device_value
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.DeviceValue" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.DeviceValue" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -82,7 +82,7 @@
     values (#{deviceId,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{currentValue,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.DeviceValue" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.DeviceValue" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -116,13 +116,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.DeviceValueExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.DeviceValueExample" resultType="java.lang.Integer" >
     select count(*) from device_value
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.DeviceValue" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.DeviceValue" >
     update device_value
     <set >
       <if test="deviceId != null" >
@@ -140,7 +140,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.DeviceValue" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.DeviceValue" >
     update device_value
     set device_id = #{deviceId,jdbcType=INTEGER},
       value_type = #{valueType,jdbcType=INTEGER},

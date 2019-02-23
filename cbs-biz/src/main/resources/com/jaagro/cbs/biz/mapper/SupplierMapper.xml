@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.SupplierMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.Supplier" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.Supplier" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
     <result column="supplier_type" property="supplierType" jdbcType="INTEGER" />
@@ -52,7 +52,7 @@
     contact_phone_number, supplier_status, create_time, create_user_id, modify_time, 
     modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.SupplierExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.SupplierExample" >
     select
     <if test="distinct" >
       distinct
@@ -85,7 +85,7 @@
     delete from supplier
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.Supplier" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -100,7 +100,7 @@
       #{supplierStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Supplier" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -194,13 +194,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.SupplierExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.SupplierExample" resultType="java.lang.Integer" >
     select count(*) from supplier
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.Supplier" >
     update supplier
     <set >
       <if test="supplierName != null" >
@@ -248,7 +248,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.Supplier" >
     update supplier
     set supplier_name = #{supplierName,jdbcType=VARCHAR},
       supplier_type = #{supplierType,jdbcType=INTEGER},

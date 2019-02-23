@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BreedingPlan" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingPlan" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plants_id" property="plantsId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
@@ -53,7 +53,7 @@
     plan_time, technician, technician_id, notes, create_time, create_user_id, create_user_name, 
     modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BreedingPlanExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingPlanExample" >
     select
     <if test="distinct" >
       distinct
@@ -86,7 +86,7 @@
     delete from breeding_plan
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BreedingPlan" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -103,7 +103,7 @@
       #{createUserName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BreedingPlan" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -203,13 +203,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BreedingPlanExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BreedingPlanExample" resultType="java.lang.Integer" >
     select count(*) from breeding_plan
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BreedingPlan" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     update breeding_plan
     <set >
       <if test="plantsId != null" >
@@ -260,7 +260,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BreedingPlan" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     update breeding_plan
     set plants_id = #{plantsId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
