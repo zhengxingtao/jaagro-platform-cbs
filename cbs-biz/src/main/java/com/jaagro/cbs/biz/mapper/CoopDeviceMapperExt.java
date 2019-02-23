@@ -1,8 +1,8 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
-import com.jaagro.cbs.biz.model.CoopDevice;
-import com.jaagro.cbs.biz.model.CoopDeviceExample;
+import com.jaagro.cbs.api.model.CoopDevice;
+import com.jaagro.cbs.api.model.CoopDeviceExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 

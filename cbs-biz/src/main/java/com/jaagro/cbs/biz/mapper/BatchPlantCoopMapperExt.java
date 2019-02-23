@@ -1,8 +1,8 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
-import com.jaagro.cbs.biz.model.BatchPlantCoop;
-import com.jaagro.cbs.biz.model.BatchPlantCoopExample;
+import com.jaagro.cbs.api.model.BatchPlantCoop;
+import com.jaagro.cbs.api.model.BatchPlantCoopExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 

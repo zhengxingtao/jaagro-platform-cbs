@@ -1,8 +1,8 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
-import com.jaagro.cbs.biz.model.BreedingStandard;
-import com.jaagro.cbs.biz.model.BreedingStandardExample;
+import com.jaagro.cbs.api.model.BreedingStandard;
+import com.jaagro.cbs.api.model.BreedingStandardExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 

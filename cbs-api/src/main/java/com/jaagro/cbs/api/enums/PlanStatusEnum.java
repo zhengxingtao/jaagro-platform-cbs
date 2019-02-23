@@ -85,4 +85,5 @@ public enum PlanStatusEnum {
     public void setType(String type) {
         this.type = type;
     }
+
 }

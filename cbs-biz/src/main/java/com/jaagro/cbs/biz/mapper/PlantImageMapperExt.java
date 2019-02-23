@@ -3,8 +3,8 @@ package com.jaagro.cbs.biz.mapper;
 import javax.annotation.Resource;
 
 import com.jaagro.cbs.api.dto.plant.ReturnPlantImageDto;
-import com.jaagro.cbs.biz.model.PlantImage;
-import com.jaagro.cbs.biz.model.PlantImageExample;
+import com.jaagro.cbs.api.model.PlantImage;
+import com.jaagro.cbs.api.model.PlantImageExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 import java.util.List;
