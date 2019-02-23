@@ -28,53 +28,57 @@ import java.util.Map;
 @Service
 public class BreedingStandardServiceImpl implements BreedingStandardService {
 
-//    @Autowired
+    //    @Autowired
 //    private CurrentUserService currentUserService;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
 
     @Autowired
     private BreedingStandardParameterMapperExt standardParameterMapper;
+
     /**
      * 创建养殖模版与参数
      *
      * @param dto
      */
     @Override
-    public Map<String,Object> createBreedingTemplate(BreedingStandardDto dto) {
-        log.info("o BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}",dto);
-        Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-        Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-        Assert.notNull(dto.getStandardParameterDtos(), "养殖参数不能为空");
-        if (CollectionUtils.isEmpty(dto.getStandardParameterDtos())) {
-            throw new RuntimeException("养殖参数不能为空");
-        }
+    public Boolean createBreedingTemplate(BreedingStandardDto dto) {
+        try {
+            log.info("o BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
+            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
+            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
+            Assert.notNull(dto.getStandardParameterDtos(), "养殖参数不能为空");
+            if (CollectionUtils.isEmpty(dto.getStandardParameterDtos())) {
+                throw new RuntimeException("养殖参数不能为空");
+            }
 
-        BreedingStandard breedingStandard = new BreedingStandard();
-        breedingStandard.setBreedingType(dto.getBreedingType())
-                        .setBreedingDays(dto.getBreedingDays())
-                        .setStandardName(dto.getStandardName())
-                        .setCreateUserId(99999999)
+            BreedingStandard breedingStandard = new BreedingStandard();
+            breedingStandard.setBreedingType(dto.getBreedingType())
+                    .setBreedingDays(dto.getBreedingDays())
+                    .setStandardName(dto.getStandardName())
+                    .setCreateUserId(99999999)
+                    .setCreateTime(new Date());
+            breedingStandardMapper.insertSelective(breedingStandard);
+
+            int standardId = breedingStandard.getId();
+
+            for (BreedingStandardParameterDto breedingStandardParameterDto : dto.getStandardParameterDtos()) {
+                BreedingStandardParameter breedingStandardParameter = new BreedingStandardParameter();
+                BeanUtils.copyProperties(breedingStandardParameterDto, breedingStandardParameter);
+                breedingStandardParameter.setStandardId(standardId)
+                        .setCreateUserId(999999)
                         .setCreateTime(new Date());
-        breedingStandardMapper.insertSelective(breedingStandard);
 
-        int standardId = breedingStandard.getId();
+                standardParameterMapper.insertSelective(breedingStandardParameter);
 
-        for (BreedingStandardParameterDto breedingStandardParameterDto : dto.getStandardParameterDtos()) {
-            BreedingStandardParameter breedingStandardParameter = new BreedingStandardParameter();
-            BeanUtils.copyProperties(breedingStandardParameterDto,breedingStandardParameter);
-            breedingStandardParameter.setStandardId(standardId)
-                                     .setCreateUserId(999999)
-                                    .setCreateTime(new Date());
-
-            standardParameterMapper.insertSelective(breedingStandardParameter);
+            }
+            log.info("o BreedingStardandServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDtos().size());
+        } catch (Exception e) {
+            log.error("R BreedingStardandServiceImpl.createBreedingTemplate  error:" + e);
+            return false;
 
         }
-
-
-        log.info("o BreedingStardandServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId,dto.getStandardParameterDtos().size());
-
-        return ServiceResult.toResult("运单养殖模板成功");
+        return true;
 
     }
 
@@ -85,7 +89,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      * @return
      */
     @Override
-    public Map<String, Object> updateBreedingTemplate(BreedingStandardDto dto) {
+    public Boolean updateBreedingTemplate(BreedingStandardDto dto) {
         return null;
     }
 

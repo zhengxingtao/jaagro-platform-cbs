@@ -37,7 +37,7 @@ public class BreedingStandardController {
     @PostMapping("/createBreedingStandard")
     public BaseResponse createBreedingStandard(@RequestBody BreedingStandardDto dto) {
 
-        Map<String, Object> result;
+        Boolean result = false;
         try {
             result = breedingStandardService.createBreedingTemplate(dto);
         } catch (Exception ex) {
