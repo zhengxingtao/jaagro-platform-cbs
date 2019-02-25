@@ -35,9 +35,9 @@ public class BreedingStandardController {
     public BaseResponse breedingStandard(@RequestBody BreedingStandardDto dto) {
         try {
             Boolean result = false;
-            if(dto.getId()==null) {
+            if (null == dto.getId() || dto.getId() == 0) {
                 result = breedingStandardService.createBreedingTemplate(dto);
-            }else{
+            } else {
                 result = breedingStandardService.updateBreedingTemplate(dto);
             }
         } catch (Exception ex) {

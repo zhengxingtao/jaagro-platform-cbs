@@ -158,7 +158,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         PlantExample plantExample = new PlantExample();
         plantExample.createCriteria()
                 .andCustomerIdEqualTo(customerId)
-                .andEnableEqualTo((byte) 1);
+                .andEnableEqualTo(true);
         List<Plant> plants = plantMapper.selectByExample(plantExample);
         List<ReturnPlantDto> returnPlantDtoList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(plants)) {

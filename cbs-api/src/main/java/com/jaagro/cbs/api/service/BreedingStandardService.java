@@ -2,10 +2,6 @@ package com.jaagro.cbs.api.service;
 
 
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardParameterDto;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 养殖大脑管理
