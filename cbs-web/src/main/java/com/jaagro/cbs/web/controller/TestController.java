@@ -46,7 +46,7 @@ public class TestController {
 
     @GetMapping("/test1")
     public void test1() {
-        String at = sequenceCodeUtils.genSeqCode("CC");
+        String at = sequenceCodeUtils.genSeqCode("AT");
         System.out.println(at);
         return;
     }
