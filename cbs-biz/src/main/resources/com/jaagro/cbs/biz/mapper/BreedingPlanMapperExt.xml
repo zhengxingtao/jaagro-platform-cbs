@@ -11,17 +11,17 @@
         where 1=1
         <if test="customerIds!=null">
             <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
-                customer_id in ${customerId}
+            and customer_id in ${customerId}
             </foreach>
         </if>
         <if test="batchNo!=null">
-            batch_no like CONCAT(#{batchNo},'%')
+            and batch_no like CONCAT(#{batchNo},'%')
         </if>
         <if test="createUserName!=null">
-            create_user_name like CONCAT(#{createUserName},'%')
+            and create_user_name like CONCAT(#{createUserName},'%')
         </if>
         <if test="planStatus!=null">
-            plan_status=#{planStatus}
+            and plan_status=#{planStatus}
         </if>
     </select>
 </mapper>

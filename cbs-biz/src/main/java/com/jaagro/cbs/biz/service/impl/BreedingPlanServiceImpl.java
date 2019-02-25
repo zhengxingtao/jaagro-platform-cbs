@@ -93,8 +93,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (dto.getCustomerInfo() != null) {
             BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
             if (!CollectionUtils.isEmpty(listBaseResponse.getData())) {
-                List<Integer> CustomerIds = listBaseResponse.getData();
-                dto.setCustomerIds(CustomerIds);
+                List<Integer> customerIds = listBaseResponse.getData();
+                dto.setCustomerIds(customerIds);
             }
         }
         List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
