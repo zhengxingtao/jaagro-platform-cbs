@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.dto.standard;
 
+import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,5 +42,5 @@ public class BreedingStandardDto implements Serializable {
     /**
      * 模板的标准参数
      */
-    private List<BreedingStandardParameterDto> standardParameterDtos;
+    private List<BreedingStandardParameter> standardParameterDos;
 }
