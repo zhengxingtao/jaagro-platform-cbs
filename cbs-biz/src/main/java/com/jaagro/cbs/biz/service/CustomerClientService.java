@@ -42,5 +42,5 @@ public interface CustomerClientService {
      * @return
      */
     @GetMapping("/listCustomerIdByKeyWord/{keyword}")
-    BaseResponse<List<Integer>> getContactsById(@PathVariable String keyword);
+    BaseResponse<List<Integer>> listCustomerIdByKeyWord(@PathVariable String keyword);
 }
