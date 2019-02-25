@@ -3,6 +3,7 @@ package com.jaagro.cbs.biz.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.CustomerContacts;
+import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
@@ -91,22 +92,20 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         if (dto.getCustomerInfo() != null) {
             BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
-            if (CollectionUtils.isEmpty(listBaseResponse.getData())) {
-                List<Integer> CustomerIds = listBaseResponse.getData();
-                dto.setCustomerIds(CustomerIds);
+            if (!CollectionUtils.isEmpty(listBaseResponse.getData())) {
+                List<Integer> customerIds = listBaseResponse.getData();
+                dto.setCustomerIds(customerIds);
             }
         }
         List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
         for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
-            BaseResponse<CustomerContacts> customeInfoData = customerClientService.getContactsById(returnBreedingPlanDto.getCustomerId());
-            if (customeInfoData.getData() != null) {
-                CustomerContacts customeInfo = customeInfoData.getData();
+            CustomerContactsReturnDto customeInfo = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
+            if (customeInfo != null) {
                 returnBreedingPlanDto
                         .setCustomerName(customeInfo.getContact())
                         .setCustomerPhone(customeInfo.getPhone());
             }
         }
         return new PageInfo(returnBreedingPlanDtos);
-        
     }
 }
