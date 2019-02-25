@@ -3,7 +3,7 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-    <select id="listBreedingPlan" resultMap="BaseResultMap"
+    <select id="listBreedingPlan" resultType="com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto"
             parameterType="com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto">
         select
         <include refid="Base_Column_List"/>
