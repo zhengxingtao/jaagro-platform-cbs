@@ -21,7 +21,6 @@ import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -253,5 +252,6 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                 .setEnable(false);
         coopMapperExt.updateByPrimaryKeySelective(coop);
         //逻辑删除鸡舍下的设备
+        coopDeviceMapper.logicDeleteCoopDeviceByCoopId(coopId);
     }
 }
