@@ -21,6 +21,11 @@ public class BreedingStandardParameterDto implements Serializable {
 
 
     private static final long serialVersionUID = 2983927390461640107L;
+
+    /**
+     * 参数id
+     */
+    private Integer id;
     /**
      * 参数名称
      */

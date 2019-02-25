@@ -16,6 +16,7 @@ import com.jaagro.utils.ServiceResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -56,7 +57,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
      * @return
      */
     @Override
-    public Map<String, Object> createPlant(CreatePlantDto plantDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean createPlant(CreatePlantDto plantDto) {
         Plant plant = new Plant();
         BeanUtils.copyProperties(plantDto, plant);
         if (StringUtils.isEmpty(plant.getCustomerId())) {
@@ -82,12 +84,13 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                             .setPlantId(plant.getId());
                     plantImageMapper.insertSelective(plantImage);
                 }
+
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return ServiceResult.error(e.getMessage());
+            log.error("R BreedingPlantServiceImpl.createPlant  error:" + e);
+            return false;
         }
-        return ServiceResult.toResult("创建成功");
+        return true;
     }
 
     /**

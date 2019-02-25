@@ -63,15 +63,15 @@ public class BreedingPlantController {
         if (StringUtils.isEmpty(plantDto.getCounty())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "区不能为空");
         }
-        Map<String, Object> result;
+        Boolean result = false;
         try {
             result = breedingPlantService.createPlant(plantDto);
         } catch (Exception e) {
             e.printStackTrace();
-            return BaseResponse.errorInstance(e.getMessage());
+            return BaseResponse.errorInstance("创建失败："+e.getMessage());
         }
 
-        return BaseResponse.service(result);
+        return BaseResponse.successInstance("创建成功");
     }
 
     /**
