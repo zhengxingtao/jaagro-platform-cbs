@@ -217,6 +217,24 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     }
 
     /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    @Override
+    public void deleteCoop(Integer coopId) {
+        //逻辑删除鸡舍
+        Coop coop = new Coop();
+        coop
+                .setId(coopId)
+                .setEnable(false);
+        coopMapperExt.updateByPrimaryKeySelective(coop);
+        //逻辑删除鸡舍下的设备
+        coopDeviceMapper.logicDeleteCoopDeviceByCoopId(coopId);
+    }
+
+
+    /**
      * 通过养殖场id获得鸡舍列表
      *
      * @param plantId

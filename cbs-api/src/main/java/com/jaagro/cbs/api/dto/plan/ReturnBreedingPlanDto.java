@@ -1,6 +1,6 @@
 package com.jaagro.cbs.api.dto.plan;
 
-import com.jaagro.cbs.api.dto.plant.ListCoopDto;
+import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,22 +30,25 @@ public class ReturnBreedingPlanDto implements Serializable {
     private String batchNo;
 
     /**
+     * 租户id
+     */
+    private Integer tenantId;
+
+    /**
      * 养殖户id
      */
     private Integer customerId;
 
     /**
-     * 养殖户名称
+     * 养殖户的名称
      */
-    private Integer customerName;
-
+    private String customerName;
     /**
-     * 养殖户电话
+     *
      */
-    private Integer customerPhone;
-
+    private String customerPhone;
     /**
-     * 计划状态(此列表只展示3-养殖中,4-待出栏确认)
+     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
      */
     private Integer planStatus;
 
@@ -60,7 +63,38 @@ public class ReturnBreedingPlanDto implements Serializable {
     private Date planTime;
 
     /**
-     * 鸡舍列表
+     * 技术员姓名
      */
-    private List<ListCoopDto> coopDtoList;
+    private String technician;
+
+    /**
+     * 技术员id
+     */
+    private Integer technicianId;
+
+    /**
+     * 备注
+     */
+    private String notes;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 创建人
+     */
+    private Integer createUserId;
+
+    /**
+     * 创建人姓名
+     */
+    private String createUserName;
+
+    /**
+     * 养殖场
+     */
+    private List<Plant> plants;
+
 }

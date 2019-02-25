@@ -21,7 +21,7 @@ public class CreateBreedingPlanDto implements Serializable {
     /**
      * 养殖场id
      */
-    private List<Integer> plantsId;
+    private List<Integer> plantIds;
 
     /**
      * 租户id
