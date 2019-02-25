@@ -99,14 +99,14 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
         for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
-            CustomerContactsReturnDto customeInfoData = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
-            if (customeInfoData != null) {
+            CustomerContactsReturnDto customeInfo = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
+            if (customeInfo != null) {
                 returnBreedingPlanDto
-                        .setCustomerName(customeInfoData.getContact())
-                        .setCustomerPhone(customeInfoData.getPhone());
+                        .setCustomerName(customeInfo.getContact())
+                        .setCustomerPhone(customeInfo.getPhone());
             }
         }
         return new PageInfo(returnBreedingPlanDtos);
-        
+
     }
 }
