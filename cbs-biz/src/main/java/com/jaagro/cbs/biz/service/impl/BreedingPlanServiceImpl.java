@@ -2,6 +2,7 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.base.CustomerContacts;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
@@ -11,8 +12,10 @@ import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.api.model.BatchPlantCoop;
 import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
+import com.jaagro.utils.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BatchPlantCoopMapperExt batchPlantCoopMapper;
     @Autowired
     private CurrentUserService currentUserService;
+    @Autowired
+    private CustomerClientService customerClientService;
 
     /**
      * 创建养殖计划
@@ -81,10 +86,26 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @return
      * @author @Gao.
      */
+    @Override
     public PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        breedingPlanMapper.listBreedingPlan(dto);
-
-        return null;
+        if (dto.getCustomerInfo() != null) {
+            BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
+            if (CollectionUtils.isEmpty(listBaseResponse.getData())) {
+                List<Integer> CustomerIds = listBaseResponse.getData();
+                dto.setCustomerIds(CustomerIds);
+            }
+        }
+        List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
+        for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
+            BaseResponse<CustomerContacts> customeInfoData = customerClientService.getContactsById(returnBreedingPlanDto.getCustomerId());
+            if (customeInfoData.getData() != null) {
+                CustomerContacts customeInfo = customeInfoData.getData();
+                returnBreedingPlanDto
+                        .setCustomerName(customeInfo.getContact())
+                        .setCustomerPhone(customeInfo.getPhone());
+            }
+        }
+        return new PageInfo(returnBreedingPlanDtos);
     }
 }

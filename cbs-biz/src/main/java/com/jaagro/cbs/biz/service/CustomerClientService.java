@@ -1,5 +1,6 @@
 package com.jaagro.cbs.biz.service;
 
+import com.jaagro.cbs.api.dto.base.CustomerContacts;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.utils.BaseResponse;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -43,4 +44,13 @@ public interface CustomerClientService {
      */
     @GetMapping("/listCustomerIdByKeyWord/{keyword}")
     BaseResponse<List<Integer>> listCustomerIdByKeyWord(@PathVariable String keyword);
+
+    /**
+     * 查询客户信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/getContactsById/{id}")
+    BaseResponse<CustomerContacts> getContactsById(@PathVariable Integer id);
 }
