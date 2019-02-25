@@ -43,7 +43,7 @@ public interface CustomerClientService {
      * @return
      */
     @GetMapping("/listCustomerIdByKeyWord/{keyword}")
-    BaseResponse<List<Integer>> listCustomerIdByKeyWord(@PathVariable String keyword);
+    BaseResponse<List<Integer>> listCustomerIdByKeyWord(@PathVariable("keyword") String keyword);
 
     /**
      * 查询客户信息
@@ -52,5 +52,5 @@ public interface CustomerClientService {
      * @return
      */
     @GetMapping("/getContactsById/{id}")
-    BaseResponse<CustomerContacts> getContactsById(@PathVariable Integer id);
+    BaseResponse<CustomerContacts> getContactsById(@PathVariable("id") Integer id);
 }
