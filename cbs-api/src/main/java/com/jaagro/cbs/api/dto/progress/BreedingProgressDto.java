@@ -65,6 +65,10 @@ public class BreedingProgressDto implements Serializable {
      * 计划上鸡数量
      */
     private Integer planChickenQuantity;
+    /**
+     * 存栏量
+     */
+    private Integer livingChickenQuantity;
 
     /**
      * 上鸡时间

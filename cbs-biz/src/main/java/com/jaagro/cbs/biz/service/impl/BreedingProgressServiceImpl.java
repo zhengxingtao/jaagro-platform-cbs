@@ -5,16 +5,23 @@ import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.dto.progress.ListBatchCriteriaDto;
+import com.jaagro.cbs.api.model.BatchPlantCoop;
+import com.jaagro.cbs.api.model.BatchPlantCoopExample;
 import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.Coop;
 import com.jaagro.cbs.api.service.BreedingProgressService;
+import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
+import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 养殖过程管理
@@ -28,6 +35,10 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
     @Autowired
     private BreedingPlanMapperExt breedingPlanMapper;
+    @Autowired
+    private BatchPlantCoopMapperExt batchPlantCoopMapper;
+    @Autowired
+    private CoopMapperExt coopMapper;
     @Autowired
     private CustomerClientService customerClientService;
 
@@ -45,9 +56,30 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         BreedingProgressDto breedingProgressDto = new BreedingProgressDto();
         breedingProgressDto.setBatchNo(breedingPlan.getBatchNo());
         breedingProgressDto.setPlanChickenQuantity(breedingPlan.getPlanChickenQuantity());
+        breedingProgressDto.setPlanTime(breedingPlan.getPlanTime());
+        //"breedingPlan.getPlanChickenQuantity()减去该养殖场死去的鸡数量"
+        breedingProgressDto.setLivingChickenQuantity(0);
 
 
-        return null;
+        BatchPlantCoopExample example = new BatchPlantCoopExample();
+        example.createCriteria().andPlanIdEqualTo(planId);
+        List<BatchPlantCoop> batchPlantCoopDos = batchPlantCoopMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(batchPlantCoopDos)) {
+            Set<Integer> plantIds = new HashSet<>();
+            List<Coop> coopDos = new ArrayList<>();
+            for (BatchPlantCoop batchPlantCoop : batchPlantCoopDos) {
+                plantIds.add(batchPlantCoop.getPlanId());
+                Coop coopDo =coopMapper.selectByPrimaryKey(batchPlantCoop.getCoopId());
+                coopDos.add(coopDo);
+            }
+            Map<Integer, List<Coop>> coopMap = new HashMap<>();
+            for(Integer plantId: plantIds){
+                List<Coop> coops = coopDos.stream().filter(c->plantId.equals(c.getPlantId())).collect(Collectors.toList());
+                coopMap.put(plantId,coops);
+            }
+            breedingProgressDto.setCoopMap(coopMap);
+        }
+        return breedingProgressDto;
     }
 
     /**
