@@ -1,15 +1,20 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
+import com.jaagro.cbs.api.dto.progress.ListBatchCriteriaDto;
 import com.jaagro.cbs.api.model.BreedingPlan;
 import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
+import com.jaagro.cbs.biz.service.CustomerClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 /**
  * 养殖过程管理
@@ -22,7 +27,10 @@ import org.springframework.util.Assert;
 public class BreedingProgressServiceImpl implements BreedingProgressService {
 
     @Autowired
-    private BreedingPlanMapperExt breedingPlanMapperExt;
+    private BreedingPlanMapperExt breedingPlanMapper;
+    @Autowired
+    private CustomerClientService customerClientService;
+
     /**
      * 根据养殖计划Id获取养殖过程喂养头信息
      *
@@ -31,7 +39,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
      */
     @Override
     public BreedingProgressDto getBreedingProgressById(Integer planId) {
-        BreedingPlan breedingPlan = breedingPlanMapperExt.selectByPrimaryKey(planId);
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         Assert.notNull(breedingPlan, "养殖计划不存在");
 
         BreedingProgressDto breedingProgressDto = new BreedingProgressDto();
@@ -65,6 +73,17 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
      */
     @Override
     public BreedingRecordDto getBreedingRecordsById(Integer planId, Integer coopId, Integer dayAge) {
+        return null;
+    }
+
+    /**
+     * 批次管理
+     *
+     * @param criteriaDto
+     * @return
+     */
+    @Override
+    public List<ReturnBreedingPlanDto> listPlanByCriteria(ListBatchCriteriaDto criteriaDto) {
         return null;
     }
 }

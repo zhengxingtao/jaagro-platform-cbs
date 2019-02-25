@@ -147,8 +147,7 @@ public class BreedingPlantController {
         if (coopId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
         }
-        breedingPlantService.deleteCoop(coopId);
-        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+       return null;
     }
 
     /**

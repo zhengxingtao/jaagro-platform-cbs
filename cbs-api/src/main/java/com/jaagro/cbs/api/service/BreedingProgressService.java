@@ -1,8 +1,12 @@
 package com.jaagro.cbs.api.service;
 
+import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
+import com.jaagro.cbs.api.dto.progress.ListBatchCriteriaDto;
+
+import java.util.List;
 
 /**
  * @Author gavin
@@ -35,4 +39,13 @@ public interface BreedingProgressService {
      * @return
      */
   BreedingRecordDto getBreedingRecordsById(Integer planId, Integer coopId, Integer dayAge);
+
+
+    /**
+     * 批次管理
+     *
+     * @param criteriaDto
+     * @return
+     */
+    List<ReturnBreedingPlanDto> listPlanByCriteria(ListBatchCriteriaDto criteriaDto);
 }
