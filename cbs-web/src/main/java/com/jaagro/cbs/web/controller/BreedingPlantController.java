@@ -68,7 +68,7 @@ public class BreedingPlantController {
             result = breedingPlantService.createPlant(plantDto);
         } catch (Exception e) {
             e.printStackTrace();
-            return BaseResponse.errorInstance("创建失败："+e.getMessage());
+            return BaseResponse.errorInstance("创建失败：" + e.getMessage());
         }
 
         return BaseResponse.successInstance("创建成功");
@@ -147,7 +147,7 @@ public class BreedingPlantController {
         if (coopId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
         }
-       return null;
+        return null;
     }
 
     /**

@@ -3,11 +3,12 @@ package com.jaagro.cbs.biz.service.impl;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.enums.CoopStatusEnum;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlantService;
+import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantMapperExt;
-import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
 import com.jaagro.utils.ServiceResult;
@@ -44,6 +45,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     private CoopMapperExt coopMapperExt;
     @Autowired
     private PlantImageMapperExt plantImageMapper;
+    @Autowired
+    private CoopDeviceMapperExt coopDeviceMapper;
 
 
     /**
@@ -233,5 +236,22 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
             }
         }
         return returnCoopDtoList;
+    }
+
+    /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    @Override
+    public void deleteCoop(Integer coopId) {
+        //逻辑删除鸡舍
+        Coop coop = new Coop();
+        coop
+                .setId(coopId)
+                .setEnable(false);
+        coopMapperExt.updateByPrimaryKeySelective(coop);
+        //逻辑删除鸡舍下的设备
+        coopDeviceMapper.logicDeleteCoopDeviceByCoopId(coopId);
     }
 }
