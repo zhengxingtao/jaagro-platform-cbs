@@ -234,4 +234,14 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         }
         return returnCoopDtoList;
     }
+
+    /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    @Override
+    public void deleteCoop(Integer coopId) {
+
+    }
 }
