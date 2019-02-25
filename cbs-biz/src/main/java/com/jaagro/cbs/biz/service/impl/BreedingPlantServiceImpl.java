@@ -13,6 +13,7 @@ import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.utils.ServiceResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.Map;
  * @author baiyiran
  * @Date 2019/2/22
  */
+@Slf4j
 @Service
 public class BreedingPlantServiceImpl implements BreedingPlantService {
 
