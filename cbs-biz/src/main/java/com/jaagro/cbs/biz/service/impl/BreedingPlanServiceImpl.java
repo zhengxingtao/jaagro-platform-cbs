@@ -2,18 +2,16 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.base.CustomerContacts;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
-import com.jaagro.cbs.api.model.BatchPlantCoop;
-import com.jaagro.cbs.api.model.BreedingPlan;
-import com.jaagro.cbs.api.model.CoopExample;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
+import com.jaagro.cbs.biz.mapper.BreedingBatchParameterMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
@@ -27,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -53,6 +53,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private CoopMapperExt coopMapper;
     @Autowired
     private BatchPlantCoopService batchPlantCoopService;
+    @Autowired
+    private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
+
 
     /**
      * 创建养殖计划
@@ -97,6 +100,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+//        dto.setTenantId();    先注释,等待从userInfo获取租户id
         if (dto.getCustomerInfo() != null) {
             BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
             if (!CollectionUtils.isEmpty(listBaseResponse.getData())) {
@@ -104,14 +108,14 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 dto.setCustomerIds(customerIds);
             }
         }
-        List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
-        for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
+        List<ReturnBreedingPlanDto> planDtoList = breedingPlanMapper.listBreedingPlan(dto);
+        for (ReturnBreedingPlanDto returnBreedingPlanDto : planDtoList) {
             //填充养殖户信息
-            CustomerContactsReturnDto customeInfo = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
-            if (customeInfo != null) {
+            CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
+            if (contactsReturnDto != null) {
                 returnBreedingPlanDto
-                        .setCustomerName(customeInfo.getContact())
-                        .setCustomerPhone(customeInfo.getPhone());
+                        .setCustomerName(contactsReturnDto.getContact())
+                        .setCustomerPhone(contactsReturnDto.getPhone());
             }
             //填充鸡舍
             List<Integer> coopId = batchPlantCoopService.listCoopIdByPlanId(returnBreedingPlanDto.getId());
@@ -122,7 +126,40 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .andEnableEqualTo(true);
                 returnBreedingPlanDto.setCoops(coopMapper.selectByExample(coopExample));
             }
+            //填充进度
+            BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
+            parameterExample.createCriteria()
+                    .andEnableEqualTo(true)
+                    .andPlanIdEqualTo(returnBreedingPlanDto.getId())
+                    .andBatchNoEqualTo(returnBreedingPlanDto.getBatchNo());
+            List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapperExt.selectByExample(parameterExample);
+            if (!CollectionUtils.isEmpty(breedingBatchParameters)) {
+                BreedingBatchParameter parameter = breedingBatchParameters.get(0);
+                returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
+                try {
+                    long day = getInterval(new Date(), returnBreedingPlanDto.getPlanTime());
+                    returnBreedingPlanDto.setAlreadyDayAge((int) day);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
-        return new PageInfo(returnBreedingPlanDtos);
+        return new PageInfo(planDtoList);
     }
+
+    private long getInterval(Date begin_date, Date end_date) throws Exception {
+        long day = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        if (begin_date != null) {
+            String begin = sdf.format(begin_date);
+            begin_date = sdf.parse(begin);
+        }
+        if (end_date != null) {
+            String end = sdf.format(end_date);
+            end_date = sdf.parse(end);
+        }
+        day = (end_date.getTime() - begin_date.getTime()) / (24 * 60 * 60 * 1000);
+        return day;
+    }
+
 }

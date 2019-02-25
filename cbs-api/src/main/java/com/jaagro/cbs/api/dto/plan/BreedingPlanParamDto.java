@@ -53,4 +53,9 @@ public class BreedingPlanParamDto implements Serializable {
      */
     private Integer planStatus;
 
+    /**
+     * 租户id
+     */
+    private Integer tenantId;
+
 }
