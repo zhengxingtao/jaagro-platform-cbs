@@ -98,9 +98,9 @@ public class PlanTask implements Serializable {
     private String notes;
 
     /**
-     * 是否有效
+     * 是否有效（1-有效 0-无效）
      */
-    private Byte enable;
+    private Boolean enable;
 
     /**
      * 创建时间

@@ -23,6 +23,11 @@ public class BatchInfo implements Serializable {
     private Integer id;
 
     /**
+     * 养殖计划id
+     */
+    private Integer planId;
+
+    /**
      * 批次号
      */
     private String batchNo;
@@ -105,7 +110,7 @@ public class BatchInfo implements Serializable {
     /**
      * 是否有效(0-无效,1-有效)
      */
-    private Byte enable;
+    private Boolean enable;
 
     /**
      * 创建时间

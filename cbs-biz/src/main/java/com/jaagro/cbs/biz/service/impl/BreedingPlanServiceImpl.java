@@ -63,7 +63,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             for (Integer plantsId : plantsIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
-                        .setBatchNo(batchNo)
                         .setCreateUserId(currentUser.getId())
                         .setPlantId(plantsId);
                 batchPlantCoopMapper.insertSelective(batchPlantCoop);

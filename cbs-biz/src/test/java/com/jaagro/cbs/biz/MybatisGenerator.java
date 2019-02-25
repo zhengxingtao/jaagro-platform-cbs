@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 代码生成类
+ * 代码生成类，
  * Created by src on 2018/6/25.
  * 放在Dao层下面
  */

@@ -215,6 +215,76 @@ public class CoopExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andCoopNoIsNull() {
+            addCriterion("coop_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoIsNotNull() {
+            addCriterion("coop_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoEqualTo(String value) {
+            addCriterion("coop_no =", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoNotEqualTo(String value) {
+            addCriterion("coop_no <>", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoGreaterThan(String value) {
+            addCriterion("coop_no >", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoGreaterThanOrEqualTo(String value) {
+            addCriterion("coop_no >=", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoLessThan(String value) {
+            addCriterion("coop_no <", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoLessThanOrEqualTo(String value) {
+            addCriterion("coop_no <=", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoLike(String value) {
+            addCriterion("coop_no like", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoNotLike(String value) {
+            addCriterion("coop_no not like", value, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoIn(List<String> values) {
+            addCriterion("coop_no in", values, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoNotIn(List<String> values) {
+            addCriterion("coop_no not in", values, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoBetween(String value1, String value2) {
+            addCriterion("coop_no between", value1, value2, "coopNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNoNotBetween(String value1, String value2) {
+            addCriterion("coop_no not between", value1, value2, "coopNo");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerIdIsNull() {
             addCriterion("customer_id is null");
             return (Criteria) this;
@@ -1062,6 +1132,66 @@ public class CoopExample implements Serializable {
 
         public Criteria andModifyUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("modify_user_id not between", value1, value2, "modifyUserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNull() {
+            addCriterion("enable is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIsNotNull() {
+            addCriterion("enable is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableEqualTo(Boolean value) {
+            addCriterion("enable =", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotEqualTo(Boolean value) {
+            addCriterion("enable <>", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThan(Boolean value) {
+            addCriterion("enable >", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("enable >=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThan(Boolean value) {
+            addCriterion("enable <", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableLessThanOrEqualTo(Boolean value) {
+            addCriterion("enable <=", value, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableIn(List<Boolean> values) {
+            addCriterion("enable in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotIn(List<Boolean> values) {
+            addCriterion("enable not in", values, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableBetween(Boolean value1, Boolean value2) {
+            addCriterion("enable between", value1, value2, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnableNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("enable not between", value1, value2, "enable");
             return (Criteria) this;
         }
     }

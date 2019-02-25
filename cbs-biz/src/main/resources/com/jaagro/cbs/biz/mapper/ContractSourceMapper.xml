@@ -13,6 +13,7 @@
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -45,7 +46,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, plan_id, plan_contract_id, certificate_type, certificate_image_url, certificate_status, 
-    notes, create_time, create_user_id, modify_time, modify_user_id
+    notes, create_time, create_user_id, modify_time, modify_user_id, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.ContractSourceExample" >
     select
@@ -87,11 +88,13 @@
     insert into contract_source (plan_id, plan_contract_id, certificate_type, 
       certificate_image_url, certificate_status, 
       notes, create_time, create_user_id, 
-      modify_time, modify_user_id)
+      modify_time, modify_user_id, enable
+      )
     values (#{planId,jdbcType=INTEGER}, #{planContractId,jdbcType=INTEGER}, #{certificateType,jdbcType=INTEGER}, 
       #{certificateImageUrl,jdbcType=VARCHAR}, #{certificateStatus,jdbcType=INTEGER}, 
       #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.ContractSource" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -129,6 +132,9 @@
       <if test="modifyUserId != null" >
         modify_user_id,
       </if>
+      <if test="enable != null" >
+        enable,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="planId != null" >
@@ -160,6 +166,9 @@
       </if>
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -202,6 +211,9 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -216,7 +228,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

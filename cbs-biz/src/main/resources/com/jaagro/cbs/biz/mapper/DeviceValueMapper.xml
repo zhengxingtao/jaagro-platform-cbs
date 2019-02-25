@@ -7,6 +7,7 @@
     <result column="value_type" property="valueType" jdbcType="INTEGER" />
     <result column="current_value" property="currentValue" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -38,7 +39,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, device_id, value_type, current_value, create_time
+    id, device_id, value_type, current_value, create_time, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.DeviceValueExample" >
     select
@@ -78,9 +79,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into device_value (device_id, value_type, current_value, 
-      create_time)
+      create_time, enable)
     values (#{deviceId,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{currentValue,jdbcType=DECIMAL}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.DeviceValue" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -100,6 +101,9 @@
       <if test="createTime != null" >
         create_time,
       </if>
+      <if test="enable != null" >
+        enable,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="deviceId != null" >
@@ -113,6 +117,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -137,6 +144,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -145,7 +155,8 @@
     set device_id = #{deviceId,jdbcType=INTEGER},
       value_type = #{valueType,jdbcType=INTEGER},
       current_value = #{currentValue,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

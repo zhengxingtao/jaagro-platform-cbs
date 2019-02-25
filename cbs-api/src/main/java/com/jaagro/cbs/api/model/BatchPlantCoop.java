@@ -22,9 +22,9 @@ public class BatchPlantCoop implements Serializable {
     private Integer id;
 
     /**
-     * 批次号
+     * 养殖计划id
      */
-    private String batchNo;
+    private Integer planId;
 
     /**
      * 养殖场id
@@ -39,7 +39,7 @@ public class BatchPlantCoop implements Serializable {
     /**
      * 是否有效(0-无效,1-有效)
      */
-    private Byte enable;
+    private Boolean enable;
 
     /**
      * 创建时间

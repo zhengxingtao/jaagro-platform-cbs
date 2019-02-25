@@ -68,9 +68,9 @@ public class BreedingStandardParameter implements Serializable {
     private Byte alarm;
 
     /**
-     * 是否有效(0-无效,1-有效)
+     * 养殖参数状态（1-启用 0 -未启用）
      */
-    private Byte enable;
+    private Integer status;
 
     /**
      * 创建时间
@@ -91,6 +91,11 @@ public class BreedingStandardParameter implements Serializable {
      * 更新人
      */
     private Integer modifyUserId;
+
+    /**
+     * 是否有效（1- 有效 0 -无效）
+     */
+    private Boolean enable;
 
     private static final long serialVersionUID = 1L;
 }

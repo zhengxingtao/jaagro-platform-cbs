@@ -91,5 +91,10 @@ public class Supplier implements Serializable {
      */
     private Integer modifyUserId;
 
+    /**
+     * 逻辑删除
+     */
+    private Boolean enable;
+
     private static final long serialVersionUID = 1L;
 }

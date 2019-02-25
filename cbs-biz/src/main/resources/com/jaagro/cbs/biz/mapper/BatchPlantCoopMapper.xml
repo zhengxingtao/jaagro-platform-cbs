@@ -3,10 +3,10 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt" >
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BatchPlantCoop" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="plant_id" property="plantId" jdbcType="INTEGER" />
     <result column="coop_id" property="coopId" jdbcType="INTEGER" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -42,7 +42,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, batch_no, plant_id, coop_id, enable, create_time, create_user_id, modify_time, 
+    id, plan_id, plant_id, coop_id, enable, create_time, create_user_id, modify_time, 
     modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BatchPlantCoopExample" >
@@ -82,11 +82,11 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into batch_plant_coop (batch_no, plant_id, coop_id, 
+    insert into batch_plant_coop (plan_id, plant_id, coop_id, 
       enable, create_time, create_user_id, 
       modify_time, modify_user_id)
-    values (#{batchNo,jdbcType=VARCHAR}, #{plantId,jdbcType=INTEGER}, #{coopId,jdbcType=INTEGER}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+    values (#{planId,jdbcType=INTEGER}, #{plantId,jdbcType=INTEGER}, #{coopId,jdbcType=INTEGER}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BatchPlantCoop" >
@@ -95,8 +95,8 @@
     </selectKey>
     insert into batch_plant_coop
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="batchNo != null" >
-        batch_no,
+      <if test="planId != null" >
+        plan_id,
       </if>
       <if test="plantId != null" >
         plant_id,
@@ -121,8 +121,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="batchNo != null" >
-        #{batchNo,jdbcType=VARCHAR},
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
       </if>
       <if test="plantId != null" >
         #{plantId,jdbcType=INTEGER},
@@ -131,7 +131,7 @@
         #{coopId,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -156,8 +156,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BatchPlantCoop" >
     update batch_plant_coop
     <set >
-      <if test="batchNo != null" >
-        batch_no = #{batchNo,jdbcType=VARCHAR},
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
       </if>
       <if test="plantId != null" >
         plant_id = #{plantId,jdbcType=INTEGER},
@@ -166,7 +166,7 @@
         coop_id = #{coopId,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -185,10 +185,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BatchPlantCoop" >
     update batch_plant_coop
-    set batch_no = #{batchNo,jdbcType=VARCHAR},
+    set plan_id = #{planId,jdbcType=INTEGER},
       plant_id = #{plantId,jdbcType=INTEGER},
       coop_id = #{coopId,jdbcType=INTEGER},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

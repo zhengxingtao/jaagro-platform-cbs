@@ -3,7 +3,6 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt" >
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingPlan" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="plants_id" property="plantsId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
@@ -18,6 +17,7 @@
     <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -49,9 +49,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, plants_id, batch_no, tenant_id, customer_id, plan_status, plan_chicken_quantity, 
-    plan_time, technician, technician_id, notes, create_time, create_user_id, create_user_name, 
-    modify_time, modify_user_id
+    id, batch_no, tenant_id, customer_id, plan_status, plan_chicken_quantity, plan_time, 
+    technician, technician_id, notes, create_time, create_user_id, create_user_name, 
+    modify_time, modify_user_id, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingPlanExample" >
     select
@@ -90,17 +90,17 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_plan (plants_id, batch_no, tenant_id, 
-      customer_id, plan_status, plan_chicken_quantity, 
-      plan_time, technician, technician_id, 
-      notes, create_time, create_user_id, 
-      create_user_name, modify_time, modify_user_id
+    insert into breeding_plan (batch_no, tenant_id, customer_id, 
+      plan_status, plan_chicken_quantity, plan_time, 
+      technician, technician_id, notes, 
+      create_time, create_user_id, create_user_name, 
+      modify_time, modify_user_id, enable
       )
-    values (#{plantsId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, 
-      #{customerId,jdbcType=INTEGER}, #{planStatus,jdbcType=INTEGER}, #{planChickenQuantity,jdbcType=INTEGER}, 
-      #{planTime,jdbcType=DATE}, #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, 
-      #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{createUserName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+    values (#{batchNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, 
+      #{planStatus,jdbcType=INTEGER}, #{planChickenQuantity,jdbcType=INTEGER}, #{planTime,jdbcType=DATE}, 
+      #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{createUserName,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
@@ -109,9 +109,6 @@
     </selectKey>
     insert into breeding_plan
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="plantsId != null" >
-        plants_id,
-      </if>
       <if test="batchNo != null" >
         batch_no,
       </if>
@@ -154,11 +151,11 @@
       <if test="modifyUserId != null" >
         modify_user_id,
       </if>
+      <if test="enable != null" >
+        enable,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="plantsId != null" >
-        #{plantsId,jdbcType=INTEGER},
-      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -201,6 +198,9 @@
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BreedingPlanExample" resultType="java.lang.Integer" >
@@ -212,9 +212,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     update breeding_plan
     <set >
-      <if test="plantsId != null" >
-        plants_id = #{plantsId,jdbcType=INTEGER},
-      </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -257,13 +254,15 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     update breeding_plan
-    set plants_id = #{plantsId,jdbcType=INTEGER},
-      batch_no = #{batchNo,jdbcType=VARCHAR},
+    set batch_no = #{batchNo,jdbcType=VARCHAR},
       tenant_id = #{tenantId,jdbcType=INTEGER},
       customer_id = #{customerId,jdbcType=INTEGER},
       plan_status = #{planStatus,jdbcType=INTEGER},
@@ -276,7 +275,8 @@
       create_user_id = #{createUserId,jdbcType=INTEGER},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

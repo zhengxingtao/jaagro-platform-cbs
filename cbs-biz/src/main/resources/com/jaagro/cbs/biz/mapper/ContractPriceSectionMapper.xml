@@ -8,7 +8,7 @@
     <result column="recycling_price" property="recyclingPrice" jdbcType="DECIMAL" />
     <result column="weight_lower" property="weightLower" jdbcType="DECIMAL" />
     <result column="weight_upper" property="weightUpper" jdbcType="DECIMAL" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -89,7 +89,7 @@
       create_time, create_user_id, modify_time, 
       modify_user_id)
     values (#{planId,jdbcType=INTEGER}, #{contractId,jdbcType=INTEGER}, #{recyclingPrice,jdbcType=DECIMAL}, 
-      #{weightLower,jdbcType=DECIMAL}, #{weightUpper,jdbcType=DECIMAL}, #{enable,jdbcType=TINYINT}, 
+      #{weightLower,jdbcType=DECIMAL}, #{weightUpper,jdbcType=DECIMAL}, #{enable,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{modifyUserId,jdbcType=INTEGER})
   </insert>
@@ -147,7 +147,7 @@
         #{weightUpper,jdbcType=DECIMAL},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -188,7 +188,7 @@
         weight_upper = #{weightUpper,jdbcType=DECIMAL},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -212,7 +212,7 @@
       recycling_price = #{recyclingPrice,jdbcType=DECIMAL},
       weight_lower = #{weightLower,jdbcType=DECIMAL},
       weight_upper = #{weightUpper,jdbcType=DECIMAL},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

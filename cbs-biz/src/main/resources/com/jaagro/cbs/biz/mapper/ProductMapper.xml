@@ -8,6 +8,7 @@
     <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -39,7 +40,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_name, product_type, manufacturer, image_url, create_time
+    id, product_name, product_type, manufacturer, image_url, create_time, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.ProductExample" >
     select
@@ -79,9 +80,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product (product_name, product_type, manufacturer, 
-      image_url, create_time)
+      image_url, create_time, enable
+      )
     values (#{productName,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{manufacturer,jdbcType=VARCHAR}, 
-      #{imageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{imageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Product" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -104,6 +107,9 @@
       <if test="createTime != null" >
         create_time,
       </if>
+      <if test="enable != null" >
+        enable,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="productName != null" >
@@ -120,6 +126,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -147,6 +156,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -156,7 +168,8 @@
       product_type = #{productType,jdbcType=INTEGER},
       manufacturer = #{manufacturer,jdbcType=VARCHAR},
       image_url = #{imageUrl,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
