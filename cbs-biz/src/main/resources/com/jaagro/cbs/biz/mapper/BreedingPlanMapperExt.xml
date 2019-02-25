@@ -8,20 +8,23 @@
         select
         <include refid="Base_Column_List"/>
         from breeding_plan
-        where 1=1
-        <if test="customerIds!=null">
-            <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
-            and customer_id in ${customerId}
-            </foreach>
-        </if>
-        <if test="batchNo!=null">
-            and batch_no like CONCAT(#{batchNo},'%')
-        </if>
-        <if test="createUserName!=null">
-            and create_user_name like CONCAT(#{createUserName},'%')
-        </if>
-        <if test="planStatus!=null">
-            and plan_status=#{planStatus}
-        </if>
+        <where>
+            1=1
+            <if test="customerIds!=null">
+                and customer_id IN
+                <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
+                ${customerId}
+                </foreach>
+            </if>
+            <if test="batchNo!=null">
+                and batch_no like CONCAT(#{batchNo},'%')
+            </if>
+            <if test="createUserName!=null">
+                and create_user_name like CONCAT(#{createUserName},'%')
+            </if>
+            <if test="planStatus!=null">
+                and plan_status=#{planStatus}
+            </if>
+        </where>
     </select>
 </mapper>
