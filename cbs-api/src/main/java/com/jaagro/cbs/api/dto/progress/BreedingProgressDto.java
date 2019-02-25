@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public class BreedingProgressDto implements Serializable {
     /**
      * 存栏量
      */
-    private Integer livingChickenQuantity;
+    private BigDecimal livingChickenQuantity;
 
     /**
      * 上鸡时间
