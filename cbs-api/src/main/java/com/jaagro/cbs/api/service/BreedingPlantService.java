@@ -60,4 +60,11 @@ public interface BreedingPlantService {
      * @return
      */
     List<ReturnCoopDto> listCoopByPlantId(Integer plantId);
+
+    /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    void deleteCoop(Integer coopId);
 }

@@ -37,7 +37,7 @@ public class BreedingPlantController {
      * @return
      */
     @ApiOperation("养殖场-新增")
-    @PostMapping("/plant")
+    @PostMapping("/createPlant")
     public BaseResponse createPlant(@RequestBody CreatePlantDto plantDto) {
         if (StringUtils.isEmpty(plantDto.getPlantName())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场名称不能为空");
@@ -81,7 +81,7 @@ public class BreedingPlantController {
      * @return
      */
     @ApiOperation("养殖场-修改")
-    @PutMapping("/plant")
+    @PutMapping("/updatePlant")
     public BaseResponse updatePlant(@RequestBody UpdatePlantDto plantDto) {
         if (StringUtils.isEmpty(plantDto.getId())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
@@ -96,7 +96,7 @@ public class BreedingPlantController {
      * @return
      */
     @ApiOperation("养殖场-获取单条")
-    @GetMapping("/plant/{id}")
+    @GetMapping("/getPlant/{id}")
     public BaseResponse<ReturnPlantDto> getPlant(@PathVariable("id") Integer id) {
         return BaseResponse.successInstance(breedingPlantService.getPlantDetailsById(id));
     }
@@ -120,8 +120,8 @@ public class BreedingPlantController {
      * @return
      */
     @ApiOperation("鸡舍-新增")
-    @PostMapping("/coop")
-    public BaseResponse createPlant(@RequestBody CreateCoopDto coopDto) {
+    @PostMapping("/createCoop")
+    public BaseResponse createCoop(@RequestBody CreateCoopDto coopDto) {
         if (StringUtils.isEmpty(coopDto.getPlantId())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
         }
@@ -139,6 +139,15 @@ public class BreedingPlantController {
             return BaseResponse.errorInstance(e.getMessage());
         }
         return BaseResponse.service(result);
+    }
+
+    @ApiOperation("鸡舍-删除")
+    @GetMapping("/deleteCoop/{plantId}")
+    public BaseResponse deleteCoop(@PathVariable("plantId") Integer coopId) {
+        if (coopId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+        }
+       return null;
     }
 
     /**

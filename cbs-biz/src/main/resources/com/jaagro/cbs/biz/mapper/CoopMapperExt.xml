@@ -20,7 +20,7 @@
         <collection property="coopDevices" column="id"
                     select="com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt.selectByPrimaryKey"></collection>
     </resultMap>
-    <select id="listCoopDeviceByCoopExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.Coop">
+    <select id="listCoopDeviceByCoopExample" resultMap="CoopDeviceResultMap" parameterType="com.jaagro.cbs.api.model.Coop">
         select
         <include refid="Base_Column_List"/>
         from coop
