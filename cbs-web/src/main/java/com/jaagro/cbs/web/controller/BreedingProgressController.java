@@ -28,7 +28,7 @@ public class BreedingProgressController {
     /**
      * 批次管理列表
      *
-     * @param customerId
+     * @param criteriaDto
      * @return
      */
     @ApiOperation("养殖场-通过养殖户id获得养殖场列表")
