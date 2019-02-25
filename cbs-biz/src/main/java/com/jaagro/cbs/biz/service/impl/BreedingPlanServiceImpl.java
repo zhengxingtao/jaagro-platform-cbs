@@ -1,6 +1,10 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
@@ -58,15 +62,29 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //插入养殖计划
         breedingPlanMapper.insertSelective(breedingPlan);
         //插入养殖关联表
-        if (!CollectionUtils.isEmpty(dto.getPlantsId())) {
-            List<Integer> plantsIds = dto.getPlantsId();
-            for (Integer plantsId : plantsIds) {
+        if (!CollectionUtils.isEmpty(dto.getPlantIds())) {
+            List<Integer> plantIds = dto.getPlantIds();
+            for (Integer plantId : plantIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
                         .setCreateUserId(currentUser.getId())
-                        .setPlantId(plantsId);
+                        .setPlantId(plantId);
                 batchPlantCoopMapper.insertSelective(batchPlantCoop);
             }
         }
+    }
+
+    /**
+     * 养殖计划列表
+     *
+     * @param dto
+     * @return
+     * @author @Gao.
+     */
+    public PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        breedingPlanMapper.listBreedingPlan(dto);
+
+        return null;
     }
 }

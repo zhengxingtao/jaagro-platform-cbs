@@ -1,5 +1,6 @@
 package com.jaagro.cbs.web.controller;
 
+import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.utils.BaseResponse;
@@ -25,7 +26,7 @@ public class BreedingPlanController {
     @PostMapping("/createBreedingPlan")
     @ApiOperation("创建养殖计划")
     public BaseResponse createBreedingPlan(@RequestBody CreateBreedingPlanDto dto) {
-        if (CollectionUtils.isEmpty(dto.getPlantsId())) {
+        if (CollectionUtils.isEmpty(dto.getPlantIds())) {
             BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场不能为空");
         }
         if (dto.getCustomerId() == null) {
@@ -37,4 +38,12 @@ public class BreedingPlanController {
         breedingPlanService.createBreedingPlan(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
+
+    @PostMapping("/listBreedingPlan")
+    @ApiOperation("养殖计划列表")
+    public BaseResponse listBreedingPlan(@RequestBody BreedingPlanParamDto dto) {
+
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
+
 }
