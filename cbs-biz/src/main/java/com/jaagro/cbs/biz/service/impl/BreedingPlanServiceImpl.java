@@ -92,7 +92,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         if (dto.getCustomerInfo() != null) {
             BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
-            if (CollectionUtils.isEmpty(listBaseResponse.getData())) {
+            if (!CollectionUtils.isEmpty(listBaseResponse.getData())) {
                 List<Integer> CustomerIds = listBaseResponse.getData();
                 dto.setCustomerIds(CustomerIds);
             }
@@ -107,6 +107,5 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
         }
         return new PageInfo(returnBreedingPlanDtos);
-
     }
 }
