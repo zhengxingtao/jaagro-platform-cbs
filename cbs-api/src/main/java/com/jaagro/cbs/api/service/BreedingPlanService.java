@@ -21,5 +21,11 @@ public interface BreedingPlanService {
      */
     void createBreedingPlan(CreateBreedingPlanDto dto);
 
+    /**
+     * 分页查询养殖计划
+     *
+     * @param dto
+     * @return
+     */
     PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto);
 }

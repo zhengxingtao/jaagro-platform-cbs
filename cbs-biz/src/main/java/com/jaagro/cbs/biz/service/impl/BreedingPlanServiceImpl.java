@@ -7,11 +7,14 @@ import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.model.BatchPlantCoop;
+import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.CoopExample;
+import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.api.model.BatchPlantCoop;
-import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
@@ -45,6 +48,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private CurrentUserService currentUserService;
     @Autowired
     private CustomerClientService customerClientService;
+    @Autowired
+    private CoopMapperExt coopMapper;
+    @Autowired
+    private BatchPlantCoopService batchPlantCoopService;
 
     /**
      * 创建养殖计划
@@ -98,6 +105,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         List<ReturnBreedingPlanDto> returnBreedingPlanDtos = breedingPlanMapper.listBreedingPlan(dto);
         for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
+            //填充养殖户信息
             BaseResponse<CustomerContacts> customeInfoData = customerClientService.getContactsById(returnBreedingPlanDto.getCustomerId());
             if (customeInfoData.getData() != null) {
                 CustomerContacts customeInfo = customeInfoData.getData();
@@ -105,8 +113,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerName(customeInfo.getContact())
                         .setCustomerPhone(customeInfo.getPhone());
             }
+            //填充鸡舍
+            List<Integer> coopId = batchPlantCoopService.listCoopIdByPlanId(returnBreedingPlanDto.getId());
+            if (!CollectionUtils.isEmpty(coopId)) {
+                CoopExample coopExample = new CoopExample();
+                coopExample.createCriteria()
+                        .andIdIn(coopId)
+                        .andEnableEqualTo(true);
+                returnBreedingPlanDto.setCoops(coopMapper.selectByExample(coopExample));
+            }
         }
         return new PageInfo(returnBreedingPlanDtos);
-        
     }
 }

@@ -1,6 +1,5 @@
 package com.jaagro.cbs.biz.service.impl;
 
-import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
@@ -11,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 /**
  * 养殖过程管理
@@ -26,6 +23,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
     @Autowired
     private BreedingPlanMapperExt breedingPlanMapperExt;
+
     /**
      * 根据养殖计划Id获取养殖过程喂养头信息
      *
@@ -71,14 +69,4 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         return null;
     }
 
-    /**
-     * 批次管理
-     *
-     * @param criteriaDto
-     * @return
-     */
-    @Override
-    public List<ReturnBreedingPlanDto> listPlanByCriteria(ListBatchCriteriaDto criteriaDto) {
-        return null;
-    }
 }
