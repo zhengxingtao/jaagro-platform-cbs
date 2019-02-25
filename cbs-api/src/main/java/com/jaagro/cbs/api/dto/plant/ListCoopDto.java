@@ -15,24 +15,14 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ReturnPlantImageDto implements Serializable {
+public class ListCoopDto implements Serializable {
     /**
-     * 客户养殖场图片表id
+     * 客户鸡舍信息表id
      */
     private Integer id;
 
     /**
-     * 养殖场id
+     * 鸡舍编号
      */
-    private Integer plantId;
-
-    /**
-     * 图片地址
-     */
-    private String imageUrl;
-
-    /**
-     * 是否有效(0-无效,1-有效)
-     */
-    private Byte enable;
+    private String coopNo;
 }
