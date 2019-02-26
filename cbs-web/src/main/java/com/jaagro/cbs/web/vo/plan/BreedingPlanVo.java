@@ -1,6 +1,5 @@
-package com.jaagro.cbs.api.dto.plan;
+package com.jaagro.cbs.web.vo.plan;
 
-import com.jaagro.cbs.api.model.Coop;
 import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,14 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author @Gao.
- */
+ * @description: 养殖计划
+ * @author: @Gao.
+ * @create: 2019-02-26 11:32
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ReturnBreedingPlanDto implements Serializable {
-
+public class BreedingPlanVo implements Serializable {
     /**
      * 计划id
      */
@@ -34,11 +34,6 @@ public class ReturnBreedingPlanDto implements Serializable {
      * 租户id
      */
     private Integer tenantId;
-
-    /**
-     * 养殖户id
-     */
-    private Integer customerId;
 
     /**
      * 养殖户的名称
@@ -69,11 +64,6 @@ public class ReturnBreedingPlanDto implements Serializable {
     private String technician;
 
     /**
-     * 技术员id
-     */
-    private Integer technicianId;
-
-    /**
      * 备注
      */
     private String notes;
@@ -84,33 +74,11 @@ public class ReturnBreedingPlanDto implements Serializable {
     private Date createTime;
 
     /**
-     * 创建人
-     */
-    private Integer createUserId;
-
-    /**
      * 创建人姓名
      */
     private String createUserName;
 
-    /**
-     * 进度 - 已进行的天数
-     */
-    private Integer alreadyDayAge;
 
-    /**
-     * 进度 - 日龄
-     */
-    private Integer AllDayAge;
-
-    /**
-     * 养殖场
-     */
     private List<Plant> plants;
-
-    /**
-     * 鸡舍
-     */
-    private List<Coop> coops;
 
 }

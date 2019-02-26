@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author gao
+ * @date 2019-02-26
+ */
 @Slf4j
 @Service
 public class BreedingCoopDeviceServiceImpl implements BreedingCoopDeviceService {
