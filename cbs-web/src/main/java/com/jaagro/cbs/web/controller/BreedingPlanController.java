@@ -77,7 +77,7 @@ public class BreedingPlanController {
         if (dto.getId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
-
+        breedingPlanService.upDateBreedingPlanDetails(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 

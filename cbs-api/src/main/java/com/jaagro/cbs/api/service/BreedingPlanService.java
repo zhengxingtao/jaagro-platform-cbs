@@ -7,7 +7,6 @@ import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 
-import java.util.List;
 
 /**
  * 养殖计划管理
@@ -36,4 +35,12 @@ public interface BreedingPlanService {
      * @param dto
      */
     void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto);
+
+    /**
+     * 养殖计划详情
+     *
+     * @param planId
+     * @return
+     */
+    ReturnBreedingPlanDto breedingPlanDetails(Integer planId);
 }
