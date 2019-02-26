@@ -40,8 +40,7 @@ public class BatchPlantCoopServiceImpl implements BatchPlantCoopService {
         List<BatchPlantCoop> batchPlantCoops = batchPlantCoopMapper.selectByExample(batchPlantCoopExample);
         List<Integer> coopId = new ArrayList<>();
         if (!CollectionUtils.isEmpty(batchPlantCoops)) {
-            for (BatchPlantCoop batchPlantCoop : batchPlantCoops
-            ) {
+            for (BatchPlantCoop batchPlantCoop : batchPlantCoops) {
                 coopId.add(batchPlantCoop.getCoopId());
             }
         }
