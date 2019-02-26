@@ -19,7 +19,7 @@ public interface BreedingPlantService {
      * @param plantDto
      * @return
      */
-    Map<String, Object> createPlant(CreatePlantDto plantDto);
+    Boolean createPlant(CreatePlantDto plantDto);
 
     /**
      * 修改
@@ -60,4 +60,11 @@ public interface BreedingPlantService {
      * @return
      */
     List<ReturnCoopDto> listCoopByPlantId(Integer plantId);
+
+    /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    void deleteCoop(Integer coopId);
 }

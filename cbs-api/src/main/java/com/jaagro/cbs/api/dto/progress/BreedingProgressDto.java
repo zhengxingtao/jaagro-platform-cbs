@@ -1,27 +1,32 @@
-package com.jaagro.cbs.api.dto.plan;
+package com.jaagro.cbs.api.dto.progress;
 
+import com.jaagro.cbs.api.model.Coop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
- * @author @Gao.
+ * @author :Gavin
+ * @date :2019/02/25
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CreateBreedingPlanDto implements Serializable {
+public class BreedingProgressDto implements Serializable {
+
 
     /**
-     * 养殖场id
+     * 批次号
      */
-    private List<Integer> plantIds;
+    private String batchNo;
 
     /**
      * 租户id
@@ -34,6 +39,25 @@ public class CreateBreedingPlanDto implements Serializable {
     private Integer customerId;
 
     /**
+     * 养殖户名称
+     */
+    private String customerName;
+
+    /**
+     * 养殖户联系人电话
+     */
+    private String contactPhone;
+
+    /**
+     * 养殖户详细地址
+     */
+    private String customerAddress;
+
+    /**
+     * 养殖天数
+     */
+    private Integer breedingDays;
+    /**
      * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
      */
     private Integer planStatus;
@@ -42,24 +66,19 @@ public class CreateBreedingPlanDto implements Serializable {
      * 计划上鸡数量
      */
     private Integer planChickenQuantity;
+    /**
+     * 存栏量
+     */
+    private BigDecimal livingChickenQuantity;
 
     /**
      * 上鸡时间
      */
     private Date planTime;
-
     /**
-     * 技术员姓名
+     *鸡舍位置:养殖厂对应的鸡舍信息
      */
-    private String technician;
 
-    /**
-     * 技术员id
-     */
-    private Integer technicianId;
+    Map<Integer, List<Coop>> coopMap;
 
-    /**
-     * 备注
-     */
-    private String notes;
 }

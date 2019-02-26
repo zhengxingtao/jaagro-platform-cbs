@@ -3,7 +3,10 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
-
+    <update id="logicDeleteCoopDeviceByCoopId" parameterType="java.lang.Integer">
+    update coop_device
+    set
+      enable = false
+    where coop_id = #{coopId,jdbcType=INTEGER}
+  </update>
 </mapper>

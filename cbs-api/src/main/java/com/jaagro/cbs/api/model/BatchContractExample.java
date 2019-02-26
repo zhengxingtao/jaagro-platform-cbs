@@ -946,6 +946,66 @@ public class BatchContractExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andDeliveryMethodIsNull() {
+            addCriterion("delivery_method is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodIsNotNull() {
+            addCriterion("delivery_method is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodEqualTo(Integer value) {
+            addCriterion("delivery_method =", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodNotEqualTo(Integer value) {
+            addCriterion("delivery_method <>", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodGreaterThan(Integer value) {
+            addCriterion("delivery_method >", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodGreaterThanOrEqualTo(Integer value) {
+            addCriterion("delivery_method >=", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodLessThan(Integer value) {
+            addCriterion("delivery_method <", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodLessThanOrEqualTo(Integer value) {
+            addCriterion("delivery_method <=", value, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodIn(List<Integer> values) {
+            addCriterion("delivery_method in", values, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodNotIn(List<Integer> values) {
+            addCriterion("delivery_method not in", values, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodBetween(Integer value1, Integer value2) {
+            addCriterion("delivery_method between", value1, value2, "deliveryMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryMethodNotBetween(Integer value1, Integer value2) {
+            addCriterion("delivery_method not between", value1, value2, "deliveryMethod");
+            return (Criteria) this;
+        }
+
         public Criteria andProtectionPriceIsNull() {
             addCriterion("protection_price is null");
             return (Criteria) this;

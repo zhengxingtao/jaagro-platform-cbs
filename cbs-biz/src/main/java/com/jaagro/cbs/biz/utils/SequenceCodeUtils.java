@@ -23,7 +23,10 @@ public class SequenceCodeUtils {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    private static final int startLength = 9;
+    private static final int START_LENGTH = 9;
+    private static final int ZERO_START_LENGTH = 4;
+    private static final String ZERO_STRING = "00000000000000";
+
 
     /**
      * 生成唯一长度的序列号 格式 前缀+时间日期+随机数+自增键
@@ -33,7 +36,8 @@ public class SequenceCodeUtils {
      */
     public String genSeqCode(String prefix) {
         StringBuilder genSeqCode = new StringBuilder();
-        String currentDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String currentDate = date.substring(2, date.length());
         RedisAtomicLong entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
         if (entityIdCounter == null) {
             entityIdCounter.expire(48, TimeUnit.HOURS);
@@ -44,9 +48,8 @@ public class SequenceCodeUtils {
         if (incrementId.longValue() == 1) {
             entityIdCounter.expire(48, TimeUnit.HOURS);
         }
-        int strLength = startLength - incrementId.toString().length();
-        String fixLengthString = fixLengthString(strLength);
-        genSeqCode.append(prefix).append(currentDate).append(fixLengthString).append(incrementId);
+        int zeroLength = ZERO_START_LENGTH - incrementId.toString().length();
+        genSeqCode.append(prefix).append(currentDate).append(ZERO_STRING.substring(0, zeroLength)).append(incrementId);
         return genSeqCode.toString();
     }
 

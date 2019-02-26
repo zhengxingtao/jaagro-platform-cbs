@@ -10,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 
 /**
  * @author gavin
- *
  * @Date 20190222
  */
 @RestController
@@ -33,19 +30,21 @@ public class BreedingStandardController {
      * @param dto
      * @return
      */
-    @ApiOperation("新增养殖标准模板")
-    @PostMapping("/createBreedingStandard")
-    public BaseResponse createBreedingStandard(@RequestBody BreedingStandardDto dto) {
-
-        Boolean result = false;
+    @ApiOperation("新增、修改养殖标准模板")
+    @PostMapping("/breedingStandard")
+    public BaseResponse breedingStandard(@RequestBody BreedingStandardDto dto) {
         try {
-            result = breedingStandardService.createBreedingTemplate(dto);
+            Boolean result = false;
+            if (null == dto.getId() || dto.getId() == 0) {
+                result = breedingStandardService.createBreedingTemplate(dto);
+            } else {
+                result = breedingStandardService.updateBreedingTemplate(dto);
+            }
         } catch (Exception ex) {
-            return BaseResponse.errorInstance(ex.getMessage());
+            return BaseResponse.errorInstance("保存失败：" + ex.getMessage());
         }
-        return BaseResponse.successInstance(result);
+        return BaseResponse.successInstance("保存成功");
     }
-
 
 
     /**
@@ -57,7 +56,7 @@ public class BreedingStandardController {
     @ApiOperation("查询单个养殖模板详情")
     @GetMapping("/getBreedingStandardById/{id}")
     public BaseResponse getBreedingStandardById(@PathVariable("id") Integer id) {
-        BreedingStandardDto breedingStandardDto  =breedingStandardService.getBreedingStandardById(id);
+        BreedingStandardDto breedingStandardDto = breedingStandardService.getBreedingStandardById(id);
         return BaseResponse.successInstance(breedingStandardDto);
     }
 

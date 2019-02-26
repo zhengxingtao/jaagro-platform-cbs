@@ -3,17 +3,20 @@ package com.jaagro.cbs.biz.service.impl;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.enums.CoopStatusEnum;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlantService;
+import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
 import com.jaagro.cbs.biz.mapper.PlantMapperExt;
-import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
 import com.jaagro.utils.ServiceResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -26,6 +29,7 @@ import java.util.Map;
  * @author baiyiran
  * @Date 2019/2/22
  */
+@Slf4j
 @Service
 public class BreedingPlantServiceImpl implements BreedingPlantService {
 
@@ -41,6 +45,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     private CoopMapperExt coopMapperExt;
     @Autowired
     private PlantImageMapperExt plantImageMapper;
+    @Autowired
+    private CoopDeviceMapperExt coopDeviceMapper;
 
 
     /**
@@ -50,7 +56,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
      * @return
      */
     @Override
-    public Map<String, Object> createPlant(CreatePlantDto plantDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean createPlant(CreatePlantDto plantDto) {
         Plant plant = new Plant();
         BeanUtils.copyProperties(plantDto, plant);
         if (StringUtils.isEmpty(plant.getCustomerId())) {
@@ -79,10 +86,10 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return ServiceResult.error(e.getMessage());
+            log.error("R BreedingPlantServiceImpl.createPlant  error:" + e);
+            return false;
         }
-        return ServiceResult.toResult("创建成功");
+        return true;
     }
 
     /**
@@ -154,7 +161,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         PlantExample plantExample = new PlantExample();
         plantExample.createCriteria()
                 .andCustomerIdEqualTo(customerId)
-                .andEnableEqualTo((byte) 1);
+                .andEnableEqualTo(true);
         List<Plant> plants = plantMapper.selectByExample(plantExample);
         List<ReturnPlantDto> returnPlantDtoList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(plants)) {
@@ -210,6 +217,24 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     }
 
     /**
+     * 逻辑删除鸡舍
+     *
+     * @param coopId
+     */
+    @Override
+    public void deleteCoop(Integer coopId) {
+        //逻辑删除鸡舍
+        Coop coop = new Coop();
+        coop
+                .setId(coopId)
+                .setEnable(false);
+        coopMapperExt.updateByPrimaryKeySelective(coop);
+        //逻辑删除鸡舍下的设备
+        coopDeviceMapper.logicDeleteCoopDeviceByCoopId(coopId);
+    }
+
+
+    /**
      * 通过养殖场id获得鸡舍列表
      *
      * @param plantId
@@ -230,4 +255,5 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         }
         return returnCoopDtoList;
     }
+
 }

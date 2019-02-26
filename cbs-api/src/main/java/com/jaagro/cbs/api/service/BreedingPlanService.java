@@ -1,7 +1,12 @@
 package com.jaagro.cbs.api.service;
 
 
+import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
+
+import java.util.List;
 import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
 
 /**
@@ -23,4 +28,6 @@ public interface BreedingPlanService {
      * @param createPlanContractDto
      */
     void createPlanContract(CreatePlanContractDto createPlanContractDto);
+
+    PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto);
 }

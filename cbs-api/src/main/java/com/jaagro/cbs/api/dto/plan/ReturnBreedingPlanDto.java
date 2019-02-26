@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.dto.plan;
 
+import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CreateBreedingPlanDto implements Serializable {
+public class ReturnBreedingPlanDto implements Serializable {
 
     /**
-     * 养殖场id
+     * 计划id
      */
-    private List<Integer> plantIds;
+    private Integer id;
+
+    /**
+     * 批次号
+     */
+    private String batchNo;
 
     /**
      * 租户id
@@ -33,6 +39,14 @@ public class CreateBreedingPlanDto implements Serializable {
      */
     private Integer customerId;
 
+    /**
+     * 养殖户的名称
+     */
+    private String customerName;
+    /**
+     *
+     */
+    private String customerPhone;
     /**
      * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
      */
@@ -62,4 +76,25 @@ public class CreateBreedingPlanDto implements Serializable {
      * 备注
      */
     private String notes;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 创建人
+     */
+    private Integer createUserId;
+
+    /**
+     * 创建人姓名
+     */
+    private String createUserName;
+
+    /**
+     * 养殖场
+     */
+    private List<Plant> plants;
+
 }

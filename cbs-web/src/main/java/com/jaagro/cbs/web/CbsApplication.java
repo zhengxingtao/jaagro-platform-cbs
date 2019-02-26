@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableEurekaClient
 @EnableCircuitBreaker
 @MapperScan("com.jaagro.cbs.biz.mapper")
-//@EnableFeignClients(basePackages = {"com.jaagro.tms.biz"})
+@EnableFeignClients(basePackages = {"com.jaagro.cbs.biz"})
 @SpringBootApplication(scanBasePackages = {"com.jaagro.cbs"})
 @EnableTransactionManagement
 public class CbsApplication {
