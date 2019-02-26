@@ -45,9 +45,6 @@ public class BreedingPlantController {
         if (StringUtils.isEmpty(plantDto.getPlantType())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场类型不能为空");
         }
-        if (StringUtils.isEmpty(plantDto.getDurableYears())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "使用年限不能为空");
-        }
         if (StringUtils.isEmpty(plantDto.getExpandable())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "未选择是否可以扩建");
         }
@@ -63,14 +60,12 @@ public class BreedingPlantController {
         if (StringUtils.isEmpty(plantDto.getCounty())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "区不能为空");
         }
-        Boolean result = false;
         try {
-            result = breedingPlantService.createPlant(plantDto);
+            breedingPlantService.createPlant(plantDto);
         } catch (Exception e) {
             e.printStackTrace();
             return BaseResponse.errorInstance("创建失败：" + e.getMessage());
         }
-
         return BaseResponse.successInstance("创建成功");
     }
 
@@ -147,7 +142,7 @@ public class BreedingPlantController {
         if (coopId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
         }
-       return null;
+        return null;
     }
 
     /**

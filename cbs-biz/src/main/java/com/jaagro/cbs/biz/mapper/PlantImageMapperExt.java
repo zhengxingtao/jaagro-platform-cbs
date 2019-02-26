@@ -1,12 +1,12 @@
 package com.jaagro.cbs.biz.mapper;
 
-import javax.annotation.Resource;
-
+import com.jaagro.cbs.api.dto.plant.CreatePlantImageDto;
 import com.jaagro.cbs.api.dto.plant.ReturnPlantImageDto;
 import com.jaagro.cbs.api.model.PlantImage;
 import com.jaagro.cbs.api.model.PlantImageExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -26,4 +26,11 @@ public interface PlantImageMapperExt extends BaseMapper<PlantImage, PlantImageEx
      * @return
      */
     List<ReturnPlantImageDto> listByPlantId(Integer id);
+
+    /**
+     * 批量新增
+     *
+     * @param imageDtoList
+     */
+    int insertBatch(List<CreatePlantImageDto> imageDtoList);
 }
