@@ -11,7 +11,7 @@ public interface BatchPlantCoopService {
     /**
      * 根据批次id查询养殖场
      *
-     * @param PlanId
+     * @param planId)
      * @return
      */
     List<Integer> listPlantIdByPlanId(Integer planId);
@@ -19,7 +19,7 @@ public interface BatchPlantCoopService {
     /**
      * 根据批次id查询鸡舍
      *
-     * @param PlanId
+     * @param planId)
      * @return
      */
     List<Integer> listCoopIdByPlanId(Integer planId);

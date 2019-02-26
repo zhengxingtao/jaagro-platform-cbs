@@ -117,12 +117,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerPhone(contactsReturnDto.getPhone());
             }
             //填充养殖场信息
-            PlantExample plantExample = new PlantExample();
-            plantExample.createCriteria()
-                    .andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId())
-                    .andEnableEqualTo(true);
-            List<Plant> plants = plantMapper.selectByExample(plantExample);
-            returnBreedingPlanDto.setPlants(plants);
+            List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(returnBreedingPlanDto.getId());
+            if (!CollectionUtils.isEmpty(plantIds)) {
+                PlantExample plantExample = new PlantExample();
+                plantExample.createCriteria()
+                        .andIdIn(plantIds)
+                        .andEnableEqualTo(true);
+                List<Plant> plants = plantMapper.selectByExample(plantExample);
+                returnBreedingPlanDto.setPlants(plants);
+            }
             //填充进度
             BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
             parameterExample.createCriteria()
