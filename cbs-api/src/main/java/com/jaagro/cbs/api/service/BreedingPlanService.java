@@ -28,7 +28,7 @@ public interface BreedingPlanService {
      * @param dto
      * @return
      */
-    PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto);
+    PageInfo listBreedingPlan(BreedingPlanParamDto dto);
 
     /**
      * 更新养殖计划
