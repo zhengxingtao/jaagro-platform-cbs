@@ -38,8 +38,10 @@ public class SequenceCodeUtils {
         StringBuilder genSeqCode = new StringBuilder();
         String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         String currentDate = date.substring(2, date.length());
-        RedisAtomicLong entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
-        if (entityIdCounter == null) {
+        RedisAtomicLong entityIdCounter = null;
+        try {
+            entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
+        } catch (Exception e) {
             entityIdCounter.expire(48, TimeUnit.HOURS);
             log.info("O genSeqCode entityIdCounter param is null");
             throw new RuntimeException("生成序列号失败");
