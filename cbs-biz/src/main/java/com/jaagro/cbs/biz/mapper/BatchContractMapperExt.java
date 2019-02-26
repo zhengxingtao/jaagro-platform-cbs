@@ -6,7 +6,6 @@ import com.jaagro.cbs.api.model.BatchContract;
 import com.jaagro.cbs.api.model.BatchContractExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
-
 /**
  * BatchContractMapperExt接口
  *
