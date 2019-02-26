@@ -23,6 +23,20 @@ public class BatchPlantCoopServiceImpl implements BatchPlantCoopService {
     private BatchPlantCoopMapperExt batchPlantCoopMapper;
 
     /**
+     * 根据批次id查询养殖场
+     *
+     * @param planId@return
+     */
+    @Override
+    public List<Integer> listPlantIdByPlanId(Integer planId) {
+        if (StringUtils.isEmpty(planId)) {
+            return null;
+        }
+        List<Integer> plantId = batchPlantCoopMapper.listPlantIdByPlanId(planId);
+        return plantId;
+    }
+
+    /**
      * 根据批次id查询鸡舍
      *
      * @param planId

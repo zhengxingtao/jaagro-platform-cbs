@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.plan;
+package com.jaagro.cbs.web.vo.plan;
 
 import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
@@ -11,14 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author @Gao.
- */
+ * @description: 批次管理
+ * @author: baiyiran
+ * @create: 2019-02-26
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ReturnBreedingPlanDto implements Serializable {
-
+public class BreedingPlanBatchVo implements Serializable {
     /**
      * 计划id
      */
@@ -30,23 +31,15 @@ public class ReturnBreedingPlanDto implements Serializable {
     private String batchNo;
 
     /**
-     * 租户id
-     */
-    private Integer tenantId;
-
-    /**
-     * 养殖户id
-     */
-    private Integer customerId;
-
-    /**
      * 养殖户的名称
      */
     private String customerName;
+
     /**
-     *
+     * 养殖户电话
      */
     private String customerPhone;
+
     /**
      * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
      */
@@ -63,34 +56,9 @@ public class ReturnBreedingPlanDto implements Serializable {
     private Date planTime;
 
     /**
-     * 技术员姓名
-     */
-    private String technician;
-
-    /**
-     * 技术员id
-     */
-    private Integer technicianId;
-
-    /**
-     * 备注
-     */
-    private String notes;
-
-    /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 创建人
-     */
-    private Integer createUserId;
-
-    /**
-     * 创建人姓名
-     */
-    private String createUserName;
 
     /**
      * 进度 - 已进行的天数

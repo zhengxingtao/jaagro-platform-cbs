@@ -78,7 +78,8 @@ public class BreedingPlanVo implements Serializable {
      */
     private String createUserName;
 
-
+    /**
+     * 养殖场列表
+     */
     private List<Plant> plants;
-
 }

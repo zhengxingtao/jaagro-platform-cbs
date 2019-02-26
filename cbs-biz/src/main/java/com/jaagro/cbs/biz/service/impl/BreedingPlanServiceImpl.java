@@ -123,15 +123,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andEnableEqualTo(true);
             List<Plant> plants = plantMapper.selectByExample(plantExample);
             returnBreedingPlanDto.setPlants(plants);
-            //填充鸡舍
-            List<Integer> coopId = batchPlantCoopService.listCoopIdByPlanId(returnBreedingPlanDto.getId());
-            if (!CollectionUtils.isEmpty(coopId)) {
-                CoopExample coopExample = new CoopExample();
-                coopExample.createCriteria()
-                        .andIdIn(coopId)
-                        .andEnableEqualTo(true);
-                returnBreedingPlanDto.setCoops(coopMapper.selectByExample(coopExample));
-            }
             //填充进度
             BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
             parameterExample.createCriteria()
@@ -143,7 +134,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BreedingBatchParameter parameter = breedingBatchParameters.get(0);
                 returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
                 try {
-                    long day = getInterval(new Date(), returnBreedingPlanDto.getPlanTime());
+                    long day = getInterval(returnBreedingPlanDto.getPlanTime(), new Date());
                     returnBreedingPlanDto.setAlreadyDayAge((int) day);
                 } catch (Exception ex) {
                     log.error("计算批次进度失败:BreedingPlanServiceImpl.getInterval()");

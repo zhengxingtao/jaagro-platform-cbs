@@ -9,11 +9,19 @@ import java.util.List;
 public interface BatchPlantCoopService {
 
     /**
+     * 根据批次id查询养殖场
+     *
+     * @param PlanId
+     * @return
+     */
+    List<Integer> listPlantIdByPlanId(Integer planId);
+
+    /**
      * 根据批次id查询鸡舍
      *
      * @param PlanId
      * @return
      */
-    List<Integer> listCoopIdByPlanId(Integer PlanId);
+    List<Integer> listCoopIdByPlanId(Integer planId);
 
 }
