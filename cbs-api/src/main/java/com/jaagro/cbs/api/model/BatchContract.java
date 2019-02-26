@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :tony
- * @date :2019/02/23
+ * @author :asus
+ * @date :2019/02/26
  */
 @Data
 @NoArgsConstructor
@@ -33,7 +33,7 @@ public class BatchContract implements Serializable {
     private String contractNumber;
 
     /**
-     * 合同状态(0-未审核,1-正常,3-未审核通过,4-停止合作)
+     * 合同状态(0-未审核,1-正常)
      */
     private Integer contractStatus;
 
@@ -81,6 +81,11 @@ public class BatchContract implements Serializable {
      * 饲料单价
      */
     private BigDecimal fodderPrice;
+
+    /**
+     * 配送方式(1-系统自动,2-专车专送)
+     */
+    private Integer deliveryMethod;
 
     /**
      * 回收保护单价（kg）
