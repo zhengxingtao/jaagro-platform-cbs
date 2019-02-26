@@ -144,26 +144,31 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     long day = getInterval(new Date(), returnBreedingPlanDto.getPlanTime());
                     returnBreedingPlanDto.setAlreadyDayAge((int) day);
                 } catch (Exception ex) {
+                    log.error("计算批次进度失败:BreedingPlanServiceImpl.getInterval()");
                     ex.printStackTrace();
                 }
             }
         }
-        
         return new PageInfo(planDtoList);
     }
 
-    private long getInterval(Date begin_date, Date end_date) throws Exception {
+    /**
+     * 计算上鸡时间进度
+     *
+     * @param beginDate
+     * @param endDate
+     * @return
+     * @throws Exception
+     */
+    private long getInterval(Date beginDate, Date endDate) throws Exception {
         long day = 0;
+        if (beginDate == null && endDate == null) {
+            return day;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        if (begin_date != null) {
-            String begin = sdf.format(begin_date);
-            begin_date = sdf.parse(begin);
-        }
-        if (end_date != null) {
-            String end = sdf.format(end_date);
-            end_date = sdf.parse(end);
-        }
-        day = (end_date.getTime() - begin_date.getTime()) / (24 * 60 * 60 * 1000);
+        beginDate = sdf.parse(sdf.format(beginDate));
+        endDate = sdf.parse(sdf.format(endDate));
+        day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
         return day;
     }
 
