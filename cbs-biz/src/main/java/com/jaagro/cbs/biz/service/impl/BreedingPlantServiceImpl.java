@@ -172,7 +172,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                     plantDto.setPlantImageDtoList(imageDtoList);
                 }
                 //填充养殖场鸡舍数量
-                plantDto.setCoopCount(getCoopsCountByPlant(plant.getId()));
+                Integer coopCount = getCoopsCountByPlant(plant.getId());
+                plantDto.setCoopCount(coopCount);
                 returnPlantDtoList.add(plantDto);
             }
         }
@@ -192,8 +193,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         CoopExample coopExample = new CoopExample();
         coopExample.createCriteria()
                 .andPlantIdEqualTo(plantId);
-        long coopCount = coopMapperExt.countByExample(coopExample);
-        return (int) coopCount;
+        Integer coopCount = coopMapperExt.countByExample(coopExample);
+        return coopCount;
     }
 
     /**
