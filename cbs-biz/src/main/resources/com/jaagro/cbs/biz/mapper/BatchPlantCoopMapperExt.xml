@@ -3,7 +3,7 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-    <select id="listPlantIdByPlanId" parameterType="java.lang.Integer">
+    <select id="listPlantIdByPlanId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select id from batch_plant_coop
         where enable = 1
         and plan_id = #{planId}
