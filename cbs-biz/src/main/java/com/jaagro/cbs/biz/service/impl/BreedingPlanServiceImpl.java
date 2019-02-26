@@ -97,7 +97,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author @Gao.
      */
     @Override
-    public PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto) {
+    public PageInfo listBreedingPlan(BreedingPlanParamDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
 //        dto.setTenantId();    先注释,等待从userInfo获取租户id
         if (dto.getCustomerInfo() != null) {
@@ -118,7 +118,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
             //填充养殖场信息
             PlantExample plantExample = new PlantExample();
-            plantExample.createCriteria().andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId());
+            plantExample.createCriteria()
+                    .andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId());
             List<Plant> plants = plantMapper.selectByExample(plantExample);
             returnBreedingPlanDto.setPlants(plants);
             //填充鸡舍
@@ -148,7 +149,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 }
             }
         }
-        
         return new PageInfo(planDtoList);
     }
 
