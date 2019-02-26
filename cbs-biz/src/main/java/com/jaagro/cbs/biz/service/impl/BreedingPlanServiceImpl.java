@@ -11,10 +11,7 @@ import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
-import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingBatchParameterMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.mapper.CoopMapperExt;
+import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
@@ -56,7 +53,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BatchPlantCoopService batchPlantCoopService;
     @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
-
+    @Autowired
+    private PlantMapperExt plantMapper;
 
     /**
      * 创建养殖计划
@@ -118,6 +116,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerName(contactsReturnDto.getContact())
                         .setCustomerPhone(contactsReturnDto.getPhone());
             }
+            //填充养殖场信息
+            PlantExample plantExample = new PlantExample();
+            plantExample.createCriteria().andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId());
+            List<Plant> plants = plantMapper.selectByExample(plantExample);
+            returnBreedingPlanDto.setPlants(plants);
             //填充鸡舍
             List<Integer> coopId = batchPlantCoopService.listCoopIdByPlanId(returnBreedingPlanDto.getId());
             if (!CollectionUtils.isEmpty(coopId)) {
@@ -167,6 +170,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * 更新养殖计划
      *
      * @param dto
+     * @author @Gao.
      */
     @Override
     public void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto) {
