@@ -46,10 +46,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     public Boolean createBreedingTemplate(BreedingStandardDto dto) {
         try {
             log.info("o BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
+
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setBreedingType(dto.getBreedingType())
@@ -92,11 +89,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         try {
             log.info("o BreedingStardandServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
             Assert.notNull(dto.getId(), "模板Id不能为空");
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
-
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setId(dto.getId())

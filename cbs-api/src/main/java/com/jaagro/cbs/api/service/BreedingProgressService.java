@@ -29,7 +29,7 @@ public interface BreedingProgressService {
      * @param dayAge
      * @return
      */
-  BreedingBatchParamTrackingDto getBreedingBatchParamById(Integer planId, Integer coopId, Integer dayAge);
+  List<BreedingBatchParamTrackingDto> getBreedingBatchParamById(Integer planId, Integer coopId, Integer dayAge);
 
     /**
      * 获取每天养殖喂养情况

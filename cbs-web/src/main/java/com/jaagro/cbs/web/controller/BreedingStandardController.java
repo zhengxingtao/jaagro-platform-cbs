@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,6 +36,10 @@ public class BreedingStandardController {
     public BaseResponse breedingStandard(@RequestBody BreedingStandardDto dto) {
         try {
             Boolean result = false;
+            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
+            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
+            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
+            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
             if (null == dto.getId() || dto.getId() == 0) {
                 result = breedingStandardService.createBreedingTemplate(dto);
             } else {

@@ -15,6 +15,7 @@
     <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
     <result column="prepaid_amount" property="prepaidAmount" jdbcType="DECIMAL" />
     <result column="fodder_price" property="fodderPrice" jdbcType="DECIMAL" />
+    <result column="delivery_method" property="deliveryMethod" jdbcType="INTEGER" />
     <result column="protection_price" property="protectionPrice" jdbcType="DECIMAL" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="enable" property="enable" jdbcType="BIT" />
@@ -55,8 +56,8 @@
   <sql id="Base_Column_List" >
     id, plan_id, contract_number, contract_status, customer_id, start_date, end_date, 
     contract_date, babychick_quantity, babychick_price, payment_method, prepaid_amount, 
-    fodder_price, protection_price, notes, enable, create_time, create_user_id, modify_time, 
-    modify_user_id
+    fodder_price, delivery_method, protection_price, notes, enable, create_time, create_user_id, 
+    modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BatchContractExample" >
     select
@@ -99,16 +100,16 @@
       customer_id, start_date, end_date, 
       contract_date, babychick_quantity, babychick_price, 
       payment_method, prepaid_amount, fodder_price, 
-      protection_price, notes, enable, 
-      create_time, create_user_id, modify_time, 
-      modify_user_id)
+      delivery_method, protection_price, notes, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
     values (#{planId,jdbcType=INTEGER}, #{contractNumber,jdbcType=VARCHAR}, #{contractStatus,jdbcType=INTEGER}, 
       #{customerId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
       #{contractDate,jdbcType=TIMESTAMP}, #{babychickQuantity,jdbcType=INTEGER}, #{babychickPrice,jdbcType=DECIMAL}, 
       #{paymentMethod,jdbcType=INTEGER}, #{prepaidAmount,jdbcType=DECIMAL}, #{fodderPrice,jdbcType=DECIMAL}, 
-      #{protectionPrice,jdbcType=DECIMAL}, #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=INTEGER})
+      #{deliveryMethod,jdbcType=INTEGER}, #{protectionPrice,jdbcType=DECIMAL}, #{notes,jdbcType=VARCHAR}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BatchContract" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -151,6 +152,9 @@
       </if>
       <if test="fodderPrice != null" >
         fodder_price,
+      </if>
+      <if test="deliveryMethod != null" >
+        delivery_method,
       </if>
       <if test="protectionPrice != null" >
         protection_price,
@@ -210,6 +214,9 @@
       </if>
       <if test="fodderPrice != null" >
         #{fodderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deliveryMethod != null" >
+        #{deliveryMethod,jdbcType=INTEGER},
       </if>
       <if test="protectionPrice != null" >
         #{protectionPrice,jdbcType=DECIMAL},
@@ -279,6 +286,9 @@
       <if test="fodderPrice != null" >
         fodder_price = #{fodderPrice,jdbcType=DECIMAL},
       </if>
+      <if test="deliveryMethod != null" >
+        delivery_method = #{deliveryMethod,jdbcType=INTEGER},
+      </if>
       <if test="protectionPrice != null" >
         protection_price = #{protectionPrice,jdbcType=DECIMAL},
       </if>
@@ -317,6 +327,7 @@
       payment_method = #{paymentMethod,jdbcType=INTEGER},
       prepaid_amount = #{prepaidAmount,jdbcType=DECIMAL},
       fodder_price = #{fodderPrice,jdbcType=DECIMAL},
+      delivery_method = #{deliveryMethod,jdbcType=INTEGER},
       protection_price = #{protectionPrice,jdbcType=DECIMAL},
       notes = #{notes,jdbcType=VARCHAR},
       enable = #{enable,jdbcType=BIT},
