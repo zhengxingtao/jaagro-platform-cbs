@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BatchPlantCoopService;
@@ -162,4 +163,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return day;
     }
 
+    /**
+     * 更新养殖计划
+     *
+     * @param dto
+     */
+    @Override
+    public void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto) {
+        BreedingPlan breedingPlan = new BreedingPlan();
+        BeanUtils.copyProperties(dto, breedingPlan);
+        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+    }
 }

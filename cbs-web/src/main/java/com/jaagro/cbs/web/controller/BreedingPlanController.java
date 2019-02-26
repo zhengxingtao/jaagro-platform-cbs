@@ -2,6 +2,7 @@ package com.jaagro.cbs.web.controller;
 
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
@@ -51,4 +52,15 @@ public class BreedingPlanController {
         }
         return BaseResponse.successInstance(breedingPlanService.listBreedingPlan(dto));
     }
+
+    @PostMapping("/upDateBreedingPlanDetails")
+    @ApiOperation("养殖计划列表")
+    public BaseResponse upDateBreedingPlanDetails(@RequestBody UpdateBreedingPlanDto dto) {
+        if (dto.getId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
+
 }
