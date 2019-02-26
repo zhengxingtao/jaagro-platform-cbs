@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 
 import java.util.List;
 
@@ -28,4 +29,11 @@ public interface BreedingPlanService {
      * @return
      */
     PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto);
+
+    /**
+     * 更新养殖计划
+     *
+     * @param dto
+     */
+    void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto);
 }

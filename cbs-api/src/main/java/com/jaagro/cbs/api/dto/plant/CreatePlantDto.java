@@ -45,7 +45,7 @@ public class CreatePlantDto implements Serializable {
     /**
      * 是否可以扩建(0-不可扩建,1-可扩建)
      */
-    private Byte expandable;
+    private Boolean expandable;
 
     /**
      * 省

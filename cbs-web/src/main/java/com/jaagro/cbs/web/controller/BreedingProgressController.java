@@ -27,10 +27,12 @@ public class BreedingProgressController {
     private BreedingPlanService breedingPlanService;
 
     /**
-     * 批次管理列表
+     * 养殖场-通过养殖户id获得养殖场列表
      *
-     * @param criteriaDto
      * @return
+     * @throws
+     * @author baiyiran
+     * @date 2019/2/26
      */
     @ApiOperation("养殖场-通过养殖户id获得养殖场列表")
     @GetMapping("/listPlanByCriteria")
