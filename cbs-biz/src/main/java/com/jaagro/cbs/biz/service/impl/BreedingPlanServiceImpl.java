@@ -202,7 +202,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         returnBreedingPlanDto.setPlants(plants);
         //技术员信息
         BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
-        if (CollectionUtils.isEmpty(empByDeptId.getData())) {
+        if (!CollectionUtils.isEmpty(empByDeptId.getData())) {
             List<Employee> employees = empByDeptId.getData();
             returnBreedingPlanDto.setTechnicianList(employees);
         }
