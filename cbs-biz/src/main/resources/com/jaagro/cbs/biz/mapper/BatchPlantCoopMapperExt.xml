@@ -9,4 +9,14 @@
         and plan_id = #{planId}
         group by plant_id
     </select>
+
+    <insert id="insertBatch" parameterType="list">
+        insert into batch_plant_coop ( id, plan_id, plant_id, create_user_id,
+        modify_time, modify_user_id)
+        values
+        <foreach collection="batchPlantCoops" item="item" separator=",">
+            (#{item.id}, #{item.planId}, #{item.plantId},
+            #{item.createUserId}, #{item.modifyTime}, #{item.modifyUserId})
+        </foreach>
+    </insert>
 </mapper>
