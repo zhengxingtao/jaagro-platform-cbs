@@ -4,6 +4,15 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
+    <select id="getLimitOneRecordByDeviceId" resultMap="BaseResultMap">
+        select * from
+        (
+            select
+              <include refid="Base_Column_List"/>
+            from device_value_history
+            where device_id=#{deviceId} and date_format(create_time, '%Y-%m-%d') =#{strDate} order by create_time desc
+        ) t limit 1
 
+    </select>
 
 </mapper>

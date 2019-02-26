@@ -10,7 +10,7 @@
     <result column="stock_quantity" property="stockQuantity" jdbcType="INTEGER" />
     <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
     <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
-    <result column="alarm" property="alarm" jdbcType="TINYINT" />
+    <result column="alarm" property="alarm" jdbcType="BIT" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -89,14 +89,14 @@
     </selectKey>
     insert into tenant_drug_stock (tenant_id, sku_no, image_url, 
       drug_name, stock_quantity, purchase_price, 
-      sale_price, alarm, enable, 
-      create_time, create_user_id, modify_time, 
-      modify_user_id)
+      sale_price, alarm, enable, create_time, 
+      create_user_id, modify_time, modify_user_id
+      )
     values (#{tenantId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, 
       #{drugName,jdbcType=VARCHAR}, #{stockQuantity,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, 
-      #{salePrice,jdbcType=DECIMAL}, #{alarm,jdbcType=TINYINT}, #{enable,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=INTEGER})
+      #{salePrice,jdbcType=DECIMAL}, #{alarm,jdbcType=BIT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.TenantDrugStock" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -167,7 +167,7 @@
         #{salePrice,jdbcType=DECIMAL},
       </if>
       <if test="alarm != null" >
-        #{alarm,jdbcType=TINYINT},
+        #{alarm,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
@@ -217,7 +217,7 @@
         sale_price = #{salePrice,jdbcType=DECIMAL},
       </if>
       <if test="alarm != null" >
-        alarm = #{alarm,jdbcType=TINYINT},
+        alarm = #{alarm,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
@@ -246,7 +246,7 @@
       stock_quantity = #{stockQuantity,jdbcType=INTEGER},
       purchase_price = #{purchasePrice,jdbcType=DECIMAL},
       sale_price = #{salePrice,jdbcType=DECIMAL},
-      alarm = #{alarm,jdbcType=TINYINT},
+      alarm = #{alarm,jdbcType=BIT},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},

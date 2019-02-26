@@ -1,7 +1,6 @@
 package com.jaagro.cbs.api.dto.progress;
 
 import com.jaagro.cbs.api.model.BreedingBatchParameter;
-import com.jaagro.cbs.api.model.DeviceValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +19,11 @@ import java.util.List;
 @Accessors(chain = true)
 public class BreedingBatchParamTrackingDto extends BreedingBatchParameter implements Serializable {
 
+    private static final long serialVersionUID = 2925681939310981862L;
     /**
      * 仪表参数实际检查结果
      */
-    private List<DeviceValue> actualResult;
+    private List<DeviceValueDto> actualResult;
     /**
      * 报警信息
      */

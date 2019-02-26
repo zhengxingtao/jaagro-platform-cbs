@@ -20,6 +20,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class BreedingRecordDto implements Serializable {
 
+ private static final long serialVersionUID = -26891159391543465L;
  /**
   *养殖计划的鸡舍在某日龄上的喂料记录
   */

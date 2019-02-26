@@ -33,11 +33,6 @@ public class BreedingRecordDaily implements Serializable {
     private String batchNo;
 
     /**
-     * 鸡舍id
-     */
-    private Integer coopId;
-
-    /**
      * 日龄
      */
     private Integer dayAge;

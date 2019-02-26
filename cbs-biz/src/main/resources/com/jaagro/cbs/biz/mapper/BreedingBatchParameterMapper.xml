@@ -14,8 +14,8 @@
     <result column="lower_limit" property="lowerLimit" jdbcType="DECIMAL" />
     <result column="upper_limit" property="upperLimit" jdbcType="DECIMAL" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
-    <result column="alarm" property="alarm" jdbcType="TINYINT" />
-    <result column="dynamic_medicine" property="dynamicMedicine" jdbcType="TINYINT" />
+    <result column="alarm" property="alarm" jdbcType="BIT" />
+    <result column="dynamic_medicine" property="dynamicMedicine" jdbcType="BIT" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -103,8 +103,8 @@
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
       #{paramId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
       #{paramType,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, 
-      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=TINYINT}, 
-      #{dynamicMedicine,jdbcType=TINYINT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=BIT}, 
+      #{dynamicMedicine,jdbcType=BIT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
@@ -204,10 +204,10 @@
         #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        #{alarm,jdbcType=TINYINT},
+        #{alarm,jdbcType=BIT},
       </if>
       <if test="dynamicMedicine != null" >
-        #{dynamicMedicine,jdbcType=TINYINT},
+        #{dynamicMedicine,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
@@ -269,10 +269,10 @@
         unit = #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        alarm = #{alarm,jdbcType=TINYINT},
+        alarm = #{alarm,jdbcType=BIT},
       </if>
       <if test="dynamicMedicine != null" >
-        dynamic_medicine = #{dynamicMedicine,jdbcType=TINYINT},
+        dynamic_medicine = #{dynamicMedicine,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
@@ -305,8 +305,8 @@
       lower_limit = #{lowerLimit,jdbcType=DECIMAL},
       upper_limit = #{upperLimit,jdbcType=DECIMAL},
       unit = #{unit,jdbcType=VARCHAR},
-      alarm = #{alarm,jdbcType=TINYINT},
-      dynamic_medicine = #{dynamicMedicine,jdbcType=TINYINT},
+      alarm = #{alarm,jdbcType=BIT},
+      dynamic_medicine = #{dynamicMedicine,jdbcType=BIT},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
