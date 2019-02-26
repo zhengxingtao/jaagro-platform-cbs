@@ -60,13 +60,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private CustomerClientService customerClientService;
     @Autowired
-    private CoopMapperExt coopMapper;
-    @Autowired
-    private BatchPlantCoopService batchPlantCoopService;
-    @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
-    @Autowired
-    private PlantMapperExt plantMapper;
     @Autowired
     private UserClientService userClientService;
     @Autowired
@@ -250,7 +244,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
 
-
     /**
      * 更新养殖计划
      *
@@ -289,4 +282,5 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return returnBreedingPlanDto;
     }
 }
+
 
