@@ -87,6 +87,11 @@ public class CreatePlanContractDto implements Serializable{
     private BigDecimal protectionPrice;
 
     /**
+     * 配送方式(1-系统自动,2-专车专送)
+     */
+    private Integer deliveryMethod;
+
+    /**
      * 备注
      */
     private String notes;

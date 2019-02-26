@@ -5,7 +5,6 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-    <result column="coop_id" property="coopId" jdbcType="INTEGER" />
     <result column="day_age" property="dayAge" jdbcType="INTEGER" />
     <result column="record_type" property="recordType" jdbcType="INTEGER" />
     <result column="breeding_value" property="breedingValue" jdbcType="DECIMAL" />
@@ -47,8 +46,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, plan_id, batch_no, coop_id, day_age, record_type, breeding_value, unit, notes, 
-    enable, create_time, create_user_id, modify_time, modify_user_id
+    id, plan_id, batch_no, day_age, record_type, breeding_value, unit, notes, enable, 
+    create_time, create_user_id, modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingRecordDailyExample" >
     select
@@ -87,14 +86,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_record_daily (plan_id, batch_no, coop_id, 
-      day_age, record_type, breeding_value, 
-      unit, notes, enable, create_time, 
+    insert into breeding_record_daily (plan_id, batch_no, day_age, 
+      record_type, breeding_value, unit, 
+      notes, enable, create_time, 
       create_user_id, modify_time, modify_user_id
       )
-    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{coopId,jdbcType=INTEGER}, 
-      #{dayAge,jdbcType=INTEGER}, #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, 
-      #{unit,jdbcType=VARCHAR}, #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
+      #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, 
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
@@ -109,9 +108,6 @@
       </if>
       <if test="batchNo != null" >
         batch_no,
-      </if>
-      <if test="coopId != null" >
-        coop_id,
       </if>
       <if test="dayAge != null" >
         day_age,
@@ -150,9 +146,6 @@
       </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
-      </if>
-      <if test="coopId != null" >
-        #{coopId,jdbcType=INTEGER},
       </if>
       <if test="dayAge != null" >
         #{dayAge,jdbcType=INTEGER},
@@ -201,9 +194,6 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="coopId != null" >
-        coop_id = #{coopId,jdbcType=INTEGER},
-      </if>
       <if test="dayAge != null" >
         day_age = #{dayAge,jdbcType=INTEGER},
       </if>
@@ -241,7 +231,6 @@
     update breeding_record_daily
     set plan_id = #{planId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
-      coop_id = #{coopId,jdbcType=INTEGER},
       day_age = #{dayAge,jdbcType=INTEGER},
       record_type = #{recordType,jdbcType=INTEGER},
       breeding_value = #{breedingValue,jdbcType=DECIMAL},

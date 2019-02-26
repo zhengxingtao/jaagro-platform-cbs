@@ -63,4 +63,6 @@ public class BreedingPlanController {
         breedingPlanService.createPlanContract(createPlanContractDto);
         return BaseResponse.successInstance("录入合同成功");
     }
+
+
 }

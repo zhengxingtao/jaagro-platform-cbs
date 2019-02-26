@@ -8,14 +8,9 @@ import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
-import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
-import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingBatchParameterMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.mapper.CoopMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
@@ -27,9 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -216,6 +210,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
             contractPriceSectionMapper.batchInsert(contractPriceSectionList);
         }
+        // 更新养殖计划状态
+        breedingPlan.setModifyTime(new Date())
+                .setModifyUserId(currentUserId)
+                .setPlanStatus(PlanStatusEnum.PARAM_CORRECT.getCode());
+        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
 
     private long getInterval(Date begin_date, Date end_date) throws Exception {
