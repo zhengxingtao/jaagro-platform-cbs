@@ -4,10 +4,7 @@ import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.enums.CoopStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlantService;
-import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
-import com.jaagro.cbs.biz.mapper.CoopMapperExt;
-import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
-import com.jaagro.cbs.biz.mapper.PlantMapperExt;
+import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
@@ -47,6 +44,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     private PlantImageMapperExt plantImageMapper;
     @Autowired
     private CoopDeviceMapperExt coopDeviceMapper;
+    @Autowired
+    private BatchPlantCoopServiceImpl batchPlantCoopService;
 
 
     /**
@@ -138,6 +137,26 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         //填充养殖场鸡舍数量
         returnPlantDto.setCoopCount(getCoopsCountByPlant(returnPlantDto.getId()));
         return returnPlantDto;
+    }
+
+    /**
+     * 根据养殖计划id 获取养殖场信息
+     *
+     * @param plantId
+     * @return
+     */
+    @Override
+    public List<Plant> listPlantInfoByPlanId(Integer plantId) {
+        List<Plant> plants = null;
+        List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(plantId);
+        if (!CollectionUtils.isEmpty(plantIds)) {
+            PlantExample plantExample = new PlantExample();
+            plantExample.createCriteria()
+                    .andIdIn(plantIds)
+                    .andEnableEqualTo(true);
+            plants = plantMapper.selectByExample(plantExample);
+        }
+        return plants;
     }
 
     /**

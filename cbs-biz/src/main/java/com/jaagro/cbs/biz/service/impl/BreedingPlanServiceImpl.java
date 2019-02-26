@@ -60,6 +60,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private PlantMapperExt plantMapper;
     @Autowired
     private UserClientService userClientService;
+    @Autowired
+    private BreedingPlantServiceImpl breedingPlantService;
 
     /**
      * 创建养殖计划
@@ -125,7 +127,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerPhone(contactsReturnDto.getPhone());
             }
             //填充养殖场信息
-            returnBreedingPlanDto.setPlants(listPlantInfoByPlanId(returnBreedingPlanDto.getId()));
+            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
+            returnBreedingPlanDto.setPlants(plants);
             //填充进度
             BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
             parameterExample.createCriteria()
@@ -195,7 +198,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
-        returnBreedingPlanDto.setPlants(listPlantInfoByPlanId(planId));
+        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
+        returnBreedingPlanDto.setPlants(plants);
         //技术员信息
         BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
         if (CollectionUtils.isEmpty(empByDeptId.getData())) {
@@ -205,23 +209,5 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return returnBreedingPlanDto;
     }
 
-    /**
-     * 根据养殖计划id 获取养殖场信息
-     *
-     * @param plantId
-     * @return
-     */
-    private List<Plant> listPlantInfoByPlanId(Integer plantId) {
-        List<Plant> plants = null;
-        List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(plantId);
-        if (!CollectionUtils.isEmpty(plantIds)) {
-            PlantExample plantExample = new PlantExample();
-            plantExample.createCriteria()
-                    .andIdIn(plantIds)
-                    .andEnableEqualTo(true);
-            plants = plantMapper.selectByExample(plantExample);
-        }
-        return plants;
-    }
 }
 
