@@ -39,5 +39,5 @@ public interface BreedingProgressService {
      * @param dayAges
      * @return
      */
-    BreedingRecordDto getBreedingRecordsById(Integer planId, Integer coopId, Integer dayAge);
+  BreedingRecordDto getBreedingRecordsById(Integer planId, Integer coopId, Integer dayAge);
 }

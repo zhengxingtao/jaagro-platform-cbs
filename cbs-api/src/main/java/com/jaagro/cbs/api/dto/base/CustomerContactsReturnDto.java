@@ -37,4 +37,14 @@ public class CustomerContactsReturnDto implements Serializable {
      * 状态(0 停用 1 启用)
      */
     private Boolean enabled;
+
+    /**
+     * 客户联系地址
+     */
+    private String  address;
+
+    /**
+     * customer_name
+     */
+    private String customerName;
 }
