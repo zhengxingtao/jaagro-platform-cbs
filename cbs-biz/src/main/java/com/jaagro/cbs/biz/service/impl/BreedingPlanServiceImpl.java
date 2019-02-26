@@ -3,6 +3,7 @@ package com.jaagro.cbs.biz.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
+import com.jaagro.cbs.api.dto.base.Employee;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
@@ -13,6 +14,7 @@ import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
+import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -56,6 +58,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
     @Autowired
     private PlantMapperExt plantMapper;
+    @Autowired
+    private UserClientService userClientService;
 
     /**
      * 创建养殖计划
@@ -192,6 +196,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
         returnBreedingPlanDto.setPlants(listPlantInfoByPlanId(planId));
+        //技术员信息
+        BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
+        if (CollectionUtils.isEmpty(empByDeptId.getData())) {
+            List<Employee> employees = empByDeptId.getData();
+            returnBreedingPlanDto.setTechnicianList(employees);
+        }
         return returnBreedingPlanDto;
     }
 
