@@ -11,7 +11,7 @@
     <result column="lower_limit" property="lowerLimit" jdbcType="DECIMAL" />
     <result column="upper_limit" property="upperLimit" jdbcType="DECIMAL" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
-    <result column="alarm" property="alarm" jdbcType="TINYINT" />
+    <result column="alarm" property="alarm" jdbcType="BIT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -97,7 +97,7 @@
       )
     values (#{standardId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
       #{paramType,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, 
-      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=TINYINT}, 
+      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=BIT}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
       )
@@ -180,7 +180,7 @@
         #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        #{alarm,jdbcType=TINYINT},
+        #{alarm,jdbcType=BIT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
@@ -236,7 +236,7 @@
         unit = #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        alarm = #{alarm,jdbcType=TINYINT},
+        alarm = #{alarm,jdbcType=BIT},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
@@ -269,7 +269,7 @@
       lower_limit = #{lowerLimit,jdbcType=DECIMAL},
       upper_limit = #{upperLimit,jdbcType=DECIMAL},
       unit = #{unit,jdbcType=VARCHAR},
-      alarm = #{alarm,jdbcType=TINYINT},
+      alarm = #{alarm,jdbcType=BIT},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},

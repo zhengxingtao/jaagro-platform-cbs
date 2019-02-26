@@ -10,11 +10,11 @@ public enum PlanStatusEnum {
      * 计划状态类型
      */
     ENTER_CONTRACT(0, "ENTER_CONTRACT", "待录入合同"),
-    PARAM_CORRECT(1, "PARAM_CORRECT", "待参数纠偏"),
+    PARAM_CORRECT(1, "PARAM_CORRECT", "待参数配置"),
     SIGN_CHICKEN(2, "SIGN_CHICKEN", "待上鸡签收"),
     BREEDING(3, "BREEDING", "养殖中"),
     SLAUGHTER_CONFIRM(4, "SLAUGHTER_CONFIRM", "待出栏确认"),
-    DONE(5, "DONE", "已完成"),
+    SLAUGHTER_PLAN(5, "SLAUGHTER_PLAN", "待出栏计划"),
     CANCEL(6, "CANCEL", "已取消");
     private int code;
     private String type;

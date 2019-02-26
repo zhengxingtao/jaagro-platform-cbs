@@ -1,9 +1,12 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
+import com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,10 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 @Resource
 public interface BreedingStandardMapperExt extends BaseMapper<BreedingStandard,BreedingStandardExample> {
 
-
-
+    /**
+     * 分页查询所有的养殖模板
+     * @param criteria
+     * @return
+     */
+    List<BreedingStandard> listBreedingStandardByCriteria(ListBreedingStandardCriteria criteria);
 }

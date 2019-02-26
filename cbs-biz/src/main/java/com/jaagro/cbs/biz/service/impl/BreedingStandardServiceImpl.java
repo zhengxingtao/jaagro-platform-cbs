@@ -1,6 +1,9 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
@@ -140,6 +143,20 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         breedingStandardDto.setStandardParameterDos(parameterList);
 
         return breedingStandardDto;
+    }
+
+    /**
+     * 分页查询所有养殖模板
+     *
+     * @param criteria
+     * @return
+     * @author yj
+     */
+    @Override
+    public PageInfo listBreedingStandardByCriteria(ListBreedingStandardCriteria criteria) {
+        PageHelper.startPage(criteria.getPageNum(),criteria.getPageSize());
+        List<BreedingStandard> breedingStandardList = breedingStandardMapper.listBreedingStandardByCriteria(criteria);
+        return new PageInfo(breedingStandardList);
     }
 
     private Integer getUserId() {

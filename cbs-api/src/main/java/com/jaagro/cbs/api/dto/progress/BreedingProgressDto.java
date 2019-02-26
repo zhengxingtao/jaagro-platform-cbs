@@ -23,6 +23,7 @@ import java.util.Map;
 public class BreedingProgressDto implements Serializable {
 
 
+    private static final long serialVersionUID = 9140829806877500166L;
     /**
      * 批次号
      */

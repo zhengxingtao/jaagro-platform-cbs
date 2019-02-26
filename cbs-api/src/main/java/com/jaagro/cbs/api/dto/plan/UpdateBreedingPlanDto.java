@@ -36,4 +36,9 @@ public class UpdateBreedingPlanDto implements Serializable {
      * 技术员id
      */
     private Integer technicianId;
+
+    /**
+     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
+     */
+    private Integer planStatus;
 }
