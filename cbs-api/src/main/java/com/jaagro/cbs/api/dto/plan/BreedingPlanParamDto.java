@@ -58,4 +58,8 @@ public class BreedingPlanParamDto implements Serializable {
      */
     private Integer tenantId;
 
+    /**
+     * 用于不同服务执行不同的Sql
+     */
+    private Integer flag;
 }

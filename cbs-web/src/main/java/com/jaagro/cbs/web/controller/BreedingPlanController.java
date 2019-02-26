@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +50,7 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/listBreedingPlan")
-    @ApiOperation("养殖计划列表")
+    @ApiOperation("养殖计划列表与批次列表")
     public BaseResponse listBreedingPlan(@RequestBody BreedingPlanParamDto dto) {
         if (dto.getPageNum() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
@@ -72,7 +73,7 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/upDateBreedingPlanDetails")
-    @ApiOperation("养殖计划列表")
+    @ApiOperation("更新养殖计划列表")
     public BaseResponse upDateBreedingPlanDetails(@RequestBody UpdateBreedingPlanDto dto) {
         if (dto.getId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
@@ -81,4 +82,12 @@ public class BreedingPlanController {
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
+    @PostMapping("/breedingPlanDetails/{planId}")
+    @ApiOperation("养殖计划详情")
+    public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
+    }
 }
