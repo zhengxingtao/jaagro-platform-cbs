@@ -148,6 +148,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 }
             }
         }
+        
         return new PageInfo(planDtoList);
     }
 

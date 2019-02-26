@@ -63,5 +63,5 @@ public class SequenceCodeUtils {
         // 返回固定的长度的随机数
         return fixLenthString.substring(2, strLength + 1);
     }
-    
+
 }
