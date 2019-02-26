@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author :Gavin
@@ -18,8 +19,15 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class BreedingBatchParamTrackingDto extends BreedingBatchParameter implements Serializable {
 
+    private static final long serialVersionUID = 2925681939310981862L;
     /**
-     * 喂料次数
+     * 仪表参数实际检查结果
      */
-    private Integer count;
+    private List<DeviceValueDto> actualResult;
+    /**
+     * 报警信息
+     */
+    private String alarmMessage;
+
+
 }

@@ -4,10 +4,7 @@ import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.enums.CoopStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlantService;
-import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
-import com.jaagro.cbs.biz.mapper.CoopMapperExt;
-import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
-import com.jaagro.cbs.biz.mapper.PlantMapperExt;
+import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
@@ -47,6 +44,8 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     private PlantImageMapperExt plantImageMapper;
     @Autowired
     private CoopDeviceMapperExt coopDeviceMapper;
+    @Autowired
+    private BatchPlantCoopServiceImpl batchPlantCoopService;
 
 
     /**
@@ -68,7 +67,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
             throw new NullPointerException("养殖户不存在");
         }
         Integer tenantId = customerClientService.getTenantByCustomer(showCustomerById.getId());
-        if (tenantId != null) {
+        if (tenantId != 0) {
             plant.setTenantId(tenantId);
         }
         try {
@@ -81,9 +80,9 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                     plantImage
                             .setCreateUserId(currentUserService.getCurrentUser().getId())
                             .setPlantId(plant.getId());
-                    plantImageMapper.insertSelective(plantImage);
                 }
-
+                //批量新增图片
+                plantImageMapper.insertBatch(plantDto.getImageDtoList());
             }
         } catch (Exception e) {
             log.error("R BreedingPlantServiceImpl.createPlant  error:" + e);
@@ -102,7 +101,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
     public Map<String, Object> updatePlant(UpdatePlantDto plantDto) {
         Plant plant = new Plant();
         BeanUtils.copyProperties(plantDto, plant);
-        Integer result = plantMapper.updateByPrimaryKeySelective(plant);
+        int result = plantMapper.updateByPrimaryKeySelective(plant);
         if (result > 0) {
             return ServiceResult.toResult("修改成功");
         } else {
@@ -136,14 +135,28 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
             returnPlantDto.setPlantImageDtoList(imageDtoList);
         }
         //填充养殖场鸡舍数量
-        CoopExample coopExample = new CoopExample();
-        coopExample.createCriteria()
-                .andPlantIdEqualTo(returnPlantDto.getId());
-        long coopCount = coopMapperExt.countByExample(coopExample);
-        if (coopCount > 0) {
-            returnPlantDto.setCoopCount((int) coopCount);
-        }
+        returnPlantDto.setCoopCount(getCoopsCountByPlant(returnPlantDto.getId()));
         return returnPlantDto;
+    }
+
+    /**
+     * 根据养殖计划id 获取养殖场信息
+     *
+     * @param plantId
+     * @return
+     */
+    @Override
+    public List<Plant> listPlantInfoByPlanId(Integer plantId) {
+        List<Plant> plants = null;
+        List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(plantId);
+        if (!CollectionUtils.isEmpty(plantIds)) {
+            PlantExample plantExample = new PlantExample();
+            plantExample.createCriteria()
+                    .andIdIn(plantIds)
+                    .andEnableEqualTo(true);
+            plants = plantMapper.selectByExample(plantExample);
+        }
+        return plants;
     }
 
     /**
@@ -178,17 +191,29 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                     plantDto.setPlantImageDtoList(imageDtoList);
                 }
                 //填充养殖场鸡舍数量
-                CoopExample coopExample = new CoopExample();
-                coopExample.createCriteria()
-                        .andPlantIdEqualTo(plant.getId());
-                long coopCount = coopMapperExt.countByExample(coopExample);
-                if (coopCount > 0) {
-                    plantDto.setCoopCount((int) coopCount);
-                }
+                Integer coopCount = getCoopsCountByPlant(plant.getId());
+                plantDto.setCoopCount(coopCount);
                 returnPlantDtoList.add(plantDto);
             }
         }
         return returnPlantDtoList;
+    }
+
+    /**
+     * 通过养殖场id获得鸡舍总数
+     *
+     * @param plantId
+     * @return
+     */
+    private Integer getCoopsCountByPlant(Integer plantId) {
+        if (plantId == null) {
+            return 0;
+        }
+        CoopExample coopExample = new CoopExample();
+        coopExample.createCriteria()
+                .andPlantIdEqualTo(plantId);
+        Integer coopCount = coopMapperExt.countByExample(coopExample);
+        return coopCount;
     }
 
     /**
@@ -209,7 +234,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                 .setCoopStatus(CoopStatusEnum.LEISURE.getCode())
                 .setCustomerId(plant.getCustomerId())
                 .setCreateUserId(currentUserService.getCurrentUser().getId());
-        Integer result = coopMapperExt.insertSelective(coop);
+        int result = coopMapperExt.insertSelective(coop);
         if (result > 0) {
             return ServiceResult.toResult("创建成功");
         }

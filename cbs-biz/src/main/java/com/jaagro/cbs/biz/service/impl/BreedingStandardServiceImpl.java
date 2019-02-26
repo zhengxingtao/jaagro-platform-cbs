@@ -48,11 +48,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean createBreedingTemplate(BreedingStandardDto dto) {
         try {
-            log.info("o BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
+            log.info("O BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
+
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setBreedingType(dto.getBreedingType())
@@ -73,7 +70,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
-            log.info("o BreedingStardandServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
+            log.info("O BreedingStardandServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
         } catch (Exception e) {
             log.error("R BreedingStardandServiceImpl.createBreedingTemplate  error:" + e);
             return false;
@@ -93,13 +90,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateBreedingTemplate(BreedingStandardDto dto) {
         try {
-            log.info("o BreedingStardandServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
+            log.info("O BreedingStardandServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
             Assert.notNull(dto.getId(), "模板Id不能为空");
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
-
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setId(dto.getId())
@@ -121,7 +113,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
-            log.info("o BreedingStardandServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
+            log.info("O BreedingStardandServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
         } catch (Exception e) {
             log.error("R BreedingStardandServiceImpl.updateBreedingTemplate  error:" + e);
             return false;
@@ -147,7 +139,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         BreedingStandardParameterExample example = new BreedingStandardParameterExample();
         example.createCriteria().andStandardIdEqualTo(standardId);
         List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
-
 
         breedingStandardDto.setStandardParameterDos(parameterList);
 

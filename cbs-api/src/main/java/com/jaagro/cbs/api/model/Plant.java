@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :asus
+ * @author :gavinwang
  * @date :2019/02/26
  */
 @Data
@@ -42,9 +42,9 @@ public class Plant implements Serializable {
     private Integer plantType;
 
     /**
-     * 产权情况
+     * 产权情况(1-全民,2-集体,3-私有)
      */
-    private String equityType;
+    private Integer equityType;
 
     /**
      * 使用年限

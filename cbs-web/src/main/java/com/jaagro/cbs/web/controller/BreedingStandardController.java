@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -45,6 +46,10 @@ public class BreedingStandardController {
     public BaseResponse breedingStandard(@RequestBody BreedingStandardDto dto) {
         try {
             Boolean result = false;
+            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
+            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
+            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
+            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
             if (null == dto.getId() || dto.getId() == 0) {
                 result = breedingStandardService.createBreedingTemplate(dto);
             } else {
@@ -71,70 +76,4 @@ public class BreedingStandardController {
     }
 
 
-    /**
-     * 分页查询所有的养殖模板
-     * @author yj
-     * @param criteria
-     * @return
-     */
-    @ApiOperation("分页查询所有的养殖模板")
-    @PostMapping("/listBreedingStandardByCriteria")
-    public BaseResponse listBreedingStandardByCriteria(@RequestBody @Validated ListBreedingStandardCriteria criteria){
-        log.info("O listBreedingStandardByCriteria criteria={}",criteria);
-        PageInfo pageInfo = breedingStandardService.listBreedingStandardByCriteria(criteria);
-        return BaseResponse.successInstance(pageInfo);
-    }
-
-    /**
-     * 查询单个养殖模板详情按日龄分组
-     * @author yj
-     * @param id
-     * @return
-     */
-    @ApiOperation("查询单个养殖模板详情按日龄分组")
-    @GetMapping("/getBreedingStandardDetail/{id}")
-    public BaseResponse getBreedingStandardDetail(@PathVariable("id") Integer id){
-        BreedingStandardDto breedingStandardDto = breedingStandardService.getBreedingStandardById(id);
-        // 将养殖参数按照日龄分组
-        BreedingStandardDetailDto detailDto = groupBreedingStandard(breedingStandardDto);
-        return BaseResponse.successInstance(detailDto);
-    }
-
-    private BreedingStandardDetailDto groupBreedingStandard(BreedingStandardDto breedingStandardDto) {
-        BreedingStandardDetailDto detailDto = new BreedingStandardDetailDto();
-        List<BreedingStandardParameter> standardParameterDos = breedingStandardDto.getStandardParameterDos();
-        if (!CollectionUtils.isEmpty(standardParameterDos)){
-            Set<Integer> dayAgeSet = new HashSet<>();
-            List<BreedingParameterDto> breedingParameterDtoList = new ArrayList<>();
-            standardParameterDos.forEach(parameter->dayAgeSet.add(parameter.getDayAge()));
-            for (Integer dayAge : dayAgeSet){
-                BreedingParameterDto parameterDto = new BreedingParameterDto();
-                parameterDto.setDayAge(dayAge);
-                List<BreedingStandardParameter> parameterList = new ArrayList<>();
-                parameterDto.setBreedingStandardParameterList(parameterList);
-                breedingParameterDtoList.add(parameterDto);
-            }
-            for (BreedingStandardParameter parameter : standardParameterDos){
-                for (BreedingParameterDto parameterDto : breedingParameterDtoList){
-                    List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                    if (parameter.getDayAge().equals(parameterDto.getDayAge())){
-                        breedingStandardParameterList.add(parameter);
-                    }
-                }
-            }
-            for (BreedingParameterDto parameterDto : breedingParameterDtoList){
-                List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                BreedingStandardParameter standardParameter = new BreedingStandardParameter();
-                standardParameter.setDayAge(parameterDto.getDayAge())
-                             .setAlarm(false)
-                             .setCreateTime(new Date())
-                        .setEnable(true)
-                        .setParamName("动保药品");
-
-            }
-            detailDto.setBreedingParameterDtoList(breedingParameterDtoList);
-            detailDto.setDayAgeList(new ArrayList<>(dayAgeSet));
-        }
-        return detailDto;
-    }
 }

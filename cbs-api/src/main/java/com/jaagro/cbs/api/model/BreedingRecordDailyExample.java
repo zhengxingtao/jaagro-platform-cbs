@@ -319,66 +319,6 @@ public class BreedingRecordDailyExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andCoopIdIsNull() {
-            addCriterion("coop_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdIsNotNull() {
-            addCriterion("coop_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdEqualTo(Integer value) {
-            addCriterion("coop_id =", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdNotEqualTo(Integer value) {
-            addCriterion("coop_id <>", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdGreaterThan(Integer value) {
-            addCriterion("coop_id >", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("coop_id >=", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdLessThan(Integer value) {
-            addCriterion("coop_id <", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdLessThanOrEqualTo(Integer value) {
-            addCriterion("coop_id <=", value, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdIn(List<Integer> values) {
-            addCriterion("coop_id in", values, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdNotIn(List<Integer> values) {
-            addCriterion("coop_id not in", values, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdBetween(Integer value1, Integer value2) {
-            addCriterion("coop_id between", value1, value2, "coopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andCoopIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("coop_id not between", value1, value2, "coopId");
-            return (Criteria) this;
-        }
-
         public Criteria andDayAgeIsNull() {
             addCriterion("day_age is null");
             return (Criteria) this;

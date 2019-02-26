@@ -13,11 +13,14 @@
             <if test="customerIds!=null">
                 and customer_id IN
                 <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
-                ${customerId}
+                    ${customerId}
                 </foreach>
             </if>
             <if test="batchNo!=null">
                 and batch_no like CONCAT(#{batchNo},'%')
+            </if>
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
             </if>
             <if test="createUserName!=null">
                 and create_user_name like CONCAT(#{createUserName},'%')

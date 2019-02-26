@@ -12,7 +12,7 @@ import java.util.List;
 @Resource
 public interface BaseMapper<D, E> {
 
-    long countByExample(E example);
+    int countByExample(E example);
 
     int deleteByExample(E example);
 

@@ -1,27 +1,24 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.api.dto.progress;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
- * @author :gavinwang
+ * @author :Gavin
  * @date :2019/02/26
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class DeviceValueHistory implements Serializable {
-    /**
-     * 设备检测值历史表id
-     */
-    private Integer id;
+public class DeviceValueDto implements Serializable {
 
+    private static final long serialVersionUID = -5832695247760330729L;
     /**
      * 设备id
      */
@@ -36,11 +33,4 @@ public class DeviceValueHistory implements Serializable {
      * 当前值
      */
     private BigDecimal currentValue;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    private static final long serialVersionUID = 1L;
 }

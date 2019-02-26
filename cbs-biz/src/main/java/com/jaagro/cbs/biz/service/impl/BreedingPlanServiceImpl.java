@@ -6,12 +6,18 @@ import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.*;
+import com.jaagro.cbs.api.dto.base.Employee;
+import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
+import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
+import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -59,7 +65,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BatchPlantCoopService batchPlantCoopService;
     @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
-
+    @Autowired
+    private PlantMapperExt plantMapper;
+    @Autowired
+    private UserClientService userClientService;
+    @Autowired
+    private BreedingPlantServiceImpl breedingPlantService;
 
     /**
      * 创建养殖计划
@@ -71,7 +82,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("AT");
+        String batchNo = sequenceCodeUtils.genSeqCode("TT");
         BreedingPlan breedingPlan = new BreedingPlan();
         breedingPlan
                 .setBatchNo(batchNo)
@@ -83,14 +94,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         breedingPlanMapper.insertSelective(breedingPlan);
         //插入养殖关联表
         if (!CollectionUtils.isEmpty(dto.getPlantIds())) {
+            List<BatchPlantCoop> batchPlantCoops = new ArrayList<>();
             List<Integer> plantIds = dto.getPlantIds();
             for (Integer plantId : plantIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
+                        .setPlanId(breedingPlan.getId())
                         .setCreateUserId(currentUser.getId())
                         .setPlantId(plantId);
-                batchPlantCoopMapper.insertSelective(batchPlantCoop);
+                batchPlantCoops.add(batchPlantCoop);
             }
+            batchPlantCoopMapper.insertBatch(batchPlantCoops);
         }
     }
 
@@ -102,7 +116,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author @Gao.
      */
     @Override
-    public PageInfo<List<ReturnBreedingPlanDto>> listBreedingPlan(BreedingPlanParamDto dto) {
+    public PageInfo listBreedingPlan(BreedingPlanParamDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
 //        dto.setTenantId();    先注释,等待从userInfo获取租户id
         if (dto.getCustomerInfo() != null) {
@@ -121,15 +135,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerName(contactsReturnDto.getContact())
                         .setCustomerPhone(contactsReturnDto.getPhone());
             }
-            //填充鸡舍
-            List<Integer> coopId = batchPlantCoopService.listCoopIdByPlanId(returnBreedingPlanDto.getId());
-            if (!CollectionUtils.isEmpty(coopId)) {
-                CoopExample coopExample = new CoopExample();
-                coopExample.createCriteria()
-                        .andIdIn(coopId)
-                        .andEnableEqualTo(true);
-                returnBreedingPlanDto.setCoops(coopMapper.selectByExample(coopExample));
-            }
+            //填充养殖场信息
+            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
+            returnBreedingPlanDto.setPlants(plants);
             //填充进度
             BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
             parameterExample.createCriteria()
@@ -141,9 +149,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BreedingBatchParameter parameter = breedingBatchParameters.get(0);
                 returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
                 try {
-                    long day = getInterval(new Date(), returnBreedingPlanDto.getPlanTime());
+                    long day = getInterval(returnBreedingPlanDto.getPlanTime(), new Date());
                     returnBreedingPlanDto.setAlreadyDayAge((int) day);
                 } catch (Exception ex) {
+                    log.error("计算批次进度失败:BreedingPlanServiceImpl.getInterval()");
                     ex.printStackTrace();
                 }
             }
@@ -151,6 +160,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return new PageInfo(planDtoList);
     }
 
+    /**
+     * 计算上鸡时间进度
+     *
+     * @param beginDate
+     * @param endDate
+     * @return
+     * @throws Exception
+     */
+    private long getInterval(Date beginDate, Date endDate) throws Exception {
     /**
      * 录入合同
      *
@@ -219,17 +237,53 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
 
     private long getInterval(Date begin_date, Date end_date) throws Exception {
         long day = 0;
+        if (beginDate == null && endDate == null) {
+            return day;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        if (begin_date != null) {
-            String begin = sdf.format(begin_date);
-            begin_date = sdf.parse(begin);
-        }
-        if (end_date != null) {
-            String end = sdf.format(end_date);
-            end_date = sdf.parse(end);
-        }
-        day = (end_date.getTime() - begin_date.getTime()) / (24 * 60 * 60 * 1000);
+        beginDate = sdf.parse(sdf.format(beginDate));
+        endDate = sdf.parse(sdf.format(endDate));
+        day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
         return day;
     }
 
+    /**
+     * 更新养殖计划
+     *
+     * @param dto
+     * @author @Gao.
+     */
+    @Override
+    public void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto) {
+        BreedingPlan breedingPlan = new BreedingPlan();
+        BeanUtils.copyProperties(dto, breedingPlan);
+        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+    }
+
+    /**
+     * 养殖计划详情
+     *
+     * @param planId
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
+        ReturnBreedingPlanDto returnBreedingPlanDto = new ReturnBreedingPlanDto();
+        //养殖计划信息
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
+        //养殖场信息
+        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
+        returnBreedingPlanDto.setPlants(plants);
+        //技术员信息
+        BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
+        if (CollectionUtils.isEmpty(empByDeptId.getData())) {
+            List<Employee> employees = empByDeptId.getData();
+            returnBreedingPlanDto.setTechnicianList(employees);
+        }
+        return returnBreedingPlanDto;
+    }
+
 }
+

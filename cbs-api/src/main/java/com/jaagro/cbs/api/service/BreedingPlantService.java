@@ -1,6 +1,7 @@
 package com.jaagro.cbs.api.service;
 
 import com.jaagro.cbs.api.dto.plant.*;
+import com.jaagro.cbs.api.model.Plant;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,14 @@ public interface BreedingPlantService {
      * @return
      */
     List<ReturnPlantDto> listPlantByCustomerId(Integer customerId);
+
+    /**
+     * 根据养殖计划id 获取养殖场信息
+     *
+     * @param plantId
+     * @return
+     */
+    List<Plant> listPlantInfoByPlanId(Integer plantId);
 
     /**
      * 新增鸡舍

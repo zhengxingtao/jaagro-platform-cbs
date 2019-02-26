@@ -23,25 +23,38 @@ public class BatchPlantCoopServiceImpl implements BatchPlantCoopService {
     private BatchPlantCoopMapperExt batchPlantCoopMapper;
 
     /**
+     * 根据批次id查询养殖场
+     *
+     * @param planId@return
+     */
+    @Override
+    public List<Integer> listPlantIdByPlanId(Integer planId) {
+        if (StringUtils.isEmpty(planId)) {
+            return null;
+        }
+        List<Integer> plantId = batchPlantCoopMapper.listPlantIdByPlanId(planId);
+        return plantId;
+    }
+
+    /**
      * 根据批次id查询鸡舍
      *
-     * @param PlanId
+     * @param planId
      * @return
      */
     @Override
-    public List<Integer> listCoopIdByPlanId(Integer PlanId) {
-        if (StringUtils.isEmpty(PlanId)) {
+    public List<Integer> listCoopIdByPlanId(Integer planId) {
+        if (StringUtils.isEmpty(planId)) {
             return null;
         }
         BatchPlantCoopExample batchPlantCoopExample = new BatchPlantCoopExample();
         batchPlantCoopExample.createCriteria()
-                .andPlanIdEqualTo(PlanId)
+                .andPlanIdEqualTo(planId)
                 .andEnableEqualTo(true);
         List<BatchPlantCoop> batchPlantCoops = batchPlantCoopMapper.selectByExample(batchPlantCoopExample);
         List<Integer> coopId = new ArrayList<>();
         if (!CollectionUtils.isEmpty(batchPlantCoops)) {
-            for (BatchPlantCoop batchPlantCoop : batchPlantCoops
-            ) {
+            for (BatchPlantCoop batchPlantCoop : batchPlantCoops) {
                 coopId.add(batchPlantCoop.getCoopId());
             }
         }

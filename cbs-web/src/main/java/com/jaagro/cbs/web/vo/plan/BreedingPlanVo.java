@@ -1,21 +1,25 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.web.vo.plan;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 /**
- * @author :gavinwang
- * @date :2019/02/26
- */
+ * @description: 养殖计划
+ * @author: @Gao.
+ * @create: 2019-02-26 11:32
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class BreedingPlan implements Serializable {
+public class BreedingPlanVo implements Serializable {
     /**
      * 计划id
      */
@@ -32,10 +36,13 @@ public class BreedingPlan implements Serializable {
     private Integer tenantId;
 
     /**
-     * 养殖户id
+     * 养殖户的名称
      */
-    private Integer customerId;
-
+    private String customerName;
+    /**
+     *
+     */
+    private String customerPhone;
     /**
      * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
      */
@@ -57,11 +64,6 @@ public class BreedingPlan implements Serializable {
     private String technician;
 
     /**
-     * 技术员id
-     */
-    private Integer technicianId;
-
-    /**
      * 备注
      */
     private String notes;
@@ -72,29 +74,12 @@ public class BreedingPlan implements Serializable {
     private Date createTime;
 
     /**
-     * 创建人
-     */
-    private Integer createUserId;
-
-    /**
      * 创建人姓名
      */
     private String createUserName;
 
     /**
-     * 更新时间
+     * 养殖场列表
      */
-    private Date modifyTime;
-
-    /**
-     * 更新人
-     */
-    private Integer modifyUserId;
-
-    /**
-     * 是否有效（1-有效 0 无效）
-     */
-    private Boolean enable;
-
-    private static final long serialVersionUID = 1L;
+    private List<Plant> plants;
 }
