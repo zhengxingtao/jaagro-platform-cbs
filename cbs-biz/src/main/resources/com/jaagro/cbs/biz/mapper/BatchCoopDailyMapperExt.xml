@@ -4,6 +4,42 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-
-
+    <select id="getStartAmountByCoopId" parameterMap="com.jaagro.cbs.api.model.BatchCoopDaily"
+            resultType="java.lang.Integer">
+        SELECT
+            current_amount
+        FROM
+            batch_coop_daily
+        WHERE
+            enable = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{createTime}
+            AND coop_id = #{coopId}
+    </select>
+    <insert id="batchInsert" parameterType="com.jaagro.cbs.api.model.BatchCoopDaily">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into batch_coop_daily (plan_id, batch_no, coop_id,
+        day_age, start_amount, current_amount,
+        dead_amount, sale_amount, fodder_times,
+        fodder_amount, enable, create_time,
+        create_user_id, modify_time, modify_user_id
+        )
+        values
+        <foreach collection="dailyList" item="item">
+            (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.coopId,jdbcType=INTEGER},
+            #{item.dayAge,jdbcType=INTEGER}, #{item.startAmount,jdbcType=INTEGER},
+            #{item.currentAmount,jdbcType=INTEGER},
+            #{item.deadAmount,jdbcType=INTEGER}, #{item.saleAmount,jdbcType=INTEGER},
+            #{item.fodderTimes,jdbcType=INTEGER},
+            #{item.fodderAmount,jdbcType=DECIMAL}, #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.createUserId,jdbcType=INTEGER}, #{item.modifyTime,jdbcType=TIMESTAMP},
+            #{item.modifyUserId,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteByDate" parameterType="java.lang.String">
+    delete from batch_coop_daily
+    where DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{todayDate}
+  </delete>
 </mapper>

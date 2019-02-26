@@ -3,7 +3,41 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
+    <select id="listCoopDailySumByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            plan_id ,batch_no,coop_id,day_age,SUM(breeding_value) as breeding_value
+        FROM
+            breeding_record
+        WHERE
+            enable = 1
+            AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{todayDate}
+            GROUP BY plan_id,coop_id
+    </select>
+    <select id="countFodderTimesByCoopId" parameterMap="com.jaagro.cbs.api.model.BreedingRecord"
+            resultType="java.lang.Integer">
+        SELECT
+            count(breeding_value) as breeding_value
+        FROM
+            breeding_record
+        WHERE
+            enable = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{createTime}
+            AND coop_id = #{coopId}
+            AND plan_id = #{planId}
+            AND record_type = 1
+    </select>
+    <select id="sumDeadAmountByCoopId" parameterMap="com.jaagro.cbs.api.model.BreedingRecord"
+            resultType="java.lang.Integer">
+        SELECT
+            sum(breeding_value) as breeding_value
+        FROM
+            breeding_record
+        WHERE
+            enable = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{createTime}
+            AND coop_id = #{coopId}
+            AND plan_id = #{planId}
+            AND record_type = 4
+    </select>
 
 </mapper>
