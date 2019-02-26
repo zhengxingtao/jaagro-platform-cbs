@@ -42,15 +42,14 @@ public class SequenceCodeUtils {
         try {
             entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
         } catch (Exception e) {
-            entityIdCounter.expire(48, TimeUnit.HOURS);
             log.info("O genSeqCode entityIdCounter param is null");
             throw new RuntimeException("生成序列号失败");
         }
-        Long incrementId = entityIdCounter.getAndIncrement() + 1;
-        if (incrementId.longValue() == 1) {
+        long incrementId = entityIdCounter.getAndIncrement() + 1;
+        if (incrementId == 1) {
             entityIdCounter.expire(48, TimeUnit.HOURS);
         }
-        int zeroLength = ZERO_START_LENGTH - incrementId.toString().length();
+        int zeroLength = ZERO_START_LENGTH - Long.valueOf(incrementId).toString().length();
         genSeqCode.append(prefix).append(currentDate).append(ZERO_STRING.substring(0, zeroLength)).append(incrementId);
         return genSeqCode.toString();
     }
