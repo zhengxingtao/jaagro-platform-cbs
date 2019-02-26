@@ -32,7 +32,7 @@ public class CoopDevice implements Serializable {
     private Integer plantId;
 
     /**
-     * 设备类型(1-温感设备,2-湿感设备)
+     * 检测类型(1-温度,2-湿度,3-光照强度,4-氮气,5-二氧化碳,6-通风,7-负压值)
      */
     private Integer deviceType;
 

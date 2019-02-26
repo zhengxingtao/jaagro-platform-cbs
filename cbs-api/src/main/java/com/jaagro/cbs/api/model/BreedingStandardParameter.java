@@ -38,7 +38,7 @@ public class BreedingStandardParameter implements Serializable {
     private Integer dayAge;
 
     /**
-     * 参数类型（1-喂养参数 2-检测参数）
+     * 检测类型(1-温度,2-湿度,3-光照强度,4-氮气,5-二氧化碳,6-通风,7-负压值)
      */
     private Integer paramType;
 
