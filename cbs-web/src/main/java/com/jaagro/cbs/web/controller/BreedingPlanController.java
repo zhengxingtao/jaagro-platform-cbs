@@ -84,8 +84,6 @@ public class BreedingPlanController {
         return BaseResponse.successInstance("录入合同成功");
     }
 
-
-
     @PostMapping("/upDateBreedingPlanDetails")
     @ApiOperation("更新养殖计划列表")
     public BaseResponse upDateBreedingPlanDetails(@RequestBody UpdateBreedingPlanDto dto) {
