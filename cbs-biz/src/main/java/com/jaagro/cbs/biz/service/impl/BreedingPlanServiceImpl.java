@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("AT");
+        String batchNo = sequenceCodeUtils.genSeqCode("TT");
         BreedingPlan breedingPlan = new BreedingPlan();
         breedingPlan
                 .setBatchNo(batchNo)
@@ -78,14 +79,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         breedingPlanMapper.insertSelective(breedingPlan);
         //插入养殖关联表
         if (!CollectionUtils.isEmpty(dto.getPlantIds())) {
+            List<BatchPlantCoop> batchPlantCoops = new ArrayList<>();
             List<Integer> plantIds = dto.getPlantIds();
             for (Integer plantId : plantIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
+                        .setPlanId(breedingPlan.getId())
                         .setCreateUserId(currentUser.getId())
                         .setPlantId(plantId);
-                batchPlantCoopMapper.insertSelective(batchPlantCoop);
+                batchPlantCoops.add(batchPlantCoop);
             }
+            batchPlantCoopMapper.insertBatch(batchPlantCoops);
         }
     }
 
@@ -180,4 +184,25 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BeanUtils.copyProperties(dto, breedingPlan);
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
+    /**
+     * 养殖计划详情
+     *
+     * @param planId
+     * @return
+     */
+    @Override
+    public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
+        ReturnBreedingPlanDto returnBreedingPlanDto = new ReturnBreedingPlanDto();
+        //养殖计划信息
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
+        //养殖场信息
+        BatchPlantCoopExample batchPlantCoopExample = new BatchPlantCoopExample();
+        batchPlantCoopExample.createCriteria()
+                .andPlanIdEqualTo(planId)
+                .andEnableEqualTo(true);
+
+        return null;
+    }
+
 }

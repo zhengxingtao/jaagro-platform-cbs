@@ -36,4 +36,12 @@ public interface BreedingPlanService {
      * @param dto
      */
     void upDateBreedingPlanDetails(UpdateBreedingPlanDto dto);
+
+    /**
+     * 养殖计划详情
+     *
+     * @param planId
+     * @return
+     */
+    ReturnBreedingPlanDto breedingPlanDetails(Integer planId);
 }

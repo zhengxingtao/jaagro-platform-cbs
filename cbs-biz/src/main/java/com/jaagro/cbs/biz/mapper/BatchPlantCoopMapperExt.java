@@ -26,4 +26,11 @@ public interface BatchPlantCoopMapperExt extends BaseMapper<BatchPlantCoop, Batc
      * @return
      */
     List<Integer> listPlantIdByPlanId(@Param("planId") Integer planId);
+
+    /**
+     * 批量插入养殖计划关联表
+     *
+     * @param batchPlantCoops
+     */
+    void insertBatch(@Param("planId") List<BatchPlantCoop> batchPlantCoops);
 }
