@@ -121,15 +121,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCustomerPhone(contactsReturnDto.getPhone());
             }
             //填充养殖场信息
-            List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(returnBreedingPlanDto.getId());
-            if (!CollectionUtils.isEmpty(plantIds)) {
-                PlantExample plantExample = new PlantExample();
-                plantExample.createCriteria()
-                        .andIdIn(plantIds)
-                        .andEnableEqualTo(true);
-                List<Plant> plants = plantMapper.selectByExample(plantExample);
-                returnBreedingPlanDto.setPlants(plants);
-            }
+            returnBreedingPlanDto.setPlants(listPlantInfoByPlanId(returnBreedingPlanDto.getId()));
             //填充进度
             BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
             parameterExample.createCriteria()
@@ -184,11 +176,13 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BeanUtils.copyProperties(dto, breedingPlan);
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
+
     /**
      * 养殖计划详情
      *
      * @param planId
      * @return
+     * @author @Gao.
      */
     @Override
     public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
@@ -197,12 +191,27 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
-        BatchPlantCoopExample batchPlantCoopExample = new BatchPlantCoopExample();
-        batchPlantCoopExample.createCriteria()
-                .andPlanIdEqualTo(planId)
-                .andEnableEqualTo(true);
-
-        return null;
+        returnBreedingPlanDto.setPlants(listPlantInfoByPlanId(planId));
+        return returnBreedingPlanDto;
     }
 
+    /**
+     * 根据养殖计划id 获取养殖场信息
+     *
+     * @param plantId
+     * @return
+     */
+    private List<Plant> listPlantInfoByPlanId(Integer plantId) {
+        List<Plant> plants = null;
+        List<Integer> plantIds = batchPlantCoopService.listPlantIdByPlanId(plantId);
+        if (!CollectionUtils.isEmpty(plantIds)) {
+            PlantExample plantExample = new PlantExample();
+            plantExample.createCriteria()
+                    .andIdIn(plantIds)
+                    .andEnableEqualTo(true);
+            plants = plantMapper.selectByExample(plantExample);
+        }
+        return plants;
+    }
 }
+
