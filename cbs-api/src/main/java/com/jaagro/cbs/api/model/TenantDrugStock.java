@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :tony
- * @date :2019/02/23
+ * @author :asus
+ * @date :2019/02/26
  */
 @Data
 @NoArgsConstructor
@@ -60,7 +60,7 @@ public class TenantDrugStock implements Serializable {
     /**
      * 是否参与预警(0-不参与,1-参与)
      */
-    private Byte alarm;
+    private Boolean alarm;
 
     /**
      * 是否有效(0-无效,1-有效)

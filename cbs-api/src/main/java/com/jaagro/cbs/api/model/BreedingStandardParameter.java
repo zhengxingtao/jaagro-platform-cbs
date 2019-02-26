@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :tony
- * @date :2019/02/23
+ * @author :asus
+ * @date :2019/02/26
  */
 @Data
 @NoArgsConstructor
@@ -65,7 +65,7 @@ public class BreedingStandardParameter implements Serializable {
     /**
      * 超限是否报警(0-不报警,1-报警)
      */
-    private Byte alarm;
+    private Boolean alarm;
 
     /**
      * 养殖参数状态（1-启用 0 -未启用）

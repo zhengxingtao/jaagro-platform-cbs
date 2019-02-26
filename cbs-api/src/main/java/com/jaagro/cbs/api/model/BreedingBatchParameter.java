@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :tony
- * @date :2019/02/23
+ * @author :asus
+ * @date :2019/02/26
  */
 @Data
 @NoArgsConstructor
@@ -80,12 +80,12 @@ public class BreedingBatchParameter implements Serializable {
     /**
      * 超限是否报警(0-不报警,1-报警)
      */
-    private Byte alarm;
+    private Boolean alarm;
 
     /**
      * 动保药品(0-停用,1-启用)
      */
-    private Byte dynamicMedicine;
+    private Boolean dynamicMedicine;
 
     /**
      * 是否有效(0-无效,1-有效)
