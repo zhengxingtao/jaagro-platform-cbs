@@ -1,11 +1,9 @@
 package com.jaagro.cbs.biz.service.impl;
 
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
-import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
-import com.jaagro.cbs.api.dto.progress.ListBatchCriteriaDto;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt;
@@ -129,14 +127,4 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         return null;
     }
 
-    /**
-     * 批次管理
-     *
-     * @param criteriaDto
-     * @return
-     */
-    @Override
-    public List<ReturnBreedingPlanDto> listPlanByCriteria(ListBatchCriteriaDto criteriaDto) {
-        return null;
-    }
 }

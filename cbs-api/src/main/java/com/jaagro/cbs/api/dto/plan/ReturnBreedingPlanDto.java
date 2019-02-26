@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.dto.plan;
 
+import com.jaagro.cbs.api.model.Coop;
 import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -93,8 +94,23 @@ public class ReturnBreedingPlanDto implements Serializable {
     private String createUserName;
 
     /**
+     * 进度 - 已进行的天数
+     */
+    private Integer alreadyDayAge;
+
+    /**
+     * 进度 - 日龄
+     */
+    private Integer AllDayAge;
+
+    /**
      * 养殖场
      */
     private List<Plant> plants;
+
+    /**
+     * 鸡舍
+     */
+    private List<Coop> coops;
 
 }

@@ -51,6 +51,11 @@ public class BreedingPlanParamDto implements Serializable {
     /**
      * 计划列表状态
      */
-    private String PlanStatus;
+    private Integer planStatus;
+
+    /**
+     * 租户id
+     */
+    private Integer tenantId;
 
 }
