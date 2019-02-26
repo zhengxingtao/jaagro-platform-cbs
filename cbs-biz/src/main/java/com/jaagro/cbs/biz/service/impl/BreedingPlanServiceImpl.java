@@ -60,13 +60,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private CustomerClientService customerClientService;
     @Autowired
-    private CoopMapperExt coopMapper;
-    @Autowired
-    private BatchPlantCoopService batchPlantCoopService;
-    @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
-    @Autowired
-    private PlantMapperExt plantMapper;
     @Autowired
     private UserClientService userClientService;
     @Autowired
@@ -161,15 +155,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 计算上鸡时间进度
-     *
-     * @param beginDate
-     * @param endDate
-     * @return
-     * @throws Exception
-     */
-    private long getInterval(Date beginDate, Date endDate) throws Exception {
-    /**
      * 录入合同
      *
      * @param createPlanContractDto
@@ -180,14 +165,14 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public void createPlanContract(CreatePlanContractDto createPlanContractDto) {
         Integer planId = createPlanContractDto.getPlanId();
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-        if (breedingPlan == null){
-            throw new RuntimeException("养殖计划id="+planId+"不存在");
+        if (breedingPlan == null) {
+            throw new RuntimeException("养殖计划id=" + planId + "不存在");
         }
         UserInfo currentUser = currentUserService.getCurrentUser();
         Integer currentUserId = currentUser == null ? null : currentUser.getId();
         // 插入计划合同
         BatchContract batchContract = new BatchContract();
-        BeanUtils.copyProperties(createPlanContractDto,batchContract);
+        BeanUtils.copyProperties(createPlanContractDto, batchContract);
         batchContract.setContractNumber(sequenceCodeUtils.genSeqCode("HT"))
                 .setContractDate(new Date())
                 .setCreateTime(new Date())
@@ -197,9 +182,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 .setEnable(true);
         batchContractMapper.insertSelective(batchContract);
         // 插入计划合同图片
-        if (!CollectionUtils.isEmpty(createPlanContractDto.getImageUrlList())){
+        if (!CollectionUtils.isEmpty(createPlanContractDto.getImageUrlList())) {
             List<ContractSource> contractSourceList = new ArrayList<>();
-            for (String imageUrl : createPlanContractDto.getImageUrlList()){
+            for (String imageUrl : createPlanContractDto.getImageUrlList()) {
                 ContractSource contractSource = new ContractSource();
                 contractSource.setCertificateImageUrl(imageUrl)
                         .setCertificateStatus(CertificateStatus.UNCHECKED)
@@ -214,11 +199,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         // 插入回收价格区间
         List<ContractPriceSectionDto> contractPriceSectionDtoList = createPlanContractDto.getContractPriceSectionDtoList();
-        if (!CollectionUtils.isEmpty(contractPriceSectionDtoList)){
+        if (!CollectionUtils.isEmpty(contractPriceSectionDtoList)) {
             List<ContractPriceSection> contractPriceSectionList = new ArrayList<>();
-            for (ContractPriceSectionDto dto : contractPriceSectionDtoList){
+            for (ContractPriceSectionDto dto : contractPriceSectionDtoList) {
                 ContractPriceSection contractPriceSection = new ContractPriceSection();
-                BeanUtils.copyProperties(dto,contractPriceSection);
+                BeanUtils.copyProperties(dto, contractPriceSection);
                 contractPriceSection.setContractId(batchContract.getId())
                         .setCreateTime(new Date())
                         .setCreateUserId(currentUserId)
@@ -235,7 +220,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
 
-    private long getInterval(Date begin_date, Date end_date) throws Exception {
+    private long getInterval(Date beginDate, Date endDate) throws Exception {
         long day = 0;
         if (beginDate == null && endDate == null) {
             return day;
@@ -284,6 +269,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         return returnBreedingPlanDto;
     }
-
 }
+
 

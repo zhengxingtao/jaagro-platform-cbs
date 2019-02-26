@@ -70,6 +70,6 @@ public interface UserClientService {
      * @return
      */
     @GetMapping("/listEmpByDeptId/{deptId}")
-    BaseResponse<List<Employee>> getEmpByDeptId(@PathVariable Integer deptId);
+    BaseResponse<List<Employee>> getEmpByDeptId(@PathVariable("deptId") Integer deptId);
 }
 
