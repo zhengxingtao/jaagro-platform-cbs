@@ -4,6 +4,14 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-
+    <select id="listBreedingStandardByCriteria" parameterType="com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria" resultMap="BaseResultMap">
+        SELECT 
+          <include refid="Base_Column_List"/>
+        FROM breeding_standard
+        WHERE 1=1
+        <if test="standardName != null">
+            <![CDATA[and (standard_name like concat('%',#{standardName},'%') )]]>
+        </if>
+    </select>
 
 </mapper>

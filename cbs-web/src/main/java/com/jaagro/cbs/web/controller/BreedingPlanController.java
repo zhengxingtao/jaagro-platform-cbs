@@ -3,6 +3,7 @@ package com.jaagro.cbs.web.controller;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -11,10 +12,12 @@ import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,7 @@ import java.util.List;
  */
 @RestController
 @Api(description = "养殖计划管理", produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class BreedingPlanController {
     @Autowired
     private BreedingPlanService breedingPlanService;
@@ -50,7 +54,7 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/listBreedingPlan")
-    @ApiOperation("养殖计划列表与批次列表")
+    @ApiOperation("养殖计划列表")
     public BaseResponse listBreedingPlan(@RequestBody BreedingPlanParamDto dto) {
         if (dto.getPageNum() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
@@ -71,6 +75,16 @@ public class BreedingPlanController {
         pageInfo.setList(breedingPlanVos);
         return BaseResponse.successInstance(pageInfo);
     }
+
+    @PostMapping("/createPlanContract")
+    @ApiOperation("录入合同")
+    public BaseResponse createPlanContract(@RequestBody @Validated  CreatePlanContractDto createPlanContractDto){
+        log.info("O createPlanContract createPlanContractDto={}",createPlanContractDto);
+        breedingPlanService.createPlanContract(createPlanContractDto);
+        return BaseResponse.successInstance("录入合同成功");
+    }
+
+
 
     @PostMapping("/upDateBreedingPlanDetails")
     @ApiOperation("更新养殖计划列表")

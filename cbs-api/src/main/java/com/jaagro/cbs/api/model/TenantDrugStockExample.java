@@ -649,52 +649,52 @@ public class TenantDrugStockExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andAlarmEqualTo(Byte value) {
+        public Criteria andAlarmEqualTo(Boolean value) {
             addCriterion("alarm =", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotEqualTo(Byte value) {
+        public Criteria andAlarmNotEqualTo(Boolean value) {
             addCriterion("alarm <>", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmGreaterThan(Byte value) {
+        public Criteria andAlarmGreaterThan(Boolean value) {
             addCriterion("alarm >", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmGreaterThanOrEqualTo(Byte value) {
+        public Criteria andAlarmGreaterThanOrEqualTo(Boolean value) {
             addCriterion("alarm >=", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmLessThan(Byte value) {
+        public Criteria andAlarmLessThan(Boolean value) {
             addCriterion("alarm <", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmLessThanOrEqualTo(Byte value) {
+        public Criteria andAlarmLessThanOrEqualTo(Boolean value) {
             addCriterion("alarm <=", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmIn(List<Byte> values) {
+        public Criteria andAlarmIn(List<Boolean> values) {
             addCriterion("alarm in", values, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotIn(List<Byte> values) {
+        public Criteria andAlarmNotIn(List<Boolean> values) {
             addCriterion("alarm not in", values, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmBetween(Byte value1, Byte value2) {
+        public Criteria andAlarmBetween(Boolean value1, Boolean value2) {
             addCriterion("alarm between", value1, value2, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotBetween(Byte value1, Byte value2) {
+        public Criteria andAlarmNotBetween(Boolean value1, Boolean value2) {
             addCriterion("alarm not between", value1, value2, "alarm");
             return (Criteria) this;
         }

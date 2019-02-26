@@ -7,7 +7,7 @@
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plant_name" property="plantName" jdbcType="VARCHAR" />
     <result column="plant_type" property="plantType" jdbcType="INTEGER" />
-    <result column="equity_type" property="equityType" jdbcType="INTEGER" />
+    <result column="equity_type" property="equityType" jdbcType="VARCHAR" />
     <result column="durable_years" property="durableYears" jdbcType="INTEGER" />
     <result column="expandable" property="expandable" jdbcType="TINYINT" />
     <result column="province" property="province" jdbcType="VARCHAR" />
@@ -96,7 +96,7 @@
       create_user_id, modify_time, modify_user_id
       )
     values (#{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{plantName,jdbcType=VARCHAR}, 
-      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=INTEGER}, #{durableYears,jdbcType=INTEGER}, 
+      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=VARCHAR}, #{durableYears,jdbcType=INTEGER}, 
       #{expandable,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{county,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
@@ -168,7 +168,7 @@
         #{plantType,jdbcType=INTEGER},
       </if>
       <if test="equityType != null" >
-        #{equityType,jdbcType=INTEGER},
+        #{equityType,jdbcType=VARCHAR},
       </if>
       <if test="durableYears != null" >
         #{durableYears,jdbcType=INTEGER},
@@ -224,7 +224,7 @@
         plant_type = #{plantType,jdbcType=INTEGER},
       </if>
       <if test="equityType != null" >
-        equity_type = #{equityType,jdbcType=INTEGER},
+        equity_type = #{equityType,jdbcType=VARCHAR},
       </if>
       <if test="durableYears != null" >
         durable_years = #{durableYears,jdbcType=INTEGER},
@@ -265,7 +265,7 @@
       customer_id = #{customerId,jdbcType=INTEGER},
       plant_name = #{plantName,jdbcType=VARCHAR},
       plant_type = #{plantType,jdbcType=INTEGER},
-      equity_type = #{equityType,jdbcType=INTEGER},
+      equity_type = #{equityType,jdbcType=VARCHAR},
       durable_years = #{durableYears,jdbcType=INTEGER},
       expandable = #{expandable,jdbcType=TINYINT},
       province = #{province,jdbcType=VARCHAR},

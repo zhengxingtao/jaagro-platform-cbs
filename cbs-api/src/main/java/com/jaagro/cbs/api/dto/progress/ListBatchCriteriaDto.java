@@ -16,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ListBatchCriteriaDto implements Serializable {
+    private static final long serialVersionUID = -8144797021478952068L;
     /**
      * 批次号
      */

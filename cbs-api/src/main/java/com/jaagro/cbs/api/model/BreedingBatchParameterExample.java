@@ -889,52 +889,52 @@ public class BreedingBatchParameterExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andAlarmEqualTo(Byte value) {
+        public Criteria andAlarmEqualTo(Boolean value) {
             addCriterion("alarm =", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotEqualTo(Byte value) {
+        public Criteria andAlarmNotEqualTo(Boolean value) {
             addCriterion("alarm <>", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmGreaterThan(Byte value) {
+        public Criteria andAlarmGreaterThan(Boolean value) {
             addCriterion("alarm >", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmGreaterThanOrEqualTo(Byte value) {
+        public Criteria andAlarmGreaterThanOrEqualTo(Boolean value) {
             addCriterion("alarm >=", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmLessThan(Byte value) {
+        public Criteria andAlarmLessThan(Boolean value) {
             addCriterion("alarm <", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmLessThanOrEqualTo(Byte value) {
+        public Criteria andAlarmLessThanOrEqualTo(Boolean value) {
             addCriterion("alarm <=", value, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmIn(List<Byte> values) {
+        public Criteria andAlarmIn(List<Boolean> values) {
             addCriterion("alarm in", values, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotIn(List<Byte> values) {
+        public Criteria andAlarmNotIn(List<Boolean> values) {
             addCriterion("alarm not in", values, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmBetween(Byte value1, Byte value2) {
+        public Criteria andAlarmBetween(Boolean value1, Boolean value2) {
             addCriterion("alarm between", value1, value2, "alarm");
             return (Criteria) this;
         }
 
-        public Criteria andAlarmNotBetween(Byte value1, Byte value2) {
+        public Criteria andAlarmNotBetween(Boolean value1, Boolean value2) {
             addCriterion("alarm not between", value1, value2, "alarm");
             return (Criteria) this;
         }
@@ -949,52 +949,52 @@ public class BreedingBatchParameterExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineEqualTo(Byte value) {
+        public Criteria andDynamicMedicineEqualTo(Boolean value) {
             addCriterion("dynamic_medicine =", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotEqualTo(Byte value) {
+        public Criteria andDynamicMedicineNotEqualTo(Boolean value) {
             addCriterion("dynamic_medicine <>", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineGreaterThan(Byte value) {
+        public Criteria andDynamicMedicineGreaterThan(Boolean value) {
             addCriterion("dynamic_medicine >", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineGreaterThanOrEqualTo(Byte value) {
+        public Criteria andDynamicMedicineGreaterThanOrEqualTo(Boolean value) {
             addCriterion("dynamic_medicine >=", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineLessThan(Byte value) {
+        public Criteria andDynamicMedicineLessThan(Boolean value) {
             addCriterion("dynamic_medicine <", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineLessThanOrEqualTo(Byte value) {
+        public Criteria andDynamicMedicineLessThanOrEqualTo(Boolean value) {
             addCriterion("dynamic_medicine <=", value, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineIn(List<Byte> values) {
+        public Criteria andDynamicMedicineIn(List<Boolean> values) {
             addCriterion("dynamic_medicine in", values, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotIn(List<Byte> values) {
+        public Criteria andDynamicMedicineNotIn(List<Boolean> values) {
             addCriterion("dynamic_medicine not in", values, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineBetween(Byte value1, Byte value2) {
+        public Criteria andDynamicMedicineBetween(Boolean value1, Boolean value2) {
             addCriterion("dynamic_medicine between", value1, value2, "dynamicMedicine");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotBetween(Byte value1, Byte value2) {
+        public Criteria andDynamicMedicineNotBetween(Boolean value1, Boolean value2) {
             addCriterion("dynamic_medicine not between", value1, value2, "dynamicMedicine");
             return (Criteria) this;
         }
