@@ -13,7 +13,6 @@ import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
-import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
@@ -103,8 +102,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划列表 批次列表 养殖列表
-     * (返回数据类型相同但类型作区分 用flag区分
+     * 养殖计划列表 批次列表 养殖列表（复用）
+     * (返回数据类型相同但计划状态不同 用flag区分
      * flag=1表示养殖计划列表数据
      * flag=2 表示批次列表数据）
      *
