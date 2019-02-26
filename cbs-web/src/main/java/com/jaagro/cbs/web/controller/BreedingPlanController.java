@@ -59,7 +59,7 @@ public class BreedingPlanController {
         }
         PageInfo pageInfo = breedingPlanService.listBreedingPlan(dto);
         List<BreedingPlanVo> breedingPlanVos = new ArrayList<>();
-        if (CollectionUtils.isEmpty(pageInfo.getList())) {
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
             List<ReturnBreedingPlanDto> ReturnBreedingPlanDtos = pageInfo.getList();
             for (ReturnBreedingPlanDto returnBreedingPlanDto : ReturnBreedingPlanDtos) {
                 BreedingPlanVo breedingPlanVo = new BreedingPlanVo();

@@ -119,7 +119,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //填充养殖场信息
             PlantExample plantExample = new PlantExample();
             plantExample.createCriteria()
-                    .andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId());
+                    .andCustomerIdEqualTo(returnBreedingPlanDto.getCustomerId())
+                    .andEnableEqualTo(true);
             List<Plant> plants = plantMapper.selectByExample(plantExample);
             returnBreedingPlanDto.setPlants(plants);
             //填充鸡舍
