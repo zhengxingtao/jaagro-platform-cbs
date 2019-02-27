@@ -3,5 +3,24 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingRecordDailyMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
+    <delete id="deleteByDate" parameterType="java.lang.String">
+        delete from breeding_record_daily
+    where create_time = #{todayDate}
+    </delete>
+    <insert id="insertBatch" parameterType="com.jaagro.cbs.api.model.BreedingRecordDaily">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into breeding_record_daily (plan_id, batch_no, day_age,
+        record_type, breeding_value, unit,
+        notes, enable, create_time,
+        create_user_id, modify_time, modify_user_id
+        )
+        values (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.dayAge,jdbcType=INTEGER},
+        #{item.recordType,jdbcType=INTEGER}, #{item.breedingValue,jdbcType=DECIMAL}, #{item.unit,jdbcType=VARCHAR},
+        #{item.notes,jdbcType=VARCHAR}, #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.createUserId,jdbcType=INTEGER}, #{item.modifyTime,jdbcType=TIMESTAMP},
+        #{item.modifyUserId,jdbcType=INTEGER}
+        )
+    </insert>
 </mapper>

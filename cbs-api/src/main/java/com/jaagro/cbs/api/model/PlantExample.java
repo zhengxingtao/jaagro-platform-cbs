@@ -578,52 +578,52 @@ public class PlantExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andExpandableEqualTo(Byte value) {
+        public Criteria andExpandableEqualTo(Boolean value) {
             addCriterion("expandable =", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableNotEqualTo(Byte value) {
+        public Criteria andExpandableNotEqualTo(Boolean value) {
             addCriterion("expandable <>", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableGreaterThan(Byte value) {
+        public Criteria andExpandableGreaterThan(Boolean value) {
             addCriterion("expandable >", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableGreaterThanOrEqualTo(Byte value) {
+        public Criteria andExpandableGreaterThanOrEqualTo(Boolean value) {
             addCriterion("expandable >=", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableLessThan(Byte value) {
+        public Criteria andExpandableLessThan(Boolean value) {
             addCriterion("expandable <", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableLessThanOrEqualTo(Byte value) {
+        public Criteria andExpandableLessThanOrEqualTo(Boolean value) {
             addCriterion("expandable <=", value, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableIn(List<Byte> values) {
+        public Criteria andExpandableIn(List<Boolean> values) {
             addCriterion("expandable in", values, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableNotIn(List<Byte> values) {
+        public Criteria andExpandableNotIn(List<Boolean> values) {
             addCriterion("expandable not in", values, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableBetween(Byte value1, Byte value2) {
+        public Criteria andExpandableBetween(Boolean value1, Boolean value2) {
             addCriterion("expandable between", value1, value2, "expandable");
             return (Criteria) this;
         }
 
-        public Criteria andExpandableNotBetween(Byte value1, Byte value2) {
+        public Criteria andExpandableNotBetween(Boolean value1, Boolean value2) {
             addCriterion("expandable not between", value1, value2, "expandable");
             return (Criteria) this;
         }

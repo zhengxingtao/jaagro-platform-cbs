@@ -272,5 +272,4 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         }
         return breedingRecordDto;
     }
-
 }

@@ -4,6 +4,46 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-
-
+    <delete id="deleteByDate" parameterType="java.lang.Integer">
+        delete from batch_info
+        where DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{todayDate}
+    </delete>
+    <insert id="insertBatch" parameterType="com.jaagro.cbs.api.model.BatchInfo">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into batch_info (plan_id, batch_no, start_amount,
+        current_amount, start_day, finish_day,
+        day_age, technician, technician_id,
+        dead_amount, sale_amount, fodder_amount,
+        fodder_value, babychick_value, drug_value,
+        sale_value, balance, enable,
+        create_time, create_user_id, modify_time,
+        modify_user_id)
+        values
+        <foreach collection="batchInfoList" item="item">
+            (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.startAmount,jdbcType=INTEGER},
+            #{item.currentAmount,jdbcType=INTEGER}, #{item.startDay,jdbcType=DATE}, #{item.finishDay,jdbcType=DATE},
+            #{item.dayAge,jdbcType=INTEGER}, #{item.technician,jdbcType=VARCHAR}, #{item.technicianId,jdbcType=INTEGER},
+            #{item.deadAmount,jdbcType=INTEGER}, #{item.saleAmount,jdbcType=INTEGER},
+            #{item.fodderAmount,jdbcType=DECIMAL},
+            #{item.fodderValue,jdbcType=DECIMAL}, #{item.babychickValue,jdbcType=DECIMAL},
+            #{item.drugValue,jdbcType=DECIMAL},
+            #{item.saleValue,jdbcType=DECIMAL}, #{item.balance,jdbcType=DECIMAL}, #{item.enable,jdbcType=BIT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
+            #{item.modifyTime,jdbcType=TIMESTAMP},
+            #{item.modifyUserId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    <select id="getStartAmountByPlanId" parameterType="com.jaagro.cbs.api.model.BatchInfo"
+            resultType="java.lang.Integer">
+        SELECT
+	        current_amount
+        FROM
+            batch_info
+        WHERE
+            ENABLE = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{createTime}
+            AND plan_id = #{planId}
+    </select>
 </mapper>
