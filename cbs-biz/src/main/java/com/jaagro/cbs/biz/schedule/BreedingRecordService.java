@@ -141,7 +141,6 @@ public class BreedingRecordService {
                 recordDaily.setCreateUserId(1);
                 dailyList.add(recordDaily);
             }
-
             //删除
             breedingRecordDailyMapper.deleteByDate(todayDate);
             //批量插入
@@ -179,12 +178,11 @@ public class BreedingRecordService {
                     //查询不到记录，就用breeding_plan的计划上鸡数量
                     BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(info.getPlanId());
                     if (breedingPlan != null) {
-//                        daily.setStartAmount(breedingPlan.getPlanChickenQuantity());
+                        info.setStartAmount(breedingPlan.getPlanChickenQuantity());
                         // 剩余喂养数量=计划上鸡数量
-//                        daily.setCurrentAmount(breedingPlan.getPlanChickenQuantity());
+                        info.setCurrentAmount(breedingPlan.getPlanChickenQuantity());
                     }
                 }
-
             }
             //删除
             batchInfoMapper.deleteByDate(todayDate);
