@@ -95,8 +95,17 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/breedingPlanDetails/{planId}")
-    @ApiOperation("养殖计划列表/批次列表详情")
+    @ApiOperation("养殖计划列表详情")
     public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
+    }
+
+    @PostMapping("/chickenSignDetails/{planId}")
+    @ApiOperation("待上鸡签收详情")
+    public BaseResponse chickenSignDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
