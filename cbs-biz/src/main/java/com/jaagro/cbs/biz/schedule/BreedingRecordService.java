@@ -39,17 +39,25 @@ public class BreedingRecordService {
     private BreedingRecordDailyMapperExt breedingRecordDailyMapper;
 
     /**
+     * 获取昨天的日期
+     *
+     * @return
+     */
+    private String getYseterday() {
+        Date newDate = new Date();
+        DateUtils.ceiling(newDate, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String todayDate = sdf.format(newDate);
+        return todayDate;
+    }
+
+    /**
      * 鸡舍养殖每日汇总
      */
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void batchCoopDaily() {
-        Date newDate = new Date();
-        DateUtils.ceiling(newDate, 1);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        //凌晨一点运行，查询的是前一天的
-        String todayDate = sdf.format(newDate);
-
+        String todayDate = getYseterday();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
         //从BreedingRecord统计

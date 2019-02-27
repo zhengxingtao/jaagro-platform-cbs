@@ -4,7 +4,7 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-    <select id="getStartAmountByCoopId" parameterMap="com.jaagro.cbs.api.model.BatchCoopDaily"
+    <select id="getStartAmountByCoopId" parameterType="com.jaagro.cbs.api.model.BatchCoopDaily"
             resultType="java.lang.Integer">
         SELECT
             current_amount
