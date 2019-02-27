@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/26
+ * @author :gaoxin
+ * @date :2019/02/27
  */
 @Data
 @NoArgsConstructor
@@ -33,19 +33,29 @@ public class PurchaseOrder implements Serializable {
     private Integer planId;
 
     /**
-     * 批次号
+     * 签收人id
      */
-    private String batchNo;
-
-    /**
-     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
-     */
-    private Integer productType;
+    private Integer signerId;
 
     /**
      * 产品id
      */
     private Integer productId;
+
+    /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
+     * 商品采购单编号
+     */
+    private String purchaseNo;
+
+    /**
+     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
+     */
+    private Integer productType;
 
     /**
      * 采购重量
@@ -58,9 +68,9 @@ public class PurchaseOrder implements Serializable {
     private Integer quantity;
 
     /**
-     * 单位(千克｜只｜个｜ 吨等)
+     * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
      */
-    private String unit;
+    private Integer unit;
 
     /**
      * 单价
@@ -86,6 +96,11 @@ public class PurchaseOrder implements Serializable {
      * 到货时间
      */
     private Date deliveryTime;
+
+    /**
+     * 采购商品备注
+     */
+    private String notes;
 
     /**
      * 是否有效(0-无效,1-有效)

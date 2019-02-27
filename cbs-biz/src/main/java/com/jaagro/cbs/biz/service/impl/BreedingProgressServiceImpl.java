@@ -52,9 +52,10 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
     private CustomerClientService customerClientService;
 
     /**
-     * 根据养殖计划Id获取养殖过程喂养头信息
+     * 根据养殖计划Id、养殖厂Id获取养殖过程喂养头信息
      *
      * @param planId
+     * @param plantId
      * @return
      */
     @Override

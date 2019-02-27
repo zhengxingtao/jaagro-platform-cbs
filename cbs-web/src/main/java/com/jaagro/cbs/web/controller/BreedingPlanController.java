@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
+import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.web.vo.plan.BreedingPlanVo;
 import com.jaagro.utils.BaseResponse;
@@ -69,6 +70,8 @@ public class BreedingPlanController {
             for (ReturnBreedingPlanDto returnBreedingPlanDto : ReturnBreedingPlanDtos) {
                 BreedingPlanVo breedingPlanVo = new BreedingPlanVo();
                 BeanUtils.copyProperties(returnBreedingPlanDto, breedingPlanVo);
+                breedingPlanVo
+                        .setPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingPlanDto.getPlanStatus()));
                 breedingPlanVos.add(breedingPlanVo);
             }
         }
@@ -78,8 +81,8 @@ public class BreedingPlanController {
 
     @PostMapping("/createPlanContract")
     @ApiOperation("录入合同")
-    public BaseResponse createPlanContract(@RequestBody @Validated  CreatePlanContractDto createPlanContractDto){
-        log.info("O createPlanContract createPlanContractDto={}",createPlanContractDto);
+    public BaseResponse createPlanContract(@RequestBody @Validated CreatePlanContractDto createPlanContractDto) {
+        log.info("O createPlanContract createPlanContractDto={}", createPlanContractDto);
         breedingPlanService.createPlanContract(createPlanContractDto);
         return BaseResponse.successInstance("录入合同成功");
     }
@@ -95,11 +98,20 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/breedingPlanDetails/{planId}")
-    @ApiOperation("养殖计划详情")
+    @ApiOperation("养殖计划列表详情")
     public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
         return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
+    }
+
+    @PostMapping("/chickenSignDetails/{planId}")
+    @ApiOperation("待上鸡签收详情")
+    public BaseResponse chickenSignDetails(@PathVariable("planId") Integer planId) {
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.chickenSignDetails(planId));
     }
 }

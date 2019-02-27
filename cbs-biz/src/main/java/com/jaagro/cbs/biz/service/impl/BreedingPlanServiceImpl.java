@@ -12,6 +12,9 @@ import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.enums.ProductTypeEnum;
+import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
+import com.jaagro.cbs.api.enums.UnitEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
@@ -64,6 +67,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private UserClientService userClientService;
     @Autowired
     private BreedingPlantServiceImpl breedingPlantService;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
 
     /**
      * 创建养殖计划
@@ -75,7 +80,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("TT");
+        String batchNo = sequenceCodeUtils.genSeqCode("AT");
         BreedingPlan breedingPlan = new BreedingPlan();
         breedingPlan
                 .setBatchNo(batchNo)
@@ -257,21 +262,28 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划详情
+     * 养殖计划列表详情
      *
      * @param planId
      * @return
      * @author @Gao.
      */
     @Override
-    public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
-        ReturnBreedingPlanDto returnBreedingPlanDto = new ReturnBreedingPlanDto();
+    public ReturnBreedingPlanDetailsDto breedingPlanDetails(Integer planId) {
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDto = new ReturnBreedingPlanDetailsDto();
         //养殖计划信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
         List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
         returnBreedingPlanDto.setPlants(plants);
+        //养殖户信息
+        CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
+        if (contactsReturnDto != null) {
+            returnBreedingPlanDto
+                    .setCustomerName(contactsReturnDto.getContact())
+                    .setCustomerPhone(contactsReturnDto.getPhone());
+        }
         //技术员信息
         BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
         if (!CollectionUtils.isEmpty(empByDeptId.getData())) {
@@ -279,6 +291,43 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             returnBreedingPlanDto.setTechnicianList(employees);
         }
         return returnBreedingPlanDto;
+    }
+
+    /**
+     * 待上鸡签收详情
+     *
+     * @param plantId
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId) {
+        ReturnChickenSignDetailsDto returnChickenSignDetailsDto = new ReturnChickenSignDetailsDto();
+        //养殖计划详情信息
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(plantId);
+        returnChickenSignDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample.createCriteria().andPlanIdEqualTo(plantId);
+        //商品采购列表信息
+        List<ReturnPurchaseOrderDto> returnPurchaseOrderDtos = new ArrayList<>();
+        List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+        if (!CollectionUtils.isEmpty(purchaseOrders)) {
+            for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
+                BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
+                returnPurchaseOrderDto
+                        .setUnit(UnitEnum.getDescByCode(purchaseOrder.getUnit()))
+                        .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
+                        .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                //签收人信息
+                returnPurchaseOrderDto
+                        .setSignerName("hh")
+                        .setSignerPhone("hh");
+                returnPurchaseOrderDtos.add(returnPurchaseOrderDto);
+            }
+        }
+        returnChickenSignDetailsDto.setReturnPurchaseOrderDtos(returnPurchaseOrderDtos);
+        return returnChickenSignDetailsDto;
     }
 }
 

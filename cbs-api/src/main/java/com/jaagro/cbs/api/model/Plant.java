@@ -43,7 +43,7 @@ public class Plant implements Serializable {
     private Integer plantType;
 
     /**
-     * 产权情况(1-全民,2-集体,3-私有)
+     * 产权情况
      */
     private String equityType;
 
