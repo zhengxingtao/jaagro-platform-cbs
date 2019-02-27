@@ -262,7 +262,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划列表详情 养殖批次列表详情
+     * 养殖计划列表详情
      *
      * @param planId
      * @return
