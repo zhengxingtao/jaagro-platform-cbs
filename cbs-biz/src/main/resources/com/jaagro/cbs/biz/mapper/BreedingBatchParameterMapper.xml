@@ -15,7 +15,9 @@
     <result column="upper_limit" property="upperLimit" jdbcType="DECIMAL" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
     <result column="alarm" property="alarm" jdbcType="BIT" />
-    <result column="dynamic_medicine" property="dynamicMedicine" jdbcType="BIT" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="necessary" property="necessary" jdbcType="BIT" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -53,8 +55,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, customer_id, plan_id, batch_no, param_id, param_name, day_age, param_type, value_type, 
-    lower_limit, upper_limit, unit, alarm, dynamic_medicine, enable, create_time, create_user_id, 
-    modify_time, modify_user_id
+    lower_limit, upper_limit, unit, alarm, param_value, status, necessary, enable, create_time, 
+    create_user_id, modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingBatchParameterExample" >
     select
@@ -97,16 +99,16 @@
       param_id, param_name, day_age, 
       param_type, value_type, lower_limit, 
       upper_limit, unit, alarm, 
-      dynamic_medicine, enable, create_time, 
-      create_user_id, modify_time, modify_user_id
-      )
+      param_value, status, necessary, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
       #{paramId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
       #{paramType,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, 
       #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=BIT}, 
-      #{dynamicMedicine,jdbcType=BIT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
-      )
+      #{paramValue,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{necessary,jdbcType=BIT}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingBatchParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -150,8 +152,14 @@
       <if test="alarm != null" >
         alarm,
       </if>
-      <if test="dynamicMedicine != null" >
-        dynamic_medicine,
+      <if test="paramValue != null" >
+        param_value,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="necessary != null" >
+        necessary,
       </if>
       <if test="enable != null" >
         enable,
@@ -206,8 +214,14 @@
       <if test="alarm != null" >
         #{alarm,jdbcType=BIT},
       </if>
-      <if test="dynamicMedicine != null" >
-        #{dynamicMedicine,jdbcType=BIT},
+      <if test="paramValue != null" >
+        #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="necessary != null" >
+        #{necessary,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
@@ -271,8 +285,14 @@
       <if test="alarm != null" >
         alarm = #{alarm,jdbcType=BIT},
       </if>
-      <if test="dynamicMedicine != null" >
-        dynamic_medicine = #{dynamicMedicine,jdbcType=BIT},
+      <if test="paramValue != null" >
+        param_value = #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="necessary != null" >
+        necessary = #{necessary,jdbcType=BIT},
       </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
@@ -306,7 +326,9 @@
       upper_limit = #{upperLimit,jdbcType=DECIMAL},
       unit = #{unit,jdbcType=VARCHAR},
       alarm = #{alarm,jdbcType=BIT},
-      dynamic_medicine = #{dynamicMedicine,jdbcType=BIT},
+      param_value = #{paramValue,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      necessary = #{necessary,jdbcType=BIT},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
