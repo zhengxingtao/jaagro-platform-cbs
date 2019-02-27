@@ -62,7 +62,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
     public BreedingProgressDto getBreedingProgressById(Integer planId, Integer plantId) {
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         Assert.notNull(breedingPlan, "养殖计划不存在");
-        log.info("O BreedingProgressServiceImpl.getBreedingProgressById input planId:{}", planId);
+        log.info("O BreedingProgressServiceImpl.getBreedingProgressById input planId:{},plantId:{}", planId, plantId);
         BreedingProgressDto breedingProgressDto = new BreedingProgressDto();
         try {
             breedingProgressDto.setBatchNo(breedingPlan.getBatchNo());
@@ -104,14 +104,8 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                     Coop coopDo = coopMapper.selectByPrimaryKey(batchPlantCoop.getCoopId());
                     coopDos.add(coopDo);
                 }
-                Map<Integer, List<Coop>> coopMap = new HashMap<>();
-//                for (Integer plantId : plantIds) {
-//                    List<Coop> coops = coopDos.stream().filter(c -> plantId.equals(c.getPlantId())).collect(Collectors.toList());
-//                    coopMap.put(plantId, coops);
-//                }
                 List<Coop> coops = coopDos.stream().filter(c -> plantId.equals(c.getPlantId())).collect(Collectors.toList());
-                coopMap.put(plantId, coops);
-                breedingProgressDto.setCoopMap(coopMap);
+                breedingProgressDto.setCoops(coops);
             }
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingProgressById  error:" + ex);
@@ -142,7 +136,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             if (!CollectionUtils.isEmpty(breedingBatchParameterDos)) {
                 //鸡舍绑定的设备
                 CoopDeviceExample coopDeviceExample = new CoopDeviceExample();
-                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andEnableEqualTo(true);
+                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andCoopDeviceStatusEqualTo(1).andEnableEqualTo(true);
                 List<CoopDevice> coopDeviceDos = coopDeviceMapper.selectByExample(coopDeviceExample);
                 Set<Integer> deviceIds = new HashSet<>();
                 if (!CollectionUtils.isEmpty(coopDeviceDos)) {
@@ -150,10 +144,9 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                         deviceIds.add(coopDeviceDo.getId());
                     }
                 }
-
                 SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = sDateFormat.parse(strDate);
-                Boolean isSameDay = DateUtils.isSameDay(date, new Date());
+                boolean isSameDay = DateUtils.isSameDay(date, new Date());
                 List<DeviceValue> deviceValueDos = new ArrayList<>();
                 List<DeviceValueHistory> deviceValueHistoryDos = new ArrayList<DeviceValueHistory>();
                 if (isSameDay) {
@@ -168,7 +161,6 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                         deviceValueHistoryDos.add(deviceValueHistory);
                     }
                 }
-
                 for (BreedingBatchParameter breedingBatchParameterDo : breedingBatchParameterDos) {
                     BreedingBatchParamTrackingDto returnDto = new BreedingBatchParamTrackingDto();
                     BeanUtils.copyProperties(breedingBatchParameterDo, returnDto);
@@ -210,7 +202,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                                         //如果检测值不在标准区间里面，那个报警
                                         if (breedingBatchParameterDo.getLowerLimit().compareTo(deviceValue.getCurrentValue()) > 0 || deviceValue.getCurrentValue().compareTo(breedingBatchParameterDo.getUpperLimit()) > 0) {
                                             returnDto.setAlarmMessage("检测值异常，其及时处理！");
-
+                                            break;
                                         }
                                     }
                                 }
@@ -237,14 +229,12 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
      */
     @Override
     public BreedingRecordDto getBreedingRecordsById(Integer planId, Integer coopId, Integer dayAge) {
-
         BreedingRecordDto breedingRecordDto = new BreedingRecordDto();
         log.info("O BreedingProgressServiceImpl.getBreedingBatchParamById input planId:{},coopId(),dayAge{}", planId, coopId, dayAge);
         try {
             //养殖计划的鸡舍在某日龄上的喂料记录
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
             breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(1).andEnableEqualTo(true);
-            ;
             List<BreedingRecord> feedFoodList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedFoodTimes = feedFoodList.size();
             BigDecimal feedFoodWeight = new BigDecimal(0.00);
@@ -258,16 +248,14 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             //养殖计划的鸡舍在某日龄上的喂水记录
             breedingRecordExample = new BreedingRecordExample();
             breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(5).andEnableEqualTo(true);
-            ;
             List<BreedingRecord> feedWaterList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedWaterTimes = feedWaterList.size();
             breedingRecordDto.setFeedWaterList(feedWaterList);
             breedingRecordDto.setFeedWaterTimes(feedWaterTimes);
 
-            //养殖计划的鸡舍在某日龄上的喂水记录
+            //养殖计划的鸡舍在某日龄上的喂药记录
             breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(5).andEnableEqualTo(true);
-            ;
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(2).andEnableEqualTo(true);
             List<BreedingRecord> feedMedicineList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedMedicineTimes = feedMedicineList.size();
             BigDecimal feedMedicineWeight = new BigDecimal(0.00);
@@ -278,7 +266,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             breedingRecordDto.setFeedMedicineList(feedMedicineList);
             breedingRecordDto.setFeedMedicineTimes(feedMedicineTimes);
         } catch (Exception ex) {
-            log.error("R BreedingProgressServiceImpl.getBreedingRecordsById  error:" + ex);
+            log.error("R BreedingProgressServiceImpl.getBreedingRecordsById error:" + ex);
         }
         return breedingRecordDto;
     }
