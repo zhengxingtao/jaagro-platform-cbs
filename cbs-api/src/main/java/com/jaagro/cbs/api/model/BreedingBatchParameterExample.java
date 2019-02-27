@@ -939,73 +939,193 @@ public class BreedingBatchParameterExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineIsNull() {
-            addCriterion("dynamic_medicine is null");
+        public Criteria andParamValueIsNull() {
+            addCriterion("param_value is null");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineIsNotNull() {
-            addCriterion("dynamic_medicine is not null");
+        public Criteria andParamValueIsNotNull() {
+            addCriterion("param_value is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineEqualTo(String value) {
-            addCriterion("dynamic_medicine =", value, "dynamicMedicine");
+        public Criteria andParamValueEqualTo(String value) {
+            addCriterion("param_value =", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotEqualTo(String value) {
-            addCriterion("dynamic_medicine <>", value, "dynamicMedicine");
+        public Criteria andParamValueNotEqualTo(String value) {
+            addCriterion("param_value <>", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineGreaterThan(String value) {
-            addCriterion("dynamic_medicine >", value, "dynamicMedicine");
+        public Criteria andParamValueGreaterThan(String value) {
+            addCriterion("param_value >", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineGreaterThanOrEqualTo(String value) {
-            addCriterion("dynamic_medicine >=", value, "dynamicMedicine");
+        public Criteria andParamValueGreaterThanOrEqualTo(String value) {
+            addCriterion("param_value >=", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineLessThan(String value) {
-            addCriterion("dynamic_medicine <", value, "dynamicMedicine");
+        public Criteria andParamValueLessThan(String value) {
+            addCriterion("param_value <", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineLessThanOrEqualTo(String value) {
-            addCriterion("dynamic_medicine <=", value, "dynamicMedicine");
+        public Criteria andParamValueLessThanOrEqualTo(String value) {
+            addCriterion("param_value <=", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineLike(String value) {
-            addCriterion("dynamic_medicine like", value, "dynamicMedicine");
+        public Criteria andParamValueLike(String value) {
+            addCriterion("param_value like", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotLike(String value) {
-            addCriterion("dynamic_medicine not like", value, "dynamicMedicine");
+        public Criteria andParamValueNotLike(String value) {
+            addCriterion("param_value not like", value, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineIn(List<String> values) {
-            addCriterion("dynamic_medicine in", values, "dynamicMedicine");
+        public Criteria andParamValueIn(List<String> values) {
+            addCriterion("param_value in", values, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotIn(List<String> values) {
-            addCriterion("dynamic_medicine not in", values, "dynamicMedicine");
+        public Criteria andParamValueNotIn(List<String> values) {
+            addCriterion("param_value not in", values, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineBetween(String value1, String value2) {
-            addCriterion("dynamic_medicine between", value1, value2, "dynamicMedicine");
+        public Criteria andParamValueBetween(String value1, String value2) {
+            addCriterion("param_value between", value1, value2, "paramValue");
             return (Criteria) this;
         }
 
-        public Criteria andDynamicMedicineNotBetween(String value1, String value2) {
-            addCriterion("dynamic_medicine not between", value1, value2, "dynamicMedicine");
+        public Criteria andParamValueNotBetween(String value1, String value2) {
+            addCriterion("param_value not between", value1, value2, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Integer value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Integer value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Integer value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Integer value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Integer> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Integer> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Integer value1, Integer value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIsNull() {
+            addCriterion("necessary is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIsNotNull() {
+            addCriterion("necessary is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryEqualTo(Boolean value) {
+            addCriterion("necessary =", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotEqualTo(Boolean value) {
+            addCriterion("necessary <>", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryGreaterThan(Boolean value) {
+            addCriterion("necessary >", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("necessary >=", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryLessThan(Boolean value) {
+            addCriterion("necessary <", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryLessThanOrEqualTo(Boolean value) {
+            addCriterion("necessary <=", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIn(List<Boolean> values) {
+            addCriterion("necessary in", values, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotIn(List<Boolean> values) {
+            addCriterion("necessary not in", values, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryBetween(Boolean value1, Boolean value2) {
+            addCriterion("necessary between", value1, value2, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("necessary not between", value1, value2, "necessary");
             return (Criteria) this;
         }
 

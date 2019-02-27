@@ -112,6 +112,6 @@ public class BreedingPlanController {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
-        return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
+        return BaseResponse.successInstance(breedingPlanService.chickenSignDetails(planId));
     }
 }

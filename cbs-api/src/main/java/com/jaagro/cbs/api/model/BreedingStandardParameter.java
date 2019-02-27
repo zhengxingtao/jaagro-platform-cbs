@@ -38,7 +38,7 @@ public class BreedingStandardParameter implements Serializable {
     private Integer dayAge;
 
     /**
-     * 参数类型（1-喂养参数 2-检测参数）
+     * 参数类型（10-温度,11-湿度,12-光照强度,13-光照时间,14-氮气,15-二氧化碳,16-通风,17-负压值,20-饲喂(次/日),21-饲喂(克/日),22-体重(克/只/日),23-死淘(只),24-药品/疫苗)
      */
     private Integer paramType;
 
@@ -48,7 +48,7 @@ public class BreedingStandardParameter implements Serializable {
     private Integer valueType;
 
     /**
-     * 参考值下限（标准值时有效）
+     * 参考值下限
      */
     private BigDecimal lowerLimit;
 
@@ -68,14 +68,19 @@ public class BreedingStandardParameter implements Serializable {
     private Boolean alarm;
 
     /**
-     * 动保药品
+     * 参数值(标准值,临界值)
      */
-    private String dynamicMedicine;
+    private String paramValue;
 
     /**
      * 养殖参数状态（1-启用 0 -未启用）
      */
     private Integer status;
+
+    /**
+     * 是否必要(0-不必要,1-必要)
+     */
+    private Boolean necessary;
 
     /**
      * 创建时间
