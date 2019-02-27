@@ -26,17 +26,6 @@ public interface CustomerClientService {
     @GetMapping("/getShowCustomer/{id}")
     ShowCustomerDto getShowCustomerById(@PathVariable("id") Integer id);
 
-
-    /**
-     * 根据养殖户查询租户
-     *
-     * @param customerId
-     * @return
-     */
-    @Ignore
-    @GetMapping("/getTenantByCustomer/{customerId}")
-    Integer getTenantByCustomer(@PathVariable("customerId") Integer customerId);
-
     /**
      * 根据关键字查询客户id集合
      *

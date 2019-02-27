@@ -66,9 +66,9 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         if (showCustomerById == null) {
             throw new NullPointerException("养殖户不存在");
         }
-        Integer tenantId = customerClientService.getTenantByCustomer(showCustomerById.getId());
-        if (tenantId != 0) {
-            plant.setTenantId(tenantId);
+        ShowCustomerDto customer = customerClientService.getShowCustomerById(showCustomerById.getId());
+        if (customer != null) {
+            plant.setTenantId(customer.getTenantId());
         }
         try {
             plant.setCreateUserId(currentUserService.getCurrentUser().getId());

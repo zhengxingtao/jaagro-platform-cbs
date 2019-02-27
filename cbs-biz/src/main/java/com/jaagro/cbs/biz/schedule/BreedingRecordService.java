@@ -1,10 +1,8 @@
 package com.jaagro.cbs.biz.schedule;
 
+import com.jaagro.cbs.api.dto.base.BatchInfoCriteriaDto;
 import com.jaagro.cbs.api.model.*;
-import com.jaagro.cbs.biz.mapper.BatchCoopDailyMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingRecordDailyMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt;
+import com.jaagro.cbs.biz.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +28,8 @@ import java.util.List;
 public class BreedingRecordService {
 
     @Autowired
+    private BatchInfoMapperExt batchInfoMapper;
+    @Autowired
     private BreedingPlanMapperExt breedingPlanMapper;
     @Autowired
     private BatchCoopDailyMapperExt batchCoopDailyMapper;
@@ -48,6 +48,17 @@ public class BreedingRecordService {
         DateUtils.ceiling(newDate, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(newDate);
+    }
+
+    /**
+     * 获取前天的日期 yyy-mm-dd
+     *
+     * @return
+     */
+    private Date getBeforeYesterdayDate() {
+        Date createDate = new Date();
+        DateUtils.ceiling(createDate, 2);
+        return createDate;
     }
 
     /**
@@ -98,7 +109,7 @@ public class BreedingRecordService {
                 daily.setFodderTimes(countFeed);
                 //当日累积喂料量
                 daily.setFodderAmount(record.getBreedingValue());
-
+                daily.setCreateUserId(1);
                 //
                 dailyList.add(daily);
             }
@@ -121,10 +132,64 @@ public class BreedingRecordService {
         List<BreedingRecordDaily> dailyList = new ArrayList<>();
 
         //统计
-        BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
-        breedingRecordExample.createCriteria()
-                .andEnableEqualTo(true);
         List<BreedingRecord> breedingRecordList = breedingRecordMapper.listSumByParams(todayDate);
+        if (!CollectionUtils.isEmpty(breedingRecordList)) {
+            for (BreedingRecord record : breedingRecordList) {
+                BreedingRecordDaily recordDaily = new BreedingRecordDaily();
+                BeanUtils.copyProperties(record, recordDaily);
+                recordDaily.setCreateUserId(1);
+                dailyList.add(recordDaily);
+            }
+
+            //删除
+            breedingRecordDailyMapper.deleteByDate(todayDate);
+            //批量插入
+            breedingRecordDailyMapper.insertBatch(dailyList);
+        }
+    }
+
+    /**
+     * 批次养殖情况汇总
+     */
+    @Scheduled(cron = "0 0 2 * * ?")
+    @Transactional(rollbackFor = Exception.class)
+    public void batchInfo() {
+        String todayDate = new Date().toString();
+        //从breedingRecord统计
+        List<BatchInfo> batchInfoList = breedingRecordMapper.listBatchInfoByParams(todayDate);
+        if (!CollectionUtils.isEmpty(batchInfoList)) {
+            BatchInfoCriteriaDto criteriaDto = new BatchInfoCriteriaDto();
+            criteriaDto.setTodayDate(todayDate);
+            for (BatchInfo info : batchInfoList) {
+                //死淘数量
+                criteriaDto.setPlanId(info.getPlanId());
+                Integer deadAmount = 0;
+                deadAmount = breedingRecordMapper.sumDeadAmountByPlanId(criteriaDto);
+                info.setDeadAmount(deadAmount);
+                //起始喂养数量 && 剩余喂养数量
+                BatchInfo batchInfo = new BatchInfo();
+                batchInfo.setCreateTime(getBeforeYesterdayDate()).setPlanId(info.getPlanId());
+                Integer currentAmount = batchInfoMapper.getStartAmountByPlanId(batchInfo);
+                if (currentAmount > 0) {
+                    info.setStartAmount(currentAmount);
+                    // 剩余喂养数量=起始-死淘
+                    info.setCurrentAmount(info.getStartAmount() - info.getDeadAmount());
+                } else {
+                    //查询不到记录，就用breeding_plan的计划上鸡数量
+                    BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(info.getPlanId());
+                    if (breedingPlan != null) {
+//                        daily.setStartAmount(breedingPlan.getPlanChickenQuantity());
+                        // 剩余喂养数量=计划上鸡数量
+//                        daily.setCurrentAmount(breedingPlan.getPlanChickenQuantity());
+                    }
+                }
+
+            }
+            //删除
+            batchInfoMapper.deleteByDate(todayDate);
+            //批量插入
+            batchInfoMapper.insertBatch(batchInfoList);
+        }
 
     }
 

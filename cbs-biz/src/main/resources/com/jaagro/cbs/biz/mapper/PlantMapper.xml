@@ -9,7 +9,7 @@
     <result column="plant_type" property="plantType" jdbcType="INTEGER" />
     <result column="equity_type" property="equityType" jdbcType="VARCHAR" />
     <result column="durable_years" property="durableYears" jdbcType="INTEGER" />
-    <result column="expandable" property="expandable" jdbcType="TINYINT" />
+    <result column="expandable" property="expandable" jdbcType="BIT" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="county" property="county" jdbcType="VARCHAR" />
@@ -97,7 +97,7 @@
       )
     values (#{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{plantName,jdbcType=VARCHAR}, 
       #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=VARCHAR}, #{durableYears,jdbcType=INTEGER}, 
-      #{expandable,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{expandable,jdbcType=BIT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{county,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
@@ -174,7 +174,7 @@
         #{durableYears,jdbcType=INTEGER},
       </if>
       <if test="expandable != null" >
-        #{expandable,jdbcType=TINYINT},
+        #{expandable,jdbcType=BIT},
       </if>
       <if test="province != null" >
         #{province,jdbcType=VARCHAR},
@@ -230,7 +230,7 @@
         durable_years = #{durableYears,jdbcType=INTEGER},
       </if>
       <if test="expandable != null" >
-        expandable = #{expandable,jdbcType=TINYINT},
+        expandable = #{expandable,jdbcType=BIT},
       </if>
       <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
@@ -267,7 +267,7 @@
       plant_type = #{plantType,jdbcType=INTEGER},
       equity_type = #{equityType,jdbcType=VARCHAR},
       durable_years = #{durableYears,jdbcType=INTEGER},
-      expandable = #{expandable,jdbcType=TINYINT},
+      expandable = #{expandable,jdbcType=BIT},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       county = #{county,jdbcType=VARCHAR},
