@@ -25,16 +25,6 @@ public class ReturnPurchaseOrderDto implements Serializable {
     private Integer id;
 
     /**
-     * 客户id
-     */
-    private Integer customerId;
-
-    /**
-     * 养殖计划id
-     */
-    private Integer planId;
-
-    /**
      * 批次号
      */
     private String batchNo;
@@ -50,9 +40,14 @@ public class ReturnPurchaseOrderDto implements Serializable {
     private String productType;
 
     /**
-     * 产品id
+     * 签收人姓名
      */
-    private Integer productId;
+    private String signerName;
+
+    /**
+     * 签收人电话
+     */
+    private String signerPhone;
 
     /**
      * 采购重量
@@ -99,8 +94,5 @@ public class ReturnPurchaseOrderDto implements Serializable {
      */
     private Date createTime;
 
-    /**
-     * 创建人
-     */
-    private Integer createUserId;
+
 }

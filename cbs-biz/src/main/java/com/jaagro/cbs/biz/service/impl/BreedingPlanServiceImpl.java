@@ -316,12 +316,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 returnPurchaseOrderDto
-                        .setUnit(UnitEnum.getDescByCode(1))
+                        .setUnit(UnitEnum.getDescByCode(purchaseOrder.getUnit()))
                         .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                //签收人信息
+                returnPurchaseOrderDto
+                        .setSignerName("hh")
+                        .setSignerPhone("hh");
                 returnPurchaseOrderDtos.add(returnPurchaseOrderDto);
             }
         }
+        returnChickenSignDetailsDto.setReturnPurchaseOrderDtos(returnPurchaseOrderDtos);
         return returnChickenSignDetailsDto;
     }
 }

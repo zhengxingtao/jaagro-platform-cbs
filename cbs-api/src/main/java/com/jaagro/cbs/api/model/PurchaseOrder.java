@@ -68,9 +68,9 @@ public class PurchaseOrder implements Serializable {
     private Integer quantity;
 
     /**
-     * 单位(千克｜只｜个｜ 吨等)
+     * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
      */
-    private String unit;
+    private Integer unit;
 
     /**
      * 单价

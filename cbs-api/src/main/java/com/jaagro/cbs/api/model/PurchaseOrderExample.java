@@ -759,62 +759,52 @@ public class PurchaseOrderExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andUnitEqualTo(String value) {
+        public Criteria andUnitEqualTo(Integer value) {
             addCriterion("unit =", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitNotEqualTo(String value) {
+        public Criteria andUnitNotEqualTo(Integer value) {
             addCriterion("unit <>", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitGreaterThan(String value) {
+        public Criteria andUnitGreaterThan(Integer value) {
             addCriterion("unit >", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitGreaterThanOrEqualTo(String value) {
+        public Criteria andUnitGreaterThanOrEqualTo(Integer value) {
             addCriterion("unit >=", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitLessThan(String value) {
+        public Criteria andUnitLessThan(Integer value) {
             addCriterion("unit <", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitLessThanOrEqualTo(String value) {
+        public Criteria andUnitLessThanOrEqualTo(Integer value) {
             addCriterion("unit <=", value, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitLike(String value) {
-            addCriterion("unit like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitNotLike(String value) {
-            addCriterion("unit not like", value, "unit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUnitIn(List<String> values) {
+        public Criteria andUnitIn(List<Integer> values) {
             addCriterion("unit in", values, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitNotIn(List<String> values) {
+        public Criteria andUnitNotIn(List<Integer> values) {
             addCriterion("unit not in", values, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitBetween(String value1, String value2) {
+        public Criteria andUnitBetween(Integer value1, Integer value2) {
             addCriterion("unit between", value1, value2, "unit");
             return (Criteria) this;
         }
 
-        public Criteria andUnitNotBetween(String value1, String value2) {
+        public Criteria andUnitNotBetween(Integer value1, Integer value2) {
             addCriterion("unit not between", value1, value2, "unit");
             return (Criteria) this;
         }

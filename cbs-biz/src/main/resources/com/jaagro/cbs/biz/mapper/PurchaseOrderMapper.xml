@@ -12,7 +12,7 @@
     <result column="product_type" property="productType" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="purchase_order_status" property="purchaseOrderStatus" jdbcType="INTEGER" />
@@ -107,7 +107,7 @@
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
       #{productType,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
-      #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
+      #{unit,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
       #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, 
       #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
@@ -212,7 +212,7 @@
         #{quantity,jdbcType=INTEGER},
       </if>
       <if test="unit != null" >
-        #{unit,jdbcType=VARCHAR},
+        #{unit,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
@@ -286,7 +286,7 @@
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
       <if test="unit != null" >
-        unit = #{unit,jdbcType=VARCHAR},
+        unit = #{unit,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
@@ -335,7 +335,7 @@
       product_type = #{productType,jdbcType=INTEGER},
       weight = #{weight,jdbcType=DECIMAL},
       quantity = #{quantity,jdbcType=INTEGER},
-      unit = #{unit,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
       amount = #{amount,jdbcType=DECIMAL},
       purchase_order_status = #{purchaseOrderStatus,jdbcType=INTEGER},
