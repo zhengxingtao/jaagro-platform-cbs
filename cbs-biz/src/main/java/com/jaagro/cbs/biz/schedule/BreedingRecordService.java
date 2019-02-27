@@ -43,12 +43,11 @@ public class BreedingRecordService {
      *
      * @return
      */
-    private String getYseterday() {
+    private String getYesterday() {
         Date newDate = new Date();
         DateUtils.ceiling(newDate, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String todayDate = sdf.format(newDate);
-        return todayDate;
+        return sdf.format(newDate);
     }
 
     /**
@@ -57,7 +56,7 @@ public class BreedingRecordService {
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void batchCoopDaily() {
-        String todayDate = getYseterday();
+        String todayDate = getYesterday();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
         //从BreedingRecord统计

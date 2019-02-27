@@ -212,8 +212,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         CoopExample coopExample = new CoopExample();
         coopExample.createCriteria()
                 .andPlantIdEqualTo(plantId);
-        Integer coopCount = coopMapperExt.countByExample(coopExample);
-        return coopCount;
+        return coopMapperExt.countByExample(coopExample);
     }
 
     /**
