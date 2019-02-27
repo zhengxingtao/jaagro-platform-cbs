@@ -245,6 +245,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
      * 逻辑删除鸡舍
      *
      * @param coopId
+     * @author @Gao.
      */
     @Override
     public void deleteCoop(Integer coopId) {

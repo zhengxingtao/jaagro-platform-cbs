@@ -448,52 +448,62 @@ public class PlantExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeEqualTo(Integer value) {
+        public Criteria andEquityTypeEqualTo(String value) {
             addCriterion("equity_type =", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeNotEqualTo(Integer value) {
+        public Criteria andEquityTypeNotEqualTo(String value) {
             addCriterion("equity_type <>", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeGreaterThan(Integer value) {
+        public Criteria andEquityTypeGreaterThan(String value) {
             addCriterion("equity_type >", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeGreaterThanOrEqualTo(Integer value) {
+        public Criteria andEquityTypeGreaterThanOrEqualTo(String value) {
             addCriterion("equity_type >=", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeLessThan(Integer value) {
+        public Criteria andEquityTypeLessThan(String value) {
             addCriterion("equity_type <", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeLessThanOrEqualTo(Integer value) {
+        public Criteria andEquityTypeLessThanOrEqualTo(String value) {
             addCriterion("equity_type <=", value, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeIn(List<Integer> values) {
+        public Criteria andEquityTypeLike(String value) {
+            addCriterion("equity_type like", value, "equityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquityTypeNotLike(String value) {
+            addCriterion("equity_type not like", value, "equityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andEquityTypeIn(List<String> values) {
             addCriterion("equity_type in", values, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeNotIn(List<Integer> values) {
+        public Criteria andEquityTypeNotIn(List<String> values) {
             addCriterion("equity_type not in", values, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeBetween(Integer value1, Integer value2) {
+        public Criteria andEquityTypeBetween(String value1, String value2) {
             addCriterion("equity_type between", value1, value2, "equityType");
             return (Criteria) this;
         }
 
-        public Criteria andEquityTypeNotBetween(Integer value1, Integer value2) {
+        public Criteria andEquityTypeNotBetween(String value1, String value2) {
             addCriterion("equity_type not between", value1, value2, "equityType");
             return (Criteria) this;
         }

@@ -2,7 +2,10 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.constant.CertificateStatus;
+import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
+import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.base.Employee;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
@@ -10,7 +13,6 @@ import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.*;
-import com.jaagro.cbs.api.service.BatchPlantCoopService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
@@ -49,15 +51,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private CurrentUserService currentUserService;
     @Autowired
+    private BatchContractMapperExt batchContractMapper;
+    @Autowired
+    private ContractSourceMapperExt contractSourceMapper;
+    @Autowired
+    private ContractPriceSectionMapperExt contractPriceSectionMapper;
+    @Autowired
     private CustomerClientService customerClientService;
     @Autowired
-    private CoopMapperExt coopMapper;
-    @Autowired
-    private BatchPlantCoopService batchPlantCoopService;
-    @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
-    @Autowired
-    private PlantMapperExt plantMapper;
     @Autowired
     private UserClientService userClientService;
     @Autowired
@@ -73,7 +75,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("TT");
+        String batchNo = sequenceCodeUtils.genSeqCode("AT");
         BreedingPlan breedingPlan = new BreedingPlan();
         breedingPlan
                 .setBatchNo(batchNo)
@@ -100,7 +102,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划列表
+     * 养殖计划列表 批次列表 养殖列表（复用）
+     * (返回数据类型相同但计划状态不同 用flag区分
+     * flag=1表示养殖计划列表数据
+     * flag=2 表示批次列表数据）
      *
      * @param dto
      * @return
@@ -151,6 +156,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return new PageInfo(planDtoList);
     }
 
+
     /**
      * 计算上鸡时间进度
      *
@@ -172,6 +178,72 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
+     * 录入合同
+     *
+     * @param createPlanContractDto
+     * @author yj
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createPlanContract(CreatePlanContractDto createPlanContractDto) {
+        Integer planId = createPlanContractDto.getPlanId();
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (breedingPlan == null) {
+            throw new RuntimeException("养殖计划id=" + planId + "不存在");
+        }
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        Integer currentUserId = currentUser == null ? null : currentUser.getId();
+        // 插入计划合同
+        BatchContract batchContract = new BatchContract();
+        BeanUtils.copyProperties(createPlanContractDto, batchContract);
+        batchContract.setContractNumber(sequenceCodeUtils.genSeqCode("HT"))
+                .setContractDate(new Date())
+                .setCreateTime(new Date())
+                .setContractStatus(ContractStatus.UNAUDITED)
+                .setCreateUserId(currentUserId)
+                .setCustomerId(breedingPlan.getCustomerId())
+                .setEnable(true);
+        batchContractMapper.insertSelective(batchContract);
+        // 插入计划合同图片
+        if (!CollectionUtils.isEmpty(createPlanContractDto.getImageUrlList())) {
+            List<ContractSource> contractSourceList = new ArrayList<>();
+            for (String imageUrl : createPlanContractDto.getImageUrlList()) {
+                ContractSource contractSource = new ContractSource();
+                contractSource.setCertificateImageUrl(imageUrl)
+                        .setCertificateStatus(CertificateStatus.UNCHECKED)
+                        .setCreateTime(new Date())
+                        .setCreateUserId(currentUserId)
+                        .setEnable(true)
+                        .setPlanId(createPlanContractDto.getPlanId())
+                        .setPlanContractId(batchContract.getId());
+                contractSourceList.add(contractSource);
+            }
+            contractSourceMapper.batchInsert(contractSourceList);
+        }
+        // 插入回收价格区间
+        List<ContractPriceSectionDto> contractPriceSectionDtoList = createPlanContractDto.getContractPriceSectionDtoList();
+        if (!CollectionUtils.isEmpty(contractPriceSectionDtoList)) {
+            List<ContractPriceSection> contractPriceSectionList = new ArrayList<>();
+            for (ContractPriceSectionDto dto : contractPriceSectionDtoList) {
+                ContractPriceSection contractPriceSection = new ContractPriceSection();
+                BeanUtils.copyProperties(dto, contractPriceSection);
+                contractPriceSection.setContractId(batchContract.getId())
+                        .setCreateTime(new Date())
+                        .setCreateUserId(currentUserId)
+                        .setEnable(true)
+                        .setPlanId(createPlanContractDto.getPlanId());
+                contractPriceSectionList.add(contractPriceSection);
+            }
+            contractPriceSectionMapper.batchInsert(contractPriceSectionList);
+        }
+        // 更新养殖计划状态
+        breedingPlan.setModifyTime(new Date())
+                .setModifyUserId(currentUserId)
+                .setPlanStatus(PlanStatusEnum.PARAM_CORRECT.getCode());
+        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+    }
+
+    /**
      * 更新养殖计划
      *
      * @param dto
@@ -185,29 +257,36 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划详情
+     * 养殖计划列表详情 养殖批次列表详情
      *
      * @param planId
      * @return
      * @author @Gao.
      */
     @Override
-    public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
-        ReturnBreedingPlanDto returnBreedingPlanDto = new ReturnBreedingPlanDto();
+    public ReturnBreedingPlanDetailsDto breedingPlanDetails(Integer planId) {
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDto = new ReturnBreedingPlanDetailsDto();
         //养殖计划信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
         List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
         returnBreedingPlanDto.setPlants(plants);
+        //养殖户信息
+        CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
+        if (contactsReturnDto != null) {
+            returnBreedingPlanDto
+                    .setCustomerName(contactsReturnDto.getContact())
+                    .setCustomerPhone(contactsReturnDto.getPhone());
+        }
         //技术员信息
         BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
-        if (CollectionUtils.isEmpty(empByDeptId.getData())) {
+        if (!CollectionUtils.isEmpty(empByDeptId.getData())) {
             List<Employee> employees = empByDeptId.getData();
             returnBreedingPlanDto.setTechnicianList(employees);
         }
         return returnBreedingPlanDto;
     }
-
 }
+
 
