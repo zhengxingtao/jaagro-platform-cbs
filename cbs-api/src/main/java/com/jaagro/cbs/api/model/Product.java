@@ -1,6 +1,7 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/26
+ * @author :gaoxin
+ * @date :2019/02/27
  */
 @Data
 @NoArgsConstructor
@@ -40,6 +41,21 @@ public class Product implements Serializable {
      * 产品图片地址
      */
     private String imageUrl;
+
+    /**
+     * SKU编码
+     */
+    private String skuNo;
+
+    /**
+     * 采购单价
+     */
+    private BigDecimal purchasePrice;
+
+    /**
+     * 销售单价
+     */
+    private BigDecimal salePrice;
 
     /**
      * 创建时间

@@ -379,6 +379,76 @@ public class PurchaseOrderExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andPurchaseNoIsNull() {
+            addCriterion("purchase_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIsNotNull() {
+            addCriterion("purchase_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoEqualTo(String value) {
+            addCriterion("purchase_no =", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotEqualTo(String value) {
+            addCriterion("purchase_no <>", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThan(String value) {
+            addCriterion("purchase_no >", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_no >=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThan(String value) {
+            addCriterion("purchase_no <", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLessThanOrEqualTo(String value) {
+            addCriterion("purchase_no <=", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoLike(String value) {
+            addCriterion("purchase_no like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotLike(String value) {
+            addCriterion("purchase_no not like", value, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoIn(List<String> values) {
+            addCriterion("purchase_no in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotIn(List<String> values) {
+            addCriterion("purchase_no not in", values, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoBetween(String value1, String value2) {
+            addCriterion("purchase_no between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNoNotBetween(String value1, String value2) {
+            addCriterion("purchase_no not between", value1, value2, "purchaseNo");
+            return (Criteria) this;
+        }
+
         public Criteria andProductTypeIsNull() {
             addCriterion("product_type is null");
             return (Criteria) this;
@@ -986,6 +1056,76 @@ public class PurchaseOrderExample implements Serializable {
 
         public Criteria andDeliveryTimeNotBetween(Date value1, Date value2) {
             addCriterion("delivery_time not between", value1, value2, "deliveryTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIsNull() {
+            addCriterion("notes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIsNotNull() {
+            addCriterion("notes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesEqualTo(String value) {
+            addCriterion("notes =", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotEqualTo(String value) {
+            addCriterion("notes <>", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesGreaterThan(String value) {
+            addCriterion("notes >", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesGreaterThanOrEqualTo(String value) {
+            addCriterion("notes >=", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLessThan(String value) {
+            addCriterion("notes <", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLessThanOrEqualTo(String value) {
+            addCriterion("notes <=", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLike(String value) {
+            addCriterion("notes like", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotLike(String value) {
+            addCriterion("notes not like", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIn(List<String> values) {
+            addCriterion("notes in", values, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotIn(List<String> values) {
+            addCriterion("notes not in", values, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesBetween(String value1, String value2) {
+            addCriterion("notes between", value1, value2, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotBetween(String value1, String value2) {
+            addCriterion("notes not between", value1, value2, "notes");
             return (Criteria) this;
         }
 

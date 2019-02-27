@@ -6,6 +6,7 @@
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
@@ -16,6 +17,7 @@
     <result column="purchase_order_status" property="purchaseOrderStatus" jdbcType="INTEGER" />
     <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
     <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -52,9 +54,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, plan_id, batch_no, product_type, product_id, weight, quantity, unit, 
-    price, amount, purchase_order_status, supplier_id, delivery_time, enable, create_time, 
-    create_user_id, modify_time, modify_user_id
+    id, customer_id, plan_id, batch_no, purchase_no, product_type, product_id, weight, 
+    quantity, unit, price, amount, purchase_order_status, supplier_id, delivery_time, 
+    notes, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
     select
@@ -94,19 +96,19 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into purchase_order (customer_id, plan_id, batch_no, 
-      product_type, product_id, weight, 
-      quantity, unit, price, 
-      amount, purchase_order_status, supplier_id, 
-      delivery_time, enable, create_time, 
-      create_user_id, modify_time, modify_user_id
-      )
+      purchase_no, product_type, product_id, 
+      weight, quantity, unit, 
+      price, amount, purchase_order_status, 
+      supplier_id, delivery_time, notes, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
-      #{productType,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, 
-      #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, 
-      #{deliveryTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
-      )
+      #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, 
+      #{supplierId,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -122,6 +124,9 @@
       </if>
       <if test="batchNo != null" >
         batch_no,
+      </if>
+      <if test="purchaseNo != null" >
+        purchase_no,
       </if>
       <if test="productType != null" >
         product_type,
@@ -153,6 +158,9 @@
       <if test="deliveryTime != null" >
         delivery_time,
       </if>
+      <if test="notes != null" >
+        notes,
+      </if>
       <if test="enable != null" >
         enable,
       </if>
@@ -178,6 +186,9 @@
       </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNo != null" >
+        #{purchaseNo,jdbcType=VARCHAR},
       </if>
       <if test="productType != null" >
         #{productType,jdbcType=INTEGER},
@@ -208,6 +219,9 @@
       </if>
       <if test="deliveryTime != null" >
         #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notes != null" >
+        #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
@@ -244,6 +258,9 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
+      <if test="purchaseNo != null" >
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="productType != null" >
         product_type = #{productType,jdbcType=INTEGER},
       </if>
@@ -274,6 +291,9 @@
       <if test="deliveryTime != null" >
         delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="notes != null" >
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
       </if>
@@ -297,6 +317,7 @@
     set customer_id = #{customerId,jdbcType=INTEGER},
       plan_id = #{planId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
+      purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       weight = #{weight,jdbcType=DECIMAL},
@@ -307,6 +328,7 @@
       purchase_order_status = #{purchaseOrderStatus,jdbcType=INTEGER},
       supplier_id = #{supplierId,jdbcType=INTEGER},
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      notes = #{notes,jdbcType=VARCHAR},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},

@@ -7,6 +7,9 @@
     <result column="product_type" property="productType" jdbcType="INTEGER" />
     <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
@@ -40,7 +43,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_name, product_type, manufacturer, image_url, create_time, enable
+    id, product_name, product_type, manufacturer, image_url, sku_no, purchase_price, 
+    sale_price, create_time, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.ProductExample" >
     select
@@ -80,10 +84,12 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product (product_name, product_type, manufacturer, 
-      image_url, create_time, enable
+      image_url, sku_no, purchase_price, 
+      sale_price, create_time, enable
       )
     values (#{productName,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{manufacturer,jdbcType=VARCHAR}, 
-      #{imageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}
+      #{imageUrl,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, 
+      #{salePrice,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Product" >
@@ -104,6 +110,15 @@
       <if test="imageUrl != null" >
         image_url,
       </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -123,6 +138,15 @@
       </if>
       <if test="imageUrl != null" >
         #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -153,6 +177,15 @@
       <if test="imageUrl != null" >
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -168,6 +201,9 @@
       product_type = #{productType,jdbcType=INTEGER},
       manufacturer = #{manufacturer,jdbcType=VARCHAR},
       image_url = #{imageUrl,jdbcType=VARCHAR},
+      sku_no = #{skuNo,jdbcType=VARCHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
