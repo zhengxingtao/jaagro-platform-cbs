@@ -146,7 +146,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 }
                 SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = sDateFormat.parse(strDate);
-                Boolean isSameDay = DateUtils.isSameDay(date, new Date());
+                boolean isSameDay = DateUtils.isSameDay(date, new Date());
                 List<DeviceValue> deviceValueDos = new ArrayList<>();
                 List<DeviceValueHistory> deviceValueHistoryDos = new ArrayList<DeviceValueHistory>();
                 if (isSameDay) {
