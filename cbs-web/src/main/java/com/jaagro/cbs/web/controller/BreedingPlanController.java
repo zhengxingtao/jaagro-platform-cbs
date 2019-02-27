@@ -78,8 +78,8 @@ public class BreedingPlanController {
 
     @PostMapping("/createPlanContract")
     @ApiOperation("录入合同")
-    public BaseResponse createPlanContract(@RequestBody @Validated  CreatePlanContractDto createPlanContractDto){
-        log.info("O createPlanContract createPlanContractDto={}",createPlanContractDto);
+    public BaseResponse createPlanContract(@RequestBody @Validated CreatePlanContractDto createPlanContractDto) {
+        log.info("O createPlanContract createPlanContractDto={}", createPlanContractDto);
         breedingPlanService.createPlanContract(createPlanContractDto);
         return BaseResponse.successInstance("录入合同成功");
     }
@@ -95,7 +95,7 @@ public class BreedingPlanController {
     }
 
     @PostMapping("/breedingPlanDetails/{planId}")
-    @ApiOperation("养殖计划详情")
+    @ApiOperation("养殖计划列表/批次列表详情")
     public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");

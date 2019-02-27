@@ -54,6 +54,12 @@ public class SequenceCodeUtils {
         return genSeqCode.toString();
     }
 
+    /**
+     * 生成随机数
+     *
+     * @param strLength
+     * @return
+     */
     private String fixLengthString(int strLength) {
         Random rm = new Random();
         // 获得随机数

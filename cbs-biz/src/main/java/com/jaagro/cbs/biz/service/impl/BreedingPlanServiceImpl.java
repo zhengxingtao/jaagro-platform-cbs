@@ -75,7 +75,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("TT");
+        String batchNo = sequenceCodeUtils.genSeqCode("AT");
         BreedingPlan breedingPlan = new BreedingPlan();
         breedingPlan
                 .setBatchNo(batchNo)
@@ -257,21 +257,28 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划详情
+     * 养殖计划列表详情 养殖批次列表详情
      *
      * @param planId
      * @return
      * @author @Gao.
      */
     @Override
-    public ReturnBreedingPlanDto breedingPlanDetails(Integer planId) {
-        ReturnBreedingPlanDto returnBreedingPlanDto = new ReturnBreedingPlanDto();
+    public ReturnBreedingPlanDetailsDto breedingPlanDetails(Integer planId) {
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDto = new ReturnBreedingPlanDetailsDto();
         //养殖计划信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //养殖场信息
         List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
         returnBreedingPlanDto.setPlants(plants);
+        //养殖户信息
+        CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
+        if (contactsReturnDto != null) {
+            returnBreedingPlanDto
+                    .setCustomerName(contactsReturnDto.getContact())
+                    .setCustomerPhone(contactsReturnDto.getPhone());
+        }
         //技术员信息
         BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
         if (!CollectionUtils.isEmpty(empByDeptId.getData())) {

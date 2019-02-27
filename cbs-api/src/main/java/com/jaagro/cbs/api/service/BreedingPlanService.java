@@ -2,11 +2,7 @@ package com.jaagro.cbs.api.service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
-import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
-import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
-import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
-import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.*;
 
 
 /**
@@ -24,8 +20,9 @@ public interface BreedingPlanService {
 
     /**
      * 录入合同
-     * @author yj
+     *
      * @param createPlanContractDto
+     * @author yj
      */
     void createPlanContract(CreatePlanContractDto createPlanContractDto);
 
@@ -50,5 +47,5 @@ public interface BreedingPlanService {
      * @param planId
      * @return
      */
-    ReturnBreedingPlanDto breedingPlanDetails(Integer planId);
+    ReturnBreedingPlanDetailsDto breedingPlanDetails(Integer planId);
 }
