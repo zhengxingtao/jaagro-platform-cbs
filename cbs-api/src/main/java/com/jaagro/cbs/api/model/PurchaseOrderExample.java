@@ -309,6 +309,126 @@ public class PurchaseOrderExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andSignerIdIsNull() {
+            addCriterion("signer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdIsNotNull() {
+            addCriterion("signer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdEqualTo(Integer value) {
+            addCriterion("signer_id =", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdNotEqualTo(Integer value) {
+            addCriterion("signer_id <>", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdGreaterThan(Integer value) {
+            addCriterion("signer_id >", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("signer_id >=", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdLessThan(Integer value) {
+            addCriterion("signer_id <", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdLessThanOrEqualTo(Integer value) {
+            addCriterion("signer_id <=", value, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdIn(List<Integer> values) {
+            addCriterion("signer_id in", values, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdNotIn(List<Integer> values) {
+            addCriterion("signer_id not in", values, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdBetween(Integer value1, Integer value2) {
+            addCriterion("signer_id between", value1, value2, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("signer_id not between", value1, value2, "signerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNull() {
+            addCriterion("product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNotNull() {
+            addCriterion("product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdEqualTo(Integer value) {
+            addCriterion("product_id =", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotEqualTo(Integer value) {
+            addCriterion("product_id <>", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThan(Integer value) {
+            addCriterion("product_id >", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_id >=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThan(Integer value) {
+            addCriterion("product_id <", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("product_id <=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIn(List<Integer> values) {
+            addCriterion("product_id in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotIn(List<Integer> values) {
+            addCriterion("product_id not in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("product_id between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_id not between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
         public Criteria andBatchNoIsNull() {
             addCriterion("batch_no is null");
             return (Criteria) this;
@@ -506,66 +626,6 @@ public class PurchaseOrderExample implements Serializable {
 
         public Criteria andProductTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("product_type not between", value1, value2, "productType");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdIsNull() {
-            addCriterion("product_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdIsNotNull() {
-            addCriterion("product_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdEqualTo(Integer value) {
-            addCriterion("product_id =", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotEqualTo(Integer value) {
-            addCriterion("product_id <>", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdGreaterThan(Integer value) {
-            addCriterion("product_id >", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("product_id >=", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdLessThan(Integer value) {
-            addCriterion("product_id <", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdLessThanOrEqualTo(Integer value) {
-            addCriterion("product_id <=", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdIn(List<Integer> values) {
-            addCriterion("product_id in", values, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotIn(List<Integer> values) {
-            addCriterion("product_id not in", values, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdBetween(Integer value1, Integer value2) {
-            addCriterion("product_id between", value1, value2, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("product_id not between", value1, value2, "productId");
             return (Criteria) this;
         }
 

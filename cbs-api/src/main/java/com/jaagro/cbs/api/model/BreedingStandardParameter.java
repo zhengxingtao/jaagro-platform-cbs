@@ -68,6 +68,11 @@ public class BreedingStandardParameter implements Serializable {
     private Boolean alarm;
 
     /**
+     * 动保药品
+     */
+    private String dynamicMedicine;
+
+    /**
      * 养殖参数状态（1-启用 0 -未启用）
      */
     private Integer status;

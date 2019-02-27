@@ -749,6 +749,76 @@ public class BreedingStandardParameterExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andDynamicMedicineIsNull() {
+            addCriterion("dynamic_medicine is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineIsNotNull() {
+            addCriterion("dynamic_medicine is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineEqualTo(String value) {
+            addCriterion("dynamic_medicine =", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineNotEqualTo(String value) {
+            addCriterion("dynamic_medicine <>", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineGreaterThan(String value) {
+            addCriterion("dynamic_medicine >", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineGreaterThanOrEqualTo(String value) {
+            addCriterion("dynamic_medicine >=", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineLessThan(String value) {
+            addCriterion("dynamic_medicine <", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineLessThanOrEqualTo(String value) {
+            addCriterion("dynamic_medicine <=", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineLike(String value) {
+            addCriterion("dynamic_medicine like", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineNotLike(String value) {
+            addCriterion("dynamic_medicine not like", value, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineIn(List<String> values) {
+            addCriterion("dynamic_medicine in", values, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineNotIn(List<String> values) {
+            addCriterion("dynamic_medicine not in", values, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineBetween(String value1, String value2) {
+            addCriterion("dynamic_medicine between", value1, value2, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
+        public Criteria andDynamicMedicineNotBetween(String value1, String value2) {
+            addCriterion("dynamic_medicine not between", value1, value2, "dynamicMedicine");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

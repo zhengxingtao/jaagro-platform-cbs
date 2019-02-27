@@ -5,10 +5,11 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="signer_id" property="signerId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
@@ -54,8 +55,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, plan_id, batch_no, purchase_no, product_type, product_id, weight, 
-    quantity, unit, price, amount, purchase_order_status, supplier_id, delivery_time, 
+    id, customer_id, plan_id, signer_id, product_id, batch_no, purchase_no, product_type, 
+    weight, quantity, unit, price, amount, purchase_order_status, supplier_id, delivery_time, 
     notes, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
@@ -95,20 +96,22 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into purchase_order (customer_id, plan_id, batch_no, 
-      purchase_no, product_type, product_id, 
-      weight, quantity, unit, 
-      price, amount, purchase_order_status, 
-      supplier_id, delivery_time, notes, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
-    values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
-      #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
-      #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, 
-      #{supplierId,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, 
-      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+    insert into purchase_order (customer_id, plan_id, signer_id, 
+      product_id, batch_no, purchase_no, 
+      product_type, weight, quantity, 
+      unit, price, amount, 
+      purchase_order_status, supplier_id, delivery_time, 
+      notes, enable, create_time, 
+      create_user_id, modify_time, modify_user_id
+      )
+    values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
+      #{productId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
+      #{productType,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
+      #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
+      #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, 
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -122,6 +125,12 @@
       <if test="planId != null" >
         plan_id,
       </if>
+      <if test="signerId != null" >
+        signer_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
       <if test="batchNo != null" >
         batch_no,
       </if>
@@ -130,9 +139,6 @@
       </if>
       <if test="productType != null" >
         product_type,
-      </if>
-      <if test="productId != null" >
-        product_id,
       </if>
       <if test="weight != null" >
         weight,
@@ -184,6 +190,12 @@
       <if test="planId != null" >
         #{planId,jdbcType=INTEGER},
       </if>
+      <if test="signerId != null" >
+        #{signerId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -192,9 +204,6 @@
       </if>
       <if test="productType != null" >
         #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
       </if>
       <if test="weight != null" >
         #{weight,jdbcType=DECIMAL},
@@ -255,6 +264,12 @@
       <if test="planId != null" >
         plan_id = #{planId,jdbcType=INTEGER},
       </if>
+      <if test="signerId != null" >
+        signer_id = #{signerId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -263,9 +278,6 @@
       </if>
       <if test="productType != null" >
         product_type = #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="weight != null" >
         weight = #{weight,jdbcType=DECIMAL},
@@ -316,10 +328,11 @@
     update purchase_order
     set customer_id = #{customerId,jdbcType=INTEGER},
       plan_id = #{planId,jdbcType=INTEGER},
+      signer_id = #{signerId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
       weight = #{weight,jdbcType=DECIMAL},
       quantity = #{quantity,jdbcType=INTEGER},
       unit = #{unit,jdbcType=VARCHAR},

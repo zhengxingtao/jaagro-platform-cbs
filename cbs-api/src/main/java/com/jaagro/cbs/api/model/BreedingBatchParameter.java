@@ -83,9 +83,9 @@ public class BreedingBatchParameter implements Serializable {
     private Boolean alarm;
 
     /**
-     * 动保药品(0-停用,1-启用)
+     * 动保药品
      */
-    private Boolean dynamicMedicine;
+    private String dynamicMedicine;
 
     /**
      * 是否有效(0-无效,1-有效)

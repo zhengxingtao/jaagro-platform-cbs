@@ -33,6 +33,16 @@ public class PurchaseOrder implements Serializable {
     private Integer planId;
 
     /**
+     * 签收人id
+     */
+    private Integer signerId;
+
+    /**
+     * 产品id
+     */
+    private Integer productId;
+
+    /**
      * 批次号
      */
     private String batchNo;
@@ -46,11 +56,6 @@ public class PurchaseOrder implements Serializable {
      * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
      */
     private Integer productType;
-
-    /**
-     * 产品id
-     */
-    private Integer productId;
 
     /**
      * 采购重量
