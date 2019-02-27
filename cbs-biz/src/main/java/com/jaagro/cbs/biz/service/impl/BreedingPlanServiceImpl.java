@@ -12,7 +12,9 @@ import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
+import com.jaagro.cbs.api.enums.UnitEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
@@ -301,10 +303,26 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId) {
         ReturnChickenSignDetailsDto returnChickenSignDetailsDto = new ReturnChickenSignDetailsDto();
+        //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(plantId);
         returnChickenSignDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
-
-        return null;
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample.createCriteria().andPlanIdEqualTo(plantId);
+        //商品采购列表信息
+        List<ReturnPurchaseOrderDto> returnPurchaseOrderDtos = new ArrayList<>();
+        List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+        if (!CollectionUtils.isEmpty(purchaseOrders)) {
+            for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
+                BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
+                returnPurchaseOrderDto
+                        .setUnit(UnitEnum.getDescByCode(1))
+                        .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
+                        .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                returnPurchaseOrderDtos.add(returnPurchaseOrderDto);
+            }
+        }
+        return returnChickenSignDetailsDto;
     }
 }
 

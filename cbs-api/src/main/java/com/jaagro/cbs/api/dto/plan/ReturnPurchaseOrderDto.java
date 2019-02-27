@@ -47,7 +47,7 @@ public class ReturnPurchaseOrderDto implements Serializable {
     /**
      * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
      */
-    private Integer productType;
+    private String productType;
 
     /**
      * 产品id
@@ -82,7 +82,7 @@ public class ReturnPurchaseOrderDto implements Serializable {
     /**
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
-    private Integer purchaseOrderStatus;
+    private String purchaseOrderStatus;
 
     /**
      * 到货时间
