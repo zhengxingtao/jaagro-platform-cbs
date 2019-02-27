@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +94,7 @@ public class BreedingPlanController {
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
-    @PostMapping("/breedingPlanDetails/{planId}")
+    @GetMapping("/breedingPlanDetails/{planId}")
     @ApiOperation("养殖计划列表详情")
     public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
@@ -106,7 +103,7 @@ public class BreedingPlanController {
         return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
     }
 
-    @PostMapping("/chickenSignDetails/{planId}")
+    @GetMapping("/chickenSignDetails/{planId}")
     @ApiOperation("待上鸡签收详情")
     public BaseResponse chickenSignDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
@@ -114,4 +111,14 @@ public class BreedingPlanController {
         }
         return BaseResponse.successInstance(breedingPlanService.chickenSignDetails(planId));
     }
+
+    @GetMapping("/breedingDetails/{planId}")
+    @ApiOperation("养殖中详情")
+    public BaseResponse breedingDetails(@PathVariable("planId") Integer planId) {
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.breedingDetails(planId));
+    }
+
 }
