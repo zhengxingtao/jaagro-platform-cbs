@@ -51,7 +51,9 @@ public interface BreedingPlanService {
 
     /**
      * 待上鸡签收详情
+     *
      * @param plantId
+     * @return
      */
-    void chickenSignDetails(Integer plantId);
+    ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId);
 }

@@ -12,6 +12,7 @@ import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
@@ -64,6 +65,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private UserClientService userClientService;
     @Autowired
     private BreedingPlantServiceImpl breedingPlantService;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
 
     /**
      * 创建养殖计划
@@ -292,10 +295,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * 待上鸡签收详情
      *
      * @param plantId
+     * @return
+     * @author @Gao.
      */
     @Override
-    public void chickenSignDetails(Integer plantId) {
-        
+    public ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId) {
+        ReturnChickenSignDetailsDto returnChickenSignDetailsDto = new ReturnChickenSignDetailsDto();
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(plantId);
+        returnChickenSignDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
+
+        return null;
     }
 }
 
