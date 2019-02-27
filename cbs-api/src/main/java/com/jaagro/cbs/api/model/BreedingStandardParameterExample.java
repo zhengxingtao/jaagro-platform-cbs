@@ -749,6 +749,76 @@ public class BreedingStandardParameterExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andParamValueIsNull() {
+            addCriterion("param_value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueIsNotNull() {
+            addCriterion("param_value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueEqualTo(String value) {
+            addCriterion("param_value =", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueNotEqualTo(String value) {
+            addCriterion("param_value <>", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueGreaterThan(String value) {
+            addCriterion("param_value >", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueGreaterThanOrEqualTo(String value) {
+            addCriterion("param_value >=", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueLessThan(String value) {
+            addCriterion("param_value <", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueLessThanOrEqualTo(String value) {
+            addCriterion("param_value <=", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueLike(String value) {
+            addCriterion("param_value like", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueNotLike(String value) {
+            addCriterion("param_value not like", value, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueIn(List<String> values) {
+            addCriterion("param_value in", values, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueNotIn(List<String> values) {
+            addCriterion("param_value not in", values, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueBetween(String value1, String value2) {
+            addCriterion("param_value between", value1, value2, "paramValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andParamValueNotBetween(String value1, String value2) {
+            addCriterion("param_value not between", value1, value2, "paramValue");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -806,6 +876,66 @@ public class BreedingStandardParameterExample implements Serializable {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIsNull() {
+            addCriterion("necessary is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIsNotNull() {
+            addCriterion("necessary is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryEqualTo(Boolean value) {
+            addCriterion("necessary =", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotEqualTo(Boolean value) {
+            addCriterion("necessary <>", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryGreaterThan(Boolean value) {
+            addCriterion("necessary >", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("necessary >=", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryLessThan(Boolean value) {
+            addCriterion("necessary <", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryLessThanOrEqualTo(Boolean value) {
+            addCriterion("necessary <=", value, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryIn(List<Boolean> values) {
+            addCriterion("necessary in", values, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotIn(List<Boolean> values) {
+            addCriterion("necessary not in", values, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryBetween(Boolean value1, Boolean value2) {
+            addCriterion("necessary between", value1, value2, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andNecessaryNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("necessary not between", value1, value2, "necessary");
             return (Criteria) this;
         }
 
