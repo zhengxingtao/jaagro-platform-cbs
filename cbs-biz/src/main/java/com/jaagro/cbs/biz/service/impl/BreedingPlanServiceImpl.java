@@ -287,6 +287,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         return returnBreedingPlanDto;
     }
+
+    /**
+     * 待上鸡签收详情
+     *
+     * @param plantId
+     */
+    @Override
+    public void chickenSignDetails(Integer plantId) {
+        
+    }
 }
 
 
