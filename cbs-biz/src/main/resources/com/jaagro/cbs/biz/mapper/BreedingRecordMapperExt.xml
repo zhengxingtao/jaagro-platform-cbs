@@ -3,6 +3,25 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
+    <select id="listSumByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            id,
+            plan_id,
+            batch_no,
+            day_age,
+            record_type,
+            SUM( breeding_value ) AS breeding_value,
+            unit,
+        ENABLE
+        FROM
+            breeding_record
+        WHERE
+            ENABLE = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{todayDate}
+        GROUP BY
+            plan_id,
+            record_type
+    </select>
     <select id="listCoopDailySumByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
             plan_id ,batch_no,coop_id,day_age,SUM(breeding_value) as breeding_value
@@ -39,5 +58,37 @@
             AND plan_id = #{planId}
             AND record_type = 4
     </select>
-
+    <select id="listBatchInfoByParams" resultType="com.jaagro.cbs.api.model.BatchInfo" parameterType="java.lang.String">
+        SELECT
+            r.plan_id,
+            r.batch_no,
+            r.day_age,
+            SUM( r.breeding_value ) AS breeding_value,
+            r.unit,
+            r.ENABLE,
+            p.technician_id AS technician_id,
+            p.technician AS technician ,
+            p.plan_chicken_quantity as plan_chicken_quantity
+            FROM
+            breeding_record r
+            INNER JOIN breeding_plan p ON r.plan_id = p.id
+        WHERE
+            r.enable = 1
+            AND p.enable = 1
+            AND DATE_FORMAT( r.create_time, '%Y-%m-%d' ) = #{todayDate}
+        GROUP BY
+            r.plan_id
+    </select>
+    <select id="sumDeadAmountByPlanId" parameterType="com.jaagro.cbs.api.dto.base.BatchInfoCriteriaDto"
+            resultType="java.lang.Integer">
+        SELECT
+            sum(breeding_value) as breeding_value
+        FROM
+            breeding_record
+        WHERE
+            enable = 1
+            AND DATE_FORMAT( create_time, '%Y-%m-%d' ) = #{todayDate}
+            AND plan_id = #{planId}
+            AND record_type = 4
+    </select>
 </mapper>

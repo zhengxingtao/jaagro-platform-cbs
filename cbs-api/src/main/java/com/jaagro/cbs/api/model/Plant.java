@@ -1,12 +1,12 @@
 package com.jaagro.cbs.api.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author :gavinwang
@@ -45,7 +45,7 @@ public class Plant implements Serializable {
     /**
      * 产权情况(1-全民,2-集体,3-私有)
      */
-    private Integer equityType;
+    private String equityType;
 
     /**
      * 使用年限

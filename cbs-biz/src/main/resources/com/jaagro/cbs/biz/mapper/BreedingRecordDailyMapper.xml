@@ -86,14 +86,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_record_daily (plan_id, batch_no, day_age, 
-      record_type, breeding_value, unit, 
-      notes, enable, create_time, 
+    insert into breeding_record_daily (plan_id, batch_no, day_age,
+      record_type, breeding_value, unit,
+      notes, enable, create_time,
       create_user_id, modify_time, modify_user_id
       )
-    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
-      #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, 
-      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER},
+      #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR},
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
