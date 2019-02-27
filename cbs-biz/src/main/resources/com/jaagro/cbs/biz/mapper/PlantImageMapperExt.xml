@@ -13,19 +13,14 @@
         plant_id = #{plantIds}
         and enable = 1
     </select>
-    <insert id="insertBatch" parameterType="list">
+    <insert id="insertBatch" parameterType="com.jaagro.cbs.api.dto.plant.CreatePlantImageDto">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into plant_image (plant_id, image_url, enable,
-        create_time, create_user_id, modify_time,
-        modify_user_id)
+        insert into plant_image (plant_id, image_url,create_user_id)
         values
         <foreach collection="imageDtoList" item="item" separator=",">
-            (#{item.plantId,jdbcType=INTEGER}, #{item.imageUrl,jdbcType=VARCHAR}, #{item.enable,jdbcType=BIT},
-            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
-            #{item.modifyTime,jdbcType=TIMESTAMP},
-            #{item.modifyUserId,jdbcType=INTEGER})
+            (#{item.plantId,jdbcType=INTEGER}, #{item.imageUrl,jdbcType=VARCHAR}, #{item.createUserId,jdbcType=INTEGER})
         </foreach>
     </insert>
 

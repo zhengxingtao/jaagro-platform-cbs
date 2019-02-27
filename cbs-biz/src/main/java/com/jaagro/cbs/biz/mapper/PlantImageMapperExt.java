@@ -5,6 +5,7 @@ import com.jaagro.cbs.api.dto.plant.ReturnPlantImageDto;
 import com.jaagro.cbs.api.model.PlantImage;
 import com.jaagro.cbs.api.model.PlantImageExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,10 +28,12 @@ public interface PlantImageMapperExt extends BaseMapper<PlantImage, PlantImageEx
      */
     List<ReturnPlantImageDto> listByPlantId(Integer id);
 
+
     /**
      * 批量新增
      *
      * @param imageDtoList
+     * @return
      */
-    int insertBatch(List<CreatePlantImageDto> imageDtoList);
+    int insertBatch(@Param("imageDtoList") List<CreatePlantImageDto> imageDtoList);
 }
