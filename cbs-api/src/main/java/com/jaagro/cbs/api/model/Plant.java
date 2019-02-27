@@ -2,6 +2,7 @@ package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,7 +55,7 @@ public class Plant implements Serializable {
     /**
      * 是否可以扩建(0-不可扩建,1-可扩建)
      */
-    private Byte expandable;
+    private Boolean expandable;
 
     /**
      * 省
