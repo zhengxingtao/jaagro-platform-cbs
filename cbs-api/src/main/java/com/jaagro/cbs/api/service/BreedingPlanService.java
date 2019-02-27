@@ -48,4 +48,12 @@ public interface BreedingPlanService {
      * @return
      */
     ReturnBreedingPlanDetailsDto breedingPlanDetails(Integer planId);
+
+    /**
+     * 待上鸡签收详情
+     *
+     * @param plantId
+     * @return
+     */
+    ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId);
 }
