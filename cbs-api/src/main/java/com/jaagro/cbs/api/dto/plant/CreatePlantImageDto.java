@@ -25,4 +25,7 @@ public class CreatePlantImageDto implements Serializable {
      * 图片地址
      */
     private String imageUrl;
+
+    private Integer createUserId;
+
 }
