@@ -35,7 +35,7 @@ public class CreatePlantDto implements Serializable {
     /**
      * 产权情况(1-全民,2-集体,3-私有)
      */
-    private Integer equityType;
+    private String equityType;
 
     /**
      * 使用年限
