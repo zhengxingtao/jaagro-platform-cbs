@@ -80,6 +80,6 @@ public class BreedingProgressDto implements Serializable {
      *鸡舍位置:养殖厂对应的鸡舍信息
      */
 
-    Map<Integer, List<Coop>> coopMap;
+    private List<Coop> coops;
 
 }
