@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jaagro.cbs.biz.mapper.DeviceAlarmLogMapperExt" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.DeviceAlarmLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="plant_id" property="plantId" jdbcType="INTEGER" />
+    <result column="coop_id" property="coopId" jdbcType="INTEGER" />
+    <result column="device_id" property="deviceId" jdbcType="INTEGER" />
+    <result column="day_age" property="dayAge" jdbcType="INTEGER" />
+    <result column="current_value" property="currentValue" jdbcType="DECIMAL" />
+    <result column="param_standard_value" property="paramStandardValue" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, plan_id, plant_id, coop_id, device_id, day_age, current_value, param_standard_value, 
+    create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from device_alarm_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from device_alarm_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from device_alarm_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_alarm_log (plan_id, plant_id, coop_id, 
+      device_id, day_age, current_value, 
+      param_standard_value, create_time)
+    values (#{planId,jdbcType=INTEGER}, #{plantId,jdbcType=INTEGER}, #{coopId,jdbcType=INTEGER}, 
+      #{deviceId,jdbcType=INTEGER}, #{dayAge,jdbcType=INTEGER}, #{currentValue,jdbcType=DECIMAL}, 
+      #{paramStandardValue,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_alarm_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="plantId != null" >
+        plant_id,
+      </if>
+      <if test="coopId != null" >
+        coop_id,
+      </if>
+      <if test="deviceId != null" >
+        device_id,
+      </if>
+      <if test="dayAge != null" >
+        day_age,
+      </if>
+      <if test="currentValue != null" >
+        current_value,
+      </if>
+      <if test="paramStandardValue != null" >
+        param_standard_value,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="plantId != null" >
+        #{plantId,jdbcType=INTEGER},
+      </if>
+      <if test="coopId != null" >
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="dayAge != null" >
+        #{dayAge,jdbcType=INTEGER},
+      </if>
+      <if test="currentValue != null" >
+        #{currentValue,jdbcType=DECIMAL},
+      </if>
+      <if test="paramStandardValue != null" >
+        #{paramStandardValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLogExample" resultType="java.lang.Integer" >
+    select count(*) from device_alarm_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLog" >
+    update device_alarm_log
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="plantId != null" >
+        plant_id = #{plantId,jdbcType=INTEGER},
+      </if>
+      <if test="coopId != null" >
+        coop_id = #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null" >
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="dayAge != null" >
+        day_age = #{dayAge,jdbcType=INTEGER},
+      </if>
+      <if test="currentValue != null" >
+        current_value = #{currentValue,jdbcType=DECIMAL},
+      </if>
+      <if test="paramStandardValue != null" >
+        param_standard_value = #{paramStandardValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.DeviceAlarmLog" >
+    update device_alarm_log
+    set plan_id = #{planId,jdbcType=INTEGER},
+      plant_id = #{plantId,jdbcType=INTEGER},
+      coop_id = #{coopId,jdbcType=INTEGER},
+      device_id = #{deviceId,jdbcType=INTEGER},
+      day_age = #{dayAge,jdbcType=INTEGER},
+      current_value = #{currentValue,jdbcType=DECIMAL},
+      param_standard_value = #{paramStandardValue,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
