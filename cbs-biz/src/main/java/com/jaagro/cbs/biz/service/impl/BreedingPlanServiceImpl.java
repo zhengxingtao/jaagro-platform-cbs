@@ -214,8 +214,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             List<ContractSource> contractSourceList = new ArrayList<>();
             for (String imageUrl : createPlanContractDto.getImageUrlList()) {
                 ContractSource contractSource = new ContractSource();
-                contractSource.setCertificateImageUrl(imageUrl)
-                        .setCertificateStatus(CertificateStatus.UNCHECKED)
+                contractSource.setSourceUrl(imageUrl)
+                        .setSourceStatus(CertificateStatus.UNCHECKED)
                         .setCreateTime(new Date())
                         .setCreateUserId(currentUserId)
                         .setEnable(true)
