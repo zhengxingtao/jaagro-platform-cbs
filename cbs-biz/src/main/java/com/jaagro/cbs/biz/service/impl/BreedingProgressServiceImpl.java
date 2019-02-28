@@ -5,6 +5,8 @@ import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.dto.progress.DeviceValueDto;
+import com.jaagro.cbs.api.enums.BreedingRecordTypeEnum;
+import com.jaagro.cbs.api.enums.DeviceStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.mapper.*;
@@ -71,7 +73,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //该计划上报死掉的鸡
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(4).andEnableEqualTo(true);
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(BreedingRecordTypeEnum.DEATH_AMOUNT.getCode()).andEnableEqualTo(true);
             ;
             List<BreedingRecord> breedingRecordDos = breedingRecordMapper.selectByExample(breedingRecordExample);
             BigDecimal deadChickenCount = new BigDecimal(0.00);
@@ -136,7 +138,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             if (!CollectionUtils.isEmpty(breedingBatchParameterDos)) {
                 //鸡舍绑定的设备
                 CoopDeviceExample coopDeviceExample = new CoopDeviceExample();
-                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andCoopDeviceStatusEqualTo(1).andEnableEqualTo(true);
+                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andCoopDeviceStatusEqualTo(DeviceStatusEnum.NORMAL.getCode()).andEnableEqualTo(true);
                 List<CoopDevice> coopDeviceDos = coopDeviceMapper.selectByExample(coopDeviceExample);
                 Set<Integer> deviceIds = new HashSet<>();
                 if (!CollectionUtils.isEmpty(coopDeviceDos)) {
@@ -234,7 +236,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         try {
             //养殖计划的鸡舍在某日龄上的喂料记录
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(1).andEnableEqualTo(true);
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(BreedingRecordTypeEnum.FEED_FOOD.getCode()).andEnableEqualTo(true);
             List<BreedingRecord> feedFoodList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedFoodTimes = feedFoodList.size();
             BigDecimal feedFoodWeight = new BigDecimal(0.00);
@@ -247,7 +249,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //养殖计划的鸡舍在某日龄上的喂水记录
             breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(5).andEnableEqualTo(true);
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(BreedingRecordTypeEnum.FEED_WATER.getCode()).andEnableEqualTo(true);
             List<BreedingRecord> feedWaterList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedWaterTimes = feedWaterList.size();
             breedingRecordDto.setFeedWaterList(feedWaterList);
@@ -255,7 +257,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //养殖计划的鸡舍在某日龄上的喂药记录
             breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(2).andEnableEqualTo(true);
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(BreedingRecordTypeEnum.FEED_MEDICINE.getCode()).andEnableEqualTo(true);
             List<BreedingRecord> feedMedicineList = breedingRecordMapper.selectByExample(breedingRecordExample);
             int feedMedicineTimes = feedMedicineList.size();
             BigDecimal feedMedicineWeight = new BigDecimal(0.00);
