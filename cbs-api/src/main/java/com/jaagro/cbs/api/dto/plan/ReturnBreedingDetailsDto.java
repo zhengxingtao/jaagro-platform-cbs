@@ -55,17 +55,17 @@ public class ReturnBreedingDetailsDto implements Serializable {
     /**
      * 异常预警
      */
-    private BigDecimal abnormalWarn;
+    private int abnormalWarn;
 
     /**
      * 质询询问次数
      */
-    private BigDecimal askQuestions;
+    private Integer askQuestions;
 
     /**
      * 质询询问解决次数
      */
-    private BigDecimal solveQuestions;
+    private Integer solveQuestions;
 
     /**
      * 计划用料

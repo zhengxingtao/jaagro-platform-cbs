@@ -78,6 +78,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private MathUtil mathUtil;
     @Autowired
     private CoopMapperExt coopMapper;
+    @Autowired
+    private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
+    @Autowired
+    private TechConsultRecordMapperExt techConsultRecordMapper;
 
     /**
      * 创建养殖计划
@@ -371,17 +375,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto) {
         List<BreedingPlanCoopDto> breedingPlanCoopDtoList = dto.getBreedingPlanCoopDtoList();
         UserInfo currentUser = currentUserService.getCurrentUser();
-        Integer currentUserId = currentUser == null ? null :currentUser.getId();
+        Integer currentUserId = currentUser == null ? null : currentUser.getId();
         // 插入养殖计划和鸡舍关系更新鸡舍在养数量和状态
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(dto.getPlanId());
-        if (breedingPlan == null){
-            throw new RuntimeException("养殖计划id="+dto.getPlanId()+"不存在");
+        if (breedingPlan == null) {
+            throw new RuntimeException("养殖计划id=" + dto.getPlanId() + "不存在");
         }
-        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
             List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
             List<Coop> coopList = new ArrayList<>();
-            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
-                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0){
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList) {
+                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0) {
                     BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                     batchPlantCoop.setCoopId(coopDto.getId())
                             .setCreateTime(new Date())
@@ -404,13 +408,13 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         // 插入养殖计划参数
         List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
-        if (!CollectionUtils.isEmpty(breedingParameterDtoList)){
+        if (!CollectionUtils.isEmpty(breedingParameterDtoList)) {
             List<BreedingBatchParameter> batchParameterList = new ArrayList<>();
-            for (BreedingParameterDto parameterDto : breedingParameterDtoList){
+            for (BreedingParameterDto parameterDto : breedingParameterDtoList) {
                 List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                for (BreedingStandardParameter standardParameter : breedingStandardParameterList){
+                for (BreedingStandardParameter standardParameter : breedingStandardParameterList) {
                     BreedingBatchParameter batchParameter = new BreedingBatchParameter();
-                    BeanUtils.copyProperties(standardParameter,batchParameter);
+                    BeanUtils.copyProperties(standardParameter, batchParameter);
                     batchParameter.setParamId(standardParameter.getId())
                             .setBatchNo(dto.getBatchNo())
                             .setCreateTime(new Date())
@@ -454,25 +458,40 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andPlanIdEqualTo(planId)
                     .andProductTypeEqualTo(ProductTypeEnum.FEED.getCode());
             List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            //累加计划饲料重量
+            //计算累加计划饲料重量
             if (CollectionUtils.isEmpty(purchaseOrders)) {
                 purchaseOrders.forEach(purchaseOrder -> totalPlanFeedWeight.add(purchaseOrder.getWeight()));
             }
-            //剩余饲料
-            BigDecimal bigDecimal = batchInfoMapper.accumulativeFeed(planId);
+            //计算剩余饲料
+            BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
+            //计算异常次数
+            DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
+            deviceAlarmLogExample.createCriteria().andPlanIdEqualTo(planId);
+            int abnormalWarn = deviceAlarmLogMapper.countByExample(deviceAlarmLogExample);
+            //计算询问总次数
+            TechConsultRecordExample techConsultRecordExample = new TechConsultRecordExample();
+            techConsultRecordExample.createCriteria().andPlanIdEqualTo(planId);
+            int askQues = techConsultRecordMapper.countByExample(techConsultRecordExample);
+            //计算询问解决次数
+            techConsultRecordExample.createCriteria().andTechConsultStatusEqualTo(TechConsultStatusEmun.PROCESSED.getCode());
+            int solveQuestions = techConsultRecordMapper.countByExample(techConsultRecordExample);
+            //养殖场信息
+            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
+            //计算理论体重值
+            //计算理论料肉比
             returnBreedingDetailsDto
                     .setBreedingDays(breedingPlan.getBreedingDays())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setBreedingStock(batchInfo.getCurrentAmount())
                     .setSurvivalRate(percentage)
+                    .setAbnormalWarn(abnormalWarn)
+                    .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed))
+                    .setAskQuestions(askQues)
+                    .setPlants(plants)
+                    .setSolveQuestions(solveQuestions)
                     .setPlanFeed(totalPlanFeedWeight);
-
-
         }
-        //养殖场信息
-        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
-        returnBreedingDetailsDto.setPlants(plants);
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
         returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
