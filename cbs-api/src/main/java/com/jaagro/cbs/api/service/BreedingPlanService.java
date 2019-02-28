@@ -52,10 +52,10 @@ public interface BreedingPlanService {
     /**
      * 待上鸡签收详情
      *
-     * @param plantId
+     * @param planId
      * @return
      */
-    ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId);
+    ReturnChickenSignDetailsDto chickenSignDetails(Integer planId);
 
     /**
      * 养殖中详情

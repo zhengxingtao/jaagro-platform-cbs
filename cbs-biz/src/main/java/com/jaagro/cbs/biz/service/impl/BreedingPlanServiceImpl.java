@@ -69,6 +69,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BreedingPlantServiceImpl breedingPlantService;
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
+    @Autowired
+    private BatchInfoMapperExt batchInfoMapper;
 
     /**
      * 创建养殖计划
@@ -296,18 +298,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     /**
      * 待上鸡签收详情
      *
-     * @param plantId
+     * @param planId
      * @return
      * @author @Gao.
      */
     @Override
-    public ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId) {
+    public ReturnChickenSignDetailsDto chickenSignDetails(Integer planId) {
         ReturnChickenSignDetailsDto returnChickenSignDetailsDto = new ReturnChickenSignDetailsDto();
         //养殖计划详情信息
-        ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(plantId);
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
         returnChickenSignDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
-        purchaseOrderExample.createCriteria().andPlanIdEqualTo(plantId);
+        purchaseOrderExample.createCriteria().andPlanIdEqualTo(planId);
         //商品采购列表信息
         List<ReturnPurchaseOrderDto> returnPurchaseOrderDtos = new ArrayList<>();
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
@@ -347,6 +349,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
+        ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
+        //送料情况信息
+        BatchInfoExample batchInfoExample = new BatchInfoExample();
+        batchInfoExample.createCriteria();
+        BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
+        
+
+        //养殖计划详情信息
+        ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
+        returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
         return null;
     }
 }

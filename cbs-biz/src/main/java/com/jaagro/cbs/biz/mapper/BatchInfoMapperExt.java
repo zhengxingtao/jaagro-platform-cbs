@@ -5,6 +5,7 @@ import com.jaagro.cbs.api.model.BatchInfoExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -39,4 +40,14 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
      * @return
      */
     Integer getStartAmountByPlanId(BatchInfo batchInfo);
+
+    /**
+     * 查询当前养殖计划 最新一条记录
+     *
+     * @param planId
+     * @return
+     */
+    BatchInfo getTheLatestBatchInfo(@Param("planId") Integer planId);
+
+
 }
