@@ -16,36 +16,24 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class DeviceValue implements Serializable {
-    /**
-     * 设备当前数值id
-     */
+public class DeviceAlarmLog implements Serializable {
     private Integer id;
 
-    /**
-     * 设备id
-     */
+    private Integer planId;
+
+    private Integer plantId;
+
+    private Integer coopId;
+
     private Integer deviceId;
 
-    /**
-     * 数值类型(1-温度,2-湿度)
-     */
-    private Integer valueType;
+    private Integer dayAge;
 
-    /**
-     * 当前值
-     */
     private BigDecimal currentValue;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+    private String paramStandardValue;
 
-    /**
-     * 是否有效（1-有效 0 无效）
-     */
-    private Boolean enable;
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }
