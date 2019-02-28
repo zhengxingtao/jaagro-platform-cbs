@@ -1,21 +1,27 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.api.dto.techconsult;
 
-import java.io.Serializable;
-import java.util.Date;
+
+import com.jaagro.cbs.api.dto.base.Employee;
+import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author gavin
+ * @Date 20190228
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class BreedingPlan implements Serializable {
+public class ReturnTechConsultDto implements Serializable {
+
     /**
      * 计划id
      */
@@ -27,14 +33,27 @@ public class BreedingPlan implements Serializable {
     private String batchNo;
 
     /**
-     * 租户id
+     * 紧急程度(1-一般,2-次要,3-重要,4-紧急)
      */
-    private Integer tenantId;
-
+    private Integer emergencyLevel;
     /**
      * 养殖户id
      */
     private Integer customerId;
+
+    /**
+     * 养殖户的名称
+     */
+    private String customerName;
+    /**
+     *
+     */
+    private String customerPhone;
+
+    /**
+     * 处理时间
+     */
+    private Date handleTime;
 
     /**
      * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
@@ -62,11 +81,6 @@ public class BreedingPlan implements Serializable {
     private Integer technicianId;
 
     /**
-     * 养殖天数
-     */
-    private Integer breedingDays;
-
-    /**
      * 备注
      */
     private String notes;
@@ -87,19 +101,24 @@ public class BreedingPlan implements Serializable {
     private String createUserName;
 
     /**
-     * 更新时间
+     * 进度 - 已进行的天数
      */
-    private Date modifyTime;
+    private Integer alreadyDayAge;
 
     /**
-     * 更新人
+     * 进度 - 日龄
      */
-    private Integer modifyUserId;
+    private Integer AllDayAge;
 
     /**
-     * 是否有效（1-有效 0 无效）
+     * 养殖场
      */
-    private Boolean enable;
+    private List<Plant> plants;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 部门下技术员信息
+     */
+    private List<Employee> technicianList;
+
+
 }

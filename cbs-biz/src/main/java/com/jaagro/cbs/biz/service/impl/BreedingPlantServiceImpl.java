@@ -167,6 +167,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         plantExample.createCriteria()
                 .andCustomerIdEqualTo(customerId)
                 .andEnableEqualTo(true);
+        plantExample.setOrderByClause("create_time desc");
         List<Plant> plants = plantMapper.selectByExample(plantExample);
         List<ReturnPlantDto> returnPlantDtoList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(plants)) {
