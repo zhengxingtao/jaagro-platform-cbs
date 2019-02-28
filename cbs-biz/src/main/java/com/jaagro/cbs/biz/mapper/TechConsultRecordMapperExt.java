@@ -9,7 +9,7 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 /**
  * TechConsultRecordMapperExt接口
  * @author :generator
- * @date :2019/2/27
+ * @date :2019/2/28
  */
 @Resource
 public interface TechConsultRecordMapperExt extends BaseMapper<TechConsultRecord,TechConsultRecordExample> {

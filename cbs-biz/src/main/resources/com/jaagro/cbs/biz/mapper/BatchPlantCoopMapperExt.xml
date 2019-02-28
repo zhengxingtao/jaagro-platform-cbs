@@ -19,4 +19,27 @@
             #{item.createUserId}, #{item.modifyTime}, #{item.modifyUserId})
         </foreach>
     </insert>
+
+    <select id="listBreedingPlanCoopsForChoose" resultType="com.jaagro.cbs.api.dto.plan.BreedingPlanCoopDto">
+        SELECT
+            p.plant_name,
+            c.breeding_value,
+            c.capacity,
+            c.home_number,
+            c.coop_status,
+            c.id,
+            c.device_quantity,
+            c.last_start_date,
+            c.last_end_date
+            FROM
+            batch_plant_coop bpc
+            LEFT JOIN plant p on bpc.plant_id = p.id
+            LEFT JOIN coop c ON bpc.plant_id = c.plant_id
+            WHERE
+            bpc.plant_id = #{planId}
+            AND coop_id IS NULL
+            AND bpc.`enable` = 1
+            AND c.`enable` = 1
+            AND c.coop_status = 1
+    </select>
 </mapper>

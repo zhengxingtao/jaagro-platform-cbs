@@ -11,6 +11,7 @@
     <result column="plan_time" property="planTime" jdbcType="DATE" />
     <result column="technician" property="technician" jdbcType="VARCHAR" />
     <result column="technician_id" property="technicianId" jdbcType="INTEGER" />
+    <result column="breeding_days" property="breedingDays" jdbcType="INTEGER" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -50,7 +51,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, batch_no, tenant_id, customer_id, plan_status, plan_chicken_quantity, plan_time, 
-    technician, technician_id, notes, create_time, create_user_id, create_user_name, 
+    technician, technician_id, breeding_days, notes, create_time, create_user_id, create_user_name, 
     modify_time, modify_user_id, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingPlanExample" >
@@ -92,16 +93,16 @@
     </selectKey>
     insert into breeding_plan (batch_no, tenant_id, customer_id, 
       plan_status, plan_chicken_quantity, plan_time, 
-      technician, technician_id, notes, 
-      create_time, create_user_id, create_user_name, 
-      modify_time, modify_user_id, enable
-      )
+      technician, technician_id, breeding_days, 
+      notes, create_time, create_user_id, 
+      create_user_name, modify_time, modify_user_id, 
+      enable)
     values (#{batchNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, 
       #{planStatus,jdbcType=INTEGER}, #{planChickenQuantity,jdbcType=INTEGER}, #{planTime,jdbcType=DATE}, 
-      #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{createUserName,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
-      )
+      #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, #{breedingDays,jdbcType=INTEGER}, 
+      #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{createUserName,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
+      #{enable,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingPlan" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -132,6 +133,9 @@
       </if>
       <if test="technicianId != null" >
         technician_id,
+      </if>
+      <if test="breedingDays != null" >
+        breeding_days,
       </if>
       <if test="notes != null" >
         notes,
@@ -179,6 +183,9 @@
       </if>
       <if test="technicianId != null" >
         #{technicianId,jdbcType=INTEGER},
+      </if>
+      <if test="breedingDays != null" >
+        #{breedingDays,jdbcType=INTEGER},
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
@@ -236,6 +243,9 @@
       <if test="technicianId != null" >
         technician_id = #{technicianId,jdbcType=INTEGER},
       </if>
+      <if test="breedingDays != null" >
+        breeding_days = #{breedingDays,jdbcType=INTEGER},
+      </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
       </if>
@@ -270,6 +280,7 @@
       plan_time = #{planTime,jdbcType=DATE},
       technician = #{technician,jdbcType=VARCHAR},
       technician_id = #{technicianId,jdbcType=INTEGER},
+      breeding_days = #{breedingDays,jdbcType=INTEGER},
       notes = #{notes,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
