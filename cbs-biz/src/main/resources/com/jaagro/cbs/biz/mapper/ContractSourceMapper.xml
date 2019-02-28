@@ -5,9 +5,9 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="plan_contract_id" property="planContractId" jdbcType="INTEGER" />
-    <result column="certificate_type" property="certificateType" jdbcType="INTEGER" />
-    <result column="certificate_image_url" property="certificateImageUrl" jdbcType="VARCHAR" />
-    <result column="certificate_status" property="certificateStatus" jdbcType="INTEGER" />
+    <result column="source_type" property="sourceType" jdbcType="INTEGER" />
+    <result column="source_url" property="sourceUrl" jdbcType="VARCHAR" />
+    <result column="source_status" property="sourceStatus" jdbcType="INTEGER" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -45,8 +45,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, plan_id, plan_contract_id, certificate_type, certificate_image_url, certificate_status, 
-    notes, create_time, create_user_id, modify_time, modify_user_id, enable
+    id, plan_id, plan_contract_id, source_type, source_url, source_status, notes, create_time, 
+    create_user_id, modify_time, modify_user_id, enable
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.ContractSourceExample" >
     select
@@ -85,16 +85,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into contract_source (plan_id, plan_contract_id, certificate_type, 
-      certificate_image_url, certificate_status, 
-      notes, create_time, create_user_id, 
-      modify_time, modify_user_id, enable
-      )
-    values (#{planId,jdbcType=INTEGER}, #{planContractId,jdbcType=INTEGER}, #{certificateType,jdbcType=INTEGER}, 
-      #{certificateImageUrl,jdbcType=VARCHAR}, #{certificateStatus,jdbcType=INTEGER}, 
-      #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
-      )
+    insert into contract_source (plan_id, plan_contract_id, source_type, 
+      source_url, source_status, notes, 
+      create_time, create_user_id, modify_time, 
+      modify_user_id, enable)
+    values (#{planId,jdbcType=INTEGER}, #{planContractId,jdbcType=INTEGER}, #{sourceType,jdbcType=INTEGER}, 
+      #{sourceUrl,jdbcType=VARCHAR}, #{sourceStatus,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.ContractSource" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -108,14 +106,14 @@
       <if test="planContractId != null" >
         plan_contract_id,
       </if>
-      <if test="certificateType != null" >
-        certificate_type,
+      <if test="sourceType != null" >
+        source_type,
       </if>
-      <if test="certificateImageUrl != null" >
-        certificate_image_url,
+      <if test="sourceUrl != null" >
+        source_url,
       </if>
-      <if test="certificateStatus != null" >
-        certificate_status,
+      <if test="sourceStatus != null" >
+        source_status,
       </if>
       <if test="notes != null" >
         notes,
@@ -143,14 +141,14 @@
       <if test="planContractId != null" >
         #{planContractId,jdbcType=INTEGER},
       </if>
-      <if test="certificateType != null" >
-        #{certificateType,jdbcType=INTEGER},
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=INTEGER},
       </if>
-      <if test="certificateImageUrl != null" >
-        #{certificateImageUrl,jdbcType=VARCHAR},
+      <if test="sourceUrl != null" >
+        #{sourceUrl,jdbcType=VARCHAR},
       </if>
-      <if test="certificateStatus != null" >
-        #{certificateStatus,jdbcType=INTEGER},
+      <if test="sourceStatus != null" >
+        #{sourceStatus,jdbcType=INTEGER},
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
@@ -187,14 +185,14 @@
       <if test="planContractId != null" >
         plan_contract_id = #{planContractId,jdbcType=INTEGER},
       </if>
-      <if test="certificateType != null" >
-        certificate_type = #{certificateType,jdbcType=INTEGER},
+      <if test="sourceType != null" >
+        source_type = #{sourceType,jdbcType=INTEGER},
       </if>
-      <if test="certificateImageUrl != null" >
-        certificate_image_url = #{certificateImageUrl,jdbcType=VARCHAR},
+      <if test="sourceUrl != null" >
+        source_url = #{sourceUrl,jdbcType=VARCHAR},
       </if>
-      <if test="certificateStatus != null" >
-        certificate_status = #{certificateStatus,jdbcType=INTEGER},
+      <if test="sourceStatus != null" >
+        source_status = #{sourceStatus,jdbcType=INTEGER},
       </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
@@ -221,9 +219,9 @@
     update contract_source
     set plan_id = #{planId,jdbcType=INTEGER},
       plan_contract_id = #{planContractId,jdbcType=INTEGER},
-      certificate_type = #{certificateType,jdbcType=INTEGER},
-      certificate_image_url = #{certificateImageUrl,jdbcType=VARCHAR},
-      certificate_status = #{certificateStatus,jdbcType=INTEGER},
+      source_type = #{sourceType,jdbcType=INTEGER},
+      source_url = #{sourceUrl,jdbcType=VARCHAR},
+      source_status = #{sourceStatus,jdbcType=INTEGER},
       notes = #{notes,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},

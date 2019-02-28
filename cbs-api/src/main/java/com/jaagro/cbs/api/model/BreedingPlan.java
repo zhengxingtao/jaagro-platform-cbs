@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/02/27
+ * @author :asus
+ * @date :2019/02/28
  */
 @Data
 @NoArgsConstructor
@@ -60,6 +60,11 @@ public class BreedingPlan implements Serializable {
      * 技术员id
      */
     private Integer technicianId;
+
+    /**
+     * 养殖天数
+     */
+    private Integer breedingDays;
 
     /**
      * 备注

@@ -2,6 +2,7 @@ package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
 
+import com.jaagro.cbs.api.dto.plan.BreedingPlanCoopDto;
 import com.jaagro.cbs.api.model.BatchPlantCoop;
 import com.jaagro.cbs.api.model.BatchPlantCoopExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
@@ -32,5 +33,12 @@ public interface BatchPlantCoopMapperExt extends BaseMapper<BatchPlantCoop, Batc
      *
      * @param batchPlantCoops
      */
-    void insertBatch(@Param("planId") List<BatchPlantCoop> batchPlantCoops);
+    void insertBatch(@Param("batchPlantCoops") List<BatchPlantCoop> batchPlantCoops);
+
+    /**
+     * 查询可供选择养殖计划鸡舍
+     * @param planId
+     * @return
+     */
+    List<BreedingPlanCoopDto> listBreedingPlanCoopsForChoose(@Param("planId")Integer planId);
 }

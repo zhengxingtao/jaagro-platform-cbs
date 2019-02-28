@@ -1,11 +1,7 @@
 package com.jaagro.cbs.web.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
-import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
-import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
-import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
-import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.web.vo.plan.BreedingPlanVo;
@@ -19,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,4 +107,21 @@ public class BreedingPlanController {
         }
         return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
     }
+
+    @GetMapping("/listBreedingPlanCoops/{planId}")
+    @ApiOperation("获取养殖计划鸡舍信息")
+    public BaseResponse listBreedingPlanCoops(@PathVariable("planId") Integer planId){
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.listBreedingPlanCoopsForChoose(planId));
+    }
+
+    @PostMapping("/breedingPlanParamConfiguration")
+    @ApiOperation("养殖计划参数配置")
+    public BaseResponse breedingPlanParamConfiguration(@RequestBody @Validated BreedingPlanParamConfigurationDto dto){
+        breedingPlanService.breedingPlanParamConfiguration(dto);
+        return BaseResponse.successInstance("参数配置成功");
+    }
+
 }

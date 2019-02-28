@@ -329,6 +329,35 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         returnChickenSignDetailsDto.setReturnPurchaseOrderDtos(returnPurchaseOrderDtos);
         return returnChickenSignDetailsDto;
     }
+
+    /**
+     * 获取养殖计划鸡舍信息
+     *
+     * @param planId
+     * @return
+     * @author yj
+     */
+    @Override
+    public List<BreedingPlanCoopDto> listBreedingPlanCoopsForChoose(Integer planId) {
+        return batchPlantCoopMapper.listBreedingPlanCoopsForChoose(planId);
+    }
+
+    /**
+     * 养殖计划参数配置
+     *
+     * @param dto
+     * @author yj
+     */
+    @Override
+    public void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto) {
+        List<BreedingPlanCoopDto> breedingPlanCoopDtoList = dto.getBreedingPlanCoopDtoList();
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
+            List<BatchPlantCoop> coopList = new ArrayList<>();
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
+                BatchPlantCoop coop = new BatchPlantCoop();
+            }
+        }
+    }
 }
 
 

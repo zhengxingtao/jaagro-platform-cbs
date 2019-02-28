@@ -4,6 +4,8 @@ package com.jaagro.cbs.api.service;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.*;
 
+import java.util.List;
+
 
 /**
  * 养殖计划管理
@@ -56,4 +58,19 @@ public interface BreedingPlanService {
      * @return
      */
     ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId);
+
+    /**
+     * 获取养殖计划鸡舍信息
+     * @author yj
+     * @param planId
+     * @return
+     */
+    List<BreedingPlanCoopDto> listBreedingPlanCoopsForChoose(Integer planId);
+
+    /**
+     * 养殖计划参数配置
+     * @author yj
+     * @param dto
+     */
+    void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto);
 }

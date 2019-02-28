@@ -308,193 +308,193 @@ public class ContractSourceExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeIsNull() {
-            addCriterion("certificate_type is null");
+        public Criteria andSourceTypeIsNull() {
+            addCriterion("source_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeIsNotNull() {
-            addCriterion("certificate_type is not null");
+        public Criteria andSourceTypeIsNotNull() {
+            addCriterion("source_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeEqualTo(Integer value) {
-            addCriterion("certificate_type =", value, "certificateType");
+        public Criteria andSourceTypeEqualTo(Integer value) {
+            addCriterion("source_type =", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeNotEqualTo(Integer value) {
-            addCriterion("certificate_type <>", value, "certificateType");
+        public Criteria andSourceTypeNotEqualTo(Integer value) {
+            addCriterion("source_type <>", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeGreaterThan(Integer value) {
-            addCriterion("certificate_type >", value, "certificateType");
+        public Criteria andSourceTypeGreaterThan(Integer value) {
+            addCriterion("source_type >", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("certificate_type >=", value, "certificateType");
+        public Criteria andSourceTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("source_type >=", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeLessThan(Integer value) {
-            addCriterion("certificate_type <", value, "certificateType");
+        public Criteria andSourceTypeLessThan(Integer value) {
+            addCriterion("source_type <", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("certificate_type <=", value, "certificateType");
+        public Criteria andSourceTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("source_type <=", value, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeIn(List<Integer> values) {
-            addCriterion("certificate_type in", values, "certificateType");
+        public Criteria andSourceTypeIn(List<Integer> values) {
+            addCriterion("source_type in", values, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeNotIn(List<Integer> values) {
-            addCriterion("certificate_type not in", values, "certificateType");
+        public Criteria andSourceTypeNotIn(List<Integer> values) {
+            addCriterion("source_type not in", values, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeBetween(Integer value1, Integer value2) {
-            addCriterion("certificate_type between", value1, value2, "certificateType");
+        public Criteria andSourceTypeBetween(Integer value1, Integer value2) {
+            addCriterion("source_type between", value1, value2, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("certificate_type not between", value1, value2, "certificateType");
+        public Criteria andSourceTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("source_type not between", value1, value2, "sourceType");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlIsNull() {
-            addCriterion("certificate_image_url is null");
+        public Criteria andSourceUrlIsNull() {
+            addCriterion("source_url is null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlIsNotNull() {
-            addCriterion("certificate_image_url is not null");
+        public Criteria andSourceUrlIsNotNull() {
+            addCriterion("source_url is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlEqualTo(String value) {
-            addCriterion("certificate_image_url =", value, "certificateImageUrl");
+        public Criteria andSourceUrlEqualTo(String value) {
+            addCriterion("source_url =", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlNotEqualTo(String value) {
-            addCriterion("certificate_image_url <>", value, "certificateImageUrl");
+        public Criteria andSourceUrlNotEqualTo(String value) {
+            addCriterion("source_url <>", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlGreaterThan(String value) {
-            addCriterion("certificate_image_url >", value, "certificateImageUrl");
+        public Criteria andSourceUrlGreaterThan(String value) {
+            addCriterion("source_url >", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlGreaterThanOrEqualTo(String value) {
-            addCriterion("certificate_image_url >=", value, "certificateImageUrl");
+        public Criteria andSourceUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("source_url >=", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlLessThan(String value) {
-            addCriterion("certificate_image_url <", value, "certificateImageUrl");
+        public Criteria andSourceUrlLessThan(String value) {
+            addCriterion("source_url <", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlLessThanOrEqualTo(String value) {
-            addCriterion("certificate_image_url <=", value, "certificateImageUrl");
+        public Criteria andSourceUrlLessThanOrEqualTo(String value) {
+            addCriterion("source_url <=", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlLike(String value) {
-            addCriterion("certificate_image_url like", value, "certificateImageUrl");
+        public Criteria andSourceUrlLike(String value) {
+            addCriterion("source_url like", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlNotLike(String value) {
-            addCriterion("certificate_image_url not like", value, "certificateImageUrl");
+        public Criteria andSourceUrlNotLike(String value) {
+            addCriterion("source_url not like", value, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlIn(List<String> values) {
-            addCriterion("certificate_image_url in", values, "certificateImageUrl");
+        public Criteria andSourceUrlIn(List<String> values) {
+            addCriterion("source_url in", values, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlNotIn(List<String> values) {
-            addCriterion("certificate_image_url not in", values, "certificateImageUrl");
+        public Criteria andSourceUrlNotIn(List<String> values) {
+            addCriterion("source_url not in", values, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlBetween(String value1, String value2) {
-            addCriterion("certificate_image_url between", value1, value2, "certificateImageUrl");
+        public Criteria andSourceUrlBetween(String value1, String value2) {
+            addCriterion("source_url between", value1, value2, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateImageUrlNotBetween(String value1, String value2) {
-            addCriterion("certificate_image_url not between", value1, value2, "certificateImageUrl");
+        public Criteria andSourceUrlNotBetween(String value1, String value2) {
+            addCriterion("source_url not between", value1, value2, "sourceUrl");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusIsNull() {
-            addCriterion("certificate_status is null");
+        public Criteria andSourceStatusIsNull() {
+            addCriterion("source_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusIsNotNull() {
-            addCriterion("certificate_status is not null");
+        public Criteria andSourceStatusIsNotNull() {
+            addCriterion("source_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusEqualTo(Integer value) {
-            addCriterion("certificate_status =", value, "certificateStatus");
+        public Criteria andSourceStatusEqualTo(Integer value) {
+            addCriterion("source_status =", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusNotEqualTo(Integer value) {
-            addCriterion("certificate_status <>", value, "certificateStatus");
+        public Criteria andSourceStatusNotEqualTo(Integer value) {
+            addCriterion("source_status <>", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusGreaterThan(Integer value) {
-            addCriterion("certificate_status >", value, "certificateStatus");
+        public Criteria andSourceStatusGreaterThan(Integer value) {
+            addCriterion("source_status >", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("certificate_status >=", value, "certificateStatus");
+        public Criteria andSourceStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("source_status >=", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusLessThan(Integer value) {
-            addCriterion("certificate_status <", value, "certificateStatus");
+        public Criteria andSourceStatusLessThan(Integer value) {
+            addCriterion("source_status <", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("certificate_status <=", value, "certificateStatus");
+        public Criteria andSourceStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("source_status <=", value, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusIn(List<Integer> values) {
-            addCriterion("certificate_status in", values, "certificateStatus");
+        public Criteria andSourceStatusIn(List<Integer> values) {
+            addCriterion("source_status in", values, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusNotIn(List<Integer> values) {
-            addCriterion("certificate_status not in", values, "certificateStatus");
+        public Criteria andSourceStatusNotIn(List<Integer> values) {
+            addCriterion("source_status not in", values, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusBetween(Integer value1, Integer value2) {
-            addCriterion("certificate_status between", value1, value2, "certificateStatus");
+        public Criteria andSourceStatusBetween(Integer value1, Integer value2) {
+            addCriterion("source_status between", value1, value2, "sourceStatus");
             return (Criteria) this;
         }
 
-        public Criteria andCertificateStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("certificate_status not between", value1, value2, "certificateStatus");
+        public Criteria andSourceStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("source_status not between", value1, value2, "sourceStatus");
             return (Criteria) this;
         }
 
