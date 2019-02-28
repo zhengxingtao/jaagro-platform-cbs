@@ -60,6 +60,13 @@ public interface BreedingPlanService {
     ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId);
 
     /**
+     * 养殖中详情
+     *
+     * @param planId
+     */
+    ReturnBreedingDetailsDto breedingDetails(Integer planId);
+
+    /**
      * 获取养殖计划鸡舍信息
      * @author yj
      * @param planId

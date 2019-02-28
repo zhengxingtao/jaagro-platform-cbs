@@ -90,7 +90,7 @@ public class BreedingPlanController {
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
-    @PostMapping("/breedingPlanDetails/{planId}")
+    @GetMapping("/breedingPlanDetails/{planId}")
     @ApiOperation("养殖计划列表详情")
     public BaseResponse breedingPlanDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
@@ -99,13 +99,22 @@ public class BreedingPlanController {
         return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
     }
 
-    @PostMapping("/chickenSignDetails/{planId}")
+    @GetMapping("/chickenSignDetails/{planId}")
     @ApiOperation("待上鸡签收详情")
     public BaseResponse chickenSignDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
-        return BaseResponse.successInstance(breedingPlanService.breedingPlanDetails(planId));
+        return BaseResponse.successInstance(breedingPlanService.chickenSignDetails(planId));
+    }
+
+    @GetMapping("/breedingDetails/{planId}")
+    @ApiOperation("养殖中详情")
+    public BaseResponse breedingDetails(@PathVariable("planId") Integer planId) {
+        if (planId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        return BaseResponse.successInstance(breedingPlanService.breedingDetails(planId));
     }
 
     @GetMapping("/listBreedingPlanCoops/{planId}")
@@ -123,5 +132,6 @@ public class BreedingPlanController {
         breedingPlanService.breedingPlanParamConfiguration(dto);
         return BaseResponse.successInstance("参数配置成功");
     }
+
 
 }

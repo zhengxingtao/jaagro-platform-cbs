@@ -262,7 +262,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖计划列表详情 养殖批次列表详情
+     * 养殖计划列表详情
      *
      * @param planId
      * @return
@@ -320,10 +320,19 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
-                returnPurchaseOrderDto
-                        .setSignerName("hh")
-                        .setSignerPhone("hh");
-                returnPurchaseOrderDtos.add(returnPurchaseOrderDto);
+                BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
+                if (globalUser.getData() != null) {
+                    UserInfo userInfo = globalUser.getData();
+                    if (userInfo.getName() != null) {
+                        returnPurchaseOrderDto
+                                .setSignerName(userInfo.getName());
+                    }
+                    if (userInfo.getPhoneNumber() != null) {
+                        returnPurchaseOrderDto
+                                .setSignerPhone(userInfo.getPhoneNumber());
+                    }
+                    returnPurchaseOrderDtos.add(returnPurchaseOrderDto);
+                }
             }
         }
         returnChickenSignDetailsDto.setReturnPurchaseOrderDtos(returnPurchaseOrderDtos);
@@ -357,6 +366,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BatchPlantCoop coop = new BatchPlantCoop();
             }
         }
+    }
+
+    /**
+     * 养殖中详情
+     *
+     * @param planId
+     * @author @Gao.
+     */
+    @Override
+    public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
+        return null;
     }
 }
 
