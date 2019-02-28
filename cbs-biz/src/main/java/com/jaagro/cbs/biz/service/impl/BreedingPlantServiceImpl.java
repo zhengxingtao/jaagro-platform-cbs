@@ -70,23 +70,15 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         if (customer != null) {
             plant.setTenantId(customer.getTenantId());
         }
-        try {
-            plant.setCreateUserId(currentUserService.getCurrentUser().getId());
-            plantMapper.insertSelective(plant);
-            if (plant.getId() != null && !CollectionUtils.isEmpty(plantDto.getImageDtoList())) {
-                for (CreatePlantImageDto imageDto : plantDto.getImageDtoList()) {
-                    PlantImage plantImage = new PlantImage();
-                    BeanUtils.copyProperties(imageDto, plantImage);
-                    plantImage
-                            .setCreateUserId(currentUserService.getCurrentUser().getId())
-                            .setPlantId(plant.getId());
-                }
-                //批量新增图片
-                plantImageMapper.insertBatch(plantDto.getImageDtoList());
+        plant.setCreateUserId(currentUserService.getCurrentUser().getId());
+        plantMapper.insertSelective(plant);
+        if (plant.getId() != null && !CollectionUtils.isEmpty(plantDto.getImageDtoList())) {
+            for (CreatePlantImageDto imageDto : plantDto.getImageDtoList()) {
+                imageDto.setCreateUserId(currentUserService.getCurrentUser().getId())
+                        .setPlantId(plant.getId());
             }
-        } catch (Exception e) {
-            log.error("R BreedingPlantServiceImpl.createPlant  error:" + e);
-            return false;
+            //批量新增图片
+            plantImageMapper.insertBatch(plantDto.getImageDtoList());
         }
         return true;
     }
@@ -212,8 +204,7 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         CoopExample coopExample = new CoopExample();
         coopExample.createCriteria()
                 .andPlantIdEqualTo(plantId);
-        Integer coopCount = coopMapperExt.countByExample(coopExample);
-        return coopCount;
+        return coopMapperExt.countByExample(coopExample);
     }
 
     /**

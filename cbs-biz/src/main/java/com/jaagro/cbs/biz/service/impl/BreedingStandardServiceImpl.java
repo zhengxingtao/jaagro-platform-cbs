@@ -49,10 +49,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     public Boolean createBreedingTemplate(BreedingStandardDto dto) {
         try {
             log.info("o BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setBreedingType(dto.getBreedingType())
@@ -94,12 +90,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     public Boolean updateBreedingTemplate(BreedingStandardDto dto) {
         try {
             log.info("o BreedingStardandServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
-            Assert.notNull(dto.getId(), "模板Id不能为空");
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
-
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setId(dto.getId())
@@ -121,7 +111,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
-            log.info("o BreedingStardandServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
+            log.info("O BreedingStardandServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
         } catch (Exception e) {
             log.error("R BreedingStardandServiceImpl.updateBreedingTemplate  error:" + e);
             return false;

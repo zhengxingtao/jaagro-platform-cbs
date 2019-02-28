@@ -39,16 +39,15 @@ public class BreedingRecordService {
     private BreedingRecordDailyMapperExt breedingRecordDailyMapper;
 
     /**
-     * 获取昨天的日期 yyy-mm-dd
+     * 获取昨天的日期
      *
      * @return
      */
-    private String getDate() {
+    private String getYesterday() {
         Date newDate = new Date();
         DateUtils.ceiling(newDate, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String todayDate = sdf.format(newDate);
-        return todayDate;
+        return sdf.format(newDate);
     }
 
     /**
@@ -68,7 +67,7 @@ public class BreedingRecordService {
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void batchCoopDaily() {
-        String todayDate = getDate();
+        String todayDate = getYesterday();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
         //从BreedingRecord统计
@@ -141,7 +140,6 @@ public class BreedingRecordService {
                 recordDaily.setCreateUserId(1);
                 dailyList.add(recordDaily);
             }
-
             //删除
             breedingRecordDailyMapper.deleteByDate(todayDate);
             //批量插入
@@ -179,12 +177,11 @@ public class BreedingRecordService {
                     //查询不到记录，就用breeding_plan的计划上鸡数量
                     BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(info.getPlanId());
                     if (breedingPlan != null) {
-//                        daily.setStartAmount(breedingPlan.getPlanChickenQuantity());
+                        info.setStartAmount(breedingPlan.getPlanChickenQuantity());
                         // 剩余喂养数量=计划上鸡数量
-//                        daily.setCurrentAmount(breedingPlan.getPlanChickenQuantity());
+                        info.setCurrentAmount(breedingPlan.getPlanChickenQuantity());
                     }
                 }
-
             }
             //删除
             batchInfoMapper.deleteByDate(todayDate);

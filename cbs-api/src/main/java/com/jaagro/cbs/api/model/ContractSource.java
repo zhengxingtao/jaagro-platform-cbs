@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @author :asus
- * @date :2019/02/27
+ * @date :2019/02/28
  */
 @Data
 @NoArgsConstructor
@@ -32,19 +32,19 @@ public class ContractSource implements Serializable {
     private Integer planContractId;
 
     /**
-     * 资质类型(1-合同首页 2-合同签字页 3-合同报价页)
+     * 资质类型(1-图片,2-文档)
      */
-    private Integer certificateType;
+    private Integer sourceType;
 
     /**
-     * 资质图片地址
+     * 资源地址
      */
-    private String certificateImageUrl;
+    private String sourceUrl;
 
     /**
      * 证件状态(0-未审核 1-正常 2-审核未通过 3-停止合作)
      */
-    private Integer certificateStatus;
+    private Integer sourceStatus;
 
     /**
      * 备注

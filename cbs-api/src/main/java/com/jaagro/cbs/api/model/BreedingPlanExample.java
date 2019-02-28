@@ -715,6 +715,66 @@ public class BreedingPlanExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andBreedingDaysIsNull() {
+            addCriterion("breeding_days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysIsNotNull() {
+            addCriterion("breeding_days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysEqualTo(Integer value) {
+            addCriterion("breeding_days =", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysNotEqualTo(Integer value) {
+            addCriterion("breeding_days <>", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysGreaterThan(Integer value) {
+            addCriterion("breeding_days >", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("breeding_days >=", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysLessThan(Integer value) {
+            addCriterion("breeding_days <", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("breeding_days <=", value, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysIn(List<Integer> values) {
+            addCriterion("breeding_days in", values, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysNotIn(List<Integer> values) {
+            addCriterion("breeding_days not in", values, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysBetween(Integer value1, Integer value2) {
+            addCriterion("breeding_days between", value1, value2, "breedingDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("breeding_days not between", value1, value2, "breedingDays");
+            return (Criteria) this;
+        }
+
         public Criteria andNotesIsNull() {
             addCriterion("notes is null");
             return (Criteria) this;

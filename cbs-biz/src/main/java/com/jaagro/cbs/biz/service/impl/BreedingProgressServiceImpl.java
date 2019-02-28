@@ -5,8 +5,11 @@ import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.dto.progress.DeviceValueDto;
+import com.jaagro.cbs.api.enums.BreedingRecordTypeEnum;
+import com.jaagro.cbs.api.enums.DeviceStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingProgressService;
+import com.jaagro.cbs.biz.bo.FeedingFactoryBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +74,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //该计划上报死掉的鸡
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(4).andEnableEqualTo(true);
+            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(BreedingRecordTypeEnum.DEATH_AMOUNT.getCode()).andEnableEqualTo(true);
             ;
             List<BreedingRecord> breedingRecordDos = breedingRecordMapper.selectByExample(breedingRecordExample);
             BigDecimal deadChickenCount = new BigDecimal(0.00);
@@ -136,7 +139,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             if (!CollectionUtils.isEmpty(breedingBatchParameterDos)) {
                 //鸡舍绑定的设备
                 CoopDeviceExample coopDeviceExample = new CoopDeviceExample();
-                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andCoopDeviceStatusEqualTo(1).andEnableEqualTo(true);
+                coopDeviceExample.createCriteria().andCoopIdEqualTo(coopId).andCoopDeviceStatusEqualTo(DeviceStatusEnum.NORMAL.getCode()).andEnableEqualTo(true);
                 List<CoopDevice> coopDeviceDos = coopDeviceMapper.selectByExample(coopDeviceExample);
                 Set<Integer> deviceIds = new HashSet<>();
                 if (!CollectionUtils.isEmpty(coopDeviceDos)) {
@@ -233,42 +236,44 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         log.info("O BreedingProgressServiceImpl.getBreedingBatchParamById input planId:{},coopId(),dayAge{}", planId, coopId, dayAge);
         try {
             //养殖计划的鸡舍在某日龄上的喂料记录
-            BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(1).andEnableEqualTo(true);
-            List<BreedingRecord> feedFoodList = breedingRecordMapper.selectByExample(breedingRecordExample);
-            int feedFoodTimes = feedFoodList.size();
-            BigDecimal feedFoodWeight = new BigDecimal(0.00);
-            for (BreedingRecord breedingRecordDo : feedFoodList) {
-                feedFoodWeight = feedFoodWeight.add(breedingRecordDo.getBreedingValue());
-            }
-            breedingRecordDto.setFeedFoodList(feedFoodList);
-            breedingRecordDto.setFeedFoodTimes(feedFoodTimes);
-            breedingRecordDto.setFeedFoodWeight(feedFoodWeight);
+            FeedingFactoryBo feedingFoodBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.FEED_FOOD.getCode());
+            breedingRecordDto.setFeedFoodList(feedingFoodBo.getBreedingList());
+            breedingRecordDto.setFeedFoodTimes(feedingFoodBo.getFeedingTimes());
+            breedingRecordDto.setFeedFoodWeight(feedingFoodBo.getFeedingWeight());
 
             //养殖计划的鸡舍在某日龄上的喂水记录
-            breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(5).andEnableEqualTo(true);
-            List<BreedingRecord> feedWaterList = breedingRecordMapper.selectByExample(breedingRecordExample);
-            int feedWaterTimes = feedWaterList.size();
-            breedingRecordDto.setFeedWaterList(feedWaterList);
-            breedingRecordDto.setFeedWaterTimes(feedWaterTimes);
+            FeedingFactoryBo feedingWaterBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.FEED_WATER.getCode());
+            breedingRecordDto.setFeedWaterList(feedingWaterBo.getBreedingList());
+            breedingRecordDto.setFeedWaterTimes(feedingWaterBo.getFeedingTimes());
 
             //养殖计划的鸡舍在某日龄上的喂药记录
-            breedingRecordExample = new BreedingRecordExample();
-            breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(2).andEnableEqualTo(true);
-            List<BreedingRecord> feedMedicineList = breedingRecordMapper.selectByExample(breedingRecordExample);
-            int feedMedicineTimes = feedMedicineList.size();
-            BigDecimal feedMedicineWeight = new BigDecimal(0.00);
-            for (BreedingRecord breedingRecordDo : feedFoodList) {
-                feedMedicineWeight = feedMedicineWeight.add(breedingRecordDo.getBreedingValue());
-            }
-            breedingRecordDto.setFeedMedicineWeight(feedMedicineWeight);
-            breedingRecordDto.setFeedMedicineList(feedMedicineList);
-            breedingRecordDto.setFeedMedicineTimes(feedMedicineTimes);
+            FeedingFactoryBo feedingMedicineBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.FEED_MEDICINE.getCode());
+            breedingRecordDto.setFeedMedicineWeight(feedingMedicineBo.getFeedingWeight());
+            breedingRecordDto.setFeedMedicineList(feedingMedicineBo.getBreedingList());
+            breedingRecordDto.setFeedMedicineTimes(feedingMedicineBo.getFeedingTimes());
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingRecordsById error:" + ex);
         }
         return breedingRecordDto;
     }
 
+
+    private FeedingFactoryBo feedingRecordFactory(Integer planId, Integer coopId, Integer dayAge, Integer feedingType) {
+        BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
+        breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andDayAgeEqualTo(dayAge).andRecordTypeEqualTo(feedingType).andEnableEqualTo(true);
+        List<BreedingRecord> breedingList = breedingRecordMapper.selectByExample(breedingRecordExample);
+        int feedingTimes = breedingList.size();
+        BigDecimal feedingWeight = new BigDecimal(0.00);
+        for (BreedingRecord breedingRecordDo : breedingList) {
+            feedingWeight = feedingWeight.add(breedingRecordDo.getBreedingValue());
+        }
+
+        FeedingFactoryBo feedingFactoryBo = new FeedingFactoryBo();
+        feedingFactoryBo
+                .setBreedingList(breedingList)
+                .setFeedingTimes(feedingTimes)
+                .setFeedingWeight(feedingWeight);
+
+        return feedingFactoryBo;
+    }
 }
