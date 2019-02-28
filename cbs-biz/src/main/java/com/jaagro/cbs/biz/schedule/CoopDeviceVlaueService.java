@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 批次养殖记录
+ * 设备检测值
  *
  * @author baiyiran
  * @Date 2019/2/28
