@@ -11,13 +11,11 @@
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into device_value (device_id, value_type, current_value,
-        create_time, enable)
+        insert into device_value (device_id, value_type, current_value)
         values
         <foreach collection="valueList" item="item">
             (#{item.deviceId,jdbcType=INTEGER}, #{item.valueType,jdbcType=INTEGER},
-            #{item.currentValue,jdbcType=DECIMAL},
-            #{item.createTime,jdbcType=TIMESTAMP}, #{item.enable,jdbcType=BIT})
+            #{item.currentValue,jdbcType=DECIMAL})
         </foreach>
     </insert>
 </mapper>
