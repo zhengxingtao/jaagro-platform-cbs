@@ -24,10 +24,13 @@ public class CreateCoopDto implements Serializable {
     private Integer plantId;
 
     /**
+     * 鸡舍编号
+     */
+    private String coopNo;
+
+    /**
      * 容量
      */
-    private Integer homeNumber;
-
     private Integer capacity;
 
     /**

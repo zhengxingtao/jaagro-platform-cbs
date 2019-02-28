@@ -1,10 +1,7 @@
 package com.jaagro.cbs.biz.schedule;
 
-import com.jaagro.cbs.api.model.DeviceValue;
-import com.jaagro.cbs.api.model.DeviceValueExample;
-import com.jaagro.cbs.api.model.DeviceValueHistory;
-import com.jaagro.cbs.biz.mapper.DeviceValueHistoryMapperExt;
-import com.jaagro.cbs.biz.mapper.DeviceValueMapperExt;
+import com.jaagro.cbs.api.model.*;
+import com.jaagro.cbs.biz.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,7 +23,13 @@ import java.util.List;
 public class CoopDeviceVlaueService {
 
     @Autowired
+    private CoopDeviceMapperExt coopDeviceMapper;
+    @Autowired
     private DeviceValueMapperExt deviceValueMapper;
+    @Autowired
+    private BatchPlantCoopMapperExt batchPlantCoopMapper;
+    @Autowired
+    private BreedingBatchParameterMapperExt batchParameterMapper;
     @Autowired
     private DeviceValueHistoryMapperExt deviceValueHistoryMapper;
 
@@ -47,6 +50,20 @@ public class CoopDeviceVlaueService {
                         .andValueTypeEqualTo(history.getValueType());
                 //直接先删掉表的的原纪录
                 deviceValueMapper.deleteByExample(valueExample);
+
+                //检测是否需要警报
+                Integer coopId = coopDeviceMapper.getCoopIdBydeviceId(history.getDeviceId());
+                if (coopId != null) {
+                    Integer planId = batchPlantCoopMapper.getPlanIdByCoopId(coopId);
+                    if (planId != null) {
+                        BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
+                        parameterExample.createCriteria()
+                                .andEnableEqualTo(true)
+                                .andPlanIdEqualTo(planId);
+                        List<BreedingBatchParameter> parameterList = batchParameterMapper.selectByExample(parameterExample);
+
+                    }
+                }
             }
             //批量插入
             deviceValueMapper.insertBatch(valueList);

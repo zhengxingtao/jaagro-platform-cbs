@@ -42,4 +42,16 @@
             AND c.`enable` = 1
             AND c.coop_status = 1
     </select>
+    <select id="getPlanIdByCoopId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            plan_id
+        FROM
+            batch_plant_coop
+        WHERE
+            ENABLE = 1
+            AND coop_id = #{coopId}
+        ORDER BY
+            create_time DESC
+            LIMIT 1
+    </select>
 </mapper>
