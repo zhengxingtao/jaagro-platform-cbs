@@ -3,7 +3,21 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.DeviceValueMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
-
+    <delete id="deleteByDate" parameterType="java.lang.Integer">
+        delete from device_value
+        where device_id = #{deviceId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insertBatch" parameterType="com.jaagro.cbs.api.model.DeviceValue">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into device_value (device_id, value_type, current_value,
+        create_time, enable)
+        values
+        <foreach collection="valueList" item="item">
+            (#{item.deviceId,jdbcType=INTEGER}, #{item.valueType,jdbcType=INTEGER},
+            #{item.currentValue,jdbcType=DECIMAL},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.enable,jdbcType=BIT})
+        </foreach>
+    </insert>
 </mapper>

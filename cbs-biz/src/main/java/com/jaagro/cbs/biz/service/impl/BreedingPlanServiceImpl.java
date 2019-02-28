@@ -119,7 +119,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public PageInfo listBreedingPlan(BreedingPlanParamDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-//        dto.setTenantId();    先注释,等待从userInfo获取租户id
+        dto.setTenantId(currentUserService.getCurrentUser().getTenantId());
         if (dto.getCustomerInfo() != null) {
             BaseResponse<List<Integer>> listBaseResponse = customerClientService.listCustomerIdByKeyWord(dto.getCustomerInfo());
             if (!CollectionUtils.isEmpty(listBaseResponse.getData())) {
@@ -153,7 +153,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     long day = getInterval(returnBreedingPlanDto.getPlanTime(), new Date());
                     returnBreedingPlanDto.setAlreadyDayAge((int) day);
                 } catch (Exception ex) {
-                    log.error("计算批次进度失败:BreedingPlanServiceImpl.getInterval()");
                     ex.printStackTrace();
                 }
             }
