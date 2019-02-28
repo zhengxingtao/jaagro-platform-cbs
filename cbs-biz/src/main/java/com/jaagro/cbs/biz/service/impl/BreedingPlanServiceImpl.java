@@ -20,6 +20,8 @@ import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
+import com.jaagro.cbs.biz.utils.DateUtil;
+import com.jaagro.cbs.biz.utils.MathUtil;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -71,6 +73,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private PurchaseOrderMapperExt purchaseOrderMapper;
     @Autowired
     private BatchInfoMapperExt batchInfoMapper;
+    @Autowired
+    private DateUtil dateUtil;
+    @Autowired
+    private MathUtil mathUtil;
 
     /**
      * 创建养殖计划
@@ -362,9 +368,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto) {
         List<BreedingPlanCoopDto> breedingPlanCoopDtoList = dto.getBreedingPlanCoopDtoList();
-        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
             List<BatchPlantCoop> coopList = new ArrayList<>();
-            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList) {
                 BatchPlantCoop coop = new BatchPlantCoop();
             }
         }
@@ -380,11 +386,30 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
-        BatchInfoExample batchInfoExample = new BatchInfoExample();
-        batchInfoExample.createCriteria();
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
-        
+        if (breedingPlan != null && batchInfo != null) {
+            String percentage = mathUtil.percentage(breedingPlan.getPlanChickenQuantity() - batchInfo.getDeadAmount(), breedingPlan.getPlanChickenQuantity());
+            String expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
+            //查询计划用料
+            PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+            purchaseOrderExample
+                    .createCriteria()
+                    .andPlanIdEqualTo(planId)
+                    .andProductTypeEqualTo(ProductTypeEnum.FEED.getCode());
+            List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+            returnBreedingDetailsDto
+                    .setBreedingDays(breedingPlan.getBreedingDays())
+                    .setDayAge(batchInfo.getDayAge())
+                    .setExpectSuchTime(expectSuchTime)
+                    .setBreedingStock(batchInfo.getCurrentAmount())
+                    .setSurvivalRate(percentage);
+            
 
+        }
+        //养殖场信息
+        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
+        returnBreedingDetailsDto.setPlants(plants);
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
         returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);

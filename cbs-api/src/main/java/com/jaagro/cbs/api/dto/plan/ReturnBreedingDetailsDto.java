@@ -25,17 +25,17 @@ public class ReturnBreedingDetailsDto implements Serializable {
     /**
      * 当前日龄
      */
-    private BigDecimal dayAge;
+    private Integer dayAge;
 
     /**
      * 养殖天数
      */
-    private BigDecimal breedingDays;
+    private Integer breedingDays;
 
     /**
      * 出栏时间
      */
-    private Date expectSuchTime;
+    private String expectSuchTime;
 
     /**
      * 养殖场
@@ -45,12 +45,12 @@ public class ReturnBreedingDetailsDto implements Serializable {
     /**
      * 存栏量
      */
-    private BigDecimal breedingStock;
+    private Integer breedingStock;
 
     /**
      * 成活率
      */
-    private BigDecimal survivalRate;
+    private String survivalRate;
 
     /**
      * 异常预警
