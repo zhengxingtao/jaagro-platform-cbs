@@ -3,7 +3,25 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingBatchParameterMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
+    <insert id="batchInsert" parameterType="list">
+        insert into breeding_batch_parameter (customer_id, plan_id, batch_no,
+      param_id, param_name, day_age,
+      param_type, value_type, lower_limit,
+      upper_limit, unit, alarm,
+      param_value, status, necessary,
+      enable, create_time, create_user_id,
+      modify_time, modify_user_id)
+    values
+    <foreach collection="batchParameterList" item="item" separator=",">
+        (#{item.customerId,jdbcType=INTEGER}, #{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR},
+        #{item.paramId,jdbcType=INTEGER}, #{item.paramName,jdbcType=VARCHAR}, #{item.dayAge,jdbcType=INTEGER},
+        #{item.paramType,jdbcType=INTEGER}, #{item.valueType,jdbcType=INTEGER}, #{item.lowerLimit,jdbcType=DECIMAL},
+        #{item.upperLimit,jdbcType=DECIMAL}, #{item.unit,jdbcType=VARCHAR}, #{item.alarm,jdbcType=BIT},
+        #{item.paramValue,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, #{item.necessary,jdbcType=BIT},
+        #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
+        #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.modifyUserId,jdbcType=INTEGER})
+    </foreach>
+    </insert>
 
 
 </mapper>

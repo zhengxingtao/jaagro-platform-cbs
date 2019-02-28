@@ -33,4 +33,126 @@
         </if>
     </select>
 
+    <update id="batchUpdateByPrimaryKeySelective" parameterType="list">
+        update coop
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="coop_no =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.coopNo!=null">
+                        when id=#{i.id} then #{i.coopNo}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="customer_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.customerId!=null">
+                        when id=#{i.id} then #{i.customerId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plant_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.plantId!=null">
+                        when id=#{i.id} then #{i.plantId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="home_number =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.homeNumber!=null">
+                        when id=#{i.id} then #{i.homeNumber}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="capacity =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.capacity!=null">
+                        when id=#{i.id} then #{i.capacity}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="breeding_value =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.breedingValue!=null">
+                        when id=#{i.id} then #{i.breedingValue}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="device_quantity =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.deviceQuantity!=null">
+                        when id=#{i.id} then #{i.deviceQuantity}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="coop_status =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.coopStatus!=null">
+                        when id=#{i.id} then #{i.coopStatus}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="last_start_date =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.lastStartDate!=null">
+                        when id=#{i.id} then #{i.lastStartDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="last_end_date =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.lastEndDate!=null">
+                        when id=#{i.id} then #{i.lastEndDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="notes =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.notes!=null">
+                        when id=#{i.id} then #{i.notes}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.createTime!=null">
+                        when id=#{i.id} then #{i.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.createUserId!=null">
+                        when id=#{i.id} then #{i.createUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_time =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.modifyTime!=null">
+                        when id=#{i.id} then #{i.modifyTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_user_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.modifyUserId!=null">
+                        when id=#{i.id} then #{i.modifyUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="enable =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.enable!=null">
+                        when id=#{i.id} then #{i.enable}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="coopList" separator="," item="i" index="index" close=")" open="(">
+            #{i.id}
+        </foreach>
+    </update>
+
 </mapper>

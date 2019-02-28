@@ -11,10 +11,8 @@ import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
-import com.jaagro.cbs.api.enums.PlanStatusEnum;
-import com.jaagro.cbs.api.enums.ProductTypeEnum;
-import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
-import com.jaagro.cbs.api.enums.UnitEnum;
+import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
+import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.*;
@@ -62,13 +60,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private CustomerClientService customerClientService;
     @Autowired
-    private BreedingBatchParameterMapperExt breedingBatchParameterMapperExt;
+    private BreedingBatchParameterMapperExt breedingBatchParameterMapper;
     @Autowired
     private UserClientService userClientService;
     @Autowired
     private BreedingPlantServiceImpl breedingPlantService;
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
+    @Autowired
+    private CoopMapperExt coopMapper;
 
     /**
      * 创建养殖计划
@@ -145,7 +145,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andEnableEqualTo(true)
                     .andPlanIdEqualTo(returnBreedingPlanDto.getId())
                     .andBatchNoEqualTo(returnBreedingPlanDto.getBatchNo());
-            List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapperExt.selectByExample(parameterExample);
+            List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapper.selectByExample(parameterExample);
             if (!CollectionUtils.isEmpty(breedingBatchParameters)) {
                 BreedingBatchParameter parameter = breedingBatchParameters.get(0);
                 returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
@@ -358,14 +358,66 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author yj
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto) {
         List<BreedingPlanCoopDto> breedingPlanCoopDtoList = dto.getBreedingPlanCoopDtoList();
-        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
-            List<BatchPlantCoop> coopList = new ArrayList<>();
-            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
-                BatchPlantCoop coop = new BatchPlantCoop();
-            }
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        Integer currentUserId = currentUser == null ? null :currentUser.getId();
+        // 插入养殖计划和鸡舍关系更新鸡舍在养数量和状态
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(dto.getPlanId());
+        if (breedingPlan == null){
+            throw new RuntimeException("养殖计划id="+dto.getPlanId()+"不存在");
         }
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
+            List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
+            List<Coop> coopList = new ArrayList<>();
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
+                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0){
+                    BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
+                    batchPlantCoop.setCoopId(coopDto.getId())
+                            .setCreateTime(new Date())
+                            .setCreateUserId(currentUserId)
+                            .setEnable(Boolean.TRUE)
+                            .setPlanId(dto.getPlanId())
+                            .setPlantId(coopDto.getPlantId());
+                    batchPlantCoopList.add(batchPlantCoop);
+                    Coop coop = new Coop();
+                    coop.setId(coopDto.getId())
+                            .setBreedingValue(coopDto.getBreedingValue())
+                            .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
+                            .setModifyTime(new Date())
+                            .setModifyUserId(currentUserId);
+                    coopList.add(coop);
+                }
+            }
+            batchPlantCoopMapper.insertBatch(batchPlantCoopList);
+            coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+        }
+        // 插入养殖计划参数
+        List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
+        if (!CollectionUtils.isEmpty(breedingParameterDtoList)){
+            List<BreedingBatchParameter> batchParameterList = new ArrayList<>();
+            for (BreedingParameterDto parameterDto : breedingParameterDtoList){
+                List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
+                for (BreedingStandardParameter standardParameter : breedingStandardParameterList){
+                    BreedingBatchParameter batchParameter = new BreedingBatchParameter();
+                    BeanUtils.copyProperties(standardParameter,batchParameter);
+                    batchParameter.setParamId(standardParameter.getId())
+                            .setBatchNo(dto.getBatchNo())
+                            .setCreateTime(new Date())
+                            .setCreateUserId(currentUserId)
+                            .setCustomerId(breedingPlan.getCustomerId())
+                            .setEnable(Boolean.TRUE);
+                    batchParameterList.add(batchParameter);
+                }
+            }
+            breedingBatchParameterMapper.batchInsert(batchParameterList);
+        }
+        // 更新养殖计划
+        breedingPlan.setPlanStatus(PlanStatusEnum.SIGN_CHICKEN.getCode())
+                .setModifyTime(new Date())
+                .setModifyUserId(currentUserId);
+        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
     }
 
     /**

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @author :asus
- * @date :2019/02/27
+ * @date :2019/02/28
  */
 @Data
 @NoArgsConstructor
@@ -27,6 +27,11 @@ public class Coop implements Serializable {
     private String coopNo;
 
     /**
+     * 鸡舍名称
+     */
+    private String coopName;
+
+    /**
      * 客户id
      */
     private Integer customerId;
@@ -35,11 +40,6 @@ public class Coop implements Serializable {
      * 养殖场id
      */
     private Integer plantId;
-
-    /**
-     * 鸡舍位置
-     */
-    private Integer homeNumber;
 
     /**
      * 容量
