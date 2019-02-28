@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.Coop" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="coop_no" property="coopNo" jdbcType="VARCHAR" />
+    <result column="coop_name" property="coopName" jdbcType="VARCHAR" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plant_id" property="plantId" jdbcType="INTEGER" />
-    <result column="home_number" property="homeNumber" jdbcType="INTEGER" />
     <result column="capacity" property="capacity" jdbcType="INTEGER" />
     <result column="breeding_value" property="breedingValue" jdbcType="INTEGER" />
     <result column="device_quantity" property="deviceQuantity" jdbcType="INTEGER" />
@@ -50,7 +50,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, coop_no, customer_id, plant_id, home_number, capacity, breeding_value, device_quantity, 
+    id, coop_no, coop_name, customer_id, plant_id, capacity, breeding_value, device_quantity, 
     coop_status, last_start_date, last_end_date, notes, create_time, create_user_id, 
     modify_time, modify_user_id, enable
   </sql>
@@ -91,14 +91,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into coop (coop_no, customer_id, plant_id, 
-      home_number, capacity, breeding_value, 
+    insert into coop (coop_no, coop_name, customer_id, 
+      plant_id, capacity, breeding_value, 
       device_quantity, coop_status, last_start_date, 
       last_end_date, notes, create_time, 
       create_user_id, modify_time, modify_user_id, 
       enable)
-    values (#{coopNo,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, #{plantId,jdbcType=INTEGER}, 
-      #{homeNumber,jdbcType=INTEGER}, #{capacity,jdbcType=INTEGER}, #{breedingValue,jdbcType=INTEGER}, 
+    values (#{coopNo,jdbcType=VARCHAR}, #{coopName,jdbcType=VARCHAR}, #{customerId,jdbcType=INTEGER}, 
+      #{plantId,jdbcType=INTEGER}, #{capacity,jdbcType=INTEGER}, #{breedingValue,jdbcType=INTEGER}, 
       #{deviceQuantity,jdbcType=INTEGER}, #{coopStatus,jdbcType=INTEGER}, #{lastStartDate,jdbcType=DATE}, 
       #{lastEndDate,jdbcType=DATE}, #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
@@ -113,14 +113,14 @@
       <if test="coopNo != null" >
         coop_no,
       </if>
+      <if test="coopName != null" >
+        coop_name,
+      </if>
       <if test="customerId != null" >
         customer_id,
       </if>
       <if test="plantId != null" >
         plant_id,
-      </if>
-      <if test="homeNumber != null" >
-        home_number,
       </if>
       <if test="capacity != null" >
         capacity,
@@ -163,14 +163,14 @@
       <if test="coopNo != null" >
         #{coopNo,jdbcType=VARCHAR},
       </if>
+      <if test="coopName != null" >
+        #{coopName,jdbcType=VARCHAR},
+      </if>
       <if test="customerId != null" >
         #{customerId,jdbcType=INTEGER},
       </if>
       <if test="plantId != null" >
         #{plantId,jdbcType=INTEGER},
-      </if>
-      <if test="homeNumber != null" >
-        #{homeNumber,jdbcType=INTEGER},
       </if>
       <if test="capacity != null" >
         #{capacity,jdbcType=INTEGER},
@@ -222,14 +222,14 @@
       <if test="coopNo != null" >
         coop_no = #{coopNo,jdbcType=VARCHAR},
       </if>
+      <if test="coopName != null" >
+        coop_name = #{coopName,jdbcType=VARCHAR},
+      </if>
       <if test="customerId != null" >
         customer_id = #{customerId,jdbcType=INTEGER},
       </if>
       <if test="plantId != null" >
         plant_id = #{plantId,jdbcType=INTEGER},
-      </if>
-      <if test="homeNumber != null" >
-        home_number = #{homeNumber,jdbcType=INTEGER},
       </if>
       <if test="capacity != null" >
         capacity = #{capacity,jdbcType=INTEGER},
@@ -273,9 +273,9 @@
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.Coop" >
     update coop
     set coop_no = #{coopNo,jdbcType=VARCHAR},
+      coop_name = #{coopName,jdbcType=VARCHAR},
       customer_id = #{customerId,jdbcType=INTEGER},
       plant_id = #{plantId,jdbcType=INTEGER},
-      home_number = #{homeNumber,jdbcType=INTEGER},
       capacity = #{capacity,jdbcType=INTEGER},
       breeding_value = #{breedingValue,jdbcType=INTEGER},
       device_quantity = #{deviceQuantity,jdbcType=INTEGER},

@@ -23,6 +23,10 @@ public class BreedingPlanCoopDto  implements Serializable{
      */
     private String plantName;
     /**
+     * 养殖场id
+     */
+    private Integer plantId;
+    /**
      * 客户鸡舍信息表id
      */
     private Integer id;
