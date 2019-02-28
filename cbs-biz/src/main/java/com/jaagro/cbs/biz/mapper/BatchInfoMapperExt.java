@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -48,6 +49,14 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
      * @return
      */
     BatchInfo getTheLatestBatchInfo(@Param("planId") Integer planId);
+
+    /**
+     * 累计饲料喂养量
+     *
+     * @param planId
+     * @return
+     */
+    BigDecimal accumulativeFeed(@Param("planId") Integer planId);
 
 
 }

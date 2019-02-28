@@ -51,7 +51,10 @@
         select
         <include refid="Base_Column_List"/>
         from batch_info
-        where enable=1
+        where enable=1 and plan_id=#{planId}
         order by create_time desc limit
+    </select>
+    <select id="accumulativeFeed" resultType="java.math.BigDecimal" parameterType="java.lang.Integer">
+       select sum(fodder_amount) accumulativeFeed from  batch_info  where enable=1 and plan_id=#{planId}
     </select>
 </mapper>
