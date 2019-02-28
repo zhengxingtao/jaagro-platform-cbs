@@ -22,6 +22,7 @@
 
     <select id="listBreedingPlanCoopsForChoose" resultType="com.jaagro.cbs.api.dto.plan.BreedingPlanCoopDto">
         SELECT
+            bpc.plant_id,
             p.plant_name,
             c.breeding_value,
             c.capacity,

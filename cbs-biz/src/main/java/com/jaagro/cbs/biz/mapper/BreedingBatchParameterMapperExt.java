@@ -4,6 +4,9 @@ import javax.annotation.Resource;
 import com.jaagro.cbs.api.model.BreedingBatchParameter;
 import com.jaagro.cbs.api.model.BreedingBatchParameterExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,9 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 @Resource
 public interface BreedingBatchParameterMapperExt extends BaseMapper<BreedingBatchParameter,BreedingBatchParameterExample> {
 
-
-
+    /**
+     * 批量插入
+     * @param batchParameterList
+     */
+    void batchInsert(@Param("batchParameterList") List<BreedingBatchParameter> batchParameterList);
 }
