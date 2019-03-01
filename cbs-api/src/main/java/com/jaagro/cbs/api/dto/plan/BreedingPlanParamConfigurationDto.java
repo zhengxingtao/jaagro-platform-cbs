@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,4 +33,14 @@ public class BreedingPlanParamConfigurationDto implements Serializable{
      */
     @NotEmpty(message = "{breedingPlanCoopDtoList.NotEmpty}")
     private List<BreedingPlanCoopDto> breedingPlanCoopDtoList;
+    /**
+     * 养殖计划id
+     */
+    @NotNull(message = "{planId.NotNull}")
+    private Integer planId;
+    /**
+     * 养殖计划批次号
+     */
+    @NotBlank(message = "{batchNo.NotBlank}")
+    private String batchNo;
 }

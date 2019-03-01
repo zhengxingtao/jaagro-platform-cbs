@@ -285,6 +285,76 @@ public class CoopExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andCoopNameIsNull() {
+            addCriterion("coop_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameIsNotNull() {
+            addCriterion("coop_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameEqualTo(String value) {
+            addCriterion("coop_name =", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameNotEqualTo(String value) {
+            addCriterion("coop_name <>", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameGreaterThan(String value) {
+            addCriterion("coop_name >", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameGreaterThanOrEqualTo(String value) {
+            addCriterion("coop_name >=", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameLessThan(String value) {
+            addCriterion("coop_name <", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameLessThanOrEqualTo(String value) {
+            addCriterion("coop_name <=", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameLike(String value) {
+            addCriterion("coop_name like", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameNotLike(String value) {
+            addCriterion("coop_name not like", value, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameIn(List<String> values) {
+            addCriterion("coop_name in", values, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameNotIn(List<String> values) {
+            addCriterion("coop_name not in", values, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameBetween(String value1, String value2) {
+            addCriterion("coop_name between", value1, value2, "coopName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoopNameNotBetween(String value1, String value2) {
+            addCriterion("coop_name not between", value1, value2, "coopName");
+            return (Criteria) this;
+        }
+
         public Criteria andCustomerIdIsNull() {
             addCriterion("customer_id is null");
             return (Criteria) this;
@@ -402,66 +472,6 @@ public class CoopExample implements Serializable {
 
         public Criteria andPlantIdNotBetween(Integer value1, Integer value2) {
             addCriterion("plant_id not between", value1, value2, "plantId");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberIsNull() {
-            addCriterion("home_number is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberIsNotNull() {
-            addCriterion("home_number is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberEqualTo(Integer value) {
-            addCriterion("home_number =", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberNotEqualTo(Integer value) {
-            addCriterion("home_number <>", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberGreaterThan(Integer value) {
-            addCriterion("home_number >", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberGreaterThanOrEqualTo(Integer value) {
-            addCriterion("home_number >=", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberLessThan(Integer value) {
-            addCriterion("home_number <", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberLessThanOrEqualTo(Integer value) {
-            addCriterion("home_number <=", value, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberIn(List<Integer> values) {
-            addCriterion("home_number in", values, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberNotIn(List<Integer> values) {
-            addCriterion("home_number not in", values, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberBetween(Integer value1, Integer value2) {
-            addCriterion("home_number between", value1, value2, "homeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andHomeNumberNotBetween(Integer value1, Integer value2) {
-            addCriterion("home_number not between", value1, value2, "homeNumber");
             return (Criteria) this;
         }
 
