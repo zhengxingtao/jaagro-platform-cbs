@@ -182,9 +182,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public long getDayAge(Integer planId) throws Exception {
         long day = 0;
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-        Date beginDate = new Date();
-        Date endDate = breedingPlan.getPlanTime();
         if (breedingPlan != null) {
+            Date beginDate = breedingPlan.getPlanTime();
+            Date endDate = new Date();
             if (beginDate == null && endDate == null) {
                 return day;
             }
@@ -192,8 +192,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             beginDate = sdf.parse(sdf.format(beginDate));
             endDate = sdf.parse(sdf.format(endDate));
             day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
+        } else {
+            throw new NullPointerException("计划不存在");
         }
-        return day;
+        return day + 1;
     }
 
     /**
