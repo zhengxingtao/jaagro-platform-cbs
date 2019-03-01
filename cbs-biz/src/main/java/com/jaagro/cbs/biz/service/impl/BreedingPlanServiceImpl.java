@@ -473,7 +473,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             techConsultRecordExample.createCriteria().andPlanIdEqualTo(planId);
             int askQues = techConsultRecordMapper.countByExample(techConsultRecordExample);
             //计算询问解决次数
-            techConsultRecordExample.createCriteria().andTechConsultStatusEqualTo(TechConsultStatusEmun.PROCESSED.getCode());
+            techConsultRecordExample.createCriteria().andTechConsultStatusEqualTo(TechConsultStatusEnum.STATUS_SOLVED.getCode());
             int solveQuestions = techConsultRecordMapper.countByExample(techConsultRecordExample);
             //计算计划采购 数量 重量
             List<CalculatePurchaseOrderDto> calculatePurchaseOrderDtos = new ArrayList<>();
