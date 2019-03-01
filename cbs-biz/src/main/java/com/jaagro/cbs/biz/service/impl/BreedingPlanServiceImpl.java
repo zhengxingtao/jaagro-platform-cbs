@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -446,12 +447,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
+        BigDecimal totalPlanFeedWeight = BigDecimal.ZERO;
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
         if (breedingPlan != null && batchInfo != null) {
+            //计算成活率
             String percentage = mathUtil.percentage(breedingPlan.getPlanChickenQuantity() - batchInfo.getDeadAmount(), breedingPlan.getPlanChickenQuantity());
+            //计算预计出栏时间
             String expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
             //查询计划用料
             PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
@@ -460,12 +464,19 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andPlanIdEqualTo(planId)
                     .andProductTypeEqualTo(ProductTypeEnum.FEED.getCode());
             List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+            //累加计划饲料重量
+            if (CollectionUtils.isEmpty(purchaseOrders)) {
+                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedWeight.add(purchaseOrder.getWeight()));
+            }
+            //剩余饲料
+            BigDecimal bigDecimal = batchInfoMapper.accumulativeFeed(planId);
             returnBreedingDetailsDto
                     .setBreedingDays(breedingPlan.getBreedingDays())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setBreedingStock(batchInfo.getCurrentAmount())
-                    .setSurvivalRate(percentage);
+                    .setSurvivalRate(percentage)
+                    .setPlanFeed(totalPlanFeedWeight);
 
 
         }
