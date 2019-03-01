@@ -489,6 +489,66 @@ public class ContractPriceSectionExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andMarketPriceFlagIsNull() {
+            addCriterion("market_price_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagIsNotNull() {
+            addCriterion("market_price_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagEqualTo(Boolean value) {
+            addCriterion("market_price_flag =", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagNotEqualTo(Boolean value) {
+            addCriterion("market_price_flag <>", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagGreaterThan(Boolean value) {
+            addCriterion("market_price_flag >", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("market_price_flag >=", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagLessThan(Boolean value) {
+            addCriterion("market_price_flag <", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagLessThanOrEqualTo(Boolean value) {
+            addCriterion("market_price_flag <=", value, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagIn(List<Boolean> values) {
+            addCriterion("market_price_flag in", values, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagNotIn(List<Boolean> values) {
+            addCriterion("market_price_flag not in", values, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagBetween(Boolean value1, Boolean value2) {
+            addCriterion("market_price_flag between", value1, value2, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andMarketPriceFlagNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("market_price_flag not between", value1, value2, "marketPriceFlag");
+            return (Criteria) this;
+        }
+
         public Criteria andEnableIsNull() {
             addCriterion("enable is null");
             return (Criteria) this;

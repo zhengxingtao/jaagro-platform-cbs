@@ -218,7 +218,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         batchContract.setContractNumber(sequenceCodeUtils.genSeqCode("HT"))
                 .setContractDate(new Date())
                 .setCreateTime(new Date())
-                .setContractStatus(ContractStatus.UNAUDITED)
+                .setContractStatus(ContractStatus.APPROVE)
                 .setCreateUserId(currentUserId)
                 .setCustomerId(breedingPlan.getCustomerId())
                 .setEnable(true);
@@ -229,7 +229,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             for (String imageUrl : createPlanContractDto.getImageUrlList()) {
                 ContractSource contractSource = new ContractSource();
                 contractSource.setSourceUrl(imageUrl)
-                        .setSourceStatus(CertificateStatus.UNCHECKED)
+                        .setSourceStatus(CertificateStatus.NORMAL)
                         .setCreateTime(new Date())
                         .setCreateUserId(currentUserId)
                         .setEnable(true)
@@ -257,6 +257,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         // 更新养殖计划状态
         breedingPlan.setModifyTime(new Date())
+                .setPlanTime(createPlanContractDto.getStartDate())
+                .setPlanChickenQuantity(createPlanContractDto.getBabychickQuantity())
                 .setModifyUserId(currentUserId)
                 .setPlanStatus(PlanStatusEnum.PARAM_CORRECT.getCode());
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
