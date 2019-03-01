@@ -1,4 +1,4 @@
-package com.jaagro.cbs.web.vo.techConsult;
+package com.jaagro.cbs.api.dto.techconsult;
 
 
 import lombok.AllArgsConstructor;
@@ -19,6 +19,7 @@ import java.util.List;
 @Accessors(chain = true)
 public class TechConsultParamDto implements Serializable {
 
+    private static final long serialVersionUID = 3835147859136626721L;
     /**
      * 起始页
      */
@@ -35,20 +36,13 @@ public class TechConsultParamDto implements Serializable {
     private String batchNo;
 
     /**
-     * 客户id
-     */
-    private List<Integer> customerIds;
-
-    /**
      * 客户姓名/手机号
      */
     private String keyWord;
-
 
     /**
      * 状态
      */
     private Integer status;
-
 
 }

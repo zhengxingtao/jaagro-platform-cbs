@@ -6,7 +6,6 @@ import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.progress.BreedingProgressDto;
 import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.web.vo.plan.BreedingPlanBatchVo;
@@ -76,6 +75,7 @@ public class BreedingProgressController {
     /**
      *  养殖过程管理-根据养殖计划Id、养殖厂Id获取养殖过程头信息
      * @param paramVo
+     * @author gavin
      * @return
      */
     @ApiOperation("根据养殖计划Id、养殖厂Id获取养殖过程头信息")
@@ -97,6 +97,7 @@ public class BreedingProgressController {
     /**
      * 获取养殖过程中某个鸡舍每天养殖参数详情
      * @param paramVo
+     * @author gavin
      * @return
      */
     @ApiOperation("获取鸡舍某天养殖参数详情")
@@ -121,7 +122,12 @@ public class BreedingProgressController {
         }
         return BaseResponse.successInstance(paramTrackingDtos);
     }
-
+    /**
+     * 获取养殖过程中某天养殖喂养情况
+     * @param paramVo
+     * @author gavin
+     * @return
+     */
     @ApiOperation("获取养殖过程中某天养殖喂养情况")
     @PostMapping("/getBreedingRecordsById")
     public BaseResponse getBreedingRecordsById(@RequestBody BreedingProgressParamVo paramVo) {
