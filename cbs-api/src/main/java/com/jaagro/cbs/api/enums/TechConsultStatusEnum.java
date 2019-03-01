@@ -1,28 +1,31 @@
 package com.jaagro.cbs.api.enums;
 
 /**
- * @author @Gao.
- * 技术支持状态
+ * @author gavin
+ * 技术询问状态枚举
+ * 20190228
  */
-public enum TechConsultStatusEmun {
+public enum TechConsultStatusEnum {
     /**
-     * 商品类型
+     *  技术咨询状态(0-待处理,1-已处理)
      */
-    PROCESSED(1, "PROCESSED", "已处理"),
-    UNTREATED(3, "UNTREATED", "未处理");
+
+    STATUS_PENDING(0, "STATUS_PENDING", "待处理"),
+    STATUS_SOLVED(1, "STATUS_SOLVED", "已处理");
+
 
     private int code;
     private String type;
     private String desc;
 
-    TechConsultStatusEmun(int code, String type, String desc) {
+    TechConsultStatusEnum(int code, String type, String desc) {
         this.code = code;
         this.type = type;
         this.desc = desc;
     }
 
     public static String getDescByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -31,7 +34,7 @@ public enum TechConsultStatusEmun {
     }
 
     public static String getTypeByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -40,7 +43,7 @@ public enum TechConsultStatusEmun {
     }
 
     public static Integer getCode(String desc) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -48,8 +51,8 @@ public enum TechConsultStatusEmun {
         return null;
     }
 
-    public static PlanStatusEnum toEnum(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+    public static TechConsultStatusEnum toEnum(int code) {
+        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }

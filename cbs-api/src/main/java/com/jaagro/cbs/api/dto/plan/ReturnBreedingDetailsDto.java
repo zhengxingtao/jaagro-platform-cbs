@@ -22,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ReturnBreedingDetailsDto implements Serializable {
+
     /**
      * 当前日龄
      */
@@ -81,6 +82,11 @@ public class ReturnBreedingDetailsDto implements Serializable {
      * 理论体重
      */
     private BigDecimal theoryWeight;
+
+    /**
+     * 送料情况
+     */
+    private List<CalculatePurchaseOrderDto> calculatePurchaseOrderDtos;
 
     /**
      * 养殖计划详情信息

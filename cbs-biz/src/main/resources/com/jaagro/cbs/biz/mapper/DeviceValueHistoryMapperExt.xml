@@ -19,6 +19,8 @@
         <include refid="Base_Column_List"/>
         FROM
         device_value_history
+        WHERE
+        DATE_FORMAT( create_time, '%Y-%m-%d' ) = DATE_FORMAT( NOW( ), '%Y-%m-%d' )
         GROUP BY
         device_id,
         value_type
