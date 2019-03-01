@@ -133,6 +133,4 @@ public class BreedingPlanController {
         breedingPlanService.breedingPlanParamConfiguration(dto);
         return BaseResponse.successInstance("参数配置成功");
     }
-
-
 }
