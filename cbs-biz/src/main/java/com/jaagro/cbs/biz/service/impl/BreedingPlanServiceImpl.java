@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -78,6 +79,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private MathUtil mathUtil;
     @Autowired
     private CoopMapperExt coopMapper;
+    @Autowired
+    private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
+    @Autowired
+    private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
 
@@ -448,6 +453,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
         BigDecimal totalPlanFeedWeight = BigDecimal.ZERO;
+        BigDecimal totalSignFeedWeight = BigDecimal.ZERO;
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
@@ -461,21 +467,50 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
             purchaseOrderExample
                     .createCriteria()
+                    .andEnableEqualTo(true)
                     .andPlanIdEqualTo(planId)
                     .andProductTypeEqualTo(ProductTypeEnum.FEED.getCode());
             List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            //累加计划饲料重量
+            //计算累加计划饲料重量 计算已签收饲料重量
             if (CollectionUtils.isEmpty(purchaseOrders)) {
                 purchaseOrders.forEach(purchaseOrder -> totalPlanFeedWeight.add(purchaseOrder.getWeight()));
             }
-            //剩余饲料
-            BigDecimal bigDecimal = batchInfoMapper.accumulativeFeed(planId);
+            purchaseOrderExample
+                    .createCriteria()
+                    .andPurchaseOrderStatusEqualTo(PurchaseOrderStatusEnum.DELIVERY.getCode());
+            List<PurchaseOrder> signPurchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+            if (!CollectionUtils.isEmpty(signPurchaseOrders)) {
+
+            }
+
+            //计算剩余饲料
+            BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
+            //计算异常次数
+            DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
+            deviceAlarmLogExample.createCriteria().andPlanIdEqualTo(planId);
+            int abnormalWarn = deviceAlarmLogMapper.countByExample(deviceAlarmLogExample);
+            //计算询问总次数
+            TechConsultRecordExample techConsultRecordExample = new TechConsultRecordExample();
+            techConsultRecordExample.createCriteria().andPlanIdEqualTo(planId);
+            int askQues = techConsultRecordMapper.countByExample(techConsultRecordExample);
+            //计算询问解决次数
+            techConsultRecordExample.createCriteria().andTechConsultStatusEqualTo(TechConsultStatusEmun.PROCESSED.getCode());
+            int solveQuestions = techConsultRecordMapper.countByExample(techConsultRecordExample);
+            //养殖场信息
+            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
+            //计算理论体重值
+            //计算理论料肉比
             returnBreedingDetailsDto
                     .setBreedingDays(breedingPlan.getBreedingDays())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setBreedingStock(batchInfo.getCurrentAmount())
                     .setSurvivalRate(percentage)
+                    .setAbnormalWarn(abnormalWarn)
+                    .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed))
+                    .setAskQuestions(askQues)
+                    .setPlants(plants)
+                    .setSolveQuestions(solveQuestions)
                     .setPlanFeed(totalPlanFeedWeight);
 
 
@@ -486,7 +521,54 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
         returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
-        return null;
+        return returnBreedingDetailsDto;
+    }
+
+    /**
+     * 根据不同商品类型 统计不同类型值
+     *
+     * @param planId
+     * @param productType
+     * @param purchaseOrderStatus
+     * @author @Gao.
+     */
+    private HashMap<Integer, HashMap<Integer, BigDecimal>> calculatePurchaseOrder(Integer planId, Integer productType, Integer purchaseOrderStatus) {
+        BigDecimal totalPlanFeedstStistical = BigDecimal.ZERO;
+        HashMap<Integer, HashMap<Integer, BigDecimal>> calculatePurchaseOrderMap = new HashMap<>(16);
+        HashMap<Integer, BigDecimal> totalPlanFeedMap = calculatePurchaseOrderMap.put(productType, new HashMap<>(16));
+        List<PurchaseOrder> purchaseOrders = null;
+        //查询计划用料
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample
+                .createCriteria()
+                .andEnableEqualTo(true)
+                .andPlanIdEqualTo(planId);
+        //药品 种苗
+        boolean flag = ProductTypeEnum.DRUG.getCode() == productType || ProductTypeEnum.SPROUT.getCode() == productType;
+        if (ProductTypeEnum.DRUG.getCode() == productType) {
+            //统计数量
+            purchaseOrderExample
+                    .createCriteria()
+                    .andProductTypeEqualTo(productType);
+            purchaseOrderMapper.selectByExample(purchaseOrderExample);
+            if (CollectionUtils.isEmpty(purchaseOrders)) {
+                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedstStistical.add(purchaseOrder.getAmount()));
+                totalPlanFeedMap.put(purchaseOrderStatus, totalPlanFeedstStistical);
+            }
+        }
+        //饲料
+        if (ProductTypeEnum.FEED.getCode() == productType) {
+            //统计重量
+            purchaseOrderExample
+                    .createCriteria()
+                    .andProductTypeEqualTo(productType);
+            purchaseOrderMapper.selectByExample(purchaseOrderExample);
+            if (CollectionUtils.isEmpty(purchaseOrders)) {
+                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedstStistical.add(purchaseOrder.getWeight()));
+                totalPlanFeedMap.put(purchaseOrderStatus, totalPlanFeedstStistical);
+            }
+        }
+        return calculatePurchaseOrderMap;
     }
 }
 
