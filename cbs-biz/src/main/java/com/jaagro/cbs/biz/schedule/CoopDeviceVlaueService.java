@@ -52,21 +52,43 @@ public class CoopDeviceVlaueService {
                 deviceValueMapper.deleteByExample(valueExample);
 
                 //检测是否需要警报
-                Integer coopId = coopDeviceMapper.getCoopIdBydeviceId(history.getDeviceId());
-                if (coopId != null) {
-                    Integer planId = batchPlantCoopMapper.getPlanIdByCoopId(coopId);
-                    if (planId != null) {
-                        BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
-                        parameterExample.createCriteria()
-                                .andEnableEqualTo(true)
-                                .andPlanIdEqualTo(planId);
-                        List<BreedingBatchParameter> parameterList = batchParameterMapper.selectByExample(parameterExample);
-
-                    }
-                }
+                deviceAlarm(history);
             }
             //批量插入
             deviceValueMapper.insertBatch(valueList);
+        }
+    }
+
+    private void deviceAlarm(DeviceValueHistory history) {
+        Integer coopId = coopDeviceMapper.getCoopIdBydeviceId(history.getDeviceId());
+        if (coopId != null) {
+            Integer planId = batchPlantCoopMapper.getPlanIdByCoopId(coopId);
+            if (planId != null) {
+                BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
+                parameterExample.createCriteria()
+                        .andEnableEqualTo(true)
+                        .andPlanIdEqualTo(planId);
+                List<BreedingBatchParameter> parameterList = batchParameterMapper.selectByExample(parameterExample);
+                if (!CollectionUtils.isEmpty(parameterList)) {
+                    BreedingBatchParameter parameter = new BreedingBatchParameter();
+                    if (parameter.getAlarm().equals(1)) {
+                        switch (parameter.getValueType()) {
+                            //区间值
+                            case 1:
+
+                                break;
+                            //标准值
+                            case 2:
+
+                                break;
+                            //临界值
+                            default:
+
+                                break;
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -120,7 +120,7 @@ public class BreedingPlantController {
         if (StringUtils.isEmpty(coopDto.getPlantId())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
         }
-        if (StringUtils.isEmpty(coopDto.getCoopNo())) {
+        if (StringUtils.isEmpty(coopDto.getCoopName())) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍名称不能为空");
         }
         if (StringUtils.isEmpty(coopDto.getCapacity())) {
