@@ -1,21 +1,27 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.api.dto.techconsult;
 
-import java.io.Serializable;
-import java.util.Date;
+
+import com.jaagro.cbs.api.model.Coop;
+import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
- * @author :asus
- * @date :2019/03/01
+ * @author gavin
+ * @Date 20190301
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class TechConsultRecord implements Serializable {
+public class ReturnTechConsultRecordDto implements Serializable {
     /**
      * 技术咨询记录表id
      */
@@ -37,26 +43,6 @@ public class TechConsultRecord implements Serializable {
     private String customerPhoneNumber;
 
     /**
-     * 鸡舍id
-     */
-    private Integer coopId;
-
-    /**
-     * 鸡舍名称
-     */
-    private String coopName;
-
-    /**
-     * 养殖场id
-     */
-    private Integer plantId;
-
-    /**
-     * 养殖场名称
-     */
-    private String plantName;
-
-    /**
      * 计划id
      */
     private Integer planId;
@@ -71,7 +57,8 @@ public class TechConsultRecord implements Serializable {
      */
     private Integer emergencyLevel;
 
-    /**
+    private String strEmergencyLevel;
+    /**E
      * 问题描述
      */
     private String problemDesc;
@@ -80,6 +67,8 @@ public class TechConsultRecord implements Serializable {
      * 技术咨询状态(0-待处理,1-已处理)
      */
     private Integer techConsultStatus;
+
+    private String strTechConsultStatus;
 
     /**
      * 处理时间
@@ -101,30 +90,22 @@ public class TechConsultRecord implements Serializable {
      */
     private Integer handleType;
 
-    /**
-     * 是否有效(0-无效,1-有效)
-     */
-    private Boolean enable;
+    private String strHandleType;
 
+    /**
+     * 养殖场列表
+     */
+    List<Plant> plantList;
+    /**
+     * 鸡舍列表
+     */
+    List<Coop> copps;
+    /**
+     * 养殖场跟对应的鸡舍
+     */
+    Map<Integer,List<Coop>> plantCoopMap;
     /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 创建人
-     */
-    private Integer createUserId;
-
-    /**
-     * 更新时间
-     */
-    private Date modifyTime;
-
-    /**
-     * 更新人
-     */
-    private Integer modifyUserId;
-
-    private static final long serialVersionUID = 1L;
 }

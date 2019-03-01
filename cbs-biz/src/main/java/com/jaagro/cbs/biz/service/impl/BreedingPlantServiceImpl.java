@@ -3,11 +3,18 @@ package com.jaagro.cbs.biz.service.impl;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.plant.*;
 import com.jaagro.cbs.api.enums.CoopStatusEnum;
+import com.jaagro.cbs.api.model.Coop;
+import com.jaagro.cbs.api.model.CoopExample;
+import com.jaagro.cbs.api.model.Plant;
+import com.jaagro.cbs.api.model.PlantExample;
 import com.jaagro.cbs.api.service.BreedingPlantService;
-import com.jaagro.cbs.biz.mapper.*;
-import com.jaagro.cbs.api.model.*;
+import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
+import com.jaagro.cbs.biz.mapper.CoopMapperExt;
+import com.jaagro.cbs.biz.mapper.PlantImageMapperExt;
+import com.jaagro.cbs.biz.mapper.PlantMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
+import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.utils.ServiceResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +37,8 @@ import java.util.Map;
 @Service
 public class BreedingPlantServiceImpl implements BreedingPlantService {
 
+    @Autowired
+    private SequenceCodeUtils sequenceCodeUtils;
     @Autowired
     private CurrentUserService currentUserService;
     @Autowired
@@ -223,11 +232,13 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         Coop coop = new Coop();
         BeanUtils.copyProperties(coopDto, coop);
         coop
+                .setCoopNo(sequenceCodeUtils.genSeqCode("CP"))
                 .setCoopStatus(CoopStatusEnum.LEISURE.getCode())
                 .setCustomerId(plant.getCustomerId())
                 .setCreateUserId(currentUserService.getCurrentUser().getId());
         int result = coopMapperExt.insertSelective(coop);
         if (result > 0) {
+
             return ServiceResult.toResult("创建成功");
         }
         return ServiceResult.error("创建失败");

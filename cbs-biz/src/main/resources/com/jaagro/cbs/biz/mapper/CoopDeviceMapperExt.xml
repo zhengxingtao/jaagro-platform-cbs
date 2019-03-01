@@ -9,4 +9,13 @@
       enable = false
     where coop_id = #{coopId,jdbcType=INTEGER}
   </update>
+    <select id="getCoopIdBydeviceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        coop_device
+        WHERE
+        enable = 1
+        AND id = #{deviceId}
+    </select>
 </mapper>

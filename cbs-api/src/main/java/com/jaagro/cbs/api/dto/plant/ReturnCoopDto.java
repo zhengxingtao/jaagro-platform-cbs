@@ -23,6 +23,16 @@ public class ReturnCoopDto implements Serializable {
     private Integer id;
 
     /**
+     * 鸡舍编号
+     */
+    private String coopNo;
+
+    /**
+     * 鸡舍名称
+     */
+    private String coopName;
+
+    /**
      * 客户id
      */
     private Integer customerId;
@@ -35,8 +45,6 @@ public class ReturnCoopDto implements Serializable {
     /**
      * 容量
      */
-    private Integer homeNumber;
-
     private Integer capacity;
 
     /**
