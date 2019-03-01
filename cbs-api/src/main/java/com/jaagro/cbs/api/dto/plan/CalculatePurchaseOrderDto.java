@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @description: 用于结算采购订单中间对象
@@ -16,6 +17,18 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalculatePurchaseOrderParamDto implements Serializable {
+public class CalculatePurchaseOrderDto implements Serializable {
+
+    private Integer productType;
+
+    /**
+     * 计划采购数量 重量
+     */
+    private BigDecimal planPurchaseValue;
+
+    /**
+     * 已送达采购数量 重量
+     */
+    private BigDecimal deliverPurchaseValue;
 
 }

@@ -32,10 +32,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -378,17 +375,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto) {
         List<BreedingPlanCoopDto> breedingPlanCoopDtoList = dto.getBreedingPlanCoopDtoList();
         UserInfo currentUser = currentUserService.getCurrentUser();
-        Integer currentUserId = currentUser == null ? null :currentUser.getId();
+        Integer currentUserId = currentUser == null ? null : currentUser.getId();
         // 插入养殖计划和鸡舍关系更新鸡舍在养数量和状态
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(dto.getPlanId());
-        if (breedingPlan == null){
-            throw new RuntimeException("养殖计划id="+dto.getPlanId()+"不存在");
+        if (breedingPlan == null) {
+            throw new RuntimeException("养殖计划id=" + dto.getPlanId() + "不存在");
         }
-        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)){
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
             List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
             List<Coop> coopList = new ArrayList<>();
-            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList){
-                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0){
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList) {
+                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0) {
                     BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                     batchPlantCoop.setCoopId(coopDto.getId())
                             .setCreateTime(new Date())
@@ -412,17 +409,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         // 插入养殖计划参数
         List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
         Integer standardId = null;
-        if (!CollectionUtils.isEmpty(breedingParameterDtoList)){
+        if (!CollectionUtils.isEmpty(breedingParameterDtoList)) {
             List<BreedingBatchParameter> batchParameterList = new ArrayList<>();
-            for (BreedingParameterDto parameterDto : breedingParameterDtoList){
+            for (BreedingParameterDto parameterDto : breedingParameterDtoList) {
                 List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                if (!CollectionUtils.isEmpty(breedingStandardParameterList)){
-                    if (standardId == null){
+                if (!CollectionUtils.isEmpty(breedingStandardParameterList)) {
+                    if (standardId == null) {
                         standardId = breedingStandardParameterList.get(0).getStandardId();
                     }
-                    for (BreedingStandardParameter standardParameter : breedingStandardParameterList){
+                    for (BreedingStandardParameter standardParameter : breedingStandardParameterList) {
                         BreedingBatchParameter batchParameter = new BreedingBatchParameter();
-                        BeanUtils.copyProperties(standardParameter,batchParameter);
+                        BeanUtils.copyProperties(standardParameter, batchParameter);
                         batchParameter.setParamId(standardParameter.getId())
                                 .setBatchNo(dto.getBatchNo())
                                 .setCreateTime(new Date())
@@ -452,37 +449,19 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
-        BigDecimal totalPlanFeedWeight = BigDecimal.ZERO;
-        BigDecimal totalSignFeedWeight = BigDecimal.ZERO;
+        HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap = null;
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (breedingPlan == null) {
+            throw new RuntimeException("当前养殖计划" + breedingPlan.getId() + "不存在");
+        }
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
-        if (breedingPlan != null && batchInfo != null) {
+        if (batchInfo != null) {
             //计算成活率
             String percentage = mathUtil.percentage(breedingPlan.getPlanChickenQuantity() - batchInfo.getDeadAmount(), breedingPlan.getPlanChickenQuantity());
             //计算预计出栏时间
             String expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
-            //查询计划用料
-            PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
-            purchaseOrderExample
-                    .createCriteria()
-                    .andEnableEqualTo(true)
-                    .andPlanIdEqualTo(planId)
-                    .andProductTypeEqualTo(ProductTypeEnum.FEED.getCode());
-            List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            //计算累加计划饲料重量 计算已签收饲料重量
-            if (CollectionUtils.isEmpty(purchaseOrders)) {
-                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedWeight.add(purchaseOrder.getWeight()));
-            }
-            purchaseOrderExample
-                    .createCriteria()
-                    .andPurchaseOrderStatusEqualTo(PurchaseOrderStatusEnum.DELIVERY.getCode());
-            List<PurchaseOrder> signPurchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            if (!CollectionUtils.isEmpty(signPurchaseOrders)) {
-
-            }
-
             //计算剩余饲料
             BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
             //计算异常次数
@@ -496,10 +475,32 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算询问解决次数
             techConsultRecordExample.createCriteria().andTechConsultStatusEqualTo(TechConsultStatusEmun.PROCESSED.getCode());
             int solveQuestions = techConsultRecordMapper.countByExample(techConsultRecordExample);
-            //养殖场信息
-            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
+            //计算计划采购 数量 重量
+            List<CalculatePurchaseOrderDto> calculatePurchaseOrderDtos = new ArrayList<>();
+            for (PlanStatusEnum planStatusEnum : PlanStatusEnum.values()) {
+                CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
+                int productType = planStatusEnum.getCode();
+                calculatePurchaseOrder(planId, productType, null);
+                BigDecimal planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
+                HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
+                BigDecimal deliverPurchaseValue = calculatePurchaseOrderMap.get(productType);
+                calculatePurchaseOrderDto
+                        .setProductType(productType)
+                        .setPlanPurchaseValue(planPurchaseValue)
+                        .setDeliverPurchaseValue(deliverPurchaseValue);
+                calculatePurchaseOrderDtos.add(calculatePurchaseOrderDto);
+            }
+            //计算计划饲料 剩余饲料
+            if (calculatePurchaseOrderAllMap.get(ProductTypeEnum.FEED.getCode()) != null) {
+                BigDecimal totalPlanFeedWeight = calculatePurchaseOrderAllMap.get(ProductTypeEnum.FEED.getCode());
+                returnBreedingDetailsDto
+                        .setPlanFeed(totalPlanFeedWeight)
+                        .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
+            }
             //计算理论体重值
             //计算理论料肉比
+            //养殖场信息
+            List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
             returnBreedingDetailsDto
                     .setBreedingDays(breedingPlan.getBreedingDays())
                     .setDayAge(batchInfo.getDayAge())
@@ -507,17 +508,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setBreedingStock(batchInfo.getCurrentAmount())
                     .setSurvivalRate(percentage)
                     .setAbnormalWarn(abnormalWarn)
-                    .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed))
                     .setAskQuestions(askQues)
                     .setPlants(plants)
-                    .setSolveQuestions(solveQuestions)
-                    .setPlanFeed(totalPlanFeedWeight);
-
-
+                    .setSolveQuestions(solveQuestions);
         }
-        //养殖场信息
-        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
-        returnBreedingDetailsDto.setPlants(plants);
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
         returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
@@ -532,40 +526,33 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @param purchaseOrderStatus
      * @author @Gao.
      */
-    private HashMap<Integer, HashMap<Integer, BigDecimal>> calculatePurchaseOrder(Integer planId, Integer productType, Integer purchaseOrderStatus) {
-        BigDecimal totalPlanFeedstStistical = BigDecimal.ZERO;
-        HashMap<Integer, HashMap<Integer, BigDecimal>> calculatePurchaseOrderMap = new HashMap<>(16);
-        HashMap<Integer, BigDecimal> totalPlanFeedMap = calculatePurchaseOrderMap.put(productType, new HashMap<>(16));
-        List<PurchaseOrder> purchaseOrders = null;
+    private HashMap<Integer, BigDecimal> calculatePurchaseOrder(Integer planId, Integer productType, Integer purchaseOrderStatus) {
+        BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
+        HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = new HashMap<>(16);
         //查询计划用料
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
         purchaseOrderExample
                 .createCriteria()
                 .andEnableEqualTo(true)
-                .andPlanIdEqualTo(planId);
+                .andPlanIdEqualTo(planId)
+                .andProductTypeEqualTo(productType)
+                .andPurchaseOrderStatusEqualTo(purchaseOrderStatus);
+        List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         //药品 种苗
         boolean flag = ProductTypeEnum.DRUG.getCode() == productType || ProductTypeEnum.SPROUT.getCode() == productType;
-        if (ProductTypeEnum.DRUG.getCode() == productType) {
+        if (flag) {
             //统计数量
-            purchaseOrderExample
-                    .createCriteria()
-                    .andProductTypeEqualTo(productType);
-            purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            if (CollectionUtils.isEmpty(purchaseOrders)) {
-                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedstStistical.add(purchaseOrder.getAmount()));
-                totalPlanFeedMap.put(purchaseOrderStatus, totalPlanFeedstStistical);
+            if (!CollectionUtils.isEmpty(purchaseOrders)) {
+                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedStatistics.add(purchaseOrder.getAmount()));
+                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
         //饲料
         if (ProductTypeEnum.FEED.getCode() == productType) {
             //统计重量
-            purchaseOrderExample
-                    .createCriteria()
-                    .andProductTypeEqualTo(productType);
-            purchaseOrderMapper.selectByExample(purchaseOrderExample);
-            if (CollectionUtils.isEmpty(purchaseOrders)) {
-                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedstStistical.add(purchaseOrder.getWeight()));
-                totalPlanFeedMap.put(purchaseOrderStatus, totalPlanFeedstStistical);
+            if (!CollectionUtils.isEmpty(purchaseOrders)) {
+                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedStatistics.add(purchaseOrder.getWeight()));
+                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
         return calculatePurchaseOrderMap;
