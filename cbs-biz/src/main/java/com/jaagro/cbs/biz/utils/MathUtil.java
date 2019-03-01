@@ -25,7 +25,10 @@ public class MathUtil {
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-        String result = numberFormat.format((float) minNum / (float) maxNum2 * 100);
+        String result = null;
+        if (maxNum2 > 0) {
+            numberFormat.format((float) minNum / (float) maxNum2 * 100);
+        }
         return result.concat("%");
     }
 }

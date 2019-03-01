@@ -443,7 +443,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
-     * 养殖中详情
+     * 养殖中详情 确认出栏详情
      *
      * @param planId
      * @author @Gao.
@@ -499,6 +499,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
             }
             //计算理论体重值
+
             //计算理论料肉比
             //养殖场信息
             List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);

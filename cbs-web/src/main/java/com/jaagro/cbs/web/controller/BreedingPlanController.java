@@ -109,7 +109,7 @@ public class BreedingPlanController {
     }
 
     @GetMapping("/breedingDetails/{planId}")
-    @ApiOperation("养殖中详情")
+    @ApiOperation("养殖中详情 确认出栏详情")
     public BaseResponse breedingDetails(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
@@ -119,7 +119,7 @@ public class BreedingPlanController {
 
     @GetMapping("/listBreedingPlanCoops/{planId}")
     @ApiOperation("获取养殖计划鸡舍信息")
-    public BaseResponse listBreedingPlanCoops(@PathVariable("planId") Integer planId){
+    public BaseResponse listBreedingPlanCoops(@PathVariable("planId") Integer planId) {
         if (planId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
@@ -128,8 +128,8 @@ public class BreedingPlanController {
 
     @PostMapping("/breedingPlanParamConfiguration")
     @ApiOperation("养殖计划参数配置")
-    public BaseResponse breedingPlanParamConfiguration(@RequestBody @Validated BreedingPlanParamConfigurationDto dto){
-        log.info("O breedingPlanParamConfiguration param={}",dto);
+    public BaseResponse breedingPlanParamConfiguration(@RequestBody @Validated BreedingPlanParamConfigurationDto dto) {
+        log.info("O breedingPlanParamConfiguration param={}", dto);
         breedingPlanService.breedingPlanParamConfiguration(dto);
         return BaseResponse.successInstance("参数配置成功");
     }
