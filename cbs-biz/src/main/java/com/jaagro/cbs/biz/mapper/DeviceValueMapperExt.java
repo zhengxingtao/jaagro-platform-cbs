@@ -2,6 +2,7 @@ package com.jaagro.cbs.biz.mapper;
 
 import com.jaagro.cbs.api.model.DeviceValue;
 import com.jaagro.cbs.api.model.DeviceValueExample;
+import com.jaagro.cbs.api.model.DeviceValueHistory;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +33,11 @@ public interface DeviceValueMapperExt extends BaseMapper<DeviceValue, DeviceValu
      * @param valueList
      */
     void insertBatch(@Param("valueList") List<DeviceValue> valueList);
+
+    /**
+     * 删除 根据设备、类型
+     *
+     * @param history
+     */
+    void deleteByValue(DeviceValueHistory history);
 }

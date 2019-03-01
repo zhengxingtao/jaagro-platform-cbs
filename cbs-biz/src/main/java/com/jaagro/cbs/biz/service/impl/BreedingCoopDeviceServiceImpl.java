@@ -5,6 +5,7 @@ import com.jaagro.cbs.api.dto.plant.ReturnCoopDeviceDto;
 
 import com.jaagro.cbs.api.model.Coop;
 import com.jaagro.cbs.api.model.CoopDevice;
+import com.jaagro.cbs.api.model.CoopDeviceExample;
 import com.jaagro.cbs.api.service.BreedingCoopDeviceService;
 import com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt;
 import com.jaagro.cbs.biz.mapper.CoopMapperExt;
@@ -41,9 +42,11 @@ public class BreedingCoopDeviceServiceImpl implements BreedingCoopDeviceService 
     public void bindDeviceToCoop(CreateCoopDeviceDto dto) {
         UserInfo currentUser = currentUserService.getCurrentUser();
         CoopDevice coopDevice = new CoopDevice();
-        coopDevice
-                .setCreateUserId(currentUser.getId());
+        Coop coop = coopMapper.selectByPrimaryKey(dto.getCoopId());
         BeanUtils.copyProperties(dto, coopDevice);
+        coopDevice
+                .setPlantId(coop.getPlantId())
+                .setCreateUserId(currentUser.getId());
         coopDeviceMapper.insertSelective(coopDevice);
     }
 
@@ -61,18 +64,18 @@ public class BreedingCoopDeviceServiceImpl implements BreedingCoopDeviceService 
     }
 
     /**
-     * 定时把数据从device_value_history表更新最新值到device_value表
+     * 根据鸡舍id查询设备列表
+     *
+     * @param coopId
+     * @return
      */
     @Override
-    public void updateDeviceValueTask() {
-
-    }
-
-    /**
-     * 从设备盒子实时收集设备数据到表device_value_history
-     */
-    @Override
-    public void collectionDeviceValue() {
-
+    public List<CoopDevice> listCoopDeviceByCoopId(Integer coopId) {
+        CoopDeviceExample deviceExample = new CoopDeviceExample();
+        deviceExample.createCriteria()
+                .andCoopIdEqualTo(coopId)
+                .andEnableEqualTo(true);
+        deviceExample.setOrderByClause("create_time desc");
+        return coopDeviceMapper.selectByExample(deviceExample);
     }
 }

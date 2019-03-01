@@ -47,13 +47,8 @@ public class CoopDeviceVlaueService {
         List<DeviceValueHistory> historyList = deviceValueHistoryMapper.listHistoryByParams();
         if (!CollectionUtils.isEmpty(historyList)) {
             for (DeviceValueHistory history : historyList) {
-                DeviceValueExample valueExample = new DeviceValueExample();
-                valueExample.createCriteria()
-                        .andDeviceIdEqualTo(history.getDeviceId())
-                        .andValueTypeEqualTo(history.getValueType());
                 //直接先删掉表的的原纪录
-                deviceValueMapper.deleteByExample(valueExample);
-
+                deviceValueMapper.deleteByValue(history);
                 //检测是否需要警报
                 deviceAlarm(history);
             }
@@ -81,16 +76,21 @@ public class CoopDeviceVlaueService {
                     BreedingBatchParameter parameter = new BreedingBatchParameter();
                     BigDecimal currentValue = history.getCurrentValue();
                     if (parameter.getAlarm().equals(1)) {
-                        DeviceAlarmLog alarmLog = new DeviceAlarmLog();
-                        Boolean flag = false;
-                        alarmLog
-                                .setCoopId(coop.getId())
-                                .setCurrentValue(currentValue)
-                                .setDayAge(parameter.getDayAge())
-                                .setDeviceId(history.getDeviceId())
-                                .setPlanId(parameter.getPlanId())
-                                .setPlantId(coop.getPlantId());
-                        switch (parameter.getValueType()) {
+                        if (currentValue.compareTo(parameter.getLowerLimit()) == -1 || currentValue.compareTo(parameter.getUpperLimit()) == 1) {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(parameter.getLowerLimit()).append("-").append(parameter.getUpperLimit());
+                            DeviceAlarmLog alarmLog = new DeviceAlarmLog();
+                            alarmLog
+                                    .setCoopId(coop.getId())
+                                    .setCurrentValue(currentValue)
+                                    .setDayAge(parameter.getDayAge())
+                                    .setDeviceId(history.getDeviceId())
+                                    .setPlanId(parameter.getPlanId())
+                                    .setPlantId(coop.getPlantId())
+                                    .setParamStandardValue(sb.toString());
+                            alarmLogMapper.insertSelective(alarmLog);
+                        }
+                        /*switch (parameter.getValueType()) {
                             //区间值
                             case 1:
                                 if (currentValue.compareTo(parameter.getLowerLimit()) == -1 || currentValue.compareTo(parameter.getUpperLimit()) == 1) {
@@ -114,14 +114,23 @@ public class CoopDeviceVlaueService {
                                     flag = true;
                                 }
                                 break;
-                        }
-                        if (flag) {
-                            alarmLogMapper.insertSelective(alarmLog);
-                        }
+                        }*/
                     }
                 }
             }
         }
+    }
+
+    /**
+     * 根据计划id获取当前日龄
+     *
+     * @param planId
+     * @return
+     */
+    private Integer getDayAge(Integer planId) {
+        Integer dayAge = 0;
+
+        return dayAge;
     }
 
 }
