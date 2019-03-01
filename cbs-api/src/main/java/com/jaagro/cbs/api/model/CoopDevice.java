@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author :asus
+ * @date :2019/03/01
  */
 @Data
 @NoArgsConstructor
@@ -50,6 +50,11 @@ public class CoopDevice implements Serializable {
      * 设备型号（生产商家的型号）
      */
     private String modelNumber;
+
+    /**
+     * 回调url
+     */
+    private String apiUrl;
 
     /**
      * 设备状态（0-拆除，1-正常 2-故障）
