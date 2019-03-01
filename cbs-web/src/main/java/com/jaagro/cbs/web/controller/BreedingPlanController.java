@@ -129,6 +129,7 @@ public class BreedingPlanController {
     @PostMapping("/breedingPlanParamConfiguration")
     @ApiOperation("养殖计划参数配置")
     public BaseResponse breedingPlanParamConfiguration(@RequestBody @Validated BreedingPlanParamConfigurationDto dto){
+        log.info("O breedingPlanParamConfiguration param={}",dto);
         breedingPlanService.breedingPlanParamConfiguration(dto);
         return BaseResponse.successInstance("参数配置成功");
     }
