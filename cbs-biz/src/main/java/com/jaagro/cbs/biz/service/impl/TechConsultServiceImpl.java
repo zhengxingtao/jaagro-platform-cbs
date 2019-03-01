@@ -6,16 +6,17 @@ import com.jaagro.cbs.api.dto.techconsult.ReturnTechConsultRecordDto;
 import com.jaagro.cbs.api.dto.techconsult.TechConsultParamDto;
 import com.jaagro.cbs.api.dto.techconsult.UpdateTechConsultDto;
 import com.jaagro.cbs.api.enums.TechConsultStatusEnum;
-import com.jaagro.cbs.api.model.TechConsultRecord;
-import com.jaagro.cbs.api.model.TechConsultRecordExample;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.TechConsultService;
+import com.jaagro.cbs.biz.mapper.BatchCoopDailyMapperExt;
+import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.TechConsultRecordMapperExt;
-import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,10 @@ public class TechConsultServiceImpl implements TechConsultService {
     private CurrentUserService currentUserService;
     @Autowired
     private TechConsultRecordMapperExt techConsultRecordMapper;
+    @Autowired
+    private BreedingPlanMapperExt breedingPlanMapper;
+    @Autowired
+    private BatchCoopDailyMapperExt batchCoopDailyMapper;
 
     /**
      * 技术询问分页列表
@@ -69,10 +74,32 @@ public class TechConsultServiceImpl implements TechConsultService {
     public ReturnTechConsultRecordDto getDetailTechConsultDtoById(Integer id) {
 
         ReturnTechConsultRecordDto returnDto = new ReturnTechConsultRecordDto();
-        TechConsultRecord techConsultRecordDo =  techConsultRecordMapper.selectByPrimaryKey(id);
-        BeanUtils.copyProperties(techConsultRecordDo,returnDto);
+        TechConsultRecord techConsultRecordDo = techConsultRecordMapper.selectByPrimaryKey(id);
+        if(null == techConsultRecordDo)
+        {
+            throw new RuntimeException("技术询问id=" + id + "不存在");
+        }
+        BeanUtils.copyProperties(techConsultRecordDo, returnDto);
         returnDto.setStrTechConsultStatus(TechConsultStatusEnum.getDescByCode(techConsultRecordDo.getTechConsultStatus()));
+        int planId = techConsultRecordDo.getPlanId();
+        int livingAmount = 0;
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (null != breedingPlan) {
+            int planChickenQuantity = breedingPlan.getPlanChickenQuantity();
+            int coopId = techConsultRecordDo.getCoopId();
 
+            BatchCoopDailyExample example = new BatchCoopDailyExample();
+            example.createCriteria().andPlanIdEqualTo(planId).andCoopIdEqualTo(coopId).andEnableEqualTo(true);
+            List<BatchCoopDaily> batchCoopDailyList = batchCoopDailyMapper.selectByExample(example);
+            int deadAmount = 0;
+            if (!CollectionUtils.isEmpty(batchCoopDailyList)) {
+                for (BatchCoopDaily batchCoopDaily : batchCoopDailyList) {
+                    deadAmount = deadAmount + batchCoopDaily.getDeadAmount();
+                }
+            }
+            livingAmount = planChickenQuantity - deadAmount;
+        }
+        returnDto.setLivingAmount(livingAmount);
         return returnDto;
     }
 
@@ -92,7 +119,7 @@ public class TechConsultServiceImpl implements TechConsultService {
             techConslutRecordDo.setModifyTime(new Date());
             techConslutRecordDo.setModifyUserId(currentUser != null ? currentUser.getId() : null);
             techConsultRecordMapper.updateByPrimaryKeySelective(techConslutRecordDo);
-        }catch(Exception e){
+        } catch (Exception e) {
             log.error("R TechConsultServiceImpl.HandleTechConsultRecord error:" + e);
             return false;
         }
