@@ -23,16 +23,12 @@ public class ListBreedingStandardCriteria implements Serializable {
     /**
      * 当前页
      */
-    @NotNull(message = "{pageNum.NotNull}")
-    @Min(value = 1,message = "{pageNum.Min}")
-    private int pageNum;
+    private Integer pageNum;
 
     /**
      * 每页的数量
      */
-    @NotNull(message = "{pageSize.NotNull}")
-    @Min(value = 1,message = "{pageSize.Min}")
-    private int pageSize;
+    private Integer pageSize;
 
     /**
      * 标准方案名称(左模糊)

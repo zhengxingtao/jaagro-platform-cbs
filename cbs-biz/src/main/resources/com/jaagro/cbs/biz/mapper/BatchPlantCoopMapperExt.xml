@@ -26,7 +26,7 @@
             p.plant_name,
             c.breeding_value,
             c.capacity,
-            c.home_number,
+            c.coop_name,
             c.coop_status,
             c.id,
             c.device_quantity,
@@ -37,7 +37,7 @@
             LEFT JOIN plant p on bpc.plant_id = p.id
             LEFT JOIN coop c ON bpc.plant_id = c.plant_id
             WHERE
-            bpc.plant_id = #{planId}
+            bpc.plan_id = #{planId}
             AND coop_id IS NULL
             AND bpc.`enable` = 1
             AND c.`enable` = 1

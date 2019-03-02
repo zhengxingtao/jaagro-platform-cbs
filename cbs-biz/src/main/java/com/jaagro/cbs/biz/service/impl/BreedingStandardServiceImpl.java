@@ -153,7 +153,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      */
     @Override
     public PageInfo listBreedingStandardByCriteria(ListBreedingStandardCriteria criteria) {
-        PageHelper.startPage(criteria.getPageNum(),criteria.getPageSize());
+        PageHelper.startPage(criteria.getPageNum() == null ? 1 : criteria.getPageNum(),criteria.getPageSize() == null ? 1000 : criteria.getPageSize());
         List<BreedingStandard> breedingStandardList = breedingStandardMapper.listBreedingStandardByCriteria(criteria);
         return new PageInfo(breedingStandardList);
     }
