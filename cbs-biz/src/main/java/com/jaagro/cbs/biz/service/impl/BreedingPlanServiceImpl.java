@@ -502,8 +502,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             for (PlanStatusEnum planStatusEnum : PlanStatusEnum.values()) {
                 BigDecimal planPurchaseValue=null;
                 BigDecimal deliverPurchaseValue=null;
-                CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
                 int productType = planStatusEnum.getCode();
+                CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
                 calculatePurchaseOrder(planId, productType, null);
                 if(calculatePurchaseOrderAllMap.get(productType)!=null){
                      planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
@@ -538,13 +538,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapper.selectByExample(breedingBatchParameterExample);
             if (!CollectionUtils.isEmpty(breedingBatchParameters)) {
                 BreedingBatchParameter breedingBatchParameter = breedingBatchParameters.get(0);
-                returnBreedingDetailsDto.setTheoryWeight(breedingBatchParameter.getParamValue());
+                if(MathUtil.isNum(breedingBatchParameter.getParamValue())){
+                    returnBreedingDetailsDto.setTheoryWeight(breedingBatchParameter.getParamValue());
+                }
                 //计算理论料肉比
                 if (breedingBatchParameter.getParamValue()!=null&&MathUtil.isNum(breedingBatchParameter.getParamValue())) {
                     BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
                     BigDecimal meat = paramValue.multiply(breedingStock);
-                    BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
-                    returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
+                    if(meat!=null){
+                        BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
+                        returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
+                    }
                 }
             }
             //养殖场信息
