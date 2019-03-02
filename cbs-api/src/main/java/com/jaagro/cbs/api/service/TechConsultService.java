@@ -31,6 +31,6 @@ public interface TechConsultService {
      * @param updateTechConsultDto
      * @return
      */
-    boolean HandleTechConsultRecord(UpdateTechConsultDto updateTechConsultDto);
+    boolean handleTechConsultRecord(UpdateTechConsultDto updateTechConsultDto);
 
 }
