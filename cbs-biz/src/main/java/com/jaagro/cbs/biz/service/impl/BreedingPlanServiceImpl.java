@@ -82,8 +82,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
-//    @Autowired
-//    private BreedingBatchParameterMapperExt breedingBatchParameterMapper;
 
     /**
      * 创建养殖计划
