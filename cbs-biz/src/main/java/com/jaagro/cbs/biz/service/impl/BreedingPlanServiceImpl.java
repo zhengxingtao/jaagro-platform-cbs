@@ -234,6 +234,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setSourceStatus(CertificateStatus.NORMAL)
                         .setCreateTime(new Date())
                         .setCreateUserId(currentUserId)
+                        .setSourceType(SourceTypeEnum.IMAGE.getCode())
                         .setEnable(true)
                         .setPlanId(createPlanContractDto.getPlanId())
                         .setPlanContractId(batchContract.getId());

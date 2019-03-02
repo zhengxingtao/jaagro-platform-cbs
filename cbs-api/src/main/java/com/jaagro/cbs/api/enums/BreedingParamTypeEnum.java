@@ -19,6 +19,7 @@ public enum BreedingParamTypeEnum {
     CARBON_DIOXIDE(15, "CARBON_DIOXIDE", "二氧化碳"),
     VENTILATION(16, "VENTILATION", "通风"),
     NEGATIVE_PRESSURE(17, "NEGATIVE_PRESSURE", "负压值"),
+    DENSITY(18,"DENSITY","密度"),
     FEEDING_NUM(20, "FEEDING", "饲喂(次/日)"),
     FEEDING_KG(21, "FEEDING", "饲喂(克/日)"),
     WEIGHT(22, "WEIGHT", "体重(克/只/日)"),
