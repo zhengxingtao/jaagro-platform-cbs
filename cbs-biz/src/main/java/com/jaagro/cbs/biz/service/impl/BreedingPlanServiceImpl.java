@@ -421,6 +421,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 .setCreateTime(new Date())
                                 .setCreateUserId(currentUserId)
                                 .setCustomerId(breedingPlan.getCustomerId())
+                                .setStatus(ParameterStatusEnum.USEFUL.getCode())
                                 .setEnable(Boolean.TRUE);
                         batchParameterList.add(batchParameter);
                     }
