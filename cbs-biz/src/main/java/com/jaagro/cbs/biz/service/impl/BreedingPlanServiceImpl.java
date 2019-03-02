@@ -302,7 +302,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
         BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount);
-        if(breedingStock!=null){
+        if (breedingStock != null) {
             returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
         }
         //养殖场信息
@@ -467,7 +467,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
-        HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap = null;
+        HashMap<Integer, BigDecimal> calculatePlanFeedWeightMap =new HashMap<>(16);
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
@@ -483,9 +483,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //累计所有饲料喂养量
             BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
             //计算存活数
-            BigDecimal survivalStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            BigDecimal survivalStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).abs();
             //计算存栏量
-            BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount);
+            BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount).abs();
             //计算成活率
             String percentage = null;
             if (survivalStock != null && breedingPlan.getPlanChickenQuantity() != null && breedingPlan.getPlanChickenQuantity() > 0) {
@@ -509,14 +509,17 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             int solveQuestions = techConsultRecordMapper.countByExample(techConsultRecordExample);
             //计算计划采购 数量 重量
             List<CalculatePurchaseOrderDto> calculatePurchaseOrderDtos = new ArrayList<>();
-            for (PlanStatusEnum planStatusEnum : PlanStatusEnum.values()) {
+            for (ProductTypeEnum productTypeEnum : ProductTypeEnum.values()) {
                 BigDecimal planPurchaseValue = null;
                 BigDecimal deliverPurchaseValue = null;
-                int productType = planStatusEnum.getCode();
+                int productType = productTypeEnum.getCode();
                 CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
-                calculatePurchaseOrder(planId, productType, null);
-                if (calculatePurchaseOrderAllMap.get(productType) != null) {
+                HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap= calculatePurchaseOrder(planId, productType, null);
+                if (calculatePurchaseOrderAllMap!=null && calculatePurchaseOrderAllMap.get(productType) != null) {
                     planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
+                    if(ProductTypeEnum.FEED.getCode()==productType){
+                        calculatePlanFeedWeightMap.put(productType,planPurchaseValue);
+                    }
                 }
                 HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
                 if (calculatePurchaseOrderMap.get(productType) != null) {
@@ -529,8 +532,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 calculatePurchaseOrderDtos.add(calculatePurchaseOrderDto);
             }
             //计算计划饲料 剩余饲料
-            if (calculatePurchaseOrderAllMap.get(ProductTypeEnum.FEED.getCode()) != null) {
-                BigDecimal totalPlanFeedWeight = calculatePurchaseOrderAllMap.get(ProductTypeEnum.FEED.getCode());
+            if (calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode()) != null) {
+                BigDecimal totalPlanFeedWeight = calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode());
                 returnBreedingDetailsDto
                         .setPlanFeed(totalPlanFeedWeight)
                         .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
@@ -573,7 +576,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setExpectSuchTime(expectSuchTime)
                     .setSolveQuestions(solveQuestions)
                     .setBreedingStock(batchInfo.getCurrentAmount())
-                    .setBreedingDays(breedingPlan.getBreedingDays());
+                    .setBreedingDays(breedingPlan.getBreedingDays())
+                    .setCalculatePurchaseOrderDtos(calculatePurchaseOrderDtos);
         }
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
@@ -590,7 +594,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author @Gao.
      */
     private HashMap<Integer, BigDecimal> calculatePurchaseOrder(Integer planId, Integer productType, Integer purchaseOrderStatus) {
-        BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
+         BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
         HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = new HashMap<>(16);
         //查询计划用料
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
@@ -598,15 +602,21 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 .createCriteria()
                 .andEnableEqualTo(true)
                 .andPlanIdEqualTo(planId)
-                .andProductTypeEqualTo(productType)
-                .andPurchaseOrderStatusEqualTo(purchaseOrderStatus);
+                .andProductTypeEqualTo(productType);
+        if (purchaseOrderStatus != null) {
+            purchaseOrderExample
+                    .createCriteria()
+                    .andPurchaseOrderStatusEqualTo(purchaseOrderStatus);
+        }
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         //药品 种苗
         boolean flag = ProductTypeEnum.DRUG.getCode() == productType || ProductTypeEnum.SPROUT.getCode() == productType;
         if (flag) {
             //统计数量
             if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedStatistics.add(purchaseOrder.getAmount()));
+                for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(new BigDecimal(purchaseOrder.getQuantity()));
+                }
                 calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
@@ -614,7 +624,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (ProductTypeEnum.FEED.getCode() == productType) {
             //统计重量
             if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                purchaseOrders.forEach(purchaseOrder -> totalPlanFeedStatistics.add(purchaseOrder.getWeight()));
+                for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(purchaseOrder.getWeight());
+                }
                 calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
