@@ -473,13 +473,19 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //累计所有饲料喂养量
             BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
             //计算存活数
-            int survivalStock = breedingPlan.getPlanChickenQuantity() - accumulativeDeadAmount.intValue();
+            BigDecimal survivalStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
             //计算存栏量
-            int breedingStock = breedingPlan.getPlanChickenQuantity() - accumulativeDeadAmount.intValue() - accumulativeSaleAmount.intValue();
+            BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount);
             //计算成活率
-            String percentage = mathUtil.percentage(survivalStock, breedingPlan.getPlanChickenQuantity());
+            String percentage=null;
+            if (survivalStock != null && breedingPlan.getPlanChickenQuantity() != null&& breedingPlan.getPlanChickenQuantity() > 0) {
+                percentage= mathUtil.percentage(survivalStock.intValue(), breedingPlan.getPlanChickenQuantity());
+            }
             //计算预计出栏时间
-            String expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
+            String expectSuchTime=null;
+            if(breedingPlan.getPlanTime()!=null&&breedingPlan.getBreedingDays()!=null){
+                 expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
+            }
             //计算异常次数
             DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
             deviceAlarmLogExample.createCriteria().andPlanIdEqualTo(planId);
@@ -494,12 +500,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算计划采购 数量 重量
             List<CalculatePurchaseOrderDto> calculatePurchaseOrderDtos = new ArrayList<>();
             for (PlanStatusEnum planStatusEnum : PlanStatusEnum.values()) {
+                BigDecimal planPurchaseValue=null;
+                BigDecimal deliverPurchaseValue=null;
                 CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
                 int productType = planStatusEnum.getCode();
                 calculatePurchaseOrder(planId, productType, null);
-                BigDecimal planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
+                if(calculatePurchaseOrderAllMap.get(productType)!=null){
+                     planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
+                }
                 HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
-                BigDecimal deliverPurchaseValue = calculatePurchaseOrderMap.get(productType);
+                if(calculatePurchaseOrderMap.get(productType)!=null){
+                    deliverPurchaseValue = calculatePurchaseOrderMap.get(productType);
+                }
                 calculatePurchaseOrderDto
                         .setProductType(productType)
                         .setPlanPurchaseValue(planPurchaseValue)
@@ -528,10 +540,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BreedingBatchParameter breedingBatchParameter = breedingBatchParameters.get(0);
                 returnBreedingDetailsDto.setTheoryWeight(breedingBatchParameter.getParamValue());
                 //计算理论料肉比
-                if (MathUtil.isNum(breedingBatchParameter.getParamValue())) {
-                    //
+                if (breedingBatchParameter.getParamValue()!=null&&MathUtil.isNum(breedingBatchParameter.getParamValue())) {
                     BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
-                    BigDecimal meat = paramValue.multiply(new BigDecimal(breedingStock));
+                    BigDecimal meat = paramValue.multiply(breedingStock);
                     BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
                     returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
                 }
@@ -543,7 +554,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setAskQuestions(askQues)
                     .setSurvivalRate(percentage)
                     .setAbnormalWarn(abnormalWarn)
-                    .setBreedingStock(breedingStock)
+                    .setBreedingStock(breedingStock.intValue())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setSolveQuestions(solveQuestions)
