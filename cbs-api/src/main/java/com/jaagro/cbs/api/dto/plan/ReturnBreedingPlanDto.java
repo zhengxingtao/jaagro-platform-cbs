@@ -79,6 +79,11 @@ public class ReturnBreedingPlanDto implements Serializable {
     private String notes;
 
     /**
+     * 养殖天数
+     */
+    private Integer breedingDays;
+
+    /**
      * 创建时间
      */
     private Date createTime;
