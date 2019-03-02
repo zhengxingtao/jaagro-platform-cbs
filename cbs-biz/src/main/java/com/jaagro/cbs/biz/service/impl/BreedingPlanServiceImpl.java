@@ -24,6 +24,7 @@ import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -389,31 +390,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (breedingPlan == null) {
             throw new RuntimeException("养殖计划id=" + dto.getPlanId() + "不存在");
         }
-        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
-            List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
-            List<Coop> coopList = new ArrayList<>();
-            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList) {
-                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0) {
-                    BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
-                    batchPlantCoop.setCoopId(coopDto.getId())
-                            .setCreateTime(new Date())
-                            .setCreateUserId(currentUserId)
-                            .setEnable(Boolean.TRUE)
-                            .setPlanId(dto.getPlanId())
-                            .setPlantId(coopDto.getPlantId());
-                    batchPlantCoopList.add(batchPlantCoop);
-                    Coop coop = new Coop();
-                    coop.setId(coopDto.getId())
-                            .setBreedingValue(coopDto.getBreedingValue())
-                            .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
-                            .setModifyTime(new Date())
-                            .setModifyUserId(currentUserId);
-                    coopList.add(coop);
-                }
-            }
-            batchPlantCoopMapper.insertBatch(batchPlantCoopList);
-            coopMapper.batchUpdateByPrimaryKeySelective(coopList);
-        }
         // 插入养殖计划参数
         List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
         Integer standardId = null;
@@ -440,8 +416,35 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
             breedingBatchParameterMapper.batchInsert(batchParameterList);
         }
-        // 更新养殖计划
         BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
+        if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
+            List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
+            List<Coop> coopList = new ArrayList<>();
+            for (BreedingPlanCoopDto coopDto : breedingPlanCoopDtoList) {
+                if (coopDto.getBreedingValue() != null && coopDto.getBreedingValue() > 0) {
+                    BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
+                    batchPlantCoop.setCoopId(coopDto.getId())
+                            .setCreateTime(new Date())
+                            .setCreateUserId(currentUserId)
+                            .setEnable(Boolean.TRUE)
+                            .setPlanId(dto.getPlanId())
+                            .setPlantId(coopDto.getPlantId());
+                    batchPlantCoopList.add(batchPlantCoop);
+                    Coop coop = new Coop();
+                    coop.setId(coopDto.getId())
+                            .setBreedingValue(coopDto.getBreedingValue())
+                            .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
+                            .setLastStartDate(breedingPlan.getPlanTime())
+                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(),breedingStandard.getBreedingDays()))
+                            .setModifyTime(new Date())
+                            .setModifyUserId(currentUserId);
+                    coopList.add(coop);
+                }
+            }
+            batchPlantCoopMapper.insertBatch(batchPlantCoopList);
+            coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+        }
+        // 更新养殖计划
         breedingPlan.setPlanStatus(PlanStatusEnum.SIGN_CHICKEN.getCode())
                 .setModifyTime(new Date())
                 .setModifyUserId(currentUserId)
