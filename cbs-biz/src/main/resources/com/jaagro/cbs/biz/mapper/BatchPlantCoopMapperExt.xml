@@ -11,12 +11,14 @@
     </select>
 
     <insert id="insertBatch" parameterType="list">
-        insert into batch_plant_coop ( id, plan_id, plant_id, create_user_id,
+        insert into batch_plant_coop (plan_id, plant_id, coop_id,
+        enable, create_time, create_user_id,
         modify_time, modify_user_id)
         values
         <foreach collection="batchPlantCoops" item="item" separator=",">
-            (#{item.id}, #{item.planId}, #{item.plantId},
-            #{item.createUserId}, #{item.modifyTime}, #{item.modifyUserId})
+            (#{item.planId,jdbcType=INTEGER}, #{item.plantId,jdbcType=INTEGER}, #{item.coopId,jdbcType=INTEGER},
+            #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
+            #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.modifyUserId,jdbcType=INTEGER})
         </foreach>
     </insert>
 

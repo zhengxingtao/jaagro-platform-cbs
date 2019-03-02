@@ -113,7 +113,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 batchPlantCoop
                         .setPlanId(breedingPlan.getId())
                         .setCreateUserId(currentUser.getId())
-                        .setPlantId(plantId);
+                        .setPlantId(plantId)
+                        .setEnable(Boolean.TRUE);
                 batchPlantCoops.add(batchPlantCoop);
             }
             batchPlantCoopMapper.insertBatch(batchPlantCoops);
@@ -415,6 +416,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         BreedingBatchParameter batchParameter = new BreedingBatchParameter();
                         BeanUtils.copyProperties(standardParameter, batchParameter);
                         batchParameter.setParamId(standardParameter.getId())
+                                .setPlanId(dto.getPlanId())
                                 .setBatchNo(dto.getBatchNo())
                                 .setCreateTime(new Date())
                                 .setCreateUserId(currentUserId)
