@@ -21,7 +21,7 @@ public class MathUtil {
 
     /**
      * 求百分数
-     *
+     * @author @Gao.
      * @param minNum
      * @param maxNum2
      * @return
@@ -39,7 +39,7 @@ public class MathUtil {
 
     /**
      * 判断字符串是否是数字
-     *
+     * @author @Gao.
      * @param str
      * @return
      */
