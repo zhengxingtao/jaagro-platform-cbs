@@ -82,6 +82,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
+//    @Autowired
+//    private BreedingBatchParameterMapperExt breedingBatchParameterMapper;
 
     /**
      * 创建养殖计划
@@ -464,12 +466,20 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
         if (batchInfo != null) {
+            //累计所有死淘数量
+            BigDecimal accumulativeDeadAmount = batchInfoMapper.accumulativeDeadAmount(planId);
+            //累计所有的出栏量
+            BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
+            //累计所有饲料喂养量
+            BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
+            //计算存活数
+            int survivalStock = breedingPlan.getPlanChickenQuantity() - accumulativeDeadAmount.intValue();
+            //计算存栏量
+            int breedingStock = breedingPlan.getPlanChickenQuantity() - accumulativeDeadAmount.intValue() - accumulativeSaleAmount.intValue();
             //计算成活率
-            String percentage = mathUtil.percentage(breedingPlan.getPlanChickenQuantity() - batchInfo.getDeadAmount(), breedingPlan.getPlanChickenQuantity());
+            String percentage = mathUtil.percentage(survivalStock, breedingPlan.getPlanChickenQuantity());
             //计算预计出栏时间
             String expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
-            //计算剩余饲料
-            BigDecimal accumulativeFeed = batchInfoMapper.accumulativeFeed(planId);
             //计算异常次数
             DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
             deviceAlarmLogExample.createCriteria().andPlanIdEqualTo(planId);
@@ -504,20 +514,41 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
             }
             //计算理论体重值
-
-            //计算理论料肉比
+            BreedingBatchParameterExample breedingBatchParameterExample = new BreedingBatchParameterExample();
+            breedingBatchParameterExample
+                    .createCriteria()
+                    .andPlanIdEqualTo(planId)
+                    .andEnableEqualTo(true)
+                    .andDayAgeEqualTo(batchInfo.getDayAge())
+                    .andStatusEqualTo(BreedingStandardStatusEnum.ENABLE.getCode())
+                    .andParamTypeEqualTo(BreedingStandardParamEnum.WEIGHT.getCode())
+                    .andValueTypeEqualTo(BreedingStandardValueTypeEnum.STANDARD_VALUE.getCode());
+            List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapper.selectByExample(breedingBatchParameterExample);
+            if (!CollectionUtils.isEmpty(breedingBatchParameters)) {
+                BreedingBatchParameter breedingBatchParameter = breedingBatchParameters.get(0);
+                returnBreedingDetailsDto.setTheoryWeight(breedingBatchParameter.getParamValue());
+                //计算理论料肉比
+                if (MathUtil.isNum(breedingBatchParameter.getParamValue())) {
+                    //
+                    BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
+                    BigDecimal meat = paramValue.multiply(new BigDecimal(breedingStock));
+                    BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
+                    returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
+                }
+            }
             //养殖场信息
             List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(planId);
             returnBreedingDetailsDto
-                    .setBreedingDays(breedingPlan.getBreedingDays())
-                    .setDayAge(batchInfo.getDayAge())
-                    .setExpectSuchTime(expectSuchTime)
-                    .setBreedingStock(batchInfo.getCurrentAmount())
+                    .setPlants(plants)
+                    .setAskQuestions(askQues)
                     .setSurvivalRate(percentage)
                     .setAbnormalWarn(abnormalWarn)
-                    .setAskQuestions(askQues)
-                    .setPlants(plants)
-                    .setSolveQuestions(solveQuestions);
+                    .setBreedingStock(breedingStock)
+                    .setDayAge(batchInfo.getDayAge())
+                    .setExpectSuchTime(expectSuchTime)
+                    .setSolveQuestions(solveQuestions)
+                    .setBreedingStock(batchInfo.getCurrentAmount())
+                    .setBreedingDays(breedingPlan.getBreedingDays());
         }
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
@@ -565,5 +596,3 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return calculatePurchaseOrderMap;
     }
 }
-
-

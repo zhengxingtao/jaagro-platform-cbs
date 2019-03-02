@@ -81,7 +81,12 @@ public class ReturnBreedingDetailsDto implements Serializable {
     /**
      * 理论体重
      */
-    private BigDecimal theoryWeight;
+    private String theoryWeight;
+
+    /**
+     * 料肉比
+     */
+    private BigDecimal feedMeatRate;
 
     /**
      * 送料情况
