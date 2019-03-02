@@ -1,6 +1,6 @@
 package com.jaagro.cbs.biz.service;
 
-import com.jaagro.cbs.api.dto.base.Employee;
+import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -70,6 +70,16 @@ public interface UserClientService {
      * @return
      */
     @GetMapping("/listEmpByDeptId/{deptId}")
-    BaseResponse<List<Employee>> getEmpByDeptId(@PathVariable("deptId") Integer deptId);
+    BaseResponse<List<ListEmployeeDto>> getEmpByDeptId(@PathVariable("deptId") Integer deptId);
+
+    /**
+     * 获取技术员列表
+     *
+     * @return
+     * @author yj
+     */
+
+    @GetMapping("/listTechnician")
+    BaseResponse<List<ListEmployeeDto>> listTechnician();
 }
 

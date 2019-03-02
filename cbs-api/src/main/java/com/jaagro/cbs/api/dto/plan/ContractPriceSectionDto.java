@@ -31,4 +31,9 @@ public class ContractPriceSectionDto implements Serializable {
      * 体重区间上限
      */
     private BigDecimal weightUpper;
+
+    /**
+     * 是否是市场价(0-不是,1-是)
+     */
+    private Boolean marketPriceFlag;
 }

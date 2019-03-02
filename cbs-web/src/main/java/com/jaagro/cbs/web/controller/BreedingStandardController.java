@@ -1,10 +1,8 @@
 package com.jaagro.cbs.web.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDetailDto;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.service.BreedingStandardService;
 import com.jaagro.utils.BaseResponse;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -78,28 +75,28 @@ public class BreedingStandardController {
 
 
     /**
-     * 分页查询所有的养殖模板
-     * @author yj
-     * @param criteria
+     * 查询所有的养殖模板
+     *
      * @return
+     * @author yj
      */
-    @ApiOperation("分页查询所有的养殖模板")
-    @PostMapping("/listBreedingStandardByCriteria")
-    public BaseResponse listBreedingStandardByCriteria(@RequestBody @Validated ListBreedingStandardCriteria criteria){
-        log.info("O listBreedingStandardByCriteria criteria={}",criteria);
-        PageInfo pageInfo = breedingStandardService.listBreedingStandardByCriteria(criteria);
-        return BaseResponse.successInstance(pageInfo);
+    @ApiOperation("查询所有的养殖模板")
+    @GetMapping("/listAllBreedingStandard")
+    public BaseResponse listAllBreedingStandard() {
+        log.info("O listAllBreedingStandard");
+        return BaseResponse.successInstance(breedingStandardService.listAllBreedingStandard());
     }
 
     /**
      * 查询单个养殖模板详情按日龄分组
-     * @author yj
+     *
      * @param id
      * @return
+     * @author yj
      */
     @ApiOperation("查询单个养殖模板详情按日龄分组")
     @GetMapping("/getBreedingStandardDetail/{id}")
-    public BaseResponse getBreedingStandardDetail(@PathVariable("id") Integer id){
+    public BaseResponse getBreedingStandardDetail(@PathVariable("id") Integer id) {
         BreedingStandardDto breedingStandardDto = breedingStandardService.getBreedingStandardById(id);
         // 将养殖参数按照日龄分组
         BreedingStandardDetailDto detailDto = groupBreedingStandard(breedingStandardDto);
@@ -109,21 +106,21 @@ public class BreedingStandardController {
     private BreedingStandardDetailDto groupBreedingStandard(BreedingStandardDto breedingStandardDto) {
         BreedingStandardDetailDto detailDto = new BreedingStandardDetailDto();
         List<BreedingStandardParameter> standardParameterDos = breedingStandardDto.getStandardParameterDos();
-        if (!CollectionUtils.isEmpty(standardParameterDos)){
+        if (!CollectionUtils.isEmpty(standardParameterDos)) {
             Set<Integer> dayAgeSet = new HashSet<>();
             List<BreedingParameterDto> breedingParameterDtoList = new ArrayList<>();
-            standardParameterDos.forEach(parameter->dayAgeSet.add(parameter.getDayAge()));
-            for (Integer dayAge : dayAgeSet){
+            standardParameterDos.forEach(parameter -> dayAgeSet.add(parameter.getDayAge()));
+            for (Integer dayAge : dayAgeSet) {
                 BreedingParameterDto parameterDto = new BreedingParameterDto();
                 parameterDto.setDayAge(dayAge);
                 List<BreedingStandardParameter> parameterList = new ArrayList<>();
                 parameterDto.setBreedingStandardParameterList(parameterList);
                 breedingParameterDtoList.add(parameterDto);
             }
-            for (BreedingStandardParameter parameter : standardParameterDos){
-                for (BreedingParameterDto parameterDto : breedingParameterDtoList){
+            for (BreedingStandardParameter parameter : standardParameterDos) {
+                for (BreedingParameterDto parameterDto : breedingParameterDtoList) {
                     List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                    if (parameter.getDayAge().equals(parameterDto.getDayAge())){
+                    if (parameter.getDayAge().equals(parameterDto.getDayAge())) {
                         breedingStandardParameterList.add(parameter);
                     }
                 }
