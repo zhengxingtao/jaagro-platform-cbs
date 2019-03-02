@@ -14,5 +14,5 @@ public final class ContractStatus {
     /**
      * 1 审核通过
      */
-    private static final Integer APPROVE = 1;
+    public static final Integer APPROVE = 1;
 }

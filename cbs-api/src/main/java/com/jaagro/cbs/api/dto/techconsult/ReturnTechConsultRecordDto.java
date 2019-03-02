@@ -1,8 +1,6 @@
 package com.jaagro.cbs.api.dto.techconsult;
 
 
-import com.jaagro.cbs.api.model.Coop;
-import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +8,6 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author gavin
@@ -93,19 +89,12 @@ public class ReturnTechConsultRecordDto implements Serializable {
     private String strHandleType;
 
     /**
-     * 养殖场列表
-     */
-    List<Plant> plantList;
-    /**
-     * 鸡舍列表
-     */
-    List<Coop> copps;
-    /**
-     * 养殖场跟对应的鸡舍
-     */
-    Map<Integer,List<Coop>> plantCoopMap;
-    /**
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 存栏量
+     */
+    private int livingAmount;
 }

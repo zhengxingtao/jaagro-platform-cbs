@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 养殖户管理
+ *
  * @author baiyiran
  * @Date 2019/2/21
  */
@@ -169,10 +171,13 @@ public class BreedingPlantController {
      * @author @Gao.
      */
     @ApiOperation("鸡舍与设备关联")
-    @GetMapping("/bindDeviceToCoop")
+    @PostMapping("/bindDeviceToCoop")
     public BaseResponse bindDeviceToCoop(@RequestBody CreateCoopDeviceDto dto) {
         if (dto.getCoopId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+        }
+        if (dto.getDeviceName() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "设备名称不能为空");
         }
         breedingCoopDeviceService.bindDeviceToCoop(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
@@ -193,4 +198,21 @@ public class BreedingPlantController {
         }
         return BaseResponse.successInstance(breedingCoopDeviceService.listBreedingCoopDevice(plantId));
     }
+
+    /**
+     * 根据鸡舍id 查询出设备列表
+     *
+     * @param
+     * @return
+     * @author baiyiran
+     */
+    @ApiOperation("获取鸡舍下的设备列表")
+    @GetMapping("/listBreedingCoopDeviceByCoopId/{coopId}")
+    public BaseResponse listBreedingCoopDeviceByCoopId(@PathVariable("coopId") Integer coopId) {
+        if (coopId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+        }
+        return BaseResponse.successInstance(breedingCoopDeviceService.listCoopDeviceByCoopId(coopId));
+    }
+
 }

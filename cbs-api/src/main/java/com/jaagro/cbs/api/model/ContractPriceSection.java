@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author :asus
+ * @date :2019/03/01
  */
 @Data
 @NoArgsConstructor
@@ -46,6 +46,11 @@ public class ContractPriceSection implements Serializable {
      * 体重区间上限
      */
     private BigDecimal weightUpper;
+
+    /**
+     * 是否是市场价(0-不是,1-是)
+     */
+    private Boolean marketPriceFlag;
 
     /**
      * 是否有效(0-无效,1-有效)

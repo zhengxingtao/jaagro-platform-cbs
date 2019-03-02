@@ -28,6 +28,11 @@ public class CreateCoopDeviceDto implements Serializable {
     private Integer plantId;
 
     /**
+     * 回调url
+     */
+    private String apiUrl;
+
+    /**
      * 设备类型(1-温感设备,2-湿感设备)
      */
     private Integer deviceType;

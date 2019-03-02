@@ -18,4 +18,9 @@
             #{item.currentValue,jdbcType=DECIMAL})
         </foreach>
     </insert>
+    <delete id="deleteByValue" parameterType="java.lang.Integer">
+        delete from device_value
+        where device_id = #{deviceId,jdbcType=INTEGER}
+        and value_type = #{valueType,jdbcType=INTEGER}
+    </delete>
 </mapper>

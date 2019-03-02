@@ -165,10 +165,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BreedingBatchParameter parameter = breedingBatchParameters.get(0);
                 returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
                 try {
-                    long day = getInterval(returnBreedingPlanDto.getPlanTime(), new Date());
+                    long day = getDayAge(returnBreedingPlanDto.getId());
                     returnBreedingPlanDto.setAlreadyDayAge((int) day);
                 } catch (Exception ex) {
-                    log.error("计算批次进度失败:BreedingPlanServiceImpl.getInterval()");
                     ex.printStackTrace();
                 }
             }
@@ -176,25 +175,29 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         return new PageInfo(planDtoList);
     }
 
-
     /**
-     * 计算上鸡时间进度
+     * 根据计划id获取当前日龄
      *
-     * @param beginDate
-     * @param endDate
+     * @param planId
      * @return
-     * @throws Exception
      */
-    private long getInterval(Date beginDate, Date endDate) throws Exception {
+    public long getDayAge(Integer planId) throws Exception {
         long day = 0;
-        if (beginDate == null && endDate == null) {
-            return day;
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (breedingPlan != null) {
+            Date beginDate = breedingPlan.getPlanTime();
+            Date endDate = new Date();
+            if (beginDate == null && endDate == null) {
+                return day;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            beginDate = sdf.parse(sdf.format(beginDate));
+            endDate = sdf.parse(sdf.format(endDate));
+            day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
+        } else {
+            throw new NullPointerException("计划不存在");
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        beginDate = sdf.parse(sdf.format(beginDate));
-        endDate = sdf.parse(sdf.format(endDate));
-        day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
-        return day;
+        return day + 1;
     }
 
     /**
@@ -219,7 +222,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         batchContract.setContractNumber(sequenceCodeUtils.genSeqCode("HT"))
                 .setContractDate(new Date())
                 .setCreateTime(new Date())
-                .setContractStatus(ContractStatus.UNAUDITED)
+                .setContractStatus(ContractStatus.APPROVE)
                 .setCreateUserId(currentUserId)
                 .setCustomerId(breedingPlan.getCustomerId())
                 .setEnable(true);
@@ -230,7 +233,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             for (String imageUrl : createPlanContractDto.getImageUrlList()) {
                 ContractSource contractSource = new ContractSource();
                 contractSource.setSourceUrl(imageUrl)
-                        .setSourceStatus(CertificateStatus.UNCHECKED)
+                        .setSourceStatus(CertificateStatus.NORMAL)
                         .setCreateTime(new Date())
                         .setCreateUserId(currentUserId)
                         .setEnable(true)
@@ -258,6 +261,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         // 更新养殖计划状态
         breedingPlan.setModifyTime(new Date())
+                .setPlanTime(createPlanContractDto.getStartDate())
+                .setPlanChickenQuantity(createPlanContractDto.getBabychickQuantity())
                 .setModifyUserId(currentUserId)
                 .setPlanStatus(PlanStatusEnum.PARAM_CORRECT.getCode());
         breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
