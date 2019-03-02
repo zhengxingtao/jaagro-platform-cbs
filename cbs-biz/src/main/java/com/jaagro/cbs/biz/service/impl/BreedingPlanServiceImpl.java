@@ -587,7 +587,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);
-        returnBreedingDetailsDto.setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
+        returnBreedingDetailsDto
+                .setReturnBreedingPlanDetails(returnBreedingPlanDetailsDto);
         return returnBreedingDetailsDto;
     }
 
@@ -600,7 +601,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author @Gao.
      */
     private HashMap<Integer, BigDecimal> calculatePurchaseOrder(Integer planId, Integer productType, Integer purchaseOrderStatus) {
-         BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
+        BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
         HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = new HashMap<>(16);
         //查询计划用料
         PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
