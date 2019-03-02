@@ -1,6 +1,6 @@
 package com.jaagro.cbs.api.dto.plan;
 
-import com.jaagro.cbs.api.dto.base.Employee;
+import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.model.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -111,5 +111,5 @@ public class ReturnBreedingPlanDto implements Serializable {
     /**
      * 部门下技术员信息
      */
-    private List<Employee> technicianList;
+    private List<ListEmployeeDto> technicianList;
 }

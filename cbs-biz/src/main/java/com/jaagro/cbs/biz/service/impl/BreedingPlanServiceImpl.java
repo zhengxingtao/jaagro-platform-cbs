@@ -6,7 +6,7 @@ import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.plan.*;
-import com.jaagro.cbs.api.dto.base.Employee;
+import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
@@ -318,10 +318,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setCustomerPhone(contactsReturnDto.getPhone());
         }
         //技术员信息
-        BaseResponse<List<Employee>> empByDeptId = userClientService.getEmpByDeptId(1);
+        BaseResponse<List<ListEmployeeDto>> empByDeptId = userClientService.listTechnician();
         if (!CollectionUtils.isEmpty(empByDeptId.getData())) {
-            List<Employee> employees = empByDeptId.getData();
-            returnBreedingPlanDto.setTechnicianList(employees);
+            List<ListEmployeeDto> listEmployeeDtos = empByDeptId.getData();
+            returnBreedingPlanDto.setTechnicianList(listEmployeeDtos);
         }
         return returnBreedingPlanDto;
     }
