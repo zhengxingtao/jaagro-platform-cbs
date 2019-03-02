@@ -57,10 +57,10 @@
                     </if>
                 </foreach>
             </trim>
-            <trim prefix="home_number =case" suffix="end,">
+            <trim prefix="coop_name =case" suffix="end,">
                 <foreach collection="coopList" item="i" index="index">
-                    <if test="i.homeNumber!=null">
-                        when id=#{i.id} then #{i.homeNumber}
+                    <if test="i.coopName!=null">
+                        when id=#{i.id} then #{i.coopName}
                     </if>
                 </foreach>
             </trim>

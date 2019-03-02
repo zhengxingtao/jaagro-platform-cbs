@@ -24,6 +24,7 @@ import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,7 +113,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 batchPlantCoop
                         .setPlanId(breedingPlan.getId())
                         .setCreateUserId(currentUser.getId())
-                        .setPlantId(plantId);
+                        .setPlantId(plantId)
+                        .setEnable(Boolean.TRUE);
                 batchPlantCoops.add(batchPlantCoop);
             }
             batchPlantCoopMapper.insertBatch(batchPlantCoops);
@@ -399,6 +401,35 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (breedingPlan == null) {
             throw new RuntimeException("养殖计划id=" + dto.getPlanId() + "不存在");
         }
+        // 插入养殖计划参数
+        List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
+        Integer standardId = null;
+        if (!CollectionUtils.isEmpty(breedingParameterDtoList)) {
+            List<BreedingBatchParameter> batchParameterList = new ArrayList<>();
+            for (BreedingParameterDto parameterDto : breedingParameterDtoList) {
+                List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
+                if (!CollectionUtils.isEmpty(breedingStandardParameterList)) {
+                    if (standardId == null) {
+                        standardId = breedingStandardParameterList.get(0).getStandardId();
+                    }
+                    for (BreedingStandardParameter standardParameter : breedingStandardParameterList) {
+                        BreedingBatchParameter batchParameter = new BreedingBatchParameter();
+                        BeanUtils.copyProperties(standardParameter, batchParameter);
+                        batchParameter.setParamId(standardParameter.getId())
+                                .setPlanId(dto.getPlanId())
+                                .setBatchNo(dto.getBatchNo())
+                                .setCreateTime(new Date())
+                                .setCreateUserId(currentUserId)
+                                .setCustomerId(breedingPlan.getCustomerId())
+                                .setStatus(ParameterStatusEnum.USEFUL.getCode())
+                                .setEnable(Boolean.TRUE);
+                        batchParameterList.add(batchParameter);
+                    }
+                }
+            }
+            breedingBatchParameterMapper.batchInsert(batchParameterList);
+        }
+        BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
         if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
             List<BatchPlantCoop> batchPlantCoopList = new ArrayList<>();
             List<Coop> coopList = new ArrayList<>();
@@ -416,6 +447,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     coop.setId(coopDto.getId())
                             .setBreedingValue(coopDto.getBreedingValue())
                             .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
+                            .setLastStartDate(breedingPlan.getPlanTime())
+                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(),breedingStandard.getBreedingDays()))
                             .setModifyTime(new Date())
                             .setModifyUserId(currentUserId);
                     coopList.add(coop);
@@ -424,34 +457,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             batchPlantCoopMapper.insertBatch(batchPlantCoopList);
             coopMapper.batchUpdateByPrimaryKeySelective(coopList);
         }
-        // 插入养殖计划参数
-        List<BreedingParameterDto> breedingParameterDtoList = dto.getBreedingParameterDtoList();
-        Integer standardId = null;
-        if (!CollectionUtils.isEmpty(breedingParameterDtoList)) {
-            List<BreedingBatchParameter> batchParameterList = new ArrayList<>();
-            for (BreedingParameterDto parameterDto : breedingParameterDtoList) {
-                List<BreedingStandardParameter> breedingStandardParameterList = parameterDto.getBreedingStandardParameterList();
-                if (!CollectionUtils.isEmpty(breedingStandardParameterList)) {
-                    if (standardId == null) {
-                        standardId = breedingStandardParameterList.get(0).getStandardId();
-                    }
-                    for (BreedingStandardParameter standardParameter : breedingStandardParameterList) {
-                        BreedingBatchParameter batchParameter = new BreedingBatchParameter();
-                        BeanUtils.copyProperties(standardParameter, batchParameter);
-                        batchParameter.setParamId(standardParameter.getId())
-                                .setBatchNo(dto.getBatchNo())
-                                .setCreateTime(new Date())
-                                .setCreateUserId(currentUserId)
-                                .setCustomerId(breedingPlan.getCustomerId())
-                                .setEnable(Boolean.TRUE);
-                        batchParameterList.add(batchParameter);
-                    }
-                }
-            }
-            breedingBatchParameterMapper.batchInsert(batchParameterList);
-        }
         // 更新养殖计划
-        BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
         breedingPlan.setPlanStatus(PlanStatusEnum.SIGN_CHICKEN.getCode())
                 .setModifyTime(new Date())
                 .setModifyUserId(currentUserId)
