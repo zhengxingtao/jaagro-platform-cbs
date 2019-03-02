@@ -594,8 +594,4 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         }
         return calculatePurchaseOrderMap;
     }
-
-    public static void main(String[] args) {
-
-    }
 }
