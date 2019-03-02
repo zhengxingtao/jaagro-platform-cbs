@@ -58,5 +58,19 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
      */
     BigDecimal accumulativeFeed(@Param("planId") Integer planId);
 
+    /**
+     * 累计饲料喂养量
+     *
+     * @param planId
+     * @return
+     */
+    BigDecimal accumulativeDeadAmount(@Param("planId") Integer planId);
 
+    /**
+     * 累计饲料喂养量
+     *
+     * @param planId
+     * @return
+     */
+    BigDecimal accumulativeSaleAmount(@Param("planId") Integer planId);
 }
