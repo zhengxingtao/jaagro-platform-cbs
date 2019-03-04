@@ -304,8 +304,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal accumulativeDeadAmount = batchInfoMapper.accumulativeDeadAmount(planId);
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
-        BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount);
+        BigDecimal breedingStock = null;
+        BigDecimal totalBreedingStock=null;
+        if (breedingPlan.getPlanChickenQuantity() != null && accumulativeDeadAmount != null) {
+            breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+        }
         if (breedingStock != null) {
+            totalBreedingStock= breedingStock.subtract(accumulativeSaleAmount);
+        }
+        if (totalBreedingStock != null) {
             returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
         }
         //养殖场信息
@@ -449,7 +456,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                             .setBreedingValue(coopDto.getBreedingValue())
                             .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
                             .setLastStartDate(breedingPlan.getPlanTime())
-                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(),breedingStandard.getBreedingDays()))
+                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(), breedingStandard.getBreedingDays()))
                             .setModifyTime(new Date())
                             .setModifyUserId(currentUserId);
                     coopList.add(coop);
@@ -474,7 +481,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
-        HashMap<Integer, BigDecimal> calculatePlanFeedWeightMap =new HashMap<>(16);
+        HashMap<Integer, BigDecimal> calculatePlanFeedWeightMap = new HashMap<>(16);
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
@@ -521,11 +528,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BigDecimal deliverPurchaseValue = null;
                 int productType = productTypeEnum.getCode();
                 CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
-                HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap= calculatePurchaseOrder(planId, productType, null);
-                if (calculatePurchaseOrderAllMap!=null && calculatePurchaseOrderAllMap.get(productType) != null) {
+                HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap = calculatePurchaseOrder(planId, productType, null);
+                if (calculatePurchaseOrderAllMap != null && calculatePurchaseOrderAllMap.get(productType) != null) {
                     planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
-                    if(ProductTypeEnum.FEED.getCode()==productType){
-                        calculatePlanFeedWeightMap.put(productType,planPurchaseValue);
+                    if (ProductTypeEnum.FEED.getCode() == productType) {
+                        calculatePlanFeedWeightMap.put(productType, planPurchaseValue);
                     }
                 }
                 HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
