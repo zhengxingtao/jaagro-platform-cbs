@@ -59,8 +59,8 @@ public class BreedingPlanController {
         PageInfo pageInfo = breedingPlanService.listBreedingPlan(dto);
         List<BreedingPlanVo> breedingPlanVos = new ArrayList<>();
         if (!CollectionUtils.isEmpty(pageInfo.getList())) {
-            List<ReturnBreedingPlanDto> ReturnBreedingPlanDtos = pageInfo.getList();
-            for (ReturnBreedingPlanDto returnBreedingPlanDto : ReturnBreedingPlanDtos) {
+            List<ReturnBreedingPlanDto> returnBreedingPlanDtos = pageInfo.getList();
+            for (ReturnBreedingPlanDto returnBreedingPlanDto : returnBreedingPlanDtos) {
                 BreedingPlanVo breedingPlanVo = new BreedingPlanVo();
                 BeanUtils.copyProperties(returnBreedingPlanDto, breedingPlanVo);
                 breedingPlanVo

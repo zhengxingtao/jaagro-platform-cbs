@@ -59,9 +59,9 @@ public class TechConsultServiceImpl implements TechConsultService {
         criteriaTwo.andBatchNoLike(dto.getBatchNo() + "%");
         criteriaTwo.andCustomerPhoneNumberLike(dto.getKeyWord() + "%");
         example.or(criteriaTwo);
-        List<TechConsultRecord> techConsultRecoreDos = techConsultRecordMapper.selectByExample(example);
+        List<TechConsultRecord> techConsultRecordDos = techConsultRecordMapper.selectByExample(example);
 
-        return new PageInfo(techConsultRecoreDos);
+        return new PageInfo(techConsultRecordDos);
     }
 
     /**
@@ -114,14 +114,14 @@ public class TechConsultServiceImpl implements TechConsultService {
         try {
             log.info("O TechConsultServiceImpl.HandleTechConsultRecord input updateDto:{}", updateDto);
             UserInfo currentUser = currentUserService.getCurrentUser();
-            TechConsultRecord techConslutRecordDo = new TechConsultRecord();
-            BeanUtils.copyProperties(updateDto, techConslutRecordDo);
-            techConslutRecordDo.setModifyTime(new Date());
-            techConslutRecordDo.setHandleTime(new Date());
-            techConslutRecordDo.setTechConsultStatus(TechConsultStatusEnum.STATUS_SOLVED.getCode());
-            techConslutRecordDo.setModifyUserId(currentUser != null ? currentUser.getId() : null);
-            techConslutRecordDo.setHandleUserId(currentUser != null ? currentUser.getId() : null);
-            techConsultRecordMapper.updateByPrimaryKeySelective(techConslutRecordDo);
+            TechConsultRecord techConsultRecordDo = new TechConsultRecord();
+            BeanUtils.copyProperties(updateDto, techConsultRecordDo);
+            techConsultRecordDo.setModifyTime(new Date());
+            techConsultRecordDo.setHandleTime(new Date());
+            techConsultRecordDo.setTechConsultStatus(TechConsultStatusEnum.STATUS_SOLVED.getCode());
+            techConsultRecordDo.setModifyUserId(currentUser != null ? currentUser.getId() : null);
+            techConsultRecordDo.setHandleUserId(currentUser != null ? currentUser.getId() : null);
+            techConsultRecordMapper.updateByPrimaryKeySelective(techConsultRecordDo);
         } catch (Exception e) {
             log.error("R TechConsultServiceImpl.HandleTechConsultRecord error:" + e);
             return false;
