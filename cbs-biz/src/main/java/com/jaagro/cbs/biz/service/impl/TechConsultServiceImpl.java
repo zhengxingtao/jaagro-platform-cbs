@@ -56,7 +56,7 @@ public class TechConsultServiceImpl implements TechConsultService {
 
         TechConsultRecordExample.Criteria criteriaTwo = example.createCriteria();
         criteriaTwo.andTechConsultStatusEqualTo(dto.getStatus());
-        criteriaOne.andBatchNoLike(dto.getBatchNo() + "%");
+        criteriaTwo.andBatchNoLike(dto.getBatchNo() + "%");
         criteriaTwo.andCustomerPhoneNumberLike(dto.getKeyWord() + "%");
         example.or(criteriaTwo);
         List<TechConsultRecord> techConsultRecoreDos = techConsultRecordMapper.selectByExample(example);
@@ -110,14 +110,17 @@ public class TechConsultServiceImpl implements TechConsultService {
      * @return
      */
     @Override
-    public boolean HandleTechConsultRecord(UpdateTechConsultDto updateDto) {
+    public boolean handleTechConsultRecord(UpdateTechConsultDto updateDto) {
         try {
             log.info("O TechConsultServiceImpl.HandleTechConsultRecord input updateDto:{}", updateDto);
             UserInfo currentUser = currentUserService.getCurrentUser();
             TechConsultRecord techConslutRecordDo = new TechConsultRecord();
             BeanUtils.copyProperties(updateDto, techConslutRecordDo);
             techConslutRecordDo.setModifyTime(new Date());
+            techConslutRecordDo.setHandleTime(new Date());
+            techConslutRecordDo.setTechConsultStatus(TechConsultStatusEnum.STATUS_SOLVED.getCode());
             techConslutRecordDo.setModifyUserId(currentUser != null ? currentUser.getId() : null);
+            techConslutRecordDo.setHandleUserId(currentUser != null ? currentUser.getId() : null);
             techConsultRecordMapper.updateByPrimaryKeySelective(techConslutRecordDo);
         } catch (Exception e) {
             log.error("R TechConsultServiceImpl.HandleTechConsultRecord error:" + e);

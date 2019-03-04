@@ -68,14 +68,10 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         log.info("O BreedingProgressServiceImpl.getBreedingProgressById input planId:{},plantId:{}", planId, plantId);
         BreedingProgressDto breedingProgressDto = new BreedingProgressDto();
         try {
-            breedingProgressDto.setBatchNo(breedingPlan.getBatchNo());
-            breedingProgressDto.setPlanChickenQuantity(breedingPlan.getPlanChickenQuantity());
-            breedingProgressDto.setPlanTime(breedingPlan.getPlanTime());
-
+            BeanUtils.copyProperties(breedingPlan,breedingProgressDto);
             //该计划上报死掉的鸡
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
             breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(BreedingRecordTypeEnum.DEATH_AMOUNT.getCode()).andEnableEqualTo(true);
-            ;
             List<BreedingRecord> breedingRecordDos = breedingRecordMapper.selectByExample(breedingRecordExample);
             BigDecimal deadChickenCount = new BigDecimal(0.00);
             for (BreedingRecord breedingRecordDo : breedingRecordDos) {
@@ -87,17 +83,9 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             BigDecimal livingQuantity = planQuantity.subtract(deadChickenCount);
             breedingProgressDto.setLivingChickenQuantity(livingQuantity);
 
-            CustomerContactsReturnDto customerDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
-            if (null != customerDto) {
-                breedingProgressDto.setContactPhone(customerDto.getPhone());
-                breedingProgressDto.setCustomerName(customerDto.getCustomerName());
-                breedingProgressDto.setCustomerAddress(customerDto.getAddress());
-            }
-
             //养殖计划的鸡舍信息
             BatchPlantCoopExample example = new BatchPlantCoopExample();
             example.createCriteria().andPlanIdEqualTo(planId).andEnableEqualTo(true);
-            ;
             List<BatchPlantCoop> batchPlantCoopDos = batchPlantCoopMapper.selectByExample(example);
             if (!CollectionUtils.isEmpty(batchPlantCoopDos)) {
                 Set<Integer> plantIds = new HashSet<>();
@@ -110,6 +98,14 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 List<Coop> coops = coopDos.stream().filter(c -> plantId.equals(c.getPlantId())).collect(Collectors.toList());
                 breedingProgressDto.setCoops(coops);
             }
+
+            CustomerContactsReturnDto customerDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
+            if (null != customerDto) {
+                breedingProgressDto.setContactPhone(customerDto.getPhone());
+                breedingProgressDto.setCustomerName(customerDto.getCustomerName());
+                breedingProgressDto.setCustomerAddress(customerDto.getAddress());
+            }
+
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingProgressById  error:" + ex);
         }
