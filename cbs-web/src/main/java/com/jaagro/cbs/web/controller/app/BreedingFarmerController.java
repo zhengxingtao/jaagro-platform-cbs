@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,13 +21,13 @@ public class BreedingFarmerController {
     private BreedingFarmerService breedingFarmerService;
 
 
-    @PostMapping("/breedingFarmerIndexStatistical")
+    @GetMapping("/breedingFarmerIndexStatistical")
     @ApiOperation("农户端首页数据统计")
     public BaseResponse breedingFarmerIndexStatistical() {
         return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndexStatistical());
     }
 
-    @PostMapping("/breedingFarmerIndex")
+    @GetMapping("/breedingFarmerIndex")
     @ApiOperation("农户端首页列表")
     public BaseResponse breedingFarmerIndex() {
         return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndex());
