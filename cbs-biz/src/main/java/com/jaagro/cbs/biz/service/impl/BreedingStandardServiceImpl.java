@@ -45,7 +45,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean createBreedingTemplate(BreedingStandardDto dto) {
         try {
-            log.info("O BreedingStardandServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
+            log.info("O BreedingStandardServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setBreedingType(dto.getBreedingType())
@@ -66,9 +66,9 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
-            log.info("O BreedingStardandServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
+            log.info("O BreedingStandardServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
         } catch (Exception e) {
-            log.error("R BreedingStardandServiceImpl.createBreedingTemplate  error:" + e);
+            log.error("R BreedingStandardServiceImpl.createBreedingTemplate  error:" + e);
             return false;
 
         }
@@ -86,7 +86,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateBreedingTemplate(BreedingStandardDto dto) {
         try {
-            log.info("O BreedingStardandServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
+            log.info("O BreedingStandardServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
             Integer currentUserId = getUserId();
             BreedingStandard breedingStandard = new BreedingStandard();
             breedingStandard.setId(dto.getId())
@@ -108,9 +108,9 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
-            log.info("O BreedingStardandServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
+            log.info("O BreedingStandardServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
         } catch (Exception e) {
-            log.error("R BreedingStardandServiceImpl.updateBreedingTemplate  error:" + e);
+            log.error("R BreedingStandardServiceImpl.updateBreedingTemplate  error:" + e);
             return false;
 
         }
@@ -149,8 +149,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      */
     @Override
     public List<BreedingStandard> listAllBreedingStandard() {
-        List<BreedingStandard> breedingStandardList = breedingStandardMapper.listAllBreedingStandard();
-        return breedingStandardList;
+        return breedingStandardMapper.listAllBreedingStandard();
     }
 
     private Integer getUserId() {

@@ -27,7 +27,7 @@ public class DateUtil {
      * @return
      * @author: @Gao.
      */
-    public String accumulateDateByDay(Date date, int day) {
+    public synchronized String accumulateDateByDay(Date date, int day) {
         String strDate = simpleDateFormat.format(date);
         Date formatDate = stringToDate(strDate);
         fromCal.setTime(formatDate);

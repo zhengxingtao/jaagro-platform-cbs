@@ -15,7 +15,6 @@ public enum EmergencyLevelEnum {
     EMERGENCY_FOUR(4, "EMERGENCY_FOUR", "紧急");
 
 
-
     private int code;
     private String type;
     private String desc;

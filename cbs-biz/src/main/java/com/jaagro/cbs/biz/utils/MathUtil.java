@@ -31,7 +31,7 @@ public class MathUtil {
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-        String result = null;
+        String result = "";
         if (maxNum > 0) {
             result = numberFormat.format((float) minNum / (float) maxNum * 100);
         }
