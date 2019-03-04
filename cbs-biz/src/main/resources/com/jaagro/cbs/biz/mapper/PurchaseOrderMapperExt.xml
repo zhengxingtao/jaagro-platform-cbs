@@ -3,7 +3,23 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
-
+    <select id="calculateTotalPurchaseOrder" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        sum( case when product_type=1 then quantity else 0 end ) totalSproutQuantity ,
+        sum(case when product_type=2 then weight else 0 end) totalFeedWeight,
+        sum( case when product_type=3 then quantity else 0 end ) totalDrugQuantity from purchase_order
+        from purchase_order
+        <where>
+            enable=1
+            <if test="productType!=null">
+                and product_type=#{productType}
+            </if>
+            <if test="planIds!=null">
+                and plan_id in
+                <foreach collection="planIds" open="(" separator="," close=")" item="planId">
+                    ${planId}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -181,6 +181,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @param planId
      * @return
      */
+    @Override
     public long getDayAge(Integer planId) throws Exception {
         long day = 0;
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);

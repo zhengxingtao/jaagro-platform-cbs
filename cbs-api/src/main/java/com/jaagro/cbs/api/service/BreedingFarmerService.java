@@ -1,8 +1,8 @@
 package com.jaagro.cbs.api.service;
 
+import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 
-import java.util.List;
 
 /**
  * 农户端app 相关api
@@ -12,8 +12,18 @@ import java.util.List;
 public interface BreedingFarmerService {
 
     /**
-     * 农户端app 首页
+     * 农户端app 首页数据统计
+     *
      * @return
+     * @author @Gao.
      */
-    ReturnBreedingFarmerIndexDto breedingFarmerIndex();
+    ReturnBreedingFarmerIndexDto breedingFarmerIndexStatistical();
+
+    /**
+     * 农户端app 首页
+     *
+     * @return
+     * @author @Gao.
+     */
+    PageInfo breedingFarmerIndex();
 }

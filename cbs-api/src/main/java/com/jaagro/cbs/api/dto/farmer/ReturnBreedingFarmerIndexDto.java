@@ -21,27 +21,18 @@ import java.util.List;
 public class ReturnBreedingFarmerIndexDto implements Serializable {
 
     /**
-     *总的存栏量
+     * 总的存栏量
      */
-    private  Integer totalBreedingStock;
+    private BigDecimal totalBreedingStock;
 
     /**
      * 总的异常总数
      */
-    private Integer totalAbnormalWarn;
+    private BigDecimal totalAbnormalWarn;
 
     /**
      * 总的饲料库存
      */
     private BigDecimal totalFeedStock;
-
-    /**
-     * 农户端养殖批次详情
-     */
-    private List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos;
-
-
-
-
 
 }

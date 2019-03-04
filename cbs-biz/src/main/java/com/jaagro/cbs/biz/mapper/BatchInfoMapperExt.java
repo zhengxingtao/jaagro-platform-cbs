@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -59,7 +60,7 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
     BigDecimal accumulativeFeed(@Param("planId") Integer planId);
 
     /**
-     * 累计饲料喂养量
+     * 累计死淘数量
      *
      * @param planId
      * @return
@@ -67,10 +68,34 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
     BigDecimal accumulativeDeadAmount(@Param("planId") Integer planId);
 
     /**
-     * 累计饲料喂养量
+     * 累计出栏量
      *
      * @param planId
      * @return
      */
     BigDecimal accumulativeSaleAmount(@Param("planId") Integer planId);
+
+    /**
+     * 累计客户养殖计划中所有死淘数量
+     *
+     * @param planIds
+     * @return
+     */
+    BigDecimal accumulativeTotalDeadAmount(@Param("planIds") Set planIds);
+
+    /**
+     * 累计客户养殖计划中食用饲料总量
+     *
+     * @param planIds
+     * @return
+     */
+    BigDecimal accumulativeTotalFeed(@Param("planIds") Set planIds);
+
+    /**
+     * 累计客户养殖计划中食用饲料总量
+     *
+     * @param planIds
+     * @return
+     */
+    BigDecimal accumulativeTotalSaleAmount(@Param("planIds") Set planIds);
 }

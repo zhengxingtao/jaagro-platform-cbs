@@ -42,14 +42,14 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
     private Integer planChickenQuantity;
 
     /**
+     * 存栏量
+     */
+    private BigDecimal breedingStock;
+
+    /**
      * 上鸡时间
      */
     private Date planTime;
-
-    /**
-     * 进度 - 已进行的天数
-     */
-    private Integer alreadyDayAge;
 
     /**
      * 进度 - 日龄
@@ -64,6 +64,6 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
     /**
      * 今日饲料耗量
      */
-    private BigDecimal expendFeed;
+    private BigDecimal fodderAmount;
 
 }

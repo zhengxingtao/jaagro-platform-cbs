@@ -80,4 +80,14 @@ public interface BreedingPlanService {
      * @param dto
      */
     void breedingPlanParamConfiguration(BreedingPlanParamConfigurationDto dto);
+
+    /**
+     * 根据计划id获取当前日龄
+     *
+     * @param planId
+     * @return
+     */
+     long getDayAge(Integer planId) throws Exception;
+
+
 }
