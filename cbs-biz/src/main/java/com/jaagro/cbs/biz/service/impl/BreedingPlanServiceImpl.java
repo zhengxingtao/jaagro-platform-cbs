@@ -435,7 +435,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     }
                 }
             }
-            breedingBatchParameterMapper.batchInsert(batchParameterList);
+            if (!CollectionUtils.isEmpty(batchParameterList)){
+                breedingBatchParameterMapper.batchInsert(batchParameterList);
+            }
         }
         BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
         if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
@@ -462,8 +464,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     coopList.add(coop);
                 }
             }
-            batchPlantCoopMapper.insertBatch(batchPlantCoopList);
-            coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+            if (!CollectionUtils.isEmpty(batchPlantCoopList)){
+                batchPlantCoopMapper.insertBatch(batchPlantCoopList);
+            }
+            if (!CollectionUtils.isEmpty(coopList)){
+                coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+            }
         }
         // 更新养殖计划
         breedingPlan.setPlanStatus(PlanStatusEnum.SIGN_CHICKEN.getCode())
