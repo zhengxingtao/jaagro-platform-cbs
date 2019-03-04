@@ -1,9 +1,10 @@
 package com.jaagro.cbs.api.service;
 
 
-import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria;
+import com.jaagro.cbs.api.model.BreedingStandard;
+
+import java.util.List;
 
 /**
  * 养殖大脑管理
@@ -21,6 +22,7 @@ public interface BreedingStandardService {
 
     /**
      * 修改养殖模版与参数
+     *
      * @param dto
      * @return
      */
@@ -28,18 +30,19 @@ public interface BreedingStandardService {
 
     /**
      * 根据养殖模板ID获取养殖模板详情
+     *
      * @param id
      * @return
      */
     BreedingStandardDto getBreedingStandardById(Integer id);
 
     /**
-     * 分页查询所有养殖模板
-     * @author yj
-     * @param criteria
+     * 查询所有养殖模板
+     *
      * @return
+     * @author yj
      */
-    PageInfo listBreedingStandardByCriteria(ListBreedingStandardCriteria criteria);
+    List<BreedingStandard> listAllBreedingStandard();
 
     /**
      * 根据标准模板的ID获取该模板所有的参数

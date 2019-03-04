@@ -31,9 +31,9 @@ public class BreedingPlanCoopDto  implements Serializable{
      */
     private Integer id;
     /**
-     * 鸡舍位置
+     * 鸡舍名称
      */
-    private Integer homeNumber;
+    private String coopName;
 
     /**
      * 容量

@@ -91,10 +91,10 @@ public class TechConsultController {
      * @date 2019/03/01
      */
     @ApiOperation("获取技术询问列表")
-    @PostMapping("/HandleTechConsultRecord")
-    public BaseResponse HandleTechConsultRecord(@RequestBody UpdateTechConsultDto updateDto) {
+    @PostMapping("/handleTechConsultRecord")
+    public BaseResponse handleTechConsultRecord(@RequestBody UpdateTechConsultDto updateDto) {
 
-        boolean flag = techConsultService.HandleTechConsultRecord(updateDto);
+        boolean flag = techConsultService.handleTechConsultRecord(updateDto);
         if (flag) {
             return BaseResponse.successInstance("处理技术申请成功!");
         }else {

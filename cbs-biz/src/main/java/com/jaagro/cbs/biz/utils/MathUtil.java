@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.NumberFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @description: 计算工具类
@@ -14,21 +16,40 @@ import java.text.NumberFormat;
 @Slf4j
 public class MathUtil {
 
+    private static Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
+
+
     /**
      * 求百分数
      *
      * @param minNum
-     * @param maxNum2
+     * @param maxNum
      * @return
+     * @author @Gao.
      */
-    public String percentage(Integer minNum, Integer maxNum2) {
+    public String percentage(Integer minNum, Integer maxNum) {
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         String result = null;
-        if (maxNum2 > 0) {
-            numberFormat.format((float) minNum / (float) maxNum2 * 100);
+        if (maxNum > 0) {
+            result = numberFormat.format((float) minNum / (float) maxNum * 100);
         }
         return result.concat("%");
+    }
+
+    /**
+     * 判断字符串是否是数字
+     *
+     * @param str
+     * @return
+     * @author @Gao.
+     */
+    public static boolean isNum(String str) {
+        Matcher isNum = pattern.matcher(str);
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
     }
 }

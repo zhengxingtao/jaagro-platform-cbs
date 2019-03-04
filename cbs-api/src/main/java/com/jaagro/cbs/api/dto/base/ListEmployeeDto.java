@@ -12,7 +12,7 @@ import java.io.Serializable;
  **/
 @Data
 @Accessors(chain = true)
-public class Employee implements Serializable {
+public class ListEmployeeDto implements Serializable {
     /**
      * 员工表自增
      */
