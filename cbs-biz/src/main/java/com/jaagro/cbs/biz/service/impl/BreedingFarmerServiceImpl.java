@@ -3,6 +3,9 @@ package com.jaagro.cbs.biz.service.impl;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderStatisticalDto;
+import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.BatchInfo;
 import com.jaagro.cbs.api.model.BatchInfoExample;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
@@ -10,6 +13,7 @@ import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BatchInfoMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.DeviceAlarmLogMapperExt;
+import com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private BatchInfoMapperExt batchInfoMapper;
     @Autowired
     private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
 
     /**
      * 农户端app 首页数据统计
@@ -67,17 +73,29 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     BigDecimal accumulativeTotalDeadAmount = batchInfoMapper.accumulativeTotalDeadAmount(planIds);
                     //2.累计所有出栏数量
                     BigDecimal accumulativeTotalSaleAmount = batchInfoMapper.accumulativeTotalSaleAmount(planIds);
+                    //3.累计所有喂养饲料
+                    BigDecimal accumulativeTotalFeed = batchInfoMapper.accumulativeTotalFeed(planIds);
                     //当前存栏量
                     BigDecimal totalBreedingStock = totalPlanStock.subtract(accumulativeTotalDeadAmount).subtract(accumulativeTotalSaleAmount);
                     //环控异常指数
                     BigDecimal accumulativeTotalAbnormalWarn = deviceAlarmLogMapper.accumulativeTotalAbnormalWarn(planIds);
+                    //饲料库存
+                    PurchaseOrderParamDto purchaseOrderParamDto = new PurchaseOrderParamDto();
+                    purchaseOrderParamDto
+                            .setPlanIds(planIds)
+                            .setProductType(ProductTypeEnum.FEED.getCode());
+                    ReturnPurchaseOrderStatisticalDto purchaseOrderStatistical = purchaseOrderMapper.calculateTotalPurchaseOrder(purchaseOrderParamDto);
+                    if (purchaseOrderStatistical.getTotalFeedWeight() != null) {
+                        BigDecimal totalFeedWeight = purchaseOrderStatistical.getTotalFeedWeight();
+                        BigDecimal totalFeedStock = totalFeedWeight.subtract(accumulativeTotalFeed);
+                        returnBreedingFarmerIndexDto
+                                .setTotalFeedStock(totalFeedStock);
+                    }
                     returnBreedingFarmerIndexDto
                             .setTotalBreedingStock(totalBreedingStock)
                             .setTotalAbnormalWarn(accumulativeTotalAbnormalWarn);
-
                 }
 
-                //饲料库存
             }
         }
         return null;
