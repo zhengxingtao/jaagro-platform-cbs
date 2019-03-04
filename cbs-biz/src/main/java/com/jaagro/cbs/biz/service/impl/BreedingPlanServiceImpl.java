@@ -478,7 +478,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         if (breedingPlan == null) {
-            throw new RuntimeException("当前养殖计划" + breedingPlan.getId() + "不存在");
+            throw new RuntimeException("当前养殖计划" + planId + "不存在");
         }
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
         if (batchInfo != null) {
