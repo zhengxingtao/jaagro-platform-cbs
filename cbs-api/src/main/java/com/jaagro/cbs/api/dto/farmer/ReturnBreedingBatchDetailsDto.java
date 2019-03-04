@@ -54,7 +54,7 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
     /**
      * 进度 - 日龄
      */
-    private Integer AllDayAge;
+    private Integer dayAge;
 
     /**
      * 养殖天数

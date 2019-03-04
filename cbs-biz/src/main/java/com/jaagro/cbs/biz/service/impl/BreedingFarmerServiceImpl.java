@@ -40,8 +40,6 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     @Autowired
     private BreedingPlanMapperExt breedingPlanMapper;
     @Autowired
-    private BreedingPlanService breedingPlanService;
-    @Autowired
     private BatchInfoMapperExt batchInfoMapper;
     @Autowired
     private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
@@ -84,10 +82,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     purchaseOrderParamDto
                             .setPlanIds(planIds)
                             .setProductType(ProductTypeEnum.FEED.getCode());
-                    ReturnPurchaseOrderStatisticalDto purchaseOrderStatistical = purchaseOrderMapper.calculateTotalPurchaseOrder(purchaseOrderParamDto);
-                    if (purchaseOrderStatistical.getTotalFeedWeight() != null) {
-                        BigDecimal totalFeedWeight = purchaseOrderStatistical.getTotalFeedWeight();
-                        BigDecimal totalFeedStock = totalFeedWeight.subtract(accumulativeTotalFeed);
+                    BigDecimal planFeedWeight = purchaseOrderMapper.calculateTotalPlanFeedWeight(purchaseOrderParamDto);
+                    if (planFeedWeight != null) {
+                        BigDecimal totalFeedStock = planFeedWeight.subtract(accumulativeTotalFeed);
                         returnBreedingFarmerIndexDto
                                 .setTotalFeedStock(totalFeedStock);
                     }
@@ -95,10 +92,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                             .setTotalBreedingStock(totalBreedingStock)
                             .setTotalAbnormalWarn(accumulativeTotalAbnormalWarn);
                 }
-
             }
         }
-        return null;
+        return returnBreedingFarmerIndexDto;
     }
 
     /**
@@ -123,6 +119,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     } catch (Exception e) {
                         log.info("R breedingFarmerIndex getDayAge error", e);
                     }
+                    returnBreedingBatchDetailsDto.setDayAge(dayAge);
                     BatchInfoExample batchInfoExample = new BatchInfoExample();
                     if (dayAge != null) {
                         //今日耗料量
@@ -140,14 +137,21 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         }
                     }
                     //1.累计所有出栏量
-                    BigDecimal saleAmount = batchInfoMapper.accumulativeSaleAmount(planId).abs();
+                    BigDecimal saleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
                     //2.累计所有死淘数量
-                    BigDecimal deadAmount = batchInfoMapper.accumulativeDeadAmount(planId).abs();
+                    BigDecimal deadAmount = batchInfoMapper.accumulativeDeadAmount(planId);
                     //计算存栏量
                     if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
+                        BigDecimal breedingStock = null;
+                        BigDecimal totalBreedingStock = null;
                         Integer planChickenQuantity = returnBreedingBatchDetailsDto.getPlanChickenQuantity();
-                        BigDecimal breedingStock = new BigDecimal(planChickenQuantity).subtract(saleAmount).subtract(deadAmount);
-                        returnBreedingBatchDetailsDto.setBreedingStock(breedingStock);
+                        if (saleAmount != null) {
+                            breedingStock = new BigDecimal(planChickenQuantity).subtract(saleAmount);
+                        }
+                        if (breedingStock != null && deadAmount != null) {
+                            totalBreedingStock = breedingStock.subtract(deadAmount);
+                        }
+                        returnBreedingBatchDetailsDto.setBreedingStock(totalBreedingStock);
                     }
                 }
             }

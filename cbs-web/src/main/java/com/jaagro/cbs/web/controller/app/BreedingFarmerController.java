@@ -24,7 +24,7 @@ public class BreedingFarmerController {
     @PostMapping("/breedingFarmerIndexStatistical")
     @ApiOperation("农户端首页数据统计")
     public BaseResponse breedingFarmerIndexStatistical() {
-        return BaseResponse.successInstance(null);
+        return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndexStatistical());
     }
 
     @PostMapping("/breedingFarmerIndex")
