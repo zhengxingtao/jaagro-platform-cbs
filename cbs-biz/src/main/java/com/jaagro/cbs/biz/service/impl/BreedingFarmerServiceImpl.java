@@ -46,7 +46,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
-    @Autowired
+    //@Autowired
 
     /**
      * 农户端app 首页数据统计
