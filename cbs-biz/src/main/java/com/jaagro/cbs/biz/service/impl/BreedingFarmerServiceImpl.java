@@ -9,6 +9,7 @@ import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.BatchInfo;
 import com.jaagro.cbs.api.model.BatchInfoExample;
@@ -167,7 +168,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                             if (breedingStock != null && deadAmount != null) {
                                 totalBreedingStock = breedingStock.subtract(deadAmount);
                             }
-                            returnBreedingBatchDetailsDto.setBreedingStock(totalBreedingStock);
+                            returnBreedingBatchDetailsDto
+                                    .setBreedingStock(totalBreedingStock)
+                                    .setStrPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingBatchDetailsDto.getPlanStatus()));
                         }
                     }
                 }
@@ -184,6 +187,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
+        BatchInfo batchInfo = batchInfoMapper.selectByPrimaryKey(dto.getPlanId());
+        if (batchInfo == null) {
+            throw new RuntimeException("当前批次不存在");
+        }
         //插入技术询问
         TechConsultRecord techConsultRecord = new TechConsultRecord();
         UserInfo currentUser = currentUserService.getCurrentUser();
