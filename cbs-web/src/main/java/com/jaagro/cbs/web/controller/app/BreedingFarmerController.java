@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,7 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndexStatistical());
     }
 
-    @GetMapping("/breedingFarmerIndex")
+    @PostMapping("/breedingFarmerIndex")
     @ApiOperation("农户端首页列表")
     public BaseResponse breedingFarmerIndex(@RequestBody BreedingBatchParamDto dto) {
         if (dto.getPageNum() == null) {
@@ -48,7 +49,7 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndex(dto));
     }
 
-    @GetMapping("/publishedChickenPlan")
+    @PostMapping("/publishedChickenPlan")
     @ApiOperation("发布上鸡计划")
     public BaseResponse publishedChickenPlan(@RequestBody CreateBreedingPlanDto dto) {
         if (CollectionUtils.isEmpty(dto.getPlantIds())) {
@@ -61,7 +62,7 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(null);
     }
 
-    @GetMapping("/technicalInquiries")
+    @PostMapping("/technicalInquiries")
     @ApiOperation("发布上鸡计划")
     public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
         if (dto.getPlanId() == null) {
