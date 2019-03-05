@@ -63,7 +63,7 @@ public class BreedingFarmerController {
     }
 
     @PostMapping("/technicalInquiries")
-    @ApiOperation("发布上鸡计划")
+    @ApiOperation("新增技术询问")
     public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
         if (dto.getPlanId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
