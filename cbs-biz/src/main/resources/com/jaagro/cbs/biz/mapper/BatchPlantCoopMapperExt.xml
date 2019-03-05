@@ -16,6 +16,7 @@
         modify_time, modify_user_id)
         values
         <foreach collection="batchPlantCoops" item="item" separator=",">
+
             (#{item.planId,jdbcType=INTEGER}, #{item.plantId,jdbcType=INTEGER}, #{item.coopId,jdbcType=INTEGER},
             #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
             #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.modifyUserId,jdbcType=INTEGER})

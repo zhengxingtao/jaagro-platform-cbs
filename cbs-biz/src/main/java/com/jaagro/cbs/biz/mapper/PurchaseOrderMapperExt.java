@@ -25,10 +25,9 @@ public interface PurchaseOrderMapperExt extends BaseMapper<PurchaseOrder, Purcha
     /**
      * 根据不同商品类型 统计不同类型值
      *
-     * @param
+     * @param dto
      * @return
      */
-    ReturnPurchaseOrderStatisticalDto calculateTotalPurchaseOrder(PurchaseOrderParamDto dto);
-
+    BigDecimal calculateTotalPlanFeedWeight(PurchaseOrderParamDto dto);
 
 }

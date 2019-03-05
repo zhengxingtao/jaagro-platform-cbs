@@ -6,6 +6,9 @@ package com.jaagro.cbs.api.enums;
  * @date 2019/3/2 15:36
  */
 public enum ParameterStatusEnum {
+    /**
+     * 参数状态
+     */
     UN_USEFUL(0,"UN_USEFUL","未启用"),
     USEFUL(1,"USEFUL","启用");
     private int code;
@@ -19,7 +22,7 @@ public enum ParameterStatusEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -28,7 +31,7 @@ public enum ParameterStatusEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -37,7 +40,7 @@ public enum ParameterStatusEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -45,8 +48,8 @@ public enum ParameterStatusEnum {
         return null;
     }
 
-    public static PlanStatusEnum toEnum(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+    public static ParameterStatusEnum toEnum(int code) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }

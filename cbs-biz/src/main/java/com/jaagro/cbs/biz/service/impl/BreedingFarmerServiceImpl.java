@@ -1,21 +1,23 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
-import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderStatisticalDto;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.BatchInfo;
 import com.jaagro.cbs.api.model.BatchInfoExample;
+import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
-import com.jaagro.cbs.api.service.BreedingPlanService;
-import com.jaagro.cbs.biz.mapper.BatchInfoMapperExt;
-import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.mapper.DeviceAlarmLogMapperExt;
-import com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt;
+import com.jaagro.cbs.biz.mapper.*;
+import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -40,13 +42,15 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     @Autowired
     private BreedingPlanMapperExt breedingPlanMapper;
     @Autowired
-    private BreedingPlanService breedingPlanService;
-    @Autowired
     private BatchInfoMapperExt batchInfoMapper;
     @Autowired
     private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
+    @Autowired
+    private TechConsultRecordMapperExt techConsultRecordMapper;
+    @Autowired
+    private UserClientService userClientService;
 
     /**
      * 农户端app 首页数据统计
@@ -84,10 +88,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     purchaseOrderParamDto
                             .setPlanIds(planIds)
                             .setProductType(ProductTypeEnum.FEED.getCode());
-                    ReturnPurchaseOrderStatisticalDto purchaseOrderStatistical = purchaseOrderMapper.calculateTotalPurchaseOrder(purchaseOrderParamDto);
-                    if (purchaseOrderStatistical.getTotalFeedWeight() != null) {
-                        BigDecimal totalFeedWeight = purchaseOrderStatistical.getTotalFeedWeight();
-                        BigDecimal totalFeedStock = totalFeedWeight.subtract(accumulativeTotalFeed);
+                    BigDecimal planFeedWeight = purchaseOrderMapper.calculateTotalPlanFeedWeight(purchaseOrderParamDto);
+                    if (planFeedWeight != null) {
+                        BigDecimal totalFeedStock = planFeedWeight.subtract(accumulativeTotalFeed);
                         returnBreedingFarmerIndexDto
                                 .setTotalFeedStock(totalFeedStock);
                     }
@@ -95,10 +98,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                             .setTotalBreedingStock(totalBreedingStock)
                             .setTotalAbnormalWarn(accumulativeTotalAbnormalWarn);
                 }
-
             }
         }
-        return null;
+        return returnBreedingFarmerIndexDto;
     }
 
     /**
@@ -108,51 +110,76 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @author: @Gao.
      */
     @Override
-    public PageInfo breedingFarmerIndex() {
+    public PageInfo breedingFarmerIndex(BreedingBatchParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos = null;
         UserInfo currentUser = currentUserService.getCurrentUser();
         if (currentUser != null) {
-            returnBreedingBatchDetailsDtos = breedingPlanMapper.listBreedingPlanByCustomerId(currentUser.getId());
-            if (!CollectionUtils.isEmpty(returnBreedingBatchDetailsDtos)) {
-                for (ReturnBreedingBatchDetailsDto returnBreedingBatchDetailsDto : returnBreedingBatchDetailsDtos) {
-                    Integer planId = returnBreedingBatchDetailsDto.getId();
-                    Integer dayAge = null;
-                    try {
-                        //获取当前日龄
-                        dayAge = getDayAge(returnBreedingBatchDetailsDto.getPlanTime());
-                    } catch (Exception e) {
-                        log.info("R breedingFarmerIndex getDayAge error", e);
-                    }
-                    BatchInfoExample batchInfoExample = new BatchInfoExample();
-                    if (dayAge != null) {
-                        //今日耗料量
-                        batchInfoExample
-                                .createCriteria()
-                                .andPlanIdEqualTo(planId)
-                                .andDayAgeEqualTo(dayAge)
-                                .andEnableEqualTo(true);
-                        List<BatchInfo> batchInfos = batchInfoMapper.selectByExample(batchInfoExample);
-                        if (!CollectionUtils.isEmpty(batchInfos)) {
-                            BatchInfo batchInfo = batchInfos.get(0);
-                            if (batchInfo != null && batchInfo.getFodderAmount() != null) {
-                                returnBreedingBatchDetailsDto.setFodderAmount(batchInfo.getFodderAmount());
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                returnBreedingBatchDetailsDtos = breedingPlanMapper.listBreedingPlanByCustomerId(customerUser.getRelevanceId());
+                if (!CollectionUtils.isEmpty(returnBreedingBatchDetailsDtos)) {
+                    for (ReturnBreedingBatchDetailsDto returnBreedingBatchDetailsDto : returnBreedingBatchDetailsDtos) {
+                        Integer planId = returnBreedingBatchDetailsDto.getId();
+                        Integer dayAge = null;
+                        try {
+                            //获取当前日龄
+                            dayAge = getDayAge(returnBreedingBatchDetailsDto.getPlanTime());
+                        } catch (Exception e) {
+                            log.info("R breedingFarmerIndex getDayAge error", e);
+                        }
+                        returnBreedingBatchDetailsDto.setDayAge(dayAge);
+                        BatchInfoExample batchInfoExample = new BatchInfoExample();
+                        if (dayAge != null) {
+                            //今日耗料量
+                            batchInfoExample
+                                    .createCriteria()
+                                    .andPlanIdEqualTo(planId)
+                                    .andDayAgeEqualTo(dayAge)
+                                    .andEnableEqualTo(true);
+                            List<BatchInfo> batchInfos = batchInfoMapper.selectByExample(batchInfoExample);
+                            if (!CollectionUtils.isEmpty(batchInfos)) {
+                                BatchInfo batchInfo = batchInfos.get(0);
+                                if (batchInfo != null && batchInfo.getFodderAmount() != null) {
+                                    returnBreedingBatchDetailsDto.setFodderAmount(batchInfo.getFodderAmount());
+                                }
                             }
                         }
-                    }
-                    //1.累计所有出栏量
-                    BigDecimal saleAmount = batchInfoMapper.accumulativeSaleAmount(planId).abs();
-                    //2.累计所有死淘数量
-                    BigDecimal deadAmount = batchInfoMapper.accumulativeDeadAmount(planId).abs();
-                    //计算存栏量
-                    if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
-                        Integer planChickenQuantity = returnBreedingBatchDetailsDto.getPlanChickenQuantity();
-                        BigDecimal breedingStock = new BigDecimal(planChickenQuantity).subtract(saleAmount).subtract(deadAmount);
-                        returnBreedingBatchDetailsDto.setBreedingStock(breedingStock);
+                        //1.累计所有出栏量
+                        BigDecimal saleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
+                        //2.累计所有死淘数量
+                        BigDecimal deadAmount = batchInfoMapper.accumulativeDeadAmount(planId);
+                        //计算存栏量
+                        if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
+                            BigDecimal breedingStock = null;
+                            BigDecimal totalBreedingStock = null;
+                            Integer planChickenQuantity = returnBreedingBatchDetailsDto.getPlanChickenQuantity();
+                            if (saleAmount != null) {
+                                breedingStock = new BigDecimal(planChickenQuantity).subtract(saleAmount);
+                            }
+                            if (breedingStock != null && deadAmount != null) {
+                                totalBreedingStock = breedingStock.subtract(deadAmount);
+                            }
+                            returnBreedingBatchDetailsDto.setBreedingStock(totalBreedingStock);
+                        }
                     }
                 }
             }
         }
         return new PageInfo(returnBreedingBatchDetailsDtos);
+    }
+
+    /**
+     * 新增技术询问
+     *
+     * @param dto
+     * @author: @Gao.
+     */
+    @Override
+    public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
+        TechConsultRecord techConsultRecord = new TechConsultRecord();
+        BeanUtils.copyProperties(dto, techConsultRecord);
+        techConsultRecordMapper.insertSelective(techConsultRecord);
     }
 
     /**

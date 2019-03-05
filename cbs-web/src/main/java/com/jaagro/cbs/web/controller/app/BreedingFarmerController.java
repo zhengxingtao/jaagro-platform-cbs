@@ -1,13 +1,21 @@
 package com.jaagro.cbs.web.controller.app;
 
+import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
+import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
+import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.utils.BaseResponse;
+import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,17 +27,51 @@ import org.springframework.web.bind.annotation.RestController;
 public class BreedingFarmerController {
     @Autowired
     private BreedingFarmerService breedingFarmerService;
+    @Autowired
+    private BreedingPlanService breedingPlanService;
 
 
-    @PostMapping("/breedingFarmerIndexStatistical")
+    @GetMapping("/breedingFarmerIndexStatistical")
     @ApiOperation("农户端首页数据统计")
     public BaseResponse breedingFarmerIndexStatistical() {
-        return BaseResponse.successInstance(null);
+        return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndexStatistical());
     }
 
     @PostMapping("/breedingFarmerIndex")
     @ApiOperation("农户端首页列表")
-    public BaseResponse breedingFarmerIndex() {
-        return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndex());
+    public BaseResponse breedingFarmerIndex(@RequestBody BreedingBatchParamDto dto) {
+        if (dto.getPageNum() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
+        }
+        if (dto.getPageSize() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "每页条数不能为空");
+        }
+        return BaseResponse.successInstance(breedingFarmerService.breedingFarmerIndex(dto));
+    }
+
+    @PostMapping("/publishedChickenPlan")
+    @ApiOperation("发布上鸡计划")
+    public BaseResponse publishedChickenPlan(@RequestBody CreateBreedingPlanDto dto) {
+        if (CollectionUtils.isEmpty(dto.getPlantIds())) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场不能为空");
+        }
+        if (dto.getCustomerId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "客户不能为空");
+        }
+        breedingPlanService.createBreedingPlan(dto);
+        return BaseResponse.successInstance(null);
+    }
+
+    @PostMapping("/technicalInquiries")
+    @ApiOperation("新增技术询问")
+    public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
+        if (dto.getPlanId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
+        }
+        if (dto.getBatchNo() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划批次号不能为空");
+        }
+
+        return BaseResponse.successInstance(null);
     }
 }

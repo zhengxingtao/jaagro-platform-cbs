@@ -1,6 +1,8 @@
 package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 
 
@@ -25,5 +27,12 @@ public interface BreedingFarmerService {
      * @return
      * @author @Gao.
      */
-    PageInfo breedingFarmerIndex();
+    PageInfo breedingFarmerIndex(BreedingBatchParamDto dto);
+
+    /**
+     * 技术询问
+     *
+     * @param dto
+     */
+    void technicalInquiries(CreateTechnicalInquiriesDto dto);
 }

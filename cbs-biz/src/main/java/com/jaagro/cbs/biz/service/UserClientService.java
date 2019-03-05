@@ -1,5 +1,6 @@
 package com.jaagro.cbs.biz.service;
 
+import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -81,5 +82,14 @@ public interface UserClientService {
 
     @GetMapping("/listTechnician")
     BaseResponse<List<ListEmployeeDto>> listTechnician();
+
+    /**
+     * 根据客户id 查询客户信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/customerUser/{id}")
+    GetCustomerUserDto getCustomerUserById(@PathVariable("id") Integer id);
 }
 

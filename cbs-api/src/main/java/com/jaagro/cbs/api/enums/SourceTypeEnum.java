@@ -6,6 +6,9 @@ package com.jaagro.cbs.api.enums;
  * @date 2019/3/1 17:44
  */
 public enum SourceTypeEnum {
+    /**
+     * 资源类型枚举
+     */
     IMAGE(1,"IMAGE","图片"),
     DOCUMENT(2,"DOCUMENT","文档");
     private int code;
@@ -19,7 +22,7 @@ public enum SourceTypeEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
+        for (SourceTypeEnum type : SourceTypeEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -28,7 +31,7 @@ public enum SourceTypeEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
+        for (SourceTypeEnum type : SourceTypeEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -37,7 +40,7 @@ public enum SourceTypeEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
+        for (SourceTypeEnum type : SourceTypeEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -45,8 +48,8 @@ public enum SourceTypeEnum {
         return null;
     }
 
-    public static TechConsultStatusEnum toEnum(int code) {
-        for (TechConsultStatusEnum type : TechConsultStatusEnum.values()) {
+    public static SourceTypeEnum toEnum(int code) {
+        for (SourceTypeEnum type : SourceTypeEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }
