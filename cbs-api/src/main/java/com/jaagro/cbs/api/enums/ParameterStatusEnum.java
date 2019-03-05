@@ -6,6 +6,9 @@ package com.jaagro.cbs.api.enums;
  * @date 2019/3/2 15:36
  */
 public enum ParameterStatusEnum {
+    /**
+     * 参数状态
+     */
     UN_USEFUL(0,"UN_USEFUL","未启用"),
     USEFUL(1,"USEFUL","启用");
     private int code;

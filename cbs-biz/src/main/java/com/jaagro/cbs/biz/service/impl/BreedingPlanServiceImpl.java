@@ -358,7 +358,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 returnPurchaseOrderDto
                         .setUnit(UnitEnum.getDescByCode(purchaseOrder.getUnit()))
-                        .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
+                        .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
                 BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());

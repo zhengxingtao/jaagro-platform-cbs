@@ -3,6 +3,7 @@ package com.jaagro.cbs.biz.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
@@ -45,6 +46,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private DeviceAlarmLogMapperExt deviceAlarmLogMapper;
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
+    @Autowired
 
     /**
      * 农户端app 首页数据统计
@@ -158,6 +160,18 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             }
         }
         return new PageInfo(returnBreedingBatchDetailsDtos);
+    }
+
+    /**
+     * 技术询问
+     *
+     * @param dto
+     * @author: @Gao.
+     */
+    @Override
+    public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
+
+
     }
 
     /**

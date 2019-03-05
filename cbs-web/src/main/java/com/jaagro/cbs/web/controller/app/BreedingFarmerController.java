@@ -1,6 +1,7 @@
 package com.jaagro.cbs.web.controller.app;
 
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -62,14 +63,14 @@ public class BreedingFarmerController {
 
     @GetMapping("/technicalInquiries")
     @ApiOperation("发布上鸡计划")
-    public BaseResponse technicalInquiries(@RequestBody CreateBreedingPlanDto dto) {
-        if (CollectionUtils.isEmpty(dto.getPlantIds())) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场不能为空");
+    public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
+        if (dto.getPlanId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
         }
-        if (dto.getCustomerId() == null) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "客户不能为空");
+        if (dto.getBatchNo() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划批次号不能为空");
         }
-        breedingPlanService.createBreedingPlan(dto);
+
         return BaseResponse.successInstance(null);
     }
 }
