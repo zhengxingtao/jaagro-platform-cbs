@@ -19,7 +19,7 @@ public enum ParameterStatusEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -28,7 +28,7 @@ public enum ParameterStatusEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -37,7 +37,7 @@ public enum ParameterStatusEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -45,8 +45,8 @@ public enum ParameterStatusEnum {
         return null;
     }
 
-    public static PlanStatusEnum toEnum(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+    public static ParameterStatusEnum toEnum(int code) {
+        for (ParameterStatusEnum type : ParameterStatusEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }

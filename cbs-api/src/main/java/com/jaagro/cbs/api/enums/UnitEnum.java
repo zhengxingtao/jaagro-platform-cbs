@@ -24,7 +24,7 @@ public enum UnitEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (UnitEnum type : UnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -33,7 +33,7 @@ public enum UnitEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (UnitEnum type : UnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -42,7 +42,7 @@ public enum UnitEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+        for (UnitEnum type : UnitEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -50,8 +50,8 @@ public enum UnitEnum {
         return null;
     }
 
-    public static PlanStatusEnum toEnum(int code) {
-        for (PlanStatusEnum type : PlanStatusEnum.values()) {
+    public static UnitEnum toEnum(int code) {
+        for (UnitEnum type : UnitEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }
@@ -83,5 +83,8 @@ public enum UnitEnum {
         this.type = type;
     }
 
-
+    public static void main(String[] args) {
+        String descByCode = getDescByCode(1);
+        System.out.println(descByCode);
+    }
 }
