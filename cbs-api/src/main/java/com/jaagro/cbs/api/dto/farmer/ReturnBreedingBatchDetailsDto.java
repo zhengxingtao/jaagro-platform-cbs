@@ -37,6 +37,11 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
     private Integer planStatus;
 
     /**
+     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
+     */
+    private String strPlanStatus;
+
+    /**
      * 计划上鸡数量
      */
     private Integer planChickenQuantity;
@@ -65,5 +70,6 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
      * 今日饲料耗量
      */
     private BigDecimal fodderAmount;
+
 
 }

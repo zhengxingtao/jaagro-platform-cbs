@@ -3,17 +3,21 @@ package com.jaagro.cbs.biz.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
+import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.BatchInfo;
 import com.jaagro.cbs.api.model.BatchInfoExample;
+import com.jaagro.cbs.api.model.TechConsultImages;
 import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.biz.mapper.*;
+import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +55,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private UserClientService userClientService;
+    @Autowired
+    private CustomerClientService customerClientService;
+    @Autowired
+    private TechConsultImagesMapperExt techConsultImagesMapper;
 
     /**
      * 农户端app 首页数据统计
@@ -160,7 +168,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                             if (breedingStock != null && deadAmount != null) {
                                 totalBreedingStock = breedingStock.subtract(deadAmount);
                             }
-                            returnBreedingBatchDetailsDto.setBreedingStock(totalBreedingStock);
+                            returnBreedingBatchDetailsDto
+                                    .setBreedingStock(totalBreedingStock)
+                                    .setStrPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingBatchDetailsDto.getPlanStatus()));
                         }
                     }
                 }
@@ -177,9 +187,44 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
+        BatchInfo batchInfo = batchInfoMapper.selectByPrimaryKey(dto.getPlanId());
+        if (batchInfo == null) {
+            throw new RuntimeException("当前批次不存在");
+        }
+        //插入技术询问
         TechConsultRecord techConsultRecord = new TechConsultRecord();
+        UserInfo currentUser = currentUserService.getCurrentUser();
         BeanUtils.copyProperties(dto, techConsultRecord);
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
+                if (showCustomer != null && showCustomer.getCustomerName() != null) {
+                    techConsultRecord
+                            .setCustomerName(showCustomer.getCustomerName())
+                            .setCreateUserId(currentUser.getId())
+                            .setCustomerId(customerUser.getRelevanceId());
+                }
+            }
+        }
         techConsultRecordMapper.insertSelective(techConsultRecord);
+        //插入图片
+        if (!CollectionUtils.isEmpty(dto.getImageUrl())) {
+            List<String> imageUrls = dto.getImageUrl();
+            for (String imageUrl : imageUrls) {
+                TechConsultImages techConsultImages = new TechConsultImages();
+                if (techConsultRecord.getId() != null) {
+                    techConsultImages
+                            .setImageUrl(imageUrl)
+                            .setTechConsultRecordId(techConsultRecord.getId());
+                    if (currentUser != null && currentUser.getId() != null) {
+                        techConsultImages
+                                .setCreateUserId(currentUser.getId());
+                    }
+                }
+                techConsultImagesMapper.insertSelective(techConsultImages);
+            }
+        }
     }
 
     /**
