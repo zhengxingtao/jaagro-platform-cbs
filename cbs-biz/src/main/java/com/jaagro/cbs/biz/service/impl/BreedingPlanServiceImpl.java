@@ -72,8 +72,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private BatchInfoMapperExt batchInfoMapper;
     @Autowired
-    private DateUtil dateUtil;
-    @Autowired
     private MathUtil mathUtil;
     @Autowired
     private CoopMapperExt coopMapper;
@@ -501,7 +499,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算预计出栏时间
             String expectSuchTime = null;
             if (breedingPlan.getPlanTime() != null && breedingPlan.getBreedingDays() != null) {
-                expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
+                expectSuchTime = DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
             }
             //计算异常次数
             DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
