@@ -66,4 +66,5 @@ public class ReturnBreedingBatchDetailsDto implements Serializable {
      */
     private BigDecimal fodderAmount;
 
+
 }
