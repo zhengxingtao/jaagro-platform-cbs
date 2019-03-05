@@ -83,8 +83,4 @@ public enum UnitEnum {
         this.type = type;
     }
 
-    public static void main(String[] args) {
-        String descByCode = getDescByCode(1);
-        System.out.println(descByCode);
-    }
 }
