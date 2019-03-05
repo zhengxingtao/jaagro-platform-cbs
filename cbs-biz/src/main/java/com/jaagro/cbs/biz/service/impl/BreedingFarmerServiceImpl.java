@@ -1,6 +1,8 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
@@ -102,7 +104,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @author: @Gao.
      */
     @Override
-    public PageInfo breedingFarmerIndex() {
+    public PageInfo breedingFarmerIndex(BreedingBatchParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos = null;
         UserInfo currentUser = currentUserService.getCurrentUser();
         if (currentUser != null) {
