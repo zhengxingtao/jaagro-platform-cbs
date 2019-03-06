@@ -1565,6 +1565,66 @@ public class PurchaseOrderExample implements Serializable {
             addCriterion("modify_user_id not between", value1, value2, "modifyUserId");
             return (Criteria) this;
         }
+
+        public Criteria andOrderPhaseIsNull() {
+            addCriterion("order_phase is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseIsNotNull() {
+            addCriterion("order_phase is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseEqualTo(Integer value) {
+            addCriterion("order_phase =", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseNotEqualTo(Integer value) {
+            addCriterion("order_phase <>", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseGreaterThan(Integer value) {
+            addCriterion("order_phase >", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_phase >=", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseLessThan(Integer value) {
+            addCriterion("order_phase <", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseLessThanOrEqualTo(Integer value) {
+            addCriterion("order_phase <=", value, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseIn(List<Integer> values) {
+            addCriterion("order_phase in", values, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseNotIn(List<Integer> values) {
+            addCriterion("order_phase not in", values, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseBetween(Integer value1, Integer value2) {
+            addCriterion("order_phase between", value1, value2, "orderPhase");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderPhaseNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_phase not between", value1, value2, "orderPhase");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria implements Serializable {

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :asus
- * @date :2019/03/05
+ * @author :gavinwang
+ * @date :2019/03/06
  */
 @Data
 @NoArgsConstructor
@@ -83,7 +83,7 @@ public class PurchaseOrder implements Serializable {
     private BigDecimal amount;
 
     /**
-     * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
+     * 状态(1-已下单 ,2－待送达 ,3-已签收)
      */
     private Integer purchaseOrderStatus;
 
@@ -131,6 +131,11 @@ public class PurchaseOrder implements Serializable {
      * 更新人
      */
     private Integer modifyUserId;
+
+    /**
+     * 订单阶段：1-第一阶段；2-第二阶段；3-第三阶段
+     */
+    private Integer orderPhase;
 
     private static final long serialVersionUID = 1L;
 }

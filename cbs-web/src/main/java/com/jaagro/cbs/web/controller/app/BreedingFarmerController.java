@@ -57,11 +57,11 @@ public class BreedingFarmerController {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "客户不能为空");
         }
         breedingPlanService.createBreedingPlan(dto);
-        return BaseResponse.successInstance(null);
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
     @PostMapping("/technicalInquiries")
-    @ApiOperation("发布上鸡计划")
+    @ApiOperation("新增技术询问")
     public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
         if (dto.getPlanId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
@@ -69,8 +69,8 @@ public class BreedingFarmerController {
         if (dto.getBatchNo() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划批次号不能为空");
         }
-
-        return BaseResponse.successInstance(null);
+        breedingFarmerService.technicalInquiries(dto);
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
     /**

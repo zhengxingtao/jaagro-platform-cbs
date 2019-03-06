@@ -25,6 +25,7 @@
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="order_phase" property="orderPhase" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -58,7 +59,8 @@
   <sql id="Base_Column_List" >
     id, customer_id, plan_id, signer_id, product_id, batch_no, purchase_no, product_type, 
     weight, quantity, unit, price, amount, purchase_order_status, supplier_id, plan_delivery_time, 
-    delivery_time, notes, enable, create_time, create_user_id, modify_time, modify_user_id
+    delivery_time, notes, enable, create_time, create_user_id, modify_time, modify_user_id, 
+    order_phase
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
     select
@@ -104,7 +106,7 @@
       purchase_order_status, supplier_id, plan_delivery_time, 
       delivery_time, notes, enable, 
       create_time, create_user_id, modify_time, 
-      modify_user_id)
+      modify_user_id, order_phase)
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
       #{productType,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
@@ -112,7 +114,7 @@
       #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{planDeliveryTime,jdbcType=DATE}, 
       #{deliveryTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=INTEGER})
+      #{modifyUserId,jdbcType=INTEGER}, #{orderPhase,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -186,6 +188,9 @@
       <if test="modifyUserId != null" >
         modify_user_id,
       </if>
+      <if test="orderPhase != null" >
+        order_phase,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -253,6 +258,9 @@
       </if>
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="orderPhase != null" >
+        #{orderPhase,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -331,6 +339,9 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="orderPhase != null" >
+        order_phase = #{orderPhase,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -357,7 +368,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      order_phase = #{orderPhase,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

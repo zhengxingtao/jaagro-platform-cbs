@@ -81,5 +81,9 @@ public class BreedingProgressDto implements Serializable {
      */
 
     private List<Coop> coops;
+    /**
+     * 养殖日龄跟日期的匹配列表
+     */
+    private List<Map<Integer,String>> progressDayAges;
 
 }

@@ -25,9 +25,34 @@ public class CreateTechnicalInquiriesDto implements Serializable {
     private Integer planId;
 
     /**
+     * 养殖场id
+     */
+    private Integer plantId;
+
+    /**
+     * 养殖场名称
+     */
+    private String plantName;
+
+    /**
+     * 鸡舍id
+     */
+    private Integer coopId;
+
+    /**
+     * 鸡舍名称
+     */
+    private String coopName;
+
+    /**
      * 批次号
      */
     private String batchNo;
+
+    /**
+     * 紧急程度(1-一般,2-次要,3-重要,4-紧急)
+     */
+    private Integer emergencyLevel;
 
     /**
      * 问题描述
@@ -38,4 +63,5 @@ public class CreateTechnicalInquiriesDto implements Serializable {
      * 图片相对路径
      */
     private List<String> imageUrl;
+
 }
