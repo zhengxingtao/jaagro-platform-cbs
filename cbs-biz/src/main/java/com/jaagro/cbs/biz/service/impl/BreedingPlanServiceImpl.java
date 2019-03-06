@@ -539,7 +539,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         calculatePlanFeedWeightMap.put(productType, planPurchaseValue);
                     }
                 }
-                HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
+                HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.ALREADY_SIGNED.getCode());
                 if (calculatePurchaseOrderMap.get(productType) != null) {
                     deliverPurchaseValue = calculatePurchaseOrderMap.get(productType);
                 }
