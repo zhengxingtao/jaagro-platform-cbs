@@ -5,6 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
+import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
+import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
+import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
@@ -15,6 +19,7 @@ import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
 import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
+import com.jaagro.cbs.biz.bo.BatchPlantCoopBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
@@ -83,6 +88,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
+    @Autowired
+    private BatchCoopDailyMapperExt batchCoopDailyMapper;
 
     /**
      * 创建养殖计划
@@ -199,6 +206,90 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             throw new NullPointerException("计划不存在");
         }
         return day + 1;
+    }
+
+    /**
+     * 批次详情(农户app)
+     *
+     * @param planId
+     * @return
+     * @author yj
+     */
+    @Override
+    public BreedingPlanDetailDto getBatchDetail(Integer planId) {
+        BreedingPlanDetailDto breedingPlanDetailDto = new BreedingPlanDetailDto();
+        try {
+            // 计划信息
+            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+            if (breedingPlan == null){
+                throw new RuntimeException("养殖计划id="+planId+"不存在");
+            }
+            // 批次详情
+            ReturnBreedingBatchDetailsDto detailsDto = new ReturnBreedingBatchDetailsDto();
+            BeanUtils.copyProperties(breedingPlan,detailsDto);
+            // 存栏量,今日耗料量
+            BatchInfo theLatestBatchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
+            // 日龄
+            Integer dayAge = null;
+            if (theLatestBatchInfo != null){
+                detailsDto.setBreedingStock(new BigDecimal(theLatestBatchInfo.getCurrentAmount()))
+                        .setFodderAmount(theLatestBatchInfo.getFodderAmount());
+                dayAge = theLatestBatchInfo.getDayAge();
+            }
+            if (dayAge == null){
+                dayAge = (int)getDayAge(planId);
+            }
+            breedingPlanDetailDto.setReturnBreedingBatchDetailsDto(detailsDto);
+            // 计划养殖场鸡舍信息
+            List<BatchPlantCoopBo> batchPlantCoopBoList = batchPlantCoopMapper.listPlantCoopInfoByPlanId(planId);
+            if (!CollectionUtils.isEmpty(batchPlantCoopBoList)){
+                Set<Integer> plantIdSet = new HashSet<>();
+                List<BatchPlantDto> batchPlantDtoList = new ArrayList<>();
+                batchPlantCoopBoList.forEach(batchPlantCoopBo -> plantIdSet.add(batchPlantCoopBo.getPlantId()));
+                for (Integer plantId : plantIdSet){
+                    BatchPlantDto batchPlantDto = new BatchPlantDto();
+                    batchPlantDto.setId(plantId);
+                    List<BatchCoopDto> batchCoopDtoList = new ArrayList<>();
+                    batchPlantDto.setBatchCoopDtoList(batchCoopDtoList);
+                    batchPlantDtoList.add(batchPlantDto);
+                }
+                for (BatchPlantCoopBo batchPlantCoopBo : batchPlantCoopBoList){
+                    for (BatchPlantDto batchPlantDto : batchPlantDtoList){
+                        if (batchPlantCoopBo.getPlantId().equals(batchPlantDto.getId())){
+                            batchPlantDto.setPlantName(batchPlantCoopBo.getPlantName());
+                            List<BatchCoopDto> batchCoopDtoList = batchPlantDto.getBatchCoopDtoList();
+                            BatchCoopDto batchCoopDto = new BatchCoopDto();
+                            batchCoopDto.setId(batchPlantCoopBo.getCoopId())
+                                    .setCoopName(batchPlantCoopBo.getCoopName())
+                                    .setCoopNo(batchPlantCoopBo.getCoopNo())
+                                    .setAlarm(false);
+                            // 异常提示
+                            DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
+                            deviceAlarmLogExample.createCriteria().andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
+                                    .andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge);
+                            List<DeviceAlarmLog> deviceAlarmLogList = deviceAlarmLogMapper.selectByExample(deviceAlarmLogExample);
+                            if (!CollectionUtils.isEmpty(deviceAlarmLogList)){
+                                batchCoopDto.setAlarm(true);
+                            }
+                            // 鸡舍存栏量
+                            BatchCoopDailyExample batchCoopDailyExample = new BatchCoopDailyExample();
+                            batchCoopDailyExample.createCriteria().andPlanIdEqualTo(planId)
+                                    .andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
+                                    .andDayAgeEqualTo(dayAge);
+                            List<BatchCoopDaily> batchCoopDailyList = batchCoopDailyMapper.selectByExample(batchCoopDailyExample);
+                            if(!CollectionUtils.isEmpty(batchCoopDailyList)){
+                                batchCoopDto.setBreedingStock(batchCoopDailyList.get(0).getCurrentAmount());
+                            }
+                            batchCoopDtoList.add(batchCoopDto);
+                        }
+                    }
+                }
+                breedingPlanDetailDto.setBatchPlantDtoList(batchPlantDtoList);
+            }
+        }catch (Exception ex){
+            log.info("O getBatchDetail error planId="+planId,ex);
+        }
+        return breedingPlanDetailDto;
     }
 
     /**

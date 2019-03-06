@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author :asus
+ * @date :2019/03/05
  */
 @Data
 @NoArgsConstructor
@@ -91,6 +91,11 @@ public class PurchaseOrder implements Serializable {
      * 供货商id
      */
     private Integer supplierId;
+
+    /**
+     * 计划送达时间
+     */
+    private Date planDeliveryTime;
 
     /**
      * 到货时间
