@@ -72,8 +72,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Autowired
     private BatchInfoMapperExt batchInfoMapper;
     @Autowired
-    private DateUtil dateUtil;
-    @Autowired
     private MathUtil mathUtil;
     @Autowired
     private CoopMapperExt coopMapper;
@@ -172,6 +170,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @param planId
      * @return
      */
+    @Override
     public long getDayAge(Integer planId) throws Exception {
         long day = 0;
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
@@ -294,8 +293,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal accumulativeDeadAmount = batchInfoMapper.accumulativeDeadAmount(planId);
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
-        BigDecimal breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount).subtract(accumulativeSaleAmount);
+        BigDecimal breedingStock = null;
+        BigDecimal totalBreedingStock=null;
+        if (breedingPlan.getPlanChickenQuantity() != null && accumulativeDeadAmount != null) {
+            breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+        }
         if (breedingStock != null) {
+            totalBreedingStock= breedingStock.subtract(accumulativeSaleAmount);
+        }
+        if (totalBreedingStock != null) {
             returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
         }
         //养殖场信息
@@ -341,7 +347,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 returnPurchaseOrderDto
                         .setUnit(UnitEnum.getDescByCode(purchaseOrder.getUnit()))
-                        .setProductType(ProductTypeEnum.getTypeByCode(purchaseOrder.getProductType()))
+                        .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
                 BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
@@ -418,7 +424,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     }
                 }
             }
-            breedingBatchParameterMapper.batchInsert(batchParameterList);
+            if (!CollectionUtils.isEmpty(batchParameterList)){
+                breedingBatchParameterMapper.batchInsert(batchParameterList);
+            }
         }
         BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
         if (!CollectionUtils.isEmpty(breedingPlanCoopDtoList)) {
@@ -439,14 +447,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                             .setBreedingValue(coopDto.getBreedingValue())
                             .setCoopStatus(CoopStatusEnum.BREEDING.getCode())
                             .setLastStartDate(breedingPlan.getPlanTime())
-                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(),breedingStandard.getBreedingDays()))
+                            .setLastEndDate(DateUtils.addDays(breedingPlan.getPlanTime(), breedingStandard.getBreedingDays()))
                             .setModifyTime(new Date())
                             .setModifyUserId(currentUserId);
                     coopList.add(coop);
                 }
             }
-            batchPlantCoopMapper.insertBatch(batchPlantCoopList);
-            coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+            if (!CollectionUtils.isEmpty(batchPlantCoopList)){
+                batchPlantCoopMapper.insertBatch(batchPlantCoopList);
+            }
+            if (!CollectionUtils.isEmpty(coopList)){
+                coopMapper.batchUpdateByPrimaryKeySelective(coopList);
+            }
         }
         // 更新养殖计划
         breedingPlan.setPlanStatus(PlanStatusEnum.SIGN_CHICKEN.getCode())
@@ -464,12 +476,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnBreedingDetailsDto breedingDetails(Integer planId) {
-        HashMap<Integer, BigDecimal> calculatePlanFeedWeightMap =new HashMap<>(16);
+        HashMap<Integer, BigDecimal> calculatePlanFeedWeightMap = new HashMap<>(16);
         ReturnBreedingDetailsDto returnBreedingDetailsDto = new ReturnBreedingDetailsDto();
         //送料情况信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         if (breedingPlan == null) {
-            throw new RuntimeException("当前养殖计划" + breedingPlan.getId() + "不存在");
+            throw new RuntimeException("当前养殖计划" + planId + "不存在");
         }
         BatchInfo batchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
         if (batchInfo != null) {
@@ -491,7 +503,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算预计出栏时间
             String expectSuchTime = null;
             if (breedingPlan.getPlanTime() != null && breedingPlan.getBreedingDays() != null) {
-                expectSuchTime = dateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
+                expectSuchTime = DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), breedingPlan.getBreedingDays());
             }
             //计算异常次数
             DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
@@ -511,11 +523,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BigDecimal deliverPurchaseValue = null;
                 int productType = productTypeEnum.getCode();
                 CalculatePurchaseOrderDto calculatePurchaseOrderDto = new CalculatePurchaseOrderDto();
-                HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap= calculatePurchaseOrder(planId, productType, null);
-                if (calculatePurchaseOrderAllMap!=null && calculatePurchaseOrderAllMap.get(productType) != null) {
+                HashMap<Integer, BigDecimal> calculatePurchaseOrderAllMap = calculatePurchaseOrder(planId, productType, null);
+                if (calculatePurchaseOrderAllMap != null && calculatePurchaseOrderAllMap.get(productType) != null) {
                     planPurchaseValue = calculatePurchaseOrderAllMap.get(productType);
-                    if(ProductTypeEnum.FEED.getCode()==productType){
-                        calculatePlanFeedWeightMap.put(productType,planPurchaseValue);
+                    if (ProductTypeEnum.FEED.getCode() == productType) {
+                        calculatePlanFeedWeightMap.put(productType, planPurchaseValue);
                     }
                 }
                 HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());

@@ -3,7 +3,21 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
-
+    <select id="calculateTotalPlanFeedWeight" resultType="java.math.BigDecimal" parameterType="java.lang.Integer">
+        select
+        sum(weight) totalPlanFeedWeight
+        from purchase_order
+        <where>
+            enable=1
+            <if test="productType!=null">
+                and product_type=#{productType}
+            </if>
+            <if test="planIds!=null">
+                and plan_id in
+                <foreach collection="planIds" open="(" separator="," close=")" item="planId">
+                    ${planId}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

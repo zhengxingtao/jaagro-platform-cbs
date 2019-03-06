@@ -36,7 +36,7 @@ public enum BreedingStandardParamEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (BreedingRecordTypeEnum type : BreedingRecordTypeEnum.values()) {
+        for (BreedingStandardParamEnum type : BreedingStandardParamEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -45,7 +45,7 @@ public enum BreedingStandardParamEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (BreedingRecordTypeEnum type : BreedingRecordTypeEnum.values()) {
+        for (BreedingStandardParamEnum type : BreedingStandardParamEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -54,7 +54,7 @@ public enum BreedingStandardParamEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (BreedingRecordTypeEnum type : BreedingRecordTypeEnum.values()) {
+        for (BreedingStandardParamEnum type : BreedingStandardParamEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -62,8 +62,8 @@ public enum BreedingStandardParamEnum {
         return null;
     }
 
-    public static BreedingRecordTypeEnum toEnum(int code) {
-        for (BreedingRecordTypeEnum type : BreedingRecordTypeEnum.values()) {
+    public static BreedingStandardParamEnum toEnum(int code) {
+        for (BreedingStandardParamEnum type : BreedingStandardParamEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }

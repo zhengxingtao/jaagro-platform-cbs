@@ -36,4 +36,20 @@
             </if>
         </where>
     </select>
+    <select id="listBreedingPlanByCustomerId" resultType="com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from breeding_plan
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </select>
+
+    <select id="listBreedingPlanIdByCustomerId" resultType="java.lang.Integer"
+            parameterType="java.lang.Integer">
+        select distinct id
+        from breeding_plan
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </select>
+
+
 </mapper>

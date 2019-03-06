@@ -7,7 +7,7 @@ package com.jaagro.cbs.api.enums;
  */
 public enum TechConsultStatusEnum {
     /**
-     *  技术咨询状态(0-待处理,1-已处理)
+     * 技术咨询状态(0-待处理,1-已处理)
      */
 
     STATUS_PENDING(0, "STATUS_PENDING", "待处理"),

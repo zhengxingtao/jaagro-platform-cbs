@@ -23,7 +23,7 @@ public enum BreedingStandardValueTypeEnum {
     }
 
     public static String getDescByCode(int code) {
-        for (CoopStatusEnum type : CoopStatusEnum.values()) {
+        for (BreedingStandardValueTypeEnum type : BreedingStandardValueTypeEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -32,7 +32,7 @@ public enum BreedingStandardValueTypeEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (CoopStatusEnum type : CoopStatusEnum.values()) {
+        for (BreedingStandardValueTypeEnum type : BreedingStandardValueTypeEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -41,7 +41,7 @@ public enum BreedingStandardValueTypeEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (CoopStatusEnum type : CoopStatusEnum.values()) {
+        for (BreedingStandardValueTypeEnum type : BreedingStandardValueTypeEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }

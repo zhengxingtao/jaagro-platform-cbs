@@ -139,12 +139,12 @@ public class BreedingPlantController {
     }
 
     @ApiOperation("鸡舍-删除")
-    @GetMapping("/deleteCoop/{plantId}")
-    public BaseResponse deleteCoop(@PathVariable("plantId") Integer coopId) {
-        if (coopId == null) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
-        }
-        return null;
+        @GetMapping("/deleteCoop/{plantId}")
+        public BaseResponse deleteCoop(@PathVariable("plantId") Integer coopId) {
+            if (coopId == null) {
+                return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+            }
+            return null;
     }
 
     /**

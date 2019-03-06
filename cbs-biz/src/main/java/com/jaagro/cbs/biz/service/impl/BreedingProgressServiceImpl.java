@@ -12,6 +12,7 @@ import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.bo.FeedingFactoryBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
+import com.jaagro.cbs.biz.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.BeanUtils;
@@ -85,7 +86,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //养殖计划的鸡舍信息
             BatchPlantCoopExample example = new BatchPlantCoopExample();
-            example.createCriteria().andPlanIdEqualTo(planId).andEnableEqualTo(true);
+            example.createCriteria().andPlanIdEqualTo(planId).andPlantIdEqualTo(plantId).andEnableEqualTo(true);
             List<BatchPlantCoop> batchPlantCoopDos = batchPlantCoopMapper.selectByExample(example);
             if (!CollectionUtils.isEmpty(batchPlantCoopDos)) {
                 Set<Integer> plantIds = new HashSet<>();
@@ -105,6 +106,15 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 breedingProgressDto.setCustomerName(customerDto.getCustomerName());
                 breedingProgressDto.setCustomerAddress(customerDto.getAddress());
             }
+            List<Map<Integer,String>> progressDayAges = new ArrayList<>();
+            for(int i=0;i<breedingPlan.getBreedingDays();i++){
+                Map<Integer,String> map = new HashMap<>();
+
+                map.put(i+1,DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(),i));
+
+                progressDayAges.add(map);
+            }
+            breedingProgressDto.setProgressDayAges(progressDayAges);
 
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingProgressById  error:" + ex);
