@@ -50,16 +50,4 @@ public class DateUtil {
         }
         return date;
     }
-
-    public static  String DateToString(Date date){
-        return simpleDateFormat.format(date);
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println(DateUtil.accumulateDateByDay(new Date(),0));
-
-        System.out.println(DateUtil.DateToString(new Date()));
-
-    }
 }

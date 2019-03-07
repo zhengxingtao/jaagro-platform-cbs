@@ -5,6 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
+import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
+import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
+import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
@@ -15,6 +19,7 @@ import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
 import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
+import com.jaagro.cbs.biz.bo.BatchPlantCoopBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
@@ -81,6 +86,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private TechConsultRecordMapperExt techConsultRecordMapper;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
+    @Autowired
+    private BatchCoopDailyMapperExt batchCoopDailyMapper;
 
     /**
      * 创建养殖计划
@@ -200,6 +207,90 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
+     * 批次详情(农户app)
+     *
+     * @param planId
+     * @return
+     * @author yj
+     */
+    @Override
+    public BreedingPlanDetailDto getBatchDetail(Integer planId) {
+        BreedingPlanDetailDto breedingPlanDetailDto = new BreedingPlanDetailDto();
+        try {
+            // 计划信息
+            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+            if (breedingPlan == null){
+                throw new RuntimeException("养殖计划id="+planId+"不存在");
+            }
+            // 批次详情
+            ReturnBreedingBatchDetailsDto detailsDto = new ReturnBreedingBatchDetailsDto();
+            BeanUtils.copyProperties(breedingPlan,detailsDto);
+            // 存栏量,今日耗料量
+            BatchInfo theLatestBatchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
+            // 日龄
+            Integer dayAge = null;
+            if (theLatestBatchInfo != null){
+                detailsDto.setBreedingStock(new BigDecimal(theLatestBatchInfo.getCurrentAmount()))
+                        .setFodderAmount(theLatestBatchInfo.getFodderAmount());
+                dayAge = theLatestBatchInfo.getDayAge();
+            }
+            if (dayAge == null){
+                dayAge = (int)getDayAge(planId);
+            }
+            breedingPlanDetailDto.setReturnBreedingBatchDetailsDto(detailsDto);
+            // 计划养殖场鸡舍信息
+            List<BatchPlantCoopBo> batchPlantCoopBoList = batchPlantCoopMapper.listPlantCoopInfoByPlanId(planId);
+            if (!CollectionUtils.isEmpty(batchPlantCoopBoList)){
+                Set<Integer> plantIdSet = new HashSet<>();
+                List<BatchPlantDto> batchPlantDtoList = new ArrayList<>();
+                batchPlantCoopBoList.forEach(batchPlantCoopBo -> plantIdSet.add(batchPlantCoopBo.getPlantId()));
+                for (Integer plantId : plantIdSet){
+                    BatchPlantDto batchPlantDto = new BatchPlantDto();
+                    batchPlantDto.setId(plantId);
+                    List<BatchCoopDto> batchCoopDtoList = new ArrayList<>();
+                    batchPlantDto.setBatchCoopDtoList(batchCoopDtoList);
+                    batchPlantDtoList.add(batchPlantDto);
+                }
+                for (BatchPlantCoopBo batchPlantCoopBo : batchPlantCoopBoList){
+                    for (BatchPlantDto batchPlantDto : batchPlantDtoList){
+                        if (batchPlantCoopBo.getPlantId().equals(batchPlantDto.getId())){
+                            batchPlantDto.setPlantName(batchPlantCoopBo.getPlantName());
+                            List<BatchCoopDto> batchCoopDtoList = batchPlantDto.getBatchCoopDtoList();
+                            BatchCoopDto batchCoopDto = new BatchCoopDto();
+                            batchCoopDto.setId(batchPlantCoopBo.getCoopId())
+                                    .setCoopName(batchPlantCoopBo.getCoopName())
+                                    .setCoopNo(batchPlantCoopBo.getCoopNo())
+                                    .setAlarm(false);
+                            // 异常提示
+                            DeviceAlarmLogExample deviceAlarmLogExample = new DeviceAlarmLogExample();
+                            deviceAlarmLogExample.createCriteria().andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
+                                    .andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge);
+                            List<DeviceAlarmLog> deviceAlarmLogList = deviceAlarmLogMapper.selectByExample(deviceAlarmLogExample);
+                            if (!CollectionUtils.isEmpty(deviceAlarmLogList)){
+                                batchCoopDto.setAlarm(true);
+                            }
+                            // 鸡舍存栏量
+                            BatchCoopDailyExample batchCoopDailyExample = new BatchCoopDailyExample();
+                            batchCoopDailyExample.createCriteria().andPlanIdEqualTo(planId)
+                                    .andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
+                                    .andDayAgeEqualTo(dayAge);
+                            List<BatchCoopDaily> batchCoopDailyList = batchCoopDailyMapper.selectByExample(batchCoopDailyExample);
+                            if(!CollectionUtils.isEmpty(batchCoopDailyList)){
+                                batchCoopDto.setBreedingStock(batchCoopDailyList.get(0).getCurrentAmount());
+                            }
+                            batchCoopDtoList.add(batchCoopDto);
+                        }
+                    }
+                }
+                breedingPlanDetailDto.setBatchPlantDtoList(batchPlantDtoList);
+            }
+        }catch (Exception ex){
+            log.info("O getBatchDetail error planId="+planId,ex);
+        }
+        return breedingPlanDetailDto;
+    }
+
+    /**
      * 录入合同
      *
      * @param createPlanContractDto
@@ -303,12 +394,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
         BigDecimal breedingStock = null;
-        BigDecimal totalBreedingStock=null;
+        BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null && accumulativeDeadAmount != null) {
             breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
         }
         if (breedingStock != null) {
-            totalBreedingStock= breedingStock.subtract(accumulativeSaleAmount);
+            totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
         }
         if (totalBreedingStock != null) {
             returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
@@ -360,13 +451,13 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
                 BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
-                if (globalUser.getData() != null) {
+                if (globalUser != null && globalUser.getData() != null) {
                     UserInfo userInfo = globalUser.getData();
-                    if (userInfo.getName() != null) {
+                    if (userInfo != null && userInfo.getName() != null) {
                         returnPurchaseOrderDto
                                 .setSignerName(userInfo.getName());
                     }
-                    if (userInfo.getPhoneNumber() != null) {
+                    if (userInfo != null && userInfo.getPhoneNumber() != null) {
                         returnPurchaseOrderDto
                                 .setSignerPhone(userInfo.getPhoneNumber());
                     }
@@ -433,7 +524,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     }
                 }
             }
-            if (!CollectionUtils.isEmpty(batchParameterList)){
+            if (!CollectionUtils.isEmpty(batchParameterList)) {
                 breedingBatchParameterMapper.batchInsert(batchParameterList);
             }
         }
@@ -462,7 +553,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     coopList.add(coop);
                 }
             }
-            if (!CollectionUtils.isEmpty(batchPlantCoopList)){
+            if (!CollectionUtils.isEmpty(batchPlantCoopList)) {
                 batchPlantCoopMapper.insertBatch(batchPlantCoopList);
             }
             if (!CollectionUtils.isEmpty(coopList)){
@@ -552,9 +643,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算计划饲料 剩余饲料
             if (calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode()) != null) {
                 BigDecimal totalPlanFeedWeight = calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode());
-                returnBreedingDetailsDto
-                        .setPlanFeed(totalPlanFeedWeight)
-                        .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
+                if (totalPlanFeedWeight != null) {
+                    returnBreedingDetailsDto
+                            .setPlanFeed(totalPlanFeedWeight)
+                            .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
+                }
             }
             //计算理论体重值
             BreedingBatchParameterExample breedingBatchParameterExample = new BreedingBatchParameterExample();
@@ -575,7 +668,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 //计算理论料肉比
                 if (breedingBatchParameter.getParamValue() != null && MathUtil.isNum(breedingBatchParameter.getParamValue())) {
                     BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
-                    BigDecimal meat = paramValue.multiply(breedingStock);
+                    BigDecimal meat = null;
+                    if (paramValue != null && breedingStock != null) {
+                        meat = paramValue.multiply(breedingStock);
+                    }
                     if (meat != null) {
                         BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
                         returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
@@ -589,13 +685,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setAskQuestions(askQues)
                     .setSurvivalRate(percentage)
                     .setAbnormalWarn(abnormalWarn)
-                    .setBreedingStock(breedingStock.intValue())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setSolveQuestions(solveQuestions)
-                    .setBreedingStock(batchInfo.getCurrentAmount())
-                    .setBreedingDays(breedingPlan.getBreedingDays())
                     .setCalculatePurchaseOrderDtos(calculatePurchaseOrderDtos);
+            if (breedingStock != null) {
+                returnBreedingDetailsDto
+                        .setBreedingStock(breedingStock.intValue());
+            }
+            if (breedingPlan.getBreedingDays() != null) {
+                returnBreedingDetailsDto
+                        .setBreedingDays(breedingPlan.getBreedingDays());
+            }
         }
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);

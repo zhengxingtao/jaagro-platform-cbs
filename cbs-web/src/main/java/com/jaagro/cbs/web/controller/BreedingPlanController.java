@@ -2,9 +2,14 @@ package com.jaagro.cbs.web.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.*;
+import com.jaagro.cbs.api.dto.plant.ReturnCoopDto;
+import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
+import com.jaagro.cbs.api.enums.CoopStatusEnum;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.service.BreedingPlanService;
+import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.web.vo.plan.BreedingPlanVo;
+import com.jaagro.cbs.web.vo.plan.CheckCoopVo;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
@@ -30,6 +35,8 @@ import java.util.List;
 public class BreedingPlanController {
     @Autowired
     private BreedingPlanService breedingPlanService;
+    @Autowired
+    private BreedingPlantService breedingPlantService;
 
     @PostMapping("/createBreedingPlan")
     @ApiOperation("创建养殖计划")
@@ -132,5 +139,37 @@ public class BreedingPlanController {
         log.info("O breedingPlanParamConfiguration param={}", dto);
         breedingPlanService.breedingPlanParamConfiguration(dto);
         return BaseResponse.successInstance("参数配置成功");
+    }
+
+    @GetMapping("/checkCoop/{customerId}")
+    @ApiOperation("鸡舍查看")
+    public BaseResponse checkCoop(@PathVariable("customerId") Integer customerId) {
+        if (customerId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖客户id不能为空");
+        }
+        List<CheckCoopVo> checkCoopVos = new ArrayList<>();
+        List<ReturnPlantDto> returnPlantDtos = breedingPlantService.listPlantByCustomerId(customerId);
+        if (!CollectionUtils.isEmpty(returnPlantDtos)) {
+            for (ReturnPlantDto returnPlantDto : returnPlantDtos) {
+                List<ReturnCoopDto> returnCoopDtos = returnPlantDto.getReturnCoopDtos();
+                if (!CollectionUtils.isEmpty(returnCoopDtos)) {
+                    for (ReturnCoopDto returnCoopDto : returnCoopDtos) {
+                        CheckCoopVo checkCoopVo = new CheckCoopVo();
+                        if (CoopStatusEnum.LEISURE.getCode() != returnCoopDto.getCoopStatus()) {
+                            continue;
+                        }
+                        checkCoopVo
+                                .setPlantName(returnPlantDto.getPlantName())
+                                .setCapacity(returnCoopDto.getCapacity())
+                                .setCoopNo(returnCoopDto.getCoopNo())
+                                .setLastEndDate(returnCoopDto.getLastEndDate())
+                                .setLastStartDate(returnCoopDto.getLastStartDate())
+                                .setCoopStatus(CoopStatusEnum.getDescByCode(returnCoopDto.getCoopStatus()));
+                        checkCoopVos.add(checkCoopVo);
+                    }
+                }
+            }
+        }
+        return BaseResponse.successInstance(checkCoopVos);
     }
 }

@@ -195,6 +195,11 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                 //填充养殖场鸡舍数量
                 Integer coopCount = getCoopsCountByPlant(plant.getId());
                 plantDto.setCoopCount(coopCount);
+                //查询鸡舍信息
+                if (plant.getId() != null) {
+                    List<ReturnCoopDto> returnCoopDtos = listCoopByPlantId(plant.getId());
+                    plantDto.setReturnCoopDtos(returnCoopDtos);
+                }
                 returnPlantDtoList.add(plantDto);
             }
         }

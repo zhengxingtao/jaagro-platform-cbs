@@ -2,6 +2,7 @@ package com.jaagro.cbs.api.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.plan.*;
 
 import java.util.List;
@@ -89,5 +90,11 @@ public interface BreedingPlanService {
      */
      long getDayAge(Integer planId) throws Exception;
 
-
+    /**
+     * 批次详情(农户app)
+     * @author yj
+     * @param planId
+     * @return
+     */
+    BreedingPlanDetailDto getBatchDetail(Integer planId);
 }

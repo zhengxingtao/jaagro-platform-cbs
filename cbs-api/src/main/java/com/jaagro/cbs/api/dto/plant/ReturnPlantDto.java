@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.dto.plant;
 
+import com.jaagro.cbs.api.model.Coop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -104,7 +105,17 @@ public class ReturnPlantDto implements Serializable {
     private List<ReturnPlantImageDto> plantImageDtoList;
 
     /**
+     * 鸡舍状态
+     */
+    private Integer coopStatus;
+
+    /**
      * 鸡舍数量
      */
     private Integer coopCount;
+
+    /**
+     * 查询鸡舍信息
+     */
+    private List<ReturnCoopDto> returnCoopDtos;
 }

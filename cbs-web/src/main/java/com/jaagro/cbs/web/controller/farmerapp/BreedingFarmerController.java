@@ -1,7 +1,9 @@
 package com.jaagro.cbs.web.controller.app;
 
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -13,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author @Gao.
@@ -71,7 +70,61 @@ public class BreedingFarmerController {
         if (dto.getBatchNo() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划批次号不能为空");
         }
+        if (dto.getPlantId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
+        }
+        if (dto.getCoopId() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "鸡舍id不能为空");
+        }
         breedingFarmerService.technicalInquiries(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
+
+    @GetMapping("/farmerPersonalCenter")
+    @ApiOperation("农户端个人中心")
+    public BaseResponse farmerPersonalCenter() {
+        return BaseResponse.successInstance(breedingFarmerService.farmerPersonalCenter());
+    }
+
+    @PostMapping("/listPurchaseOrder")
+    @ApiOperation("商品采购列表")
+    public BaseResponse listPurchaseOrder(@RequestBody PurchaseOrderListParamDto dto) {
+        return BaseResponse.successInstance(breedingFarmerService.listPurchaseOrder(dto));
+    }
+
+    @GetMapping("/purchaseOrderDetails/{purchaseOrderId}")
+    @ApiOperation("采购订单详情")
+    public BaseResponse purchaseOrderDetails(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
+        if (purchaseOrderId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
+        }
+        return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
+    }
+
+    @GetMapping("/updatePurchaseOrder/{purchaseOrderId}")
+    @ApiOperation("更新采购订单状态")
+    public BaseResponse updatePurchaseOrder(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
+        if (purchaseOrderId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
+        }
+        return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
+    }
+
+    /**
+     * 批次详情
+     *
+     * @param planId
+     * @return
+     * @author yj
+     */
+    @PostMapping("/getBatchDetail/{planId}")
+    @ApiOperation("批次详情")
+    public BaseResponse getBatchDetail(@PathVariable("planId") Integer planId) {
+        log.info("O getBatchDetail planId={}", planId);
+        BreedingPlanDetailDto breedingPlanDetailDto = breedingPlanService.getBatchDetail(planId);
+        if (breedingPlanDetailDto != null) {
+            return BaseResponse.successInstance(breedingPlanDetailDto);
+        }
+        return BaseResponse.queryDataEmpty();
     }
 }

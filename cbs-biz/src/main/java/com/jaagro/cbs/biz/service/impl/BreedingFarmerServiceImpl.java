@@ -4,17 +4,16 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
-import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
-import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
-import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
+import com.jaagro.cbs.api.dto.farmer.*;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
-import com.jaagro.cbs.api.model.BatchInfo;
-import com.jaagro.cbs.api.model.BatchInfoExample;
-import com.jaagro.cbs.api.model.TechConsultImages;
-import com.jaagro.cbs.api.model.TechConsultRecord;
+import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
+import com.jaagro.cbs.api.enums.TechConsultStatusEnum;
+import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
@@ -28,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +59,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private CustomerClientService customerClientService;
     @Autowired
     private TechConsultImagesMapperExt techConsultImagesMapper;
+    @Autowired
+    private ProductMapperExt productMapper;
+
 
     /**
      * 农户端app 首页数据统计
@@ -189,12 +192,14 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
         BatchInfo batchInfo = batchInfoMapper.selectByPrimaryKey(dto.getPlanId());
         if (batchInfo == null) {
-            throw new RuntimeException("当前批次不存在");
+            throw new RuntimeException("当前养殖批次不存在");
         }
         //插入技术询问
         TechConsultRecord techConsultRecord = new TechConsultRecord();
         UserInfo currentUser = currentUserService.getCurrentUser();
         BeanUtils.copyProperties(dto, techConsultRecord);
+        techConsultRecord
+                .setTechConsultStatus(TechConsultStatusEnum.STATUS_PENDING.getCode());
         if (currentUser != null && currentUser.getId() != null) {
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
             if (customerUser != null && customerUser.getRelevanceId() != null) {
@@ -225,6 +230,118 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 techConsultImagesMapper.insertSelective(techConsultImages);
             }
         }
+    }
+
+    /**
+     * 农户端个人中心
+     *
+     * @return
+     * @author: @Gao.
+     */
+    @Override
+    public FarmerPersonalCenterDto farmerPersonalCenter() {
+        FarmerPersonalCenterDto farmerPersonalCenterDto = new FarmerPersonalCenterDto();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        if (currentUser != null && currentUser.getId() != null && currentUser.getLoginName() != null) {
+            farmerPersonalCenterDto
+                    .setPhoneNumber(currentUser.getPhoneNumber())
+                    .setLoginName(currentUser.getLoginName());
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
+                if (showCustomer != null && showCustomer.getCustomerName() != null) {
+                    farmerPersonalCenterDto
+                            .setCustomerName(showCustomer.getCustomerName());
+                }
+            }
+        }
+        return farmerPersonalCenterDto;
+    }
+
+    /**
+     * 商品采购列表
+     *
+     * @return
+     * @author: @Gao.
+     */
+    @Override
+    public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
+        List<Integer> purchaseOrderStatus = new ArrayList<>();
+        if (dto != null && dto.getPurchaseOrderStatus() == null) {
+            for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
+                purchaseOrderStatus.add(type.getCode());
+            }
+        } else {
+            purchaseOrderStatus.add(dto.getPurchaseOrderStatus());
+        }
+        List<PurchaseOrderDto> purchaseOrderDtos = new ArrayList<>();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+                purchaseOrderExample
+                        .createCriteria()
+                        .andPurchaseOrderStatusIn(purchaseOrderStatus)
+                        .andEnableEqualTo(true)
+                        .andCustomerIdEqualTo(customerUser.getRelevanceId());
+                purchaseOrderExample.setOrderByClause("create_time DESC");
+                List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+                for (PurchaseOrder purchaseOrder : purchaseOrderList) {
+                    PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
+                    BeanUtils.copyProperties(purchaseOrder, purchaseOrderDto);
+                    purchaseOrderDtos.add(purchaseOrderDto);
+                }
+            }
+        }
+        return purchaseOrderDtos;
+    }
+
+    /**
+     * 农户端采购订单详情
+     *
+     * @param purchaseOrderId
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public ReturnFarmerPurchaseOrderDetailsDto purchaseOrderDetails(Integer purchaseOrderId) {
+        ReturnFarmerPurchaseOrderDetailsDto returnFarmerPurchaseOrderDetailsDto = new ReturnFarmerPurchaseOrderDetailsDto();
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample
+                .createCriteria()
+                .andIdEqualTo(purchaseOrderId)
+                .andEnableEqualTo(true);
+        List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+        if (!CollectionUtils.isEmpty(purchaseOrderList)) {
+            //采购信息
+            PurchaseOrder purchaseOrder = purchaseOrderList.get(0);
+            BeanUtils.copyProperties(purchaseOrder, returnFarmerPurchaseOrderDetailsDto);
+            ProductExample productExample = new ProductExample();
+            productExample
+                    .createCriteria()
+                    .andIdEqualTo(purchaseOrder.getProductId());
+            //商品信息
+            List<Product> products = productMapper.selectByExample(productExample);
+            if (!CollectionUtils.isEmpty(products)) {
+                Product product = products.get(0);
+                if (product.getProductName() != null) {
+                    returnFarmerPurchaseOrderDetailsDto
+                            .setProductName(product.getProductName());
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 更新采购订单状态
+     *
+     * @param dto
+     */
+    @Override
+    public void updatePurchaseOrder(PurchaseOrderParamDto dto) {
+
     }
 
     /**
