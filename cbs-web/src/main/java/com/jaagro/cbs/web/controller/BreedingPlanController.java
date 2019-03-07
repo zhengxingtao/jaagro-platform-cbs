@@ -161,7 +161,7 @@ public class BreedingPlanController {
                                 .setCoopNo(returnCoopDto.getCoopNo())
                                 .setLastEndDate(returnCoopDto.getLastEndDate())
                                 .setLastStartDate(returnCoopDto.getLastStartDate())
-                                .setCoopStatus(returnCoopDto.getCoopStatus());
+                                .setCoopStatus(CoopStatusEnum.getDescByCode(returnCoopDto.getCoopStatus()));
                         checkCoopVos.add(checkCoopVo);
                     }
                 }

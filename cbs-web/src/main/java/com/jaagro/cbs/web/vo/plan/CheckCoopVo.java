@@ -36,7 +36,7 @@ public class CheckCoopVo implements Serializable {
     /**
      * 鸡舍状态
      */
-    private Integer coopStatus;
+    private String coopStatus;
 
     /**
      * 上次起始时间
