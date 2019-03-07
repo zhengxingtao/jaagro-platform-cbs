@@ -8,6 +8,7 @@ import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
@@ -58,6 +59,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private CustomerClientService customerClientService;
     @Autowired
     private TechConsultImagesMapperExt techConsultImagesMapper;
+    @Autowired
+    private ProductMapperExt productMapper;
+
 
     /**
      * 农户端app 首页数据统计
@@ -265,9 +269,6 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         List<Integer> purchaseOrderStatus = new ArrayList<>();
         if (dto != null && dto.getPurchaseOrderStatus() == null) {
             for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
-                if (PurchaseOrderStatusEnum.ORDER_PLACED.getCode() == type.getCode()) {
-                    continue;
-                }
                 purchaseOrderStatus.add(type.getCode());
             }
         } else {
@@ -294,6 +295,53 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             }
         }
         return purchaseOrderDtos;
+    }
+
+    /**
+     * 农户端采购订单详情
+     *
+     * @param purchaseOrderId
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public ReturnFarmerPurchaseOrderDetailsDto purchaseOrderDetails(Integer purchaseOrderId) {
+        ReturnFarmerPurchaseOrderDetailsDto returnFarmerPurchaseOrderDetailsDto = new ReturnFarmerPurchaseOrderDetailsDto();
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample
+                .createCriteria()
+                .andIdEqualTo(purchaseOrderId)
+                .andEnableEqualTo(true);
+        List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+        if (!CollectionUtils.isEmpty(purchaseOrderList)) {
+            //采购信息
+            PurchaseOrder purchaseOrder = purchaseOrderList.get(0);
+            BeanUtils.copyProperties(purchaseOrder, returnFarmerPurchaseOrderDetailsDto);
+            ProductExample productExample = new ProductExample();
+            productExample
+                    .createCriteria()
+                    .andIdEqualTo(purchaseOrder.getProductId());
+            //商品信息
+            List<Product> products = productMapper.selectByExample(productExample);
+            if (!CollectionUtils.isEmpty(products)) {
+                Product product = products.get(0);
+                if (product.getProductName() != null) {
+                    returnFarmerPurchaseOrderDetailsDto
+                            .setProductName(product.getProductName());
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 更新采购订单状态
+     *
+     * @param dto
+     */
+    @Override
+    public void updatePurchaseOrder(PurchaseOrderParamDto dto) {
+
     }
 
     /**

@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
+import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public interface BreedingFarmerService {
      * 技术询问
      *
      * @param dto
+     * @author @Gao.
      */
     void technicalInquiries(CreateTechnicalInquiriesDto dto);
 
@@ -42,6 +45,7 @@ public interface BreedingFarmerService {
      * 农户端个人中心
      *
      * @return
+     * @author @Gao.
      */
     FarmerPersonalCenterDto farmerPersonalCenter();
 
@@ -49,9 +53,24 @@ public interface BreedingFarmerService {
      * 商品采购列表
      *
      * @return
+     * @author @Gao.
      */
     List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto);
 
-    // purchaseOrderDetails(Integer purchaseOrderId);
+    /**
+     * 农户端采购订单详情
+     *
+     * @param purchaseOrderId
+     * @return
+     * @author @Gao.
+     */
+    ReturnFarmerPurchaseOrderDetailsDto purchaseOrderDetails(Integer purchaseOrderId);
+
+    /**
+     * 更新采购订单状态
+     *
+     * @param dto
+     */
+    void updatePurchaseOrder(PurchaseOrderParamDto dto);
 
 }

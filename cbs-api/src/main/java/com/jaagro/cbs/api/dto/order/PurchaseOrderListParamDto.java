@@ -32,5 +32,4 @@ public class PurchaseOrderListParamDto implements Serializable {
      */
     private Integer purchaseOrderStatus;
 
-
 }

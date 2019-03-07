@@ -95,21 +95,34 @@ public class BreedingFarmerController {
     @GetMapping("/purchaseOrderDetails/{purchaseOrderId}")
     @ApiOperation("采购订单详情")
     public BaseResponse purchaseOrderDetails(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
-        return BaseResponse.successInstance(null);
+        if (purchaseOrderId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
+        }
+        return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
+    }
+
+    @GetMapping("/updatePurchaseOrder/{purchaseOrderId}")
+    @ApiOperation("更新采购订单状态")
+    public BaseResponse updatePurchaseOrder(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
+        if (purchaseOrderId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
+        }
+        return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
     }
 
     /**
      * 批次详情
-     * @author yj
+     *
      * @param planId
      * @return
+     * @author yj
      */
     @PostMapping("/getBatchDetail/{planId}")
     @ApiOperation("批次详情")
-    public BaseResponse getBatchDetail(@PathVariable("planId") Integer planId){
-        log.info("O getBatchDetail planId={}",planId);
+    public BaseResponse getBatchDetail(@PathVariable("planId") Integer planId) {
+        log.info("O getBatchDetail planId={}", planId);
         BreedingPlanDetailDto breedingPlanDetailDto = breedingPlanService.getBatchDetail(planId);
-        if (breedingPlanDetailDto != null){
+        if (breedingPlanDetailDto != null) {
             return BaseResponse.successInstance(breedingPlanDetailDto);
         }
         return BaseResponse.queryDataEmpty();

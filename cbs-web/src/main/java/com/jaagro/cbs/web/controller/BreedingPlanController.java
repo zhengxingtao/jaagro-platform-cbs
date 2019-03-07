@@ -144,6 +144,9 @@ public class BreedingPlanController {
     @GetMapping("/checkCoop/{customerId}")
     @ApiOperation("鸡舍查看")
     public BaseResponse checkCoop(@PathVariable("customerId") Integer customerId) {
+        if (customerId == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖客户id不能为空");
+        }
         List<CheckCoopVo> checkCoopVos = new ArrayList<>();
         List<ReturnPlantDto> returnPlantDtos = breedingPlantService.listPlantByCustomerId(customerId);
         if (!CollectionUtils.isEmpty(returnPlantDtos)) {
