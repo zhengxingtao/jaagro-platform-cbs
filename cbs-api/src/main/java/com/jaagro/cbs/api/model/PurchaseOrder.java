@@ -137,5 +137,10 @@ public class PurchaseOrder implements Serializable {
      */
     private Integer orderPhase;
 
+    /**
+     * 采购执行时间
+     */
+    private Date planExecuteTime;
+
     private static final long serialVersionUID = 1L;
 }
