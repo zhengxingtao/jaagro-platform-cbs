@@ -141,14 +141,14 @@ public class BreedingPlanController {
         return BaseResponse.successInstance("参数配置成功");
     }
 
-    @GetMapping("/checkCoop/{customerId}")
+    @PostMapping("/checkCoop")
     @ApiOperation("鸡舍查看")
-    public BaseResponse checkCoop(@PathVariable("customerId") Integer customerId) {
-        if (customerId == null) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖客户id不能为空");
+    public BaseResponse checkCoop(@RequestBody CheckCoopParamDto dto) {
+        if (CollectionUtils.isEmpty(dto.getPlantIds())) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
         }
         List<CheckCoopVo> checkCoopVos = new ArrayList<>();
-        List<ReturnPlantDto> returnPlantDtos = breedingPlantService.listPlantByCustomerId(customerId);
+        List<ReturnPlantDto> returnPlantDtos = breedingPlantService.listPlantAndCoopByPlantIds(dto.getPlantIds());
         if (!CollectionUtils.isEmpty(returnPlantDtos)) {
             for (ReturnPlantDto returnPlantDto : returnPlantDtos) {
                 List<ReturnCoopDto> returnCoopDtos = returnPlantDto.getReturnCoopDtos();
