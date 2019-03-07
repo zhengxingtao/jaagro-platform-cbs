@@ -3,7 +3,7 @@ package com.jaagro.cbs.web.controller.app;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
-import com.jaagro.cbs.api.dto.farmer.PurchaseOrderListParamDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -94,7 +94,7 @@ public class BreedingFarmerController {
 
     @GetMapping("/purchaseOrderDetails/{purchaseOrderId}")
     @ApiOperation("采购订单详情")
-    public BaseResponse purchaseOrderDetails(@PathVariable() Integer purchaseOrderId) {
+    public BaseResponse purchaseOrderDetails(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
         return BaseResponse.successInstance(null);
     }
 

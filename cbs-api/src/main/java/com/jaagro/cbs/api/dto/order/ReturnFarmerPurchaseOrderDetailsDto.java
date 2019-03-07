@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.farmer;
+package com.jaagro.cbs.api.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,20 +10,19 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @description: 采购订单列表对象
+ * @description: 农户端采购订单详情
  * @author: @Gao.
- * @create: 2019-03-06 13:59
+ * @create: 2019-03-07 10:56
  **/
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseOrderDto implements Serializable {
-
+public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     /**
-     * 养殖采购订单表id
+     * 批次号
      */
-    private Integer id;
+    private String batchNo;
 
     /**
      * 商品采购单编号
@@ -34,6 +33,11 @@ public class PurchaseOrderDto implements Serializable {
      * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
      */
     private Integer productType;
+
+    /**
+     * 商品品名
+     */
+    private String productName;
 
     /**
      * 采购重量
@@ -56,7 +60,19 @@ public class PurchaseOrderDto implements Serializable {
     private Integer purchaseOrderStatus;
 
     /**
+     * 开单时间
+     */
+    private Date createPurchaseOrderTime;
+
+    /**
+     * 待送达时间
+     */
+    private Date planDeliveryTime;
+
+    /**
      * 到货时间
      */
     private Date deliveryTime;
+
+
 }

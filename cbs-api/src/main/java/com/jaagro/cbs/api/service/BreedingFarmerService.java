@@ -2,6 +2,8 @@ package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.*;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 
 import java.util.List;
 
@@ -50,6 +52,6 @@ public interface BreedingFarmerService {
      */
     List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto);
 
-   // purchaseOrderDetails(Integer purchaseOrderId);
+    // purchaseOrderDetails(Integer purchaseOrderId);
 
 }

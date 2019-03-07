@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.farmer;
+package com.jaagro.cbs.api.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,9 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.*;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
+import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
+import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
 import com.jaagro.cbs.api.enums.TechConsultStatusEnum;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
@@ -259,6 +262,17 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
+        List<Integer> purchaseOrderStatus = new ArrayList<>();
+        if (dto != null && dto.getPurchaseOrderStatus() == null) {
+            for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
+                if (PurchaseOrderStatusEnum.ORDER_PLACED.getCode() == type.getCode()) {
+                    continue;
+                }
+                purchaseOrderStatus.add(type.getCode());
+            }
+        } else {
+            purchaseOrderStatus.add(dto.getPurchaseOrderStatus());
+        }
         List<PurchaseOrderDto> purchaseOrderDtos = new ArrayList<>();
         UserInfo currentUser = currentUserService.getCurrentUser();
         if (currentUser != null && currentUser.getId() != null) {
@@ -267,10 +281,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
                 purchaseOrderExample
                         .createCriteria()
+                        .andPurchaseOrderStatusIn(purchaseOrderStatus)
                         .andEnableEqualTo(true)
                         .andCustomerIdEqualTo(customerUser.getRelevanceId());
-                purchaseOrderExample
-                        .setOrderByClause("desc");
+                purchaseOrderExample.setOrderByClause("create_time DESC");
                 List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
                 for (PurchaseOrder purchaseOrder : purchaseOrderList) {
                     PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
