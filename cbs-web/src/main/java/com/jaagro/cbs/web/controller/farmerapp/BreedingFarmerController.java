@@ -102,9 +102,9 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
     }
 
-    @GetMapping("/updatePurchaseOrder")
+    @PostMapping("/updatePurchaseOrder")
     @ApiOperation("更新采购订单状态")
-    public BaseResponse updatePurchaseOrder(UpdatePurchaseOrderParamDto dto) {
+    public BaseResponse updatePurchaseOrder(@RequestBody UpdatePurchaseOrderParamDto dto) {
         if (dto.getPurchaseOrderId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
         }

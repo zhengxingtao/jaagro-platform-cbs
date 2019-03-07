@@ -358,6 +358,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     @Override
     public void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto) {
         PurchaseOrder purchaseOrder = new PurchaseOrder();
+        purchaseOrder
+                .setId(dto.getPurchaseOrderId());
         if (dto.getPurchaseOrderStatus() != null) {
             purchaseOrder
                     .setPurchaseOrderStatus(dto.getPurchaseOrderStatus());
