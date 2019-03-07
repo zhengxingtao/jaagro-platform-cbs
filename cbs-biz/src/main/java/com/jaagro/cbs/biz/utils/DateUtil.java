@@ -15,11 +15,10 @@ import java.util.Date;
  * @create: 2019-02-28 13:29
  **/
 @Slf4j
-@Component
 public class DateUtil {
 
-    private Calendar fromCal = Calendar.getInstance();
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static Calendar fromCal = Calendar.getInstance();
+    private static  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 日期添加指定天数
@@ -27,7 +26,7 @@ public class DateUtil {
      * @return
      * @author: @Gao.
      */
-    public synchronized String accumulateDateByDay(Date date, int day) {
+    public synchronized static String accumulateDateByDay(Date date, int day) {
         String strDate = simpleDateFormat.format(date);
         Date formatDate = stringToDate(strDate);
         fromCal.setTime(formatDate);
@@ -42,7 +41,7 @@ public class DateUtil {
      * @return
      * @Author @Gao.
      */
-    private Date stringToDate(String stringDate) {
+    private static Date stringToDate(String stringDate) {
         Date date = null;
         try {
             date = simpleDateFormat.parse(stringDate);
@@ -50,5 +49,17 @@ public class DateUtil {
             log.error("I stringToDate-{}", e);
         }
         return date;
+    }
+
+    public static  String DateToString(Date date){
+        return simpleDateFormat.format(date);
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(DateUtil.accumulateDateByDay(new Date(),0));
+
+        System.out.println(DateUtil.DateToString(new Date()));
+
     }
 }

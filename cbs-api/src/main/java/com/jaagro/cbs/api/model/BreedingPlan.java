@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @author :gavinwang
- * @date :2019/02/28
+ * @date :2019/03/06
  */
 @Data
 @NoArgsConstructor
@@ -37,7 +37,7 @@ public class BreedingPlan implements Serializable {
     private Integer customerId;
 
     /**
-     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
+     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-待出栏计划,6-已完成,7-已取消)
      */
     private Integer planStatus;
 

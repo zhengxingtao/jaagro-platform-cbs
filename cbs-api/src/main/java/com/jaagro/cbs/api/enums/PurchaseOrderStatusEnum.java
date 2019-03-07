@@ -6,12 +6,11 @@ package com.jaagro.cbs.api.enums;
  */
 public enum PurchaseOrderStatusEnum {
     /**
-     * 采购订单状态
+     * 采购订单状态 状态(1-已下单 ,2－待送达 ,3-已签收)
      */
-    TO_AUDIT(0, "TO_AUDIT", "待审核"),
-    APPROVED(1, "APPROVED", "审核通过"),
-    DELIVERY(2, "DELIVERY", "已完成送货"),
-    AUDIT_REFUSED(3, "AUDIT_REFUSED", "审核拒绝");
+    ORDER_PLACED(1, "ORDER_PLACED", "已下单"),
+    PENDING_ARRIVED(2, "PENDING_ARRIVED", "待送达"),
+    ALREADY_SIGNED(3, "ALREADY_SIGNED", "已签收");
 
     private int code;
     private String type;

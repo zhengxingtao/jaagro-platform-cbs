@@ -1,8 +1,8 @@
-package com.jaagro.cbs.web.controller.farmerapp;
+package com.jaagro.cbs.web.controller.app;
 
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
-import com.jaagro.cbs.api.dto.farmer.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -97,4 +97,20 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(null);
     }
 
+    /**
+     * 批次详情
+     * @author yj
+     * @param planId
+     * @return
+     */
+    @PostMapping("/getBatchDetail/{planId}")
+    @ApiOperation("批次详情")
+    public BaseResponse getBatchDetail(@PathVariable("planId") Integer planId){
+        log.info("O getBatchDetail planId={}",planId);
+        BreedingPlanDetailDto breedingPlanDetailDto = breedingPlanService.getBatchDetail(planId);
+        if (breedingPlanDetailDto != null){
+            return BaseResponse.successInstance(breedingPlanDetailDto);
+        }
+        return BaseResponse.queryDataEmpty();
+    }
 }
