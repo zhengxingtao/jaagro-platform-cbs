@@ -146,22 +146,24 @@ public class BreedingPlanController {
     public BaseResponse checkCoop(@PathVariable("customerId") Integer customerId) {
         List<CheckCoopVo> checkCoopVos = new ArrayList<>();
         List<ReturnPlantDto> returnPlantDtos = breedingPlantService.listPlantByCustomerId(customerId);
-        for (ReturnPlantDto returnPlantDto : returnPlantDtos) {
-            List<ReturnCoopDto> returnCoopDtos = returnPlantDto.getReturnCoopDtos();
-            if (!CollectionUtils.isEmpty(returnCoopDtos)) {
-                for (ReturnCoopDto returnCoopDto : returnCoopDtos) {
-                    CheckCoopVo checkCoopVo = new CheckCoopVo();
-                    if (CoopStatusEnum.LEISURE.getCode() != returnCoopDto.getCoopStatus()) {
-                        continue;
+        if (!CollectionUtils.isEmpty(returnPlantDtos)) {
+            for (ReturnPlantDto returnPlantDto : returnPlantDtos) {
+                List<ReturnCoopDto> returnCoopDtos = returnPlantDto.getReturnCoopDtos();
+                if (!CollectionUtils.isEmpty(returnCoopDtos)) {
+                    for (ReturnCoopDto returnCoopDto : returnCoopDtos) {
+                        CheckCoopVo checkCoopVo = new CheckCoopVo();
+                        if (CoopStatusEnum.LEISURE.getCode() != returnCoopDto.getCoopStatus()) {
+                            continue;
+                        }
+                        checkCoopVo
+                                .setPlantName(returnPlantDto.getPlantName())
+                                .setCapacity(returnCoopDto.getCapacity())
+                                .setCoopNo(returnCoopDto.getCoopNo())
+                                .setLastEndDate(returnCoopDto.getLastEndDate())
+                                .setLastStartDate(returnCoopDto.getLastStartDate())
+                                .setCoopStatus(returnCoopDto.getCoopStatus());
+                        checkCoopVos.add(checkCoopVo);
                     }
-                    if (returnPlantDto != null) {
-                        checkCoopVo.setPlantName(returnPlantDto.getPlantName());
-                    }
-                    checkCoopVo
-                            .setCapacity(checkCoopVo.getCapacity())
-                            .setCoopNo(checkCoopVo.getCoopNo())
-                            .setCoopStatus(checkCoopVo.getCoopStatus());
-                    checkCoopVos.add(checkCoopVo);
                 }
             }
         }
