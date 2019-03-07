@@ -8,9 +8,10 @@ public enum PurchaseOrderPhaseEnum {
     /**
      * 订单阶段：1-第一阶段；2-第二阶段；3-第三阶段
      */
-    PHASE_ONE(1, "PHASE_ONE", "第一阶段"),
-    PHASE_TWO(2, "PHASE_TWO", "第二阶段"),
-    PHASE_THREE(3, "PHASE_THREE", "第三阶段");
+    PHASE_ONE(1, "ONE", "一"),
+    PHASE_TWO(2, "TWO", "二"),
+    PHASE_THREE(2, "THREE", "三"),
+    PHASE_FOUR(3, "FOUR", "四");
 
     private int code;
     private String type;

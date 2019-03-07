@@ -137,6 +137,7 @@ public class PurchaseOrder implements Serializable {
      */
     private Integer orderPhase;
 
+
     /**
      * 采购执行时间
      */

@@ -108,6 +108,9 @@ public class BreedingFarmerController {
         if (dto.getPurchaseOrderId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
         }
+        if (dto.getPurchaseOrderStatus() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单状态不能为空");
+        }
         breedingFarmerService.updatePurchaseOrder(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
