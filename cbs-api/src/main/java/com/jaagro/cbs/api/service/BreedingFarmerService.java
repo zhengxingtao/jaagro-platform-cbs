@@ -2,10 +2,7 @@ package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.*;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
-import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
+import com.jaagro.cbs.api.dto.order.*;
 
 import java.util.List;
 
@@ -71,6 +68,6 @@ public interface BreedingFarmerService {
      *
      * @param dto
      */
-    void updatePurchaseOrder(PurchaseOrderParamDto dto);
+    void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto);
 
 }

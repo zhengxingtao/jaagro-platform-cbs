@@ -5,10 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.*;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
-import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
+import com.jaagro.cbs.api.dto.order.*;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
@@ -331,7 +328,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 }
             }
         }
-        return null;
+        return returnFarmerPurchaseOrderDetailsDto;
     }
 
     /**
@@ -340,8 +337,13 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @param dto
      */
     @Override
-    public void updatePurchaseOrder(PurchaseOrderParamDto dto) {
-
+    public void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto) {
+        PurchaseOrder purchaseOrder = new PurchaseOrder();
+        if (dto.getPurchaseOrderStatus() != null) {
+            purchaseOrder
+                    .setPurchaseOrderStatus(dto.getPurchaseOrderStatus());
+        }
+        purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
     }
 
     /**

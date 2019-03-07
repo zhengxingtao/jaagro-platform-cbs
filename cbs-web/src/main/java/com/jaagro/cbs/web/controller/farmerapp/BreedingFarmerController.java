@@ -4,6 +4,7 @@ import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
+import com.jaagro.cbs.api.dto.order.UpdatePurchaseOrderParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -101,13 +102,14 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
     }
 
-    @GetMapping("/updatePurchaseOrder/{purchaseOrderId}")
+    @GetMapping("/updatePurchaseOrder")
     @ApiOperation("更新采购订单状态")
-    public BaseResponse updatePurchaseOrder(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
-        if (purchaseOrderId == null) {
+    public BaseResponse updatePurchaseOrder(UpdatePurchaseOrderParamDto dto) {
+        if (dto.getPurchaseOrderId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
         }
-        return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
+        breedingFarmerService.updatePurchaseOrder(dto);
+        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 
     /**
