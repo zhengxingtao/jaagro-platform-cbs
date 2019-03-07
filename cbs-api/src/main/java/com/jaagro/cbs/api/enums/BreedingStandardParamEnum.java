@@ -8,7 +8,7 @@ package com.jaagro.cbs.api.enums;
 public enum BreedingStandardParamEnum {
     /**
      * 养殖模板参数类型（10-温度,11-湿度,12-光照强度,13-光照时间,14-氮气,
-     * 15-二氧化碳,16-通风,17-负压值,20-饲喂(次/日),21-饲喂(克/日),
+     * 15-二氧化碳,16-通风,17-负压值,20-饲喂(次/日),21-饲喂(克/只/日),
      * 22-体重(克/只/日),23-死淘(只),24-药品/疫苗)
      */
     TEMPERATURE(10, "TEMPERATURE", "温度"),
@@ -20,10 +20,10 @@ public enum BreedingStandardParamEnum {
     VENTILATION(16, "VENTILATION", "通风"),
     NEGATIVE_PRESSURE(17, "NEGATIVE_PRESSURE", "负压值"),
     DENSITY(18,"DENSITY","密度"),
-    FEEDING_NUM(20, "FEEDING", "饲喂(次/日)"),
-    FEEDING_KG(21, "FEEDING", "饲喂(克/日)"),
+    FEEDING_TIMES(20, "FEEDING_TIMES", "饲喂(次/日)"),
+    FEEDING_KG(21, "FEEDING_KG", "饲喂(克/只/日)"),
     WEIGHT(22, "WEIGHT", "体重(克/只/日)"),
-    DIE(23, "DIE", "死淘(只)"),
+    DEAD_AMOUNT(23, "DEAD_AMOUNT", "死淘(只)"),
     DRUG(24, "DRUG", "药品/疫苗");
     private int code;
     private String type;

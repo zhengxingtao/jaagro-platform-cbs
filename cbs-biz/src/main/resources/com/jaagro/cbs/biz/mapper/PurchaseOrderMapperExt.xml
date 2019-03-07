@@ -20,4 +20,11 @@
             </if>
         </where>
     </select>
+    <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
+        delete from purchase_order
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+
+    </delete>
 </mapper>

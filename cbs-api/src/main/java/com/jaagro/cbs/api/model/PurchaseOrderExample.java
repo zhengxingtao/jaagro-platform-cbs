@@ -1625,6 +1625,66 @@ public class PurchaseOrderExample implements Serializable {
             addCriterion("order_phase not between", value1, value2, "orderPhase");
             return (Criteria) this;
         }
+
+        public Criteria andPlanExecuteTimeIsNull() {
+            addCriterion("plan_execute_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeIsNotNull() {
+            addCriterion("plan_execute_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeEqualTo(Date value) {
+            addCriterion("plan_execute_time =", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeNotEqualTo(Date value) {
+            addCriterion("plan_execute_time <>", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeGreaterThan(Date value) {
+            addCriterion("plan_execute_time >", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("plan_execute_time >=", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeLessThan(Date value) {
+            addCriterion("plan_execute_time <", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeLessThanOrEqualTo(Date value) {
+            addCriterion("plan_execute_time <=", value, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeIn(List<Date> values) {
+            addCriterion("plan_execute_time in", values, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeNotIn(List<Date> values) {
+            addCriterion("plan_execute_time not in", values, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeBetween(Date value1, Date value2) {
+            addCriterion("plan_execute_time between", value1, value2, "planExecuteTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlanExecuteTimeNotBetween(Date value1, Date value2) {
+            addCriterion("plan_execute_time not between", value1, value2, "planExecuteTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria implements Serializable {
