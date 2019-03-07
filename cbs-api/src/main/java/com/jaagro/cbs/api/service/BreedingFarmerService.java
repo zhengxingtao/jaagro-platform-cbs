@@ -1,9 +1,9 @@
 package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
-import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
-import com.jaagro.cbs.api.dto.farmer.ReturnBreedingFarmerIndexDto;
+import com.jaagro.cbs.api.dto.farmer.*;
+
+import java.util.List;
 
 
 /**
@@ -35,4 +35,21 @@ public interface BreedingFarmerService {
      * @param dto
      */
     void technicalInquiries(CreateTechnicalInquiriesDto dto);
+
+    /**
+     * 农户端个人中心
+     *
+     * @return
+     */
+    FarmerPersonalCenterDto farmerPersonalCenter();
+
+    /**
+     * 商品采购列表
+     *
+     * @return
+     */
+    List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto);
+
+   // purchaseOrderDetails(Integer purchaseOrderId);
+
 }

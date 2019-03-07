@@ -305,12 +305,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
         BigDecimal breedingStock = null;
-        BigDecimal totalBreedingStock=null;
+        BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null && accumulativeDeadAmount != null) {
             breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
         }
         if (breedingStock != null) {
-            totalBreedingStock= breedingStock.subtract(accumulativeSaleAmount);
+            totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
         }
         if (totalBreedingStock != null) {
             returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
@@ -362,13 +362,13 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
                 BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
-                if (globalUser.getData() != null) {
+                if (globalUser != null && globalUser.getData() != null) {
                     UserInfo userInfo = globalUser.getData();
-                    if (userInfo.getName() != null) {
+                    if (userInfo != null && userInfo.getName() != null) {
                         returnPurchaseOrderDto
                                 .setSignerName(userInfo.getName());
                     }
-                    if (userInfo.getPhoneNumber() != null) {
+                    if (userInfo != null && userInfo.getPhoneNumber() != null) {
                         returnPurchaseOrderDto
                                 .setSignerPhone(userInfo.getPhoneNumber());
                     }
@@ -435,7 +435,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     }
                 }
             }
-            if (!CollectionUtils.isEmpty(batchParameterList)){
+            if (!CollectionUtils.isEmpty(batchParameterList)) {
                 breedingBatchParameterMapper.batchInsert(batchParameterList);
             }
         }
@@ -464,10 +464,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     coopList.add(coop);
                 }
             }
-            if (!CollectionUtils.isEmpty(batchPlantCoopList)){
+            if (!CollectionUtils.isEmpty(batchPlantCoopList)) {
                 batchPlantCoopMapper.insertBatch(batchPlantCoopList);
             }
-            if (!CollectionUtils.isEmpty(coopList)){
+            if (!CollectionUtils.isEmpty(coopList)) {
                 coopMapper.batchUpdateByPrimaryKeySelective(coopList);
             }
         }
@@ -542,7 +542,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     }
                 }
                 HashMap<Integer, BigDecimal> calculatePurchaseOrderMap = calculatePurchaseOrder(planId, productType, PurchaseOrderStatusEnum.DELIVERY.getCode());
-                if (calculatePurchaseOrderMap.get(productType) != null) {
+                if (calculatePurchaseOrderMap != null && calculatePurchaseOrderMap.get(productType) != null) {
                     deliverPurchaseValue = calculatePurchaseOrderMap.get(productType);
                 }
                 calculatePurchaseOrderDto
@@ -554,9 +554,11 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             //计算计划饲料 剩余饲料
             if (calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode()) != null) {
                 BigDecimal totalPlanFeedWeight = calculatePlanFeedWeightMap.get(ProductTypeEnum.FEED.getCode());
-                returnBreedingDetailsDto
-                        .setPlanFeed(totalPlanFeedWeight)
-                        .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
+                if (totalPlanFeedWeight != null) {
+                    returnBreedingDetailsDto
+                            .setPlanFeed(totalPlanFeedWeight)
+                            .setRemainFeed(totalPlanFeedWeight.subtract(accumulativeFeed));
+                }
             }
             //计算理论体重值
             BreedingBatchParameterExample breedingBatchParameterExample = new BreedingBatchParameterExample();
@@ -577,7 +579,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 //计算理论料肉比
                 if (breedingBatchParameter.getParamValue() != null && MathUtil.isNum(breedingBatchParameter.getParamValue())) {
                     BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
-                    BigDecimal meat = paramValue.multiply(breedingStock);
+                    BigDecimal meat = null;
+                    if (paramValue != null && breedingStock != null) {
+                        meat = paramValue.multiply(breedingStock);
+                    }
                     if (meat != null) {
                         BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
                         returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
@@ -591,13 +596,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .setAskQuestions(askQues)
                     .setSurvivalRate(percentage)
                     .setAbnormalWarn(abnormalWarn)
-                    .setBreedingStock(breedingStock.intValue())
                     .setDayAge(batchInfo.getDayAge())
                     .setExpectSuchTime(expectSuchTime)
                     .setSolveQuestions(solveQuestions)
-                    .setBreedingStock(batchInfo.getCurrentAmount())
-                    .setBreedingDays(breedingPlan.getBreedingDays())
                     .setCalculatePurchaseOrderDtos(calculatePurchaseOrderDtos);
+            if (breedingStock != null) {
+                returnBreedingDetailsDto
+                        .setBreedingStock(breedingStock.intValue());
+            }
+            if (breedingPlan.getBreedingDays() != null) {
+                returnBreedingDetailsDto
+                        .setBreedingDays(breedingPlan.getBreedingDays());
+            }
         }
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(planId);

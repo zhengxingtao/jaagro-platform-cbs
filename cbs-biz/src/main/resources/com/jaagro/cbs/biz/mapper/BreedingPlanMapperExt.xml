@@ -42,6 +42,7 @@
         <include refid="Base_Column_List"/>
         from breeding_plan
         where customer_id = #{customerId,jdbcType=INTEGER}
+        order by create_time desc
     </select>
 
     <select id="listBreedingPlanIdByCustomerId" resultType="java.lang.Integer"
