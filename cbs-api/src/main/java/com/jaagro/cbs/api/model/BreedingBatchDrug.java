@@ -1,6 +1,7 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,21 +16,56 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class PlantImage implements Serializable {
+public class BreedingBatchDrug implements Serializable {
     /**
-     * 客户养殖场图片表id
+     * 养殖计划药品配置表id
      */
     private Integer id;
 
     /**
-     * 养殖场id
+     * 计划id
      */
-    private Integer plantId;
+    private Integer planId;
 
     /**
-     * 图片地址
+     * 批次号
      */
-    private String imageUrl;
+    private String batchNo;
+
+    /**
+     * 养殖参数模板药品配置表id
+     */
+    private Integer standardDrugId;
+
+    /**
+     * 商品id
+     */
+    private Integer productId;
+
+    /**
+     * sku编码
+     */
+    private String skuNo;
+
+    /**
+     * 日龄起
+     */
+    private Integer dayAgeStart;
+
+    /**
+     * 日龄止
+     */
+    private Integer dayAgeEnd;
+
+    /**
+     * 停药标识(0-否,1-是)
+     */
+    private Boolean stopDrugFlag;
+
+    /**
+     * 千只日喂量
+     */
+    private BigDecimal feedVolume;
 
     /**
      * 是否有效(0-无效,1-有效)

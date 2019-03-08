@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/03/06
+ * @author :gaoxin
+ * @date :2019/03/08
  */
 @Data
 @NoArgsConstructor
@@ -136,7 +136,6 @@ public class PurchaseOrder implements Serializable {
      * 订单阶段：1-第一阶段；2-第二阶段；3-第三阶段
      */
     private Integer orderPhase;
-
 
     /**
      * 采购执行时间

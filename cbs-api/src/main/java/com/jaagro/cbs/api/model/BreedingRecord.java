@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/03/06
+ * @author :gaoxin
+ * @date :2019/03/08
  */
 @Data
 @NoArgsConstructor
@@ -47,6 +47,9 @@ public class BreedingRecord implements Serializable {
      */
     private Integer recordType;
 
+    /**
+     * 喂养数量
+     */
     private BigDecimal breedingValue;
 
     /**
