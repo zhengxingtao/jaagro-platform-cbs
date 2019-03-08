@@ -1,22 +1,36 @@
 package com.jaagro.cbs.web.controller.app;
 
+import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.UpdatePurchaseOrderParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
+import com.jaagro.cbs.api.enums.EmergencyLevelEnum;
+import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
+import com.jaagro.cbs.api.service.BreedingPlantService;
+import com.jaagro.cbs.biz.service.UserClientService;
+import com.jaagro.cbs.web.vo.plan.PublishedChickenPlanVo;
+import com.jaagro.cbs.web.vo.techconsult.TechnicalInquiriesVo;
+import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author @Gao.
@@ -29,6 +43,10 @@ public class BreedingFarmerController {
     private BreedingFarmerService breedingFarmerService;
     @Autowired
     private BreedingPlanService breedingPlanService;
+    @Autowired
+    private UserClientService userClientService;
+    @Autowired
+    private BreedingPlantService breedingPlantService;
 
 
     @GetMapping("/breedingFarmerIndexStatistical")
@@ -67,9 +85,6 @@ public class BreedingFarmerController {
     public BaseResponse technicalInquiries(@RequestBody CreateTechnicalInquiriesDto dto) {
         if (dto.getPlanId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划id不能为空");
-        }
-        if (dto.getBatchNo() == null) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖计划批次号不能为空");
         }
         if (dto.getPlantId() == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "养殖场id不能为空");
@@ -113,6 +128,78 @@ public class BreedingFarmerController {
         }
         breedingFarmerService.updatePurchaseOrder(dto);
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+    }
+
+    @PostMapping("/listPublishedChickenPlan")
+    @ApiOperation("上鸡计划列表")
+    public BaseResponse listPublishedChickenPlan(@RequestBody BreedingBatchParamDto dto) {
+        if (dto.getPageNum() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
+        }
+        if (dto.getPageSize() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "每页条数不能为空");
+        }
+        PageInfo pageInfo = breedingFarmerService.listPublishedChickenPlan(dto);
+        List<PublishedChickenPlanVo> publishedChickenPlanVos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            List<BreedingPlan> breedingPlans = pageInfo.getList();
+            for (BreedingPlan breedingPlan : breedingPlans) {
+                PublishedChickenPlanVo publishedChickenPlanVo = new PublishedChickenPlanVo();
+                BeanUtils.copyProperties(breedingPlan, publishedChickenPlanVo);
+                publishedChickenPlanVos.add(publishedChickenPlanVo);
+            }
+        }
+        pageInfo.setList(publishedChickenPlanVos);
+        return BaseResponse.successInstance(pageInfo);
+    }
+
+    @PostMapping("/listTechnicalInquiries")
+    @ApiOperation("技术询问列表")
+    public BaseResponse listTechnicalInquiries(@RequestBody BreedingBatchParamDto dto) {
+        if (dto.getPageNum() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
+        }
+        if (dto.getPageSize() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "每页条数不能为空");
+        }
+        PageInfo pageInfo = breedingFarmerService.listTechnicalInquiries(dto);
+        List<TechnicalInquiriesVo> technicalInquiriesVos = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            List<TechConsultRecord> techConsultRecords = pageInfo.getList();
+            for (TechConsultRecord techConsultRecord : techConsultRecords) {
+                StringBuilder sb = new StringBuilder();
+                TechnicalInquiriesVo technicalInquiriesVo = new TechnicalInquiriesVo();
+                BeanUtils.copyProperties(techConsultRecord, technicalInquiriesVo);
+                if (techConsultRecord.getHandleUserId() != null) {
+                    BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(techConsultRecord.getHandleUserId());
+                    if (globalUser != null && globalUser.getData() != null) {
+                        UserInfo userInfo = globalUser.getData();
+                        technicalInquiriesVo
+                                .setHandlePhone(userInfo.getPhoneNumber())
+                                .setHandleUser(userInfo.getName());
+                    }
+                }
+                if (techConsultRecord.getPlantId() != null) {
+                    ReturnPlantDto plant = breedingPlantService.getPlantDetailsById(techConsultRecord.getPlantId());
+                    if (plant != null && plant.getProvince() != null) {
+                        sb.append(plant.getProvince());
+                    }
+                    if (plant != null && plant.getCity() != null) {
+                        sb.append(plant.getCity());
+                    }
+                    if (plant != null && plant.getCounty() != null) {
+                        sb.append(plant.getCounty());
+                    }
+                }
+                technicalInquiriesVo
+                        .setAddress(sb.toString());
+                technicalInquiriesVo
+                        .setEmergencyLevel(EmergencyLevelEnum.getDescByCode(techConsultRecord.getEmergencyLevel()));
+                technicalInquiriesVos.add(technicalInquiriesVo);
+            }
+        }
+        pageInfo.setList(technicalInquiriesVos);
+        return BaseResponse.successInstance(technicalInquiriesVos);
     }
 
     /**

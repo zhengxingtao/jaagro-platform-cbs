@@ -1,4 +1,4 @@
-package com.jaagro.cbs.api.dto.plan;
+package com.jaagro.cbs.web.vo.plan;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,26 +7,26 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * @author @Gao.
- */
+ * @description: 农户端上鸡计划列表
+ * @author: @Gao.
+ * @create: 2019-03-08 11:24
+ **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CreateBreedingPlanDto implements Serializable {
+public class PublishedChickenPlanVo implements Serializable {
+    /**
+     * 计划id
+     */
+    private Integer id;
 
     /**
-     * 养殖场id
+     * 批次号
      */
-    private List<Integer> plantIds;
-
-    /**
-     * 养殖户id
-     */
-    private Integer customerId;
+    private String batchNo;
 
     /**
      * 计划上鸡数量
@@ -39,17 +39,8 @@ public class CreateBreedingPlanDto implements Serializable {
     private Date planTime;
 
     /**
-     * 技术员姓名
+     * 创建时间
      */
-    private String technician;
+    private Date createTime;
 
-    /**
-     * 技术员id
-     */
-    private Integer technicianId;
-
-    /**
-     * 备注
-     */
-    private String notes;
 }

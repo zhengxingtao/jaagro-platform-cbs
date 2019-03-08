@@ -97,4 +97,7 @@ public interface BreedingPlanService {
      * @return
      */
     BreedingPlanDetailDto getBatchDetail(Integer planId);
+
+
+
 }

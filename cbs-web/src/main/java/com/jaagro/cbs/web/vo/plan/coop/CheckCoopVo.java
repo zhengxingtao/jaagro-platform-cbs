@@ -1,4 +1,4 @@
-package com.jaagro.cbs.web.vo.plan;
+package com.jaagro.cbs.web.vo.plan.coop;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

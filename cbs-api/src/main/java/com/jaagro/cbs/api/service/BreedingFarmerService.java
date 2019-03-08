@@ -31,7 +31,7 @@ public interface BreedingFarmerService {
     PageInfo breedingFarmerIndex(BreedingBatchParamDto dto);
 
     /**
-     * 技术询问
+     * 农户端技术询问
      *
      * @param dto
      * @author @Gao.
@@ -69,5 +69,23 @@ public interface BreedingFarmerService {
      * @param dto
      */
     void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto);
+
+
+    /**
+     * 农户端上鸡计划列表
+     *
+     * @param dto
+     * @return
+     * @author @Gao.
+     */
+    PageInfo listPublishedChickenPlan(BreedingBatchParamDto dto);
+
+    /**
+     * 技术询问列表
+     *
+     * @param dto
+     * @return
+     */
+    PageInfo listTechnicalInquiries(BreedingBatchParamDto dto);
 
 }

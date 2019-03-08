@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +56,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private TechConsultImagesMapperExt techConsultImagesMapper;
     @Autowired
     private ProductMapperExt productMapper;
-
+    @Autowired
+    private BatchPlantCoopMapperExt batchPlantCoopMapper;
 
     /**
      * 农户端app 首页数据统计
@@ -177,15 +179,15 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     }
 
     /**
-     * 新增技术询问
+     * 农户端技术询问
      *
      * @param dto
      * @author: @Gao.
      */
     @Override
     public void technicalInquiries(CreateTechnicalInquiriesDto dto) {
-        BatchInfo batchInfo = batchInfoMapper.selectByPrimaryKey(dto.getPlanId());
-        if (batchInfo == null) {
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(dto.getPlanId());
+        if (breedingPlan == null) {
             throw new RuntimeException("当前养殖批次不存在");
         }
         //插入技术询问
@@ -200,6 +202,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
                 if (showCustomer != null && showCustomer.getCustomerName() != null) {
                     techConsultRecord
+                            .setBatchNo(breedingPlan.getBatchNo())
+                            .setCustomerPhoneNumber(currentUser.getPhoneNumber())
                             .setCustomerName(showCustomer.getCustomerName())
                             .setCreateUserId(currentUser.getId())
                             .setCustomerId(customerUser.getRelevanceId());
@@ -365,6 +369,52 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     .setPurchaseOrderStatus(dto.getPurchaseOrderStatus());
         }
         purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
+    }
+
+    /**
+     * 农户端上鸡计划列表
+     *
+     * @param dto
+     * @return
+     * @author: @Gao.
+     */
+    @Override
+    public PageInfo listPublishedChickenPlan(BreedingBatchParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        BreedingPlanExample breedingPlanExample = new BreedingPlanExample();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                breedingPlanExample
+                        .createCriteria()
+                        .andCustomerIdEqualTo(customerUser.getRelevanceId())
+                        .andEnableEqualTo(true);
+            }
+        }
+        List<BreedingPlan> breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
+        return new PageInfo(breedingPlans);
+    }
+
+    /**
+     * 技术询问列表
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public PageInfo listTechnicalInquiries(BreedingBatchParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        TechConsultRecordExample techConsultRecordExample = new TechConsultRecordExample();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            techConsultRecordExample
+                    .createCriteria()
+                    .andCustomerIdEqualTo(customerUser.getRelevanceId());
+        }
+        List<TechConsultRecord> techConsultRecords = techConsultRecordMapper.selectByExample(techConsultRecordExample);
+        return new PageInfo(techConsultRecords);
     }
 
     /**
