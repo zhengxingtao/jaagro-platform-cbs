@@ -246,6 +246,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     .setLoginName(currentUser.getLoginName());
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
             if (customerUser != null && customerUser.getRelevanceId() != null) {
+                farmerPersonalCenterDto
+                        .setCustomerId(customerUser.getRelevanceId());
                 ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
                 if (showCustomer != null && showCustomer.getCustomerName() != null) {
                     farmerPersonalCenterDto
