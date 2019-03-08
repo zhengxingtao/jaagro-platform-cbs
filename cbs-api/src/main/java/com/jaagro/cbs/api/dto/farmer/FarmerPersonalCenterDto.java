@@ -28,6 +28,11 @@ public class FarmerPersonalCenterDto implements Serializable {
     private String phoneNumber;
 
     /**
+     * 客户id
+     */
+    private Integer customerId;
+
+    /**
      * 客户名称
      */
     private String customerName;

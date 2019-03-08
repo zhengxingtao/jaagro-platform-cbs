@@ -36,6 +36,11 @@ public class PurchaseOrderDto implements Serializable {
     private Integer productType;
 
     /**
+     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
+     */
+    private String strProductType;
+
+    /**
      * 采购重量
      */
     private BigDecimal weight;
@@ -59,4 +64,10 @@ public class PurchaseOrderDto implements Serializable {
      * 到货时间
      */
     private Date deliveryTime;
+
+    /**
+     *
+     */
+    private String strOrderPhase;
+
 }

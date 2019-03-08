@@ -34,6 +34,7 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      */
     private Integer productType;
 
+
     /**
      * 商品品名
      */
@@ -57,12 +58,12 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     /**
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
-    private Integer purchaseOrderStatus;
+    private String purchaseOrderStatus;
 
     /**
      * 开单时间
      */
-    private Date createPurchaseOrderTime;
+    private Date createTime;
 
     /**
      * 待送达时间
@@ -73,6 +74,11 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      * 到货时间
      */
     private Date deliveryTime;
+
+    /**
+     *
+     */
+    private String orderPhase;
 
 
 }

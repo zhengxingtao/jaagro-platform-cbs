@@ -24,19 +24,9 @@ public class CreateBreedingPlanDto implements Serializable {
     private List<Integer> plantIds;
 
     /**
-     * 租户id
-     */
-    private Integer tenantId;
-
-    /**
      * 养殖户id
      */
     private Integer customerId;
-
-    /**
-     * 计划状态(0-待录入合同,1-待参数纠偏,2-待上鸡签收,3-养殖中,4-待出栏确认,5-已完成,6-已取消)
-     */
-    private Integer planStatus;
 
     /**
      * 计划上鸡数量

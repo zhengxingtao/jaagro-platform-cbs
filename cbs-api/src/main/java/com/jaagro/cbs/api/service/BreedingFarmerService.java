@@ -2,10 +2,7 @@ package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.*;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderParamDto;
-import com.jaagro.cbs.api.dto.order.ReturnFarmerPurchaseOrderDetailsDto;
+import com.jaagro.cbs.api.dto.order.*;
 
 import java.util.List;
 
@@ -34,7 +31,7 @@ public interface BreedingFarmerService {
     PageInfo breedingFarmerIndex(BreedingBatchParamDto dto);
 
     /**
-     * 技术询问
+     * 农户端技术询问
      *
      * @param dto
      * @author @Gao.
@@ -71,6 +68,24 @@ public interface BreedingFarmerService {
      *
      * @param dto
      */
-    void updatePurchaseOrder(PurchaseOrderParamDto dto);
+    void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto);
+
+
+    /**
+     * 农户端上鸡计划列表
+     *
+     * @param dto
+     * @return
+     * @author @Gao.
+     */
+    PageInfo listPublishedChickenPlan(BreedingBatchParamDto dto);
+
+    /**
+     * 技术询问列表
+     *
+     * @param dto
+     * @return
+     */
+    PageInfo listTechnicalInquiries(BreedingBatchParamDto dto);
 
 }

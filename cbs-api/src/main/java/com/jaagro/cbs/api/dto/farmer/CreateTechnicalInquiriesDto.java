@@ -45,11 +45,6 @@ public class CreateTechnicalInquiriesDto implements Serializable {
     private String coopName;
 
     /**
-     * 批次号
-     */
-    private String batchNo;
-
-    /**
      * 紧急程度(1-一般,2-次要,3-重要,4-紧急)
      */
     private Integer emergencyLevel;
