@@ -1,20 +1,27 @@
 package com.jaagro.cbs.web.controller.app;
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
+import com.jaagro.cbs.api.dto.message.MessageCriteriaDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.UpdatePurchaseOrderParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
 import com.jaagro.cbs.api.enums.EmergencyLevelEnum;
+import com.jaagro.cbs.api.enums.UserTypeEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.Message;
 import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.biz.service.UserClientService;
+import com.jaagro.cbs.biz.service.impl.CurrentUserService;
+import com.jaagro.cbs.biz.service.impl.MessageServiceImpl;
+import com.jaagro.cbs.web.vo.message.FarmerMessageVo;
 import com.jaagro.cbs.web.vo.plan.PublishedChickenPlanVo;
 import com.jaagro.cbs.web.vo.techconsult.TechnicalInquiriesVo;
 import com.jaagro.constant.UserInfo;
@@ -46,7 +53,11 @@ public class BreedingFarmerController {
     @Autowired
     private UserClientService userClientService;
     @Autowired
+    private CurrentUserService currentUserService;
+    @Autowired
     private BreedingPlantService breedingPlantService;
+    @Autowired
+    private MessageServiceImpl messageService;
 
 
     @GetMapping("/breedingFarmerIndexStatistical")
@@ -200,6 +211,33 @@ public class BreedingFarmerController {
         }
         pageInfo.setList(technicalInquiriesVos);
         return BaseResponse.successInstance(technicalInquiriesVos);
+    }
+
+    @PostMapping("/listFarmerMessage")
+    @ApiOperation("农户端消息列表")
+    public BaseResponse listFarmerMessage() {
+        List<FarmerMessageVo> farmerMessageVos = new ArrayList<>();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        MessageCriteriaDto messageCriteriaDto = new MessageCriteriaDto();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                messageCriteriaDto
+                        .setToUserType(UserTypeEnum.CUSTOMER.getCode())
+                        .setToUserId(customerUser.getRelevanceId());
+            }
+        }
+        PageInfo pageInfo = messageService.listMessageByCriteria(messageCriteriaDto);
+        if (!CollectionUtils.isEmpty(pageInfo.getList())) {
+            List<Message> messages = pageInfo.getList();
+            for (Message message : messages) {
+                FarmerMessageVo farmerMessageVo = new FarmerMessageVo();
+                BeanUtils.copyProperties(message, farmerMessageVo);
+                farmerMessageVos.add(farmerMessageVo);
+            }
+        }
+        pageInfo.setList(farmerMessageVos);
+        return BaseResponse.successInstance(pageInfo);
     }
 
     /**
