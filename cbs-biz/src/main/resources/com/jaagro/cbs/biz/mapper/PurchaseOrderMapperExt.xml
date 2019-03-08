@@ -25,6 +25,5 @@
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
         </if>
-
     </delete>
 </mapper>
