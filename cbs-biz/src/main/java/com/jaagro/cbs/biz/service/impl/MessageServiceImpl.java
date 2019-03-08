@@ -1,5 +1,6 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.message.MessageCriteriaDto;
 import com.jaagro.cbs.api.model.Message;
@@ -33,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     public PageInfo listMessageByCriteria(MessageCriteriaDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         MessageExample messageExample = new MessageExample();
         MessageExample.Criteria criteria = messageExample.createCriteria();
         if (dto.getToUserId() != null && dto.getToUserType() != null) {

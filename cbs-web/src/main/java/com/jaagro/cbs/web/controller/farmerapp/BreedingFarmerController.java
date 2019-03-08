@@ -215,7 +215,13 @@ public class BreedingFarmerController {
 
     @PostMapping("/listFarmerMessage")
     @ApiOperation("农户端消息列表")
-    public BaseResponse listFarmerMessage() {
+    public BaseResponse listFarmerMessage(@RequestBody BreedingBatchParamDto dto) {
+        if (dto.getPageNum() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
+        }
+        if (dto.getPageSize() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "每页条数不能为空");
+        }
         List<FarmerMessageVo> farmerMessageVos = new ArrayList<>();
         UserInfo currentUser = currentUserService.getCurrentUser();
         MessageCriteriaDto messageCriteriaDto = new MessageCriteriaDto();
@@ -223,6 +229,8 @@ public class BreedingFarmerController {
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
             if (customerUser != null && customerUser.getRelevanceId() != null) {
                 messageCriteriaDto
+                        .setPageNum(dto.getPageNum())
+                        .setPageSize(dto.getPageSize())
                         .setToUserType(UserTypeEnum.CUSTOMER.getCode())
                         .setToUserId(customerUser.getRelevanceId());
             }
