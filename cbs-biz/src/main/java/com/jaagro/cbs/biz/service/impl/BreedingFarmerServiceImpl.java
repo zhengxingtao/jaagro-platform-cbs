@@ -58,6 +58,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private ProductMapperExt productMapper;
     @Autowired
     private BatchPlantCoopMapperExt batchPlantCoopMapper;
+    @Autowired
+    private PurchaseOrderItemsMapperExt purchaseOrderItemsMapper;
+
 
     /**
      * 农户端app 首页数据统计
@@ -343,20 +346,33 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                 returnFarmerPurchaseOrderDetailsDto.setOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
             }
-            /*
+            PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+
+            purchaseOrderItemsExample
+                    .createCriteria()
+                    .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+            List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+            List<Integer> productIds = new ArrayList<>();
+            for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+                if (purchaseOrderItem.getProductId() != null) {
+                    productIds.add(purchaseOrderItem.getProductId());
+                }
+            }
             ProductExample productExample = new ProductExample();
             productExample
                     .createCriteria()
-                    .andIdEqualTo(purchaseOrder.getProductId());
-            //商品信息
+                    .andIdIn(productIds)
+                    .andEnableEqualTo(true);
             List<Product> products = productMapper.selectByExample(productExample);
-            if (!CollectionUtils.isEmpty(products)) {
-                Product product = products.get(0);
-                if (product.getProductName() != null) {
-                    returnFarmerPurchaseOrderDetailsDto
-                            .setProductName(product.getProductName());
-                }
-            } */
+            List<ReturnProductDto> returnProductDtos = new ArrayList<>();
+            for (Product product : products) {
+                ReturnProductDto returnProductDto = new ReturnProductDto();
+                BeanUtils.copyProperties(product, returnProductDto);
+                returnProductDtos.add(returnProductDto);
+            }
+            returnFarmerPurchaseOrderDetailsDto
+                    .setReturnProductDtos(returnProductDtos);
+
         }
         return returnFarmerPurchaseOrderDetailsDto;
     }
