@@ -104,7 +104,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (currentUser != null && currentUser.getId() != null && currentUser.getTenantId() != null &&
                 currentUser.getName() != null) {
             breedingPlan
-                    .setPlanTime(new Date())
                     .setCreateUserId(currentUser.getId())
                     .setCreateUserName(currentUser.getName())
                     .setTenantId(currentUser.getTenantId());

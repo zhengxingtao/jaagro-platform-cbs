@@ -30,9 +30,11 @@
             </if>
             <if test="flag==1">
                 and plan_status in (0,6)
+                order by create_time desc
             </if>
             <if test="flag==2">
                 and plan_status in (1,2,3,4,5)
+                order by create_time desc
             </if>
         </where>
     </select>
