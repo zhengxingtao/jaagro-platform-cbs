@@ -3,12 +3,14 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingStandardDrugMapperExt" >
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingStandardDrug" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="breeding_standard_id" property="breedingStandardId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="sku_no" property="skuNo" jdbcType="VARCHAR" />
     <result column="day_age_start" property="dayAgeStart" jdbcType="INTEGER" />
     <result column="day_age_end" property="dayAgeEnd" jdbcType="INTEGER" />
     <result column="stop_drug_flag" property="stopDrugFlag" jdbcType="BIT" />
     <result column="feed_volume" property="feedVolume" jdbcType="DECIMAL" />
+    <result column="days" property="days" jdbcType="INTEGER" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -45,8 +47,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, sku_no, day_age_start, day_age_end, stop_drug_flag, feed_volume, 
-    enable, create_time, create_user_id, modify_time, modify_user_id
+    id, breeding_standard_id, product_id, sku_no, day_age_start, day_age_end, stop_drug_flag, 
+    feed_volume, days, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingStandardDrugExample" >
     select
@@ -85,14 +87,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_standard_drug (product_id, sku_no, day_age_start, 
-      day_age_end, stop_drug_flag, feed_volume, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
-    values (#{productId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, #{dayAgeStart,jdbcType=INTEGER}, 
-      #{dayAgeEnd,jdbcType=INTEGER}, #{stopDrugFlag,jdbcType=BIT}, #{feedVolume,jdbcType=DECIMAL}, 
-      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+    insert into breeding_standard_drug (breeding_standard_id, product_id, sku_no, 
+      day_age_start, day_age_end, stop_drug_flag, 
+      feed_volume, days, enable, 
+      create_time, create_user_id, modify_time, 
+      modify_user_id)
+    values (#{breedingStandardId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, 
+      #{dayAgeStart,jdbcType=INTEGER}, #{dayAgeEnd,jdbcType=INTEGER}, #{stopDrugFlag,jdbcType=BIT}, 
+      #{feedVolume,jdbcType=DECIMAL}, #{days,jdbcType=INTEGER}, #{enable,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardDrug" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -100,6 +104,9 @@
     </selectKey>
     insert into breeding_standard_drug
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="breedingStandardId != null" >
+        breeding_standard_id,
+      </if>
       <if test="productId != null" >
         product_id,
       </if>
@@ -118,6 +125,9 @@
       <if test="feedVolume != null" >
         feed_volume,
       </if>
+      <if test="days != null" >
+        days,
+      </if>
       <if test="enable != null" >
         enable,
       </if>
@@ -135,6 +145,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="breedingStandardId != null" >
+        #{breedingStandardId,jdbcType=INTEGER},
+      </if>
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
       </if>
@@ -152,6 +165,9 @@
       </if>
       <if test="feedVolume != null" >
         #{feedVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
@@ -179,6 +195,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardDrug" >
     update breeding_standard_drug
     <set >
+      <if test="breedingStandardId != null" >
+        breeding_standard_id = #{breedingStandardId,jdbcType=INTEGER},
+      </if>
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
       </if>
@@ -196,6 +215,9 @@
       </if>
       <if test="feedVolume != null" >
         feed_volume = #{feedVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
       </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
@@ -217,12 +239,14 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingStandardDrug" >
     update breeding_standard_drug
-    set product_id = #{productId,jdbcType=INTEGER},
+    set breeding_standard_id = #{breedingStandardId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
       sku_no = #{skuNo,jdbcType=VARCHAR},
       day_age_start = #{dayAgeStart,jdbcType=INTEGER},
       day_age_end = #{dayAgeEnd,jdbcType=INTEGER},
       stop_drug_flag = #{stopDrugFlag,jdbcType=BIT},
       feed_volume = #{feedVolume,jdbcType=DECIMAL},
+      days = #{days,jdbcType=INTEGER},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},

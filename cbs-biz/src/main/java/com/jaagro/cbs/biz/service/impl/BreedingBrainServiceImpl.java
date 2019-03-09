@@ -5,6 +5,7 @@ import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingBrainService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.bo.BatchInfoBo;
+import com.jaagro.cbs.biz.bo.PurchaseOrderBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.utils.JsonUtils;
 import com.jaagro.cbs.biz.utils.RedisUtil;
@@ -71,6 +72,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
             Assert.notNull(breedingPlan, "养殖计划不存在");
             log.info("O BreedingBrainServiceImpl.getPhaseOneFoodWeightById input planId:{}", planId);
+
             //第一阶段鸡苗需要采购的数量
             BigDecimal planChickenQuantity = new BigDecimal(breedingPlan.getPlanChickenQuantity());
             //1-14日龄区间每天每只鸡吃的饲料（小料510）总和
@@ -143,7 +145,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     PhaseTwo2Weight = PhaseTwo2Weight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
                     //插入第二次饲料订单（20->28日龄大料511饲料订单）
                     int productId = 7;
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), PhaseTwo2Weight, productId);
+                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), PhaseTwo2Weight, productId);
                     phaseTwoOrders.add(purchaseOrder);
                 }
             }
@@ -202,7 +204,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     PhaseThreeWeight = PhaseThreeWeight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
                     //插入第三次饲料订单（29->->计划养殖天数日龄大料511饲料订单）
                     int productId = 7;
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), PhaseThreeWeight, productId);
+                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), PhaseThreeWeight, productId);
                     phaseTwoOrders.add(purchaseOrder);
                 }
             }
@@ -214,6 +216,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
 
     /**
      * 计算养殖计划某个日龄区间剩余的饲料总数 单位 克
+     *
      * @param planId
      * @param startDayAge
      * @param endDayAge
@@ -248,18 +251,16 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         Product product = productMapper.selectByPrimaryKey(productId);
         UserInfo currentUser = currentUserService.getCurrentUser();
         Integer userId = currentUser.getId();
-        PurchaseOrder purchaseOrder = new PurchaseOrder();
-        purchaseOrder.setBatchNo(plan.getBatchNo())
-                .setCustomerId(plan.getCustomerId())
-                .setPlanId(plan.getId())
-                .setProductId(productId)
-                .setPurchaseOrderStatus(PurchaseOrderStatusEnum.ORDER_PLACED.getCode())
-                .setCreateUserId(userId)
-                .setEnable(true)
-                .setOrderPhase(phase)
-                .setCreateTime(new Date());
-
         if (null != product) {
+            PurchaseOrder purchaseOrder = new PurchaseOrder();
+            purchaseOrder.setBatchNo(plan.getBatchNo())
+                    .setCustomerId(plan.getCustomerId())
+                    .setPlanId(plan.getId())
+                    .setOrderPhase(phase)
+                    .setPurchaseOrderStatus(PurchaseOrderStatusEnum.ORDER_PLACED.getCode())
+                    .setCreateUserId(userId)
+                    .setEnable(true)
+                    .setCreateTime(new Date());
             Integer productType = product.getProductType();
             purchaseOrder.setProductType(productType);
             if (productType == ProductTypeEnum.SPROUT.getCode()) {
@@ -293,17 +294,22 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             } else {
                 //药品订单单位
             }
+            //1.删除
+            PurchaseOrderBo orderBo = new PurchaseOrderBo();
+            orderBo.setPlanId(plan.getId())
+                    .setOrderPhase(phase)
+                    .setProductType(productType)
+                    .setProductId(productId);
+            this.deleteByCriteria(orderBo);
 
+            //2.插入
+            purchaseOrderMapper.insertSelective(purchaseOrder);
+            return purchaseOrder;
         }
-        //1.删除
-        this.deleteByExample(purchaseOrder);
-        //2.插入
-        purchaseOrderMapper.insertSelective(purchaseOrder);
-        return purchaseOrder;
+        return null;
     }
 
     /**
-     *
      * @param planId
      * @param startDayAge
      * @param endDayAge
@@ -375,12 +381,20 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         return batchInfoBo;
     }
 
-    private int deleteByExample(PurchaseOrder order) {
-        PurchaseOrderExample example = new PurchaseOrderExample();
-        example.createCriteria().andPlanIdEqualTo(order.getPlanId())
-                .andProductTypeEqualTo(order.getProductType())
-                .andProductIdEqualTo(order.getProductId())
-                .andOrderPhaseEqualTo(order.getOrderPhase());
-        return purchaseOrderMapper.deleteByExample(example);
+private MaterialConfig getMaterialConfig(Integer phase,Integer productTyp){
+        return null;
+}
+    /**
+     * 删除订单
+     * @param orderBo
+     */
+    private void deleteByCriteria(PurchaseOrderBo orderBo) {
+        List<Integer> orderIds = purchaseOrderMapper.queryPurchaseOrderByCondition(orderBo);
+        if (!CollectionUtils.isEmpty(orderIds)) {
+            for (Integer orderId : orderIds) {
+                purchaseOrderMapper.deleteByPrimaryKey(orderId);
+            }
+
+        }
     }
 }

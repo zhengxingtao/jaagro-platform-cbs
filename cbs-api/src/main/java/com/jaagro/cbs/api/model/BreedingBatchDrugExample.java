@@ -689,6 +689,66 @@ public class BreedingBatchDrugExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andDaysIsNull() {
+            addCriterion("days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysIsNotNull() {
+            addCriterion("days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysEqualTo(Integer value) {
+            addCriterion("days =", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotEqualTo(Integer value) {
+            addCriterion("days <>", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysGreaterThan(Integer value) {
+            addCriterion("days >", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("days >=", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysLessThan(Integer value) {
+            addCriterion("days <", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("days <=", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysIn(List<Integer> values) {
+            addCriterion("days in", values, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotIn(List<Integer> values) {
+            addCriterion("days not in", values, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysBetween(Integer value1, Integer value2) {
+            addCriterion("days between", value1, value2, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("days not between", value1, value2, "days");
+            return (Criteria) this;
+        }
+
         public Criteria andFeedVolumeIsNull() {
             addCriterion("feed_volume is null");
             return (Criteria) this;

@@ -11,6 +11,7 @@
     <result column="day_age_start" property="dayAgeStart" jdbcType="INTEGER" />
     <result column="day_age_end" property="dayAgeEnd" jdbcType="INTEGER" />
     <result column="stop_drug_flag" property="stopDrugFlag" jdbcType="BIT" />
+    <result column="days" property="days" jdbcType="INTEGER" />
     <result column="feed_volume" property="feedVolume" jdbcType="DECIMAL" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -49,7 +50,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, plan_id, batch_no, standard_drug_id, product_id, sku_no, day_age_start, day_age_end, 
-    stop_drug_flag, feed_volume, enable, create_time, create_user_id, modify_time, modify_user_id
+    stop_drug_flag, days, feed_volume, enable, create_time, create_user_id, modify_time, 
+    modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingBatchDrugExample" >
     select
@@ -90,14 +92,16 @@
     </selectKey>
     insert into breeding_batch_drug (plan_id, batch_no, standard_drug_id, 
       product_id, sku_no, day_age_start, 
-      day_age_end, stop_drug_flag, feed_volume, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
+      day_age_end, stop_drug_flag, days, 
+      feed_volume, enable, create_time, 
+      create_user_id, modify_time, modify_user_id
+      )
     values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{standardDrugId,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, #{dayAgeStart,jdbcType=INTEGER}, 
-      #{dayAgeEnd,jdbcType=INTEGER}, #{stopDrugFlag,jdbcType=BIT}, #{feedVolume,jdbcType=DECIMAL}, 
-      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+      #{dayAgeEnd,jdbcType=INTEGER}, #{stopDrugFlag,jdbcType=BIT}, #{days,jdbcType=INTEGER}, 
+      #{feedVolume,jdbcType=DECIMAL}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingBatchDrug" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -128,6 +132,9 @@
       </if>
       <if test="stopDrugFlag != null" >
         stop_drug_flag,
+      </if>
+      <if test="days != null" >
+        days,
       </if>
       <if test="feedVolume != null" >
         feed_volume,
@@ -172,6 +179,9 @@
       </if>
       <if test="stopDrugFlag != null" >
         #{stopDrugFlag,jdbcType=BIT},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
       </if>
       <if test="feedVolume != null" >
         #{feedVolume,jdbcType=DECIMAL},
@@ -226,6 +236,9 @@
       <if test="stopDrugFlag != null" >
         stop_drug_flag = #{stopDrugFlag,jdbcType=BIT},
       </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
+      </if>
       <if test="feedVolume != null" >
         feed_volume = #{feedVolume,jdbcType=DECIMAL},
       </if>
@@ -257,6 +270,7 @@
       day_age_start = #{dayAgeStart,jdbcType=INTEGER},
       day_age_end = #{dayAgeEnd,jdbcType=INTEGER},
       stop_drug_flag = #{stopDrugFlag,jdbcType=BIT},
+      days = #{days,jdbcType=INTEGER},
       feed_volume = #{feedVolume,jdbcType=DECIMAL},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

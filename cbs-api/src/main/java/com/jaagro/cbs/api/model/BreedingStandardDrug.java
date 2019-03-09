@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/08
+ * @author :gavinwang
+ * @date :2019/03/09
  */
 @Data
 @NoArgsConstructor
@@ -21,6 +21,11 @@ public class BreedingStandardDrug implements Serializable {
      * 养殖参数模板药品配置表id
      */
     private Integer id;
+
+    /**
+     * 养殖模板id
+     */
+    private Integer breedingStandardId;
 
     /**
      * 商品id
@@ -51,6 +56,11 @@ public class BreedingStandardDrug implements Serializable {
      * 千只日喂量
      */
     private BigDecimal feedVolume;
+
+    /**
+     * 该日龄区间天数
+     */
+    private Integer days;
 
     /**
      * 是否有效(0-无效,1-有效)

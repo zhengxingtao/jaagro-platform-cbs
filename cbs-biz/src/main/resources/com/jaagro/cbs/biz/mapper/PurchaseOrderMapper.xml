@@ -6,7 +6,6 @@
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="signer_id" property="signerId" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
@@ -27,6 +26,7 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
     <result column="order_phase" property="orderPhase" jdbcType="INTEGER" />
     <result column="plan_execute_time" property="planExecuteTime" jdbcType="TIMESTAMP" />
+    <result column="purchase_name" property="purchaseName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -58,10 +58,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, plan_id, signer_id, product_id, batch_no, purchase_no, product_type, 
-    weight, quantity, unit, price, amount, purchase_order_status, supplier_id, plan_delivery_time, 
+    id, customer_id, plan_id, signer_id, batch_no, purchase_no, product_type, weight, 
+    quantity, unit, price, amount, purchase_order_status, supplier_id, plan_delivery_time, 
     delivery_time, notes, enable, create_time, create_user_id, modify_time, modify_user_id, 
-    order_phase, plan_execute_time
+    order_phase, plan_execute_time, purchase_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
     select
@@ -101,22 +101,22 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into purchase_order (customer_id, plan_id, signer_id, 
-      product_id, batch_no, purchase_no, 
-      product_type, weight, quantity, 
-      unit, price, amount, 
-      purchase_order_status, supplier_id, plan_delivery_time, 
-      delivery_time, notes, enable, 
-      create_time, create_user_id, modify_time, 
-      modify_user_id, order_phase, plan_execute_time
+      batch_no, purchase_no, product_type, 
+      weight, quantity, unit, 
+      price, amount, purchase_order_status, 
+      supplier_id, plan_delivery_time, delivery_time, 
+      notes, enable, create_time, 
+      create_user_id, modify_time, modify_user_id, 
+      order_phase, plan_execute_time, purchase_name
       )
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
-      #{productId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, 
-      #{productType,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
-      #{unit,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
-      #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{planDeliveryTime,jdbcType=DATE}, 
-      #{deliveryTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=INTEGER}, #{orderPhase,jdbcType=INTEGER}, #{planExecuteTime,jdbcType=TIMESTAMP}
+      #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, 
+      #{supplierId,jdbcType=INTEGER}, #{planDeliveryTime,jdbcType=DATE}, #{deliveryTime,jdbcType=TIMESTAMP}, 
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
+      #{orderPhase,jdbcType=INTEGER}, #{planExecuteTime,jdbcType=TIMESTAMP}, #{purchaseName,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
@@ -133,9 +133,6 @@
       </if>
       <if test="signerId != null" >
         signer_id,
-      </if>
-      <if test="productId != null" >
-        product_id,
       </if>
       <if test="batchNo != null" >
         batch_no,
@@ -197,6 +194,9 @@
       <if test="planExecuteTime != null" >
         plan_execute_time,
       </if>
+      <if test="purchaseName != null" >
+        purchase_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
@@ -207,9 +207,6 @@
       </if>
       <if test="signerId != null" >
         #{signerId,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
       </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
@@ -271,6 +268,9 @@
       <if test="planExecuteTime != null" >
         #{planExecuteTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="purchaseName != null" >
+        #{purchaseName,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" resultType="java.lang.Integer" >
@@ -290,9 +290,6 @@
       </if>
       <if test="signerId != null" >
         signer_id = #{signerId,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
@@ -354,6 +351,9 @@
       <if test="planExecuteTime != null" >
         plan_execute_time = #{planExecuteTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="purchaseName != null" >
+        purchase_name = #{purchaseName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -362,7 +362,6 @@
     set customer_id = #{customerId,jdbcType=INTEGER},
       plan_id = #{planId,jdbcType=INTEGER},
       signer_id = #{signerId,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
@@ -382,7 +381,8 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       order_phase = #{orderPhase,jdbcType=INTEGER},
-      plan_execute_time = #{planExecuteTime,jdbcType=TIMESTAMP}
+      plan_execute_time = #{planExecuteTime,jdbcType=TIMESTAMP},
+      purchase_name = #{purchaseName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

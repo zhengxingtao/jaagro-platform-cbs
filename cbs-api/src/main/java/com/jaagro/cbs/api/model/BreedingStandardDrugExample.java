@@ -189,6 +189,66 @@ public class BreedingStandardDrugExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andBreedingStandardIdIsNull() {
+            addCriterion("breeding_standard_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdIsNotNull() {
+            addCriterion("breeding_standard_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdEqualTo(Integer value) {
+            addCriterion("breeding_standard_id =", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdNotEqualTo(Integer value) {
+            addCriterion("breeding_standard_id <>", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdGreaterThan(Integer value) {
+            addCriterion("breeding_standard_id >", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("breeding_standard_id >=", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdLessThan(Integer value) {
+            addCriterion("breeding_standard_id <", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdLessThanOrEqualTo(Integer value) {
+            addCriterion("breeding_standard_id <=", value, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdIn(List<Integer> values) {
+            addCriterion("breeding_standard_id in", values, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdNotIn(List<Integer> values) {
+            addCriterion("breeding_standard_id not in", values, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdBetween(Integer value1, Integer value2) {
+            addCriterion("breeding_standard_id between", value1, value2, "breedingStandardId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingStandardIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("breeding_standard_id not between", value1, value2, "breedingStandardId");
+            return (Criteria) this;
+        }
+
         public Criteria andProductIdIsNull() {
             addCriterion("product_id is null");
             return (Criteria) this;
@@ -556,6 +616,66 @@ public class BreedingStandardDrugExample implements Serializable {
 
         public Criteria andFeedVolumeNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("feed_volume not between", value1, value2, "feedVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysIsNull() {
+            addCriterion("days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysIsNotNull() {
+            addCriterion("days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysEqualTo(Integer value) {
+            addCriterion("days =", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotEqualTo(Integer value) {
+            addCriterion("days <>", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysGreaterThan(Integer value) {
+            addCriterion("days >", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("days >=", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysLessThan(Integer value) {
+            addCriterion("days <", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("days <=", value, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysIn(List<Integer> values) {
+            addCriterion("days in", values, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotIn(List<Integer> values) {
+            addCriterion("days not in", values, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysBetween(Integer value1, Integer value2) {
+            addCriterion("days between", value1, value2, "days");
+            return (Criteria) this;
+        }
+
+        public Criteria andDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("days not between", value1, value2, "days");
             return (Criteria) this;
         }
 

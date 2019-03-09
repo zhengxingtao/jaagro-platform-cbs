@@ -338,6 +338,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                 returnFarmerPurchaseOrderDetailsDto.setOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
             }
+            /*
             ProductExample productExample = new ProductExample();
             productExample
                     .createCriteria()
@@ -350,7 +351,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     returnFarmerPurchaseOrderDetailsDto
                             .setProductName(product.getProductName());
                 }
-            }
+            } */
         }
         return returnFarmerPurchaseOrderDetailsDto;
     }

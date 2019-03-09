@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/08
+ * @author :gavinwang
+ * @date :2019/03/09
  */
 @Data
 @NoArgsConstructor
@@ -36,11 +36,6 @@ public class PurchaseOrder implements Serializable {
      * 签收人id
      */
     private Integer signerId;
-
-    /**
-     * 产品id
-     */
-    private Integer productId;
 
     /**
      * 批次号
@@ -141,6 +136,11 @@ public class PurchaseOrder implements Serializable {
      * 采购执行时间
      */
     private Date planExecuteTime;
+
+    /**
+     * 采购名称
+     */
+    private String purchaseName;
 
     private static final long serialVersionUID = 1L;
 }

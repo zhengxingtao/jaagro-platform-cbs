@@ -20,10 +20,17 @@
             </if>
         </where>
     </select>
+    <select id="queryPurchaseOrderByCondition" resultType="java.lang.Integer" parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
+        select o.id from purchase_order o, purchase_order_items i
+        where o.id=i.purchase_order_id
+              and i.product_id=#{productId}
+              and o.plan_id=#{planId} and o.order_phase=#{orderPhase}
+    </select>
     <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
         delete from purchase_order
         <if test="_parameter != null" >
             <include refid="Example_Where_Clause" />
         </if>
     </delete>
+
 </mapper>

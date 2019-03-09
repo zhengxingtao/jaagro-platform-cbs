@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/08
+ * @author :gavinwang
+ * @date :2019/03/09
  */
 @Data
 @NoArgsConstructor
@@ -61,6 +61,11 @@ public class BreedingBatchDrug implements Serializable {
      * 停药标识(0-否,1-是)
      */
     private Boolean stopDrugFlag;
+
+    /**
+     * 该日龄区间天数
+     */
+    private Integer days;
 
     /**
      * 千只日喂量
