@@ -318,13 +318,13 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     private BigDecimal getSumFoodWeightByPlanIdAndDayAgeArea(Integer planId, Integer startDayAge, Integer endDayAge) {
         List<BreedingBatchParameter> breedingBatchParameterDos;
         //从redis里去取养殖计划的喂养参数
-        String key = planId + BreedingStandardParamEnum.FEEDING_KG.getType();
+        String key = planId + BreedingStandardParamEnum.FEEDING_WEIGHT.getType();
         String BatchParameterListJson = redis.get(key);
         if (StringUtils.isEmpty(BatchParameterListJson)) {
             //养殖计划所用的参数
             BreedingBatchParameterExample batchParameterExample = new BreedingBatchParameterExample();
             batchParameterExample.createCriteria().andPlanIdEqualTo(planId)
-                    .andParamTypeEqualTo(BreedingStandardParamEnum.FEEDING_KG.getCode())
+                    .andParamTypeEqualTo(BreedingStandardParamEnum.FEEDING_WEIGHT.getCode())
                     .andEnableEqualTo(true);
             breedingBatchParameterDos = breedingBatchParameterMapper.selectByExample(batchParameterExample);
             if (!CollectionUtils.isEmpty(breedingBatchParameterDos)) {
@@ -357,7 +357,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     private BatchInfoBo getDeadAmountByPlanIdAndDayAge(Integer planId, Integer dayAge) {
         BatchInfoBo batchInfoBo = new BatchInfoBo();
         //从redis里去取养殖计划所有日龄的死淘、存栏记录
-        String key = planId + BreedingStandardParamEnum.DEAD_AMOUNT.getType();
+        String key = planId + BreedingStandardParamEnum.DIE.getType();
         String BatchInfoListJson = redis.get(key);
         List<BatchInfo> batchInfoDos;
         if (StringUtils.isEmpty(BatchInfoListJson)) {

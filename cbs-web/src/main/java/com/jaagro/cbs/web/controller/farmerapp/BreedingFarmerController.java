@@ -1,15 +1,14 @@
-package com.jaagro.cbs.web.controller.app;
+package com.jaagro.cbs.web.controller.farmerapp;
 
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
-import com.jaagro.cbs.api.dto.farmer.CreateTechnicalInquiriesDto;
+import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.message.MessageCriteriaDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderListParamDto;
 import com.jaagro.cbs.api.dto.order.UpdatePurchaseOrderParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plant.ReturnPlantDto;
+import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.enums.EmergencyLevelEnum;
 import com.jaagro.cbs.api.enums.UserTypeEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
@@ -18,11 +17,13 @@ import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingPlantService;
+import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.cbs.biz.service.impl.CurrentUserService;
 import com.jaagro.cbs.biz.service.impl.MessageServiceImpl;
 import com.jaagro.cbs.web.vo.message.FarmerMessageVo;
 import com.jaagro.cbs.web.vo.plan.PublishedChickenPlanVo;
+import com.jaagro.cbs.web.vo.progress.BreedingProgressParamVo;
 import com.jaagro.cbs.web.vo.techconsult.TechnicalInquiriesVo;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -33,7 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -58,6 +61,8 @@ public class BreedingFarmerController {
     private BreedingPlantService breedingPlantService;
     @Autowired
     private MessageServiceImpl messageService;
+    @Autowired
+    private BreedingProgressService breedingProgressService;
 
 
     @GetMapping("/breedingFarmerIndexStatistical")
@@ -247,7 +252,6 @@ public class BreedingFarmerController {
         pageInfo.setList(farmerMessageVos);
         return BaseResponse.successInstance(pageInfo);
     }
-
     /**
      * 批次详情
      *
@@ -264,5 +268,58 @@ public class BreedingFarmerController {
             return BaseResponse.successInstance(breedingPlanDetailDto);
         }
         return BaseResponse.queryDataEmpty();
+    }
+
+    /**
+     * 查询鸡舍养殖过程批次参数
+     * @author yj
+     * @param paramVo
+     * @return
+     */
+    @PostMapping("/getBreedingBatchParamForApp")
+    @ApiOperation("查询鸡舍养殖过程批次参数")
+    public BaseResponse getBreedingBatchParamForApp(@RequestBody BreedingProgressParamVo paramVo){
+        log.info("O getBreedingBatchParamForApp paramVo={}",paramVo);
+        Assert.notNull(paramVo.getPlanId(),"养殖计划id不能为空");
+        Assert.notNull(paramVo.getCoopId(),"鸡舍id不能为空");
+        Integer planId = paramVo.getPlanId();
+        Integer coopId = paramVo.getCoopId();
+        Integer dayAge = paramVo.getDayAge();
+        String strDate = paramVo.getStrDate();
+        try {
+            BreedingBatchParamListDto breedingBatchParamListDto = breedingPlanService.getBreedingBatchParamForApp(planId,coopId,dayAge,strDate);
+            return BaseResponse.successInstance(breedingBatchParamListDto);
+        }catch (Exception ex){
+            log.error("O getBreedingBatchParamForApp error paramVo="+paramVo,ex);
+            return BaseResponse.errorInstance("查询鸡舍养殖过程批次参数异常");
+        }
+    }
+
+    /**
+     * 查询批次养殖记录
+     * @author yj
+     * @param planId
+     * @param coopId
+     * @return
+     */
+    @ApiOperation("查询批次养殖记录")
+    @GetMapping("/listBatchBreedingRecord")
+    public BaseResponse listBatchBreedingRecord(@RequestParam Integer planId,@RequestParam Integer coopId){
+        log.info("O listBatchBreedingRecord planId={},coopId={}",planId,coopId);
+        BreedingRecordDto breedingRecordDto;
+        try {
+            long dayAge = breedingPlanService.getDayAge(planId);
+            breedingRecordDto= breedingProgressService.getBreedingRecordsById(planId,coopId,(int)dayAge);
+        }catch (Exception ex){
+            log.error("O listBatchBreedingRecord error planId="+planId+",coopId="+coopId,ex);
+            return BaseResponse.errorInstance("查询批次养殖记录异常");
+        }
+        return BaseResponse.successInstance(breedingRecordDto);
+    }
+
+    @ApiOperation("上传养殖记录")
+    @PostMapping("/uploadBreedingRecord")
+    public BaseResponse uploadBreedingRecord(@RequestBody @Validated CreateBreedingRecordDto createBreedingRecordDto){
+        return null;
     }
 }

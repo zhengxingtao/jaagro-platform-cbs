@@ -13,7 +13,7 @@
         <foreach collection="contractPriceSectionList" item="item" separator=",">
             (#{item.planId,jdbcType=INTEGER}, #{item.contractId,jdbcType=INTEGER},
             #{item.recyclingPrice,jdbcType=DECIMAL},
-            #{item.weightLower,jdbcType=DECIMAL}, #{item.weightUpper,jdbcType=DECIMAL}, #{marketPriceFlag,jdbcType=BIT},
+            #{item.weightLower,jdbcType=DECIMAL}, #{item.weightUpper,jdbcType=DECIMAL}, #{item.marketPriceFlag,jdbcType=BIT},
             #{item.enable,jdbcType=BIT},
             #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
             #{item.modifyTime,jdbcType=TIMESTAMP},
