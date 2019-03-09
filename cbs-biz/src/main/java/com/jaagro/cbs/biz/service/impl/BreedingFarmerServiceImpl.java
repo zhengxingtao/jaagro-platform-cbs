@@ -350,6 +350,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
 
             purchaseOrderItemsExample
                     .createCriteria()
+                    .andEnableEqualTo(true)
                     .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
             List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
             List<Integer> productIds = new ArrayList<>();
