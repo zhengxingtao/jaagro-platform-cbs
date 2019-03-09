@@ -541,7 +541,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 returnPurchaseOrderDto
-                        .setUnit(UnitEnum.getDescByCode(purchaseOrder.getUnit()))
+                        .setUnit(OrderUnitEnum.getDescByCode(purchaseOrder.getUnit()))
                         .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息

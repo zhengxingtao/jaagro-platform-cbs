@@ -351,7 +351,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     private BatchInfoBo getDeadAmountByPlanIdAndDayAge(Integer planId, Integer dayAge) {
         BatchInfoBo batchInfoBo = new BatchInfoBo();
         //从redis里去取养殖计划所有日龄的死淘、存栏记录
-        String key = planId + BreedingStandardParamEnum.DEAD_AMOUNT.getType();
+        String key = planId + BreedingStandardParamEnum.DIE.getType();
         String BatchInfoListJson = redis.get(key);
         List<BatchInfo> batchInfoDos;
         if (StringUtils.isEmpty(BatchInfoListJson)) {
