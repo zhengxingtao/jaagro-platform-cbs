@@ -393,8 +393,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         if (dto.getPurchaseOrderStatus() != null) {
             purchaseOrder
                     .setPurchaseOrderStatus(dto.getPurchaseOrderStatus());
+            purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
         }
-        purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
     }
 
     /**
@@ -406,6 +406,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public PageInfo listPublishedChickenPlan(BreedingBatchParamDto dto) {
+        List<BreedingPlan> breedingPlans = null;
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         UserInfo currentUser = currentUserService.getCurrentUser();
         BreedingPlanExample breedingPlanExample = new BreedingPlanExample();
@@ -416,9 +417,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         .createCriteria()
                         .andCustomerIdEqualTo(customerUser.getRelevanceId())
                         .andEnableEqualTo(true);
+                breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
             }
         }
-        List<BreedingPlan> breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
+
         return new PageInfo(breedingPlans);
     }
 
@@ -430,16 +432,20 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public PageInfo listTechnicalInquiries(BreedingBatchParamDto dto) {
+        List<TechConsultRecord> techConsultRecords = null;
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         UserInfo currentUser = currentUserService.getCurrentUser();
         TechConsultRecordExample techConsultRecordExample = new TechConsultRecordExample();
         if (currentUser != null && currentUser.getId() != null) {
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
-            techConsultRecordExample
-                    .createCriteria()
-                    .andCustomerIdEqualTo(customerUser.getRelevanceId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                techConsultRecordExample
+                        .createCriteria()
+                        .andCustomerIdEqualTo(customerUser.getRelevanceId());
+                techConsultRecords = techConsultRecordMapper.selectByExample(techConsultRecordExample);
+            }
         }
-        List<TechConsultRecord> techConsultRecords = techConsultRecordMapper.selectByExample(techConsultRecordExample);
+
         return new PageInfo(techConsultRecords);
     }
 
