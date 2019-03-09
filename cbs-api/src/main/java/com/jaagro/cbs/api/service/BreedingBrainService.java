@@ -1,6 +1,9 @@
 package com.jaagro.cbs.api.service;
 
+import com.jaagro.cbs.api.model.PurchaseOrder;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author gavin
@@ -10,30 +13,27 @@ import java.math.BigDecimal;
 public interface BreedingBrainService {
 
     /**
-     * 根据养殖计划Id生成养殖第一阶段（1->14天）的饲料订单
+     * 根据养殖计划Id生成养殖第一阶段（1->14天）的相关订单：第一阶段的饲料订单、第一阶段的鸡苗订单
      * @param planId
-     * @return 返回第一阶段需要购买饲料重量
+     * @return 返回第一阶段2采购订单：第一阶段的饲料订单、第一阶段的鸡苗订单
      */
-    BigDecimal calculatePhaseOneFoodWeightById(Integer planId);
+    List<PurchaseOrder> calculatePhaseOneFoodWeightById(Integer planId);
 
     /**
-     * 根据养殖计划Id生成养殖第二阶段（15->19天）的饲料订单
+     * 根据养殖计划Id生成养殖第二阶段（15->19天）的饲料订单、20->28天的饲料订单
+     *
      * @param planId
-     * @return 返回第二阶段需要购买饲料重量
+     * @return 返回第二阶段需要采购的2个订单：15->19天的饲料订单、20->28天的饲料订单
      */
-    BigDecimal calculatePhaseTwoFoodWeightById(Integer planId);
+    List<PurchaseOrder> calculatePhaseTwoFoodWeightById(Integer planId);
 
     /**
-     * 根据养殖计划Id生成养殖第三阶段（20->28天）的饲料订单
+     * 根据养殖计划Id生成29->计划养殖天数的饲料订单
+     * 饲料采购 - 第三次饲料配送
      * @param planId
-     * @return 返回第三阶段需要购买饲料重量
+     * @return 返回第三次饲料配送需要采购的饲料订单
      */
-    BigDecimal calculatePhaseThreeFoodWeightById(Integer planId);
+    List<PurchaseOrder> calculatePhaseThreeFoodWeightById(Integer planId);
 
-    /**
-     * 根据养殖计划Id生成养殖第四阶段（29->计划养殖天数）的饲料订单
-     * @param planId
-     * @return 返回第思念阶段需要购买饲料重量
-     */
-    BigDecimal calculatePhaseFourFoodWeightById(Integer planId);
+
 }

@@ -1,30 +1,30 @@
 package com.jaagro.cbs.api.enums;
 
 /**
- * @author @Gao.
- * 单位
+ * @author gavin
+ * 产品的容量单位
  */
 
-public enum UnitEnum {
+public enum CapacityUnitEnum {
     /**
-     * 单位
+     * 容量单位(1-ml,2-g,3-L,4-kg)
      */
-    KG(1, "KG", "千克"),
-    AN(2, "AN", "只"),
-    ONE(3, "ONE", "个"),
-    TONS(4, "TONS", "吨");
+    ML(1, "ML", "毫升"),
+    G(2, "G", "克"),
+    L(3, "L", "升"),
+    KG(4, "KG", "千克");
     private int code;
     private String type;
     private String desc;
 
-    UnitEnum(int code, String type, String desc) {
+    CapacityUnitEnum(int code, String type, String desc) {
         this.code = code;
         this.type = type;
         this.desc = desc;
     }
 
     public static String getDescByCode(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (CapacityUnitEnum type : CapacityUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -33,7 +33,7 @@ public enum UnitEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (CapacityUnitEnum type : CapacityUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -42,7 +42,7 @@ public enum UnitEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (CapacityUnitEnum type : CapacityUnitEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -50,8 +50,8 @@ public enum UnitEnum {
         return null;
     }
 
-    public static UnitEnum toEnum(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+    public static CapacityUnitEnum toEnum(int code) {
+        for (CapacityUnitEnum type : CapacityUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }
