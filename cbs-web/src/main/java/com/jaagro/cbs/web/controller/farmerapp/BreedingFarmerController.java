@@ -252,7 +252,6 @@ public class BreedingFarmerController {
         pageInfo.setList(farmerMessageVos);
         return BaseResponse.successInstance(pageInfo);
     }
-
     /**
      * 批次详情
      *
