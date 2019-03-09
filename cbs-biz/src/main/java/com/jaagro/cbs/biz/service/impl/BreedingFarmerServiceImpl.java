@@ -359,21 +359,22 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     productIds.add(purchaseOrderItem.getProductId());
                 }
             }
-            ProductExample productExample = new ProductExample();
-            productExample
-                    .createCriteria()
-                    .andIdIn(productIds)
-                    .andEnableEqualTo(true);
-            List<Product> products = productMapper.selectByExample(productExample);
-            List<ReturnProductDto> returnProductDtos = new ArrayList<>();
-            for (Product product : products) {
-                ReturnProductDto returnProductDto = new ReturnProductDto();
-                BeanUtils.copyProperties(product, returnProductDto);
-                returnProductDtos.add(returnProductDto);
+            if (!CollectionUtils.isEmpty(productIds)) {
+                ProductExample productExample = new ProductExample();
+                productExample
+                        .createCriteria()
+                        .andIdIn(productIds)
+                        .andEnableEqualTo(true);
+                List<Product> products = productMapper.selectByExample(productExample);
+                List<ReturnProductDto> returnProductDtos = new ArrayList<>();
+                for (Product product : products) {
+                    ReturnProductDto returnProductDto = new ReturnProductDto();
+                    BeanUtils.copyProperties(product, returnProductDto);
+                    returnProductDtos.add(returnProductDto);
+                }
+                returnFarmerPurchaseOrderDetailsDto
+                        .setReturnProductDtos(returnProductDtos);
             }
-            returnFarmerPurchaseOrderDetailsDto
-                    .setReturnProductDtos(returnProductDtos);
-
         }
         return returnFarmerPurchaseOrderDetailsDto;
     }
