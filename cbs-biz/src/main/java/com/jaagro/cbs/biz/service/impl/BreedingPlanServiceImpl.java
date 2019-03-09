@@ -5,20 +5,19 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
-import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
-import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
-import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
+import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.CreateBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
 import com.jaagro.cbs.api.dto.plan.UpdateBreedingPlanDto;
+import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
 import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingPlanService;
+import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.bo.BatchPlantCoopBo;
 import com.jaagro.cbs.biz.mapper.*;
 import com.jaagro.cbs.biz.service.CustomerClientService;
@@ -88,7 +87,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BreedingStandardMapperExt breedingStandardMapper;
     @Autowired
     private BatchCoopDailyMapperExt batchCoopDailyMapper;
-
+    @Autowired
+    private BreedingProgressService breedingProgressService;
     /**
      * 创建养殖计划
      *
@@ -291,6 +291,85 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     }
 
     /**
+     * 养殖过程批次参数
+     *
+     * @param planId
+     * @param coopId
+     * @param dayAge
+     * @param strDate
+     * @return
+     */
+    @Override
+    public BreedingBatchParamListDto getBreedingBatchParamForApp(Integer planId, Integer coopId, Integer dayAge, String strDate) throws Exception{
+        BreedingBatchParamListDto breedingBatchParamListDto = new BreedingBatchParamListDto();
+        SimpleDateFormat dateFormatDay = new SimpleDateFormat("MM-dd");
+        Date now = new Date();
+        if (dayAge == null){
+            dayAge = (int) getDayAge(planId);
+        }
+        if (strDate == null){
+            strDate = dateFormatDay.format(now);
+        }
+        // 日龄数据
+        List<DayAgeDto> dayAgeDtoList = getDayDtoList(dayAge);
+        breedingBatchParamListDto.setDayAgeDtoList(dayAgeDtoList);
+        // 养殖日期追加年份
+        strDate = strDateAppendYear(strDate);
+        List<BreedingBatchParamTrackingDto> breedingBatchParam = breedingProgressService.getBreedingBatchParamById(planId, coopId, dayAge, strDate);
+        breedingBatchParamListDto.setBreedingBatchParamTrackingDtoList(breedingBatchParam);
+        return breedingBatchParamListDto;
+    }
+
+    /**
+     * 获取近三天日龄
+     * @param dayAge
+     * @return
+     */
+    private List<DayAgeDto> getDayDtoList(Integer dayAge) {
+        List<DayAgeDto> dayAgeDtoList = new ArrayList<>();
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        int showForApp = 3;
+        if (dayAge != null && dayAge >=1){
+            if (dayAge <= showForApp){
+                for (int i = 1;i <= dayAge;i++){
+                    DayAgeDto dayAgeDto = new DayAgeDto();
+                    dayAgeDto.setDayAge(i);
+                    dayAgeDto.setStrDate(sdf.format(DateUtils.addDays(now,i-dayAge)));
+                    dayAgeDtoList.add(dayAgeDto);
+                }
+            }else {
+                for (int i = dayAge-(showForApp-1);i< dayAge;i++){
+                    DayAgeDto dayAgeDto = new DayAgeDto();
+                    dayAgeDto.setDayAge(i);
+                    dayAgeDto.setStrDate(sdf.format(DateUtils.addDays(now,i-dayAge)));
+                    dayAgeDtoList.add(dayAgeDto);
+                }
+            }
+        }
+        return dayAgeDtoList;
+    }
+
+    /**
+     * 日期追加年份
+     * @param strDate
+     * @return
+     */
+    private String strDateAppendYear(String strDate){
+        // 判断日期是否跨年
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        Date now = new Date();
+        String strNow = sdf.format(now);
+        Integer monthLength = 2;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        if (Integer.parseInt(strNow.substring(0,monthLength)) < Integer.parseInt(strDate.substring(0,monthLength))){
+            calendar.add(Calendar.YEAR,-1);
+        }
+        strDate = calendar.get(Calendar.YEAR)+"-"+strDate;
+        return strDate;
+    }
+    /**
      * 录入合同
      *
      * @param createPlanContractDto
@@ -346,6 +425,9 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         .setCreateUserId(currentUserId)
                         .setEnable(true)
                         .setPlanId(createPlanContractDto.getPlanId());
+                if (contractPriceSection.getMarketPriceFlag() == null){
+                    contractPriceSection.setMarketPriceFlag(Boolean.FALSE);
+                }
                 contractPriceSectionList.add(contractPriceSection);
             }
             contractPriceSectionMapper.batchInsert(contractPriceSectionList);

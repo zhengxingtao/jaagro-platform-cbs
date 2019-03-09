@@ -2,6 +2,7 @@ package com.jaagro.cbs.api.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamListDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.plan.*;
 
@@ -97,4 +98,15 @@ public interface BreedingPlanService {
      * @return
      */
     BreedingPlanDetailDto getBatchDetail(Integer planId);
+
+    /**
+     * 养殖过程批次参数
+     * @param planId
+     * @param coopId
+     * @param dayAge
+     * @param strDate
+     * @return
+     * @throws Exception if has error(异常说明)
+     */
+    BreedingBatchParamListDto getBreedingBatchParamForApp(Integer planId, Integer coopId, Integer dayAge, String strDate) throws Exception;
 }
