@@ -22,7 +22,7 @@ public enum BreedingStandardParamEnum {
     DENSITY(18,"DENSITY","密度"),
     FEEDING_FODDER_NUM(20, "FEEDING_FODDER_NUM", "喂料(次/日)"),
     FEEDING_WATER_NUM(21, "FEEDING_WATER_NUM", "喂水(次/日)"),
-    FEEDING_KG(22, "FEEDING", "饲喂(克/日)"),
+    FEEDING_WEIGHT(22, "FEEDING_WEIGHT", "饲喂(克/只/日)"),
     WEIGHT(23, "WEIGHT", "体重(克/只/日)"),
     DIE(24, "DIE", "死淘(只)"),
     DRUG(25, "DRUG", "药品/疫苗");
