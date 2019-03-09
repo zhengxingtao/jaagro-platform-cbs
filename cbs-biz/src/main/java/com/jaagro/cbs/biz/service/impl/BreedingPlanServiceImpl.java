@@ -6,6 +6,11 @@ import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.farmer.*;
+import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
+import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
+import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
+import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
@@ -98,13 +103,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createBreedingPlan(CreateBreedingPlanDto dto) {
-        UserInfo currentUser = currentUserService.getCurrentUser();
-        String batchNo = sequenceCodeUtils.genSeqCode("AT");
         BreedingPlan breedingPlan = new BreedingPlan();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        if (currentUser != null && currentUser.getId() != null && currentUser.getTenantId() != null &&
+                currentUser.getName() != null) {
+            breedingPlan
+                    .setCreateUserId(currentUser.getId())
+                    .setCreateUserName(currentUser.getName())
+                    .setTenantId(currentUser.getTenantId());
+        }
+        String batchNo = sequenceCodeUtils.genSeqCode("AT");
         breedingPlan
                 .setBatchNo(batchNo)
-                .setCreateUserId(currentUser.getId())
-                .setCreateUserName(currentUser.getName())
                 .setPlanStatus(PlanStatusEnum.ENTER_CONTRACT.getCode());
         BeanUtils.copyProperties(dto, breedingPlan);
         //插入养殖计划
@@ -116,13 +126,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             for (Integer plantId : plantIds) {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
+                        .setCreateTime(new Date())
                         .setPlanId(breedingPlan.getId())
                         .setCreateUserId(currentUser.getId())
                         .setPlantId(plantId)
                         .setEnable(Boolean.TRUE);
                 batchPlantCoops.add(batchPlantCoop);
             }
-            batchPlantCoopMapper.insertBatch(batchPlantCoops);
+            if (!CollectionUtils.isEmpty(batchPlantCoops)) {
+                batchPlantCoopMapper.insertBatch(batchPlantCoops);
+            }
         }
     }
 
@@ -219,41 +232,41 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         try {
             // 计划信息
             BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-            if (breedingPlan == null){
-                throw new RuntimeException("养殖计划id="+planId+"不存在");
+            if (breedingPlan == null) {
+                throw new RuntimeException("养殖计划id=" + planId + "不存在");
             }
             // 批次详情
             ReturnBreedingBatchDetailsDto detailsDto = new ReturnBreedingBatchDetailsDto();
-            BeanUtils.copyProperties(breedingPlan,detailsDto);
+            BeanUtils.copyProperties(breedingPlan, detailsDto);
             // 存栏量,今日耗料量
             BatchInfo theLatestBatchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
             // 日龄
             Integer dayAge = null;
-            if (theLatestBatchInfo != null){
+            if (theLatestBatchInfo != null) {
                 detailsDto.setBreedingStock(new BigDecimal(theLatestBatchInfo.getCurrentAmount()))
                         .setFodderAmount(theLatestBatchInfo.getFodderAmount());
                 dayAge = theLatestBatchInfo.getDayAge();
             }
-            if (dayAge == null){
-                dayAge = (int)getDayAge(planId);
+            if (dayAge == null) {
+                dayAge = (int) getDayAge(planId);
             }
             breedingPlanDetailDto.setReturnBreedingBatchDetailsDto(detailsDto);
             // 计划养殖场鸡舍信息
             List<BatchPlantCoopBo> batchPlantCoopBoList = batchPlantCoopMapper.listPlantCoopInfoByPlanId(planId);
-            if (!CollectionUtils.isEmpty(batchPlantCoopBoList)){
+            if (!CollectionUtils.isEmpty(batchPlantCoopBoList)) {
                 Set<Integer> plantIdSet = new HashSet<>();
                 List<BatchPlantDto> batchPlantDtoList = new ArrayList<>();
                 batchPlantCoopBoList.forEach(batchPlantCoopBo -> plantIdSet.add(batchPlantCoopBo.getPlantId()));
-                for (Integer plantId : plantIdSet){
+                for (Integer plantId : plantIdSet) {
                     BatchPlantDto batchPlantDto = new BatchPlantDto();
                     batchPlantDto.setId(plantId);
                     List<BatchCoopDto> batchCoopDtoList = new ArrayList<>();
                     batchPlantDto.setBatchCoopDtoList(batchCoopDtoList);
                     batchPlantDtoList.add(batchPlantDto);
                 }
-                for (BatchPlantCoopBo batchPlantCoopBo : batchPlantCoopBoList){
-                    for (BatchPlantDto batchPlantDto : batchPlantDtoList){
-                        if (batchPlantCoopBo.getPlantId().equals(batchPlantDto.getId())){
+                for (BatchPlantCoopBo batchPlantCoopBo : batchPlantCoopBoList) {
+                    for (BatchPlantDto batchPlantDto : batchPlantDtoList) {
+                        if (batchPlantCoopBo.getPlantId().equals(batchPlantDto.getId())) {
                             batchPlantDto.setPlantName(batchPlantCoopBo.getPlantName());
                             List<BatchCoopDto> batchCoopDtoList = batchPlantDto.getBatchCoopDtoList();
                             BatchCoopDto batchCoopDto = new BatchCoopDto();
@@ -266,7 +279,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                             deviceAlarmLogExample.createCriteria().andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
                                     .andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge);
                             List<DeviceAlarmLog> deviceAlarmLogList = deviceAlarmLogMapper.selectByExample(deviceAlarmLogExample);
-                            if (!CollectionUtils.isEmpty(deviceAlarmLogList)){
+                            if (!CollectionUtils.isEmpty(deviceAlarmLogList)) {
                                 batchCoopDto.setAlarm(true);
                             }
                             // 鸡舍存栏量
@@ -275,7 +288,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                     .andCoopIdEqualTo(batchPlantCoopBo.getCoopId())
                                     .andDayAgeEqualTo(dayAge);
                             List<BatchCoopDaily> batchCoopDailyList = batchCoopDailyMapper.selectByExample(batchCoopDailyExample);
-                            if(!CollectionUtils.isEmpty(batchCoopDailyList)){
+                            if (!CollectionUtils.isEmpty(batchCoopDailyList)) {
                                 batchCoopDto.setBreedingStock(batchCoopDailyList.get(0).getCurrentAmount());
                             }
                             batchCoopDtoList.add(batchCoopDto);
@@ -284,8 +297,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 }
                 breedingPlanDetailDto.setBatchPlantDtoList(batchPlantDtoList);
             }
-        }catch (Exception ex){
-            log.info("O getBatchDetail error planId="+planId,ex);
+        } catch (Exception ex) {
+            log.info("O getBatchDetail error planId=" + planId, ex);
         }
         return breedingPlanDetailDto;
     }

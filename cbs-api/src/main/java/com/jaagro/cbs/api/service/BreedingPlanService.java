@@ -109,4 +109,7 @@ public interface BreedingPlanService {
      * @throws Exception if has error(异常说明)
      */
     BreedingBatchParamListDto getBreedingBatchParamForApp(Integer planId, Integer coopId, Integer dayAge, String strDate) throws Exception;
+
+
+
 }

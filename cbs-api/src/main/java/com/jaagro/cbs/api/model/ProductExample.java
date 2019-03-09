@@ -649,6 +649,256 @@ public class ProductExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andProductCapacityIsNull() {
+            addCriterion("product_capacity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityIsNotNull() {
+            addCriterion("product_capacity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityEqualTo(BigDecimal value) {
+            addCriterion("product_capacity =", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityNotEqualTo(BigDecimal value) {
+            addCriterion("product_capacity <>", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityGreaterThan(BigDecimal value) {
+            addCriterion("product_capacity >", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_capacity >=", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityLessThan(BigDecimal value) {
+            addCriterion("product_capacity <", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_capacity <=", value, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityIn(List<BigDecimal> values) {
+            addCriterion("product_capacity in", values, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityNotIn(List<BigDecimal> values) {
+            addCriterion("product_capacity not in", values, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_capacity between", value1, value2, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductCapacityNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_capacity not between", value1, value2, "productCapacity");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitIsNull() {
+            addCriterion("capacity_unit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitIsNotNull() {
+            addCriterion("capacity_unit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitEqualTo(Integer value) {
+            addCriterion("capacity_unit =", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitNotEqualTo(Integer value) {
+            addCriterion("capacity_unit <>", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitGreaterThan(Integer value) {
+            addCriterion("capacity_unit >", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitGreaterThanOrEqualTo(Integer value) {
+            addCriterion("capacity_unit >=", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitLessThan(Integer value) {
+            addCriterion("capacity_unit <", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitLessThanOrEqualTo(Integer value) {
+            addCriterion("capacity_unit <=", value, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitIn(List<Integer> values) {
+            addCriterion("capacity_unit in", values, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitNotIn(List<Integer> values) {
+            addCriterion("capacity_unit not in", values, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitBetween(Integer value1, Integer value2) {
+            addCriterion("capacity_unit between", value1, value2, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andCapacityUnitNotBetween(Integer value1, Integer value2) {
+            addCriterion("capacity_unit not between", value1, value2, "capacityUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitIsNull() {
+            addCriterion("package_unit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitIsNotNull() {
+            addCriterion("package_unit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitEqualTo(Integer value) {
+            addCriterion("package_unit =", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitNotEqualTo(Integer value) {
+            addCriterion("package_unit <>", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitGreaterThan(Integer value) {
+            addCriterion("package_unit >", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitGreaterThanOrEqualTo(Integer value) {
+            addCriterion("package_unit >=", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitLessThan(Integer value) {
+            addCriterion("package_unit <", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitLessThanOrEqualTo(Integer value) {
+            addCriterion("package_unit <=", value, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitIn(List<Integer> values) {
+            addCriterion("package_unit in", values, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitNotIn(List<Integer> values) {
+            addCriterion("package_unit not in", values, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitBetween(Integer value1, Integer value2) {
+            addCriterion("package_unit between", value1, value2, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPackageUnitNotBetween(Integer value1, Integer value2) {
+            addCriterion("package_unit not between", value1, value2, "packageUnit");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIsNull() {
+            addCriterion("notes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIsNotNull() {
+            addCriterion("notes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesEqualTo(String value) {
+            addCriterion("notes =", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotEqualTo(String value) {
+            addCriterion("notes <>", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesGreaterThan(String value) {
+            addCriterion("notes >", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesGreaterThanOrEqualTo(String value) {
+            addCriterion("notes >=", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLessThan(String value) {
+            addCriterion("notes <", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLessThanOrEqualTo(String value) {
+            addCriterion("notes <=", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesLike(String value) {
+            addCriterion("notes like", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotLike(String value) {
+            addCriterion("notes not like", value, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesIn(List<String> values) {
+            addCriterion("notes in", values, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotIn(List<String> values) {
+            addCriterion("notes not in", values, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesBetween(String value1, String value2) {
+            addCriterion("notes between", value1, value2, "notes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotesNotBetween(String value1, String value2) {
+            addCriterion("notes not between", value1, value2, "notes");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
