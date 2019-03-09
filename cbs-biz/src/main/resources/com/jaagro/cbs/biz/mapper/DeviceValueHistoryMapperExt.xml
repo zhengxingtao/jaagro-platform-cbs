@@ -4,6 +4,28 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
+    <select id="getLimitOneRecordByDeviceId" resultMap="BaseResultMap">
+        select * from
+        (
+        select
+        <include refid="Base_Column_List"/>
+        from device_value_history
+        where device_id=#{deviceId} and date_format(create_time, '%Y-%m-%d') =#{strDate} order by create_time desc
+        ) t limit 1
 
-
+    </select>
+    <select id="listHistoryByParams" resultType="com.jaagro.cbs.api.model.DeviceValueHistory">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        device_value_history
+        WHERE
+        DATE_FORMAT( create_time, '%Y-%m-%d' ) = DATE_FORMAT( NOW( ), '%Y-%m-%d' )
+        GROUP BY
+        device_id,
+        value_type
+        ORDER BY
+        create_time DESC
+        LIMIT 1
+    </select>
 </mapper>

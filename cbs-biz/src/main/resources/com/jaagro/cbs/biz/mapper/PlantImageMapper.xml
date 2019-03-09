@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.PlantImageMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.PlantImage" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.PlantImage" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plant_id" property="plantId" jdbcType="INTEGER" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -43,7 +43,7 @@
   <sql id="Base_Column_List" >
     id, plant_id, image_url, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.PlantImageExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PlantImageExample" >
     select
     <if test="distinct" >
       distinct
@@ -76,18 +76,18 @@
     delete from plant_image
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.PlantImage" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.PlantImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into plant_image (plant_id, image_url, enable, 
       create_time, create_user_id, modify_time, 
       modify_user_id)
-    values (#{plantId,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, 
+    values (#{plantId,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.PlantImage" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PlantImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -123,7 +123,7 @@
         #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -139,13 +139,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.PlantImageExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.PlantImageExample" resultType="java.lang.Integer" >
     select count(*) from plant_image
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.PlantImage" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.PlantImage" >
     update plant_image
     <set >
       <if test="plantId != null" >
@@ -155,7 +155,7 @@
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -172,11 +172,11 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.PlantImage" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.PlantImage" >
     update plant_image
     set plant_id = #{plantId,jdbcType=INTEGER},
       image_url = #{imageUrl,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

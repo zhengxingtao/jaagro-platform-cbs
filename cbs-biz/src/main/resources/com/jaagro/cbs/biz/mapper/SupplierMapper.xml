@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.SupplierMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.Supplier" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.Supplier" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
     <result column="supplier_type" property="supplierType" jdbcType="INTEGER" />
@@ -17,6 +17,7 @@
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -50,9 +51,9 @@
   <sql id="Base_Column_List" >
     id, supplier_name, supplier_type, tenant_id, province, city, county, address, contact, 
     contact_phone_number, supplier_status, create_time, create_user_id, modify_time, 
-    modify_user_id
+    modify_user_id, enable
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.SupplierExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.SupplierExample" >
     select
     <if test="distinct" >
       distinct
@@ -85,7 +86,7 @@
     delete from supplier
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.Supplier" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -93,14 +94,16 @@
       province, city, county, 
       address, contact, contact_phone_number, 
       supplier_status, create_time, create_user_id, 
-      modify_time, modify_user_id)
+      modify_time, modify_user_id, enable
+      )
     values (#{supplierName,jdbcType=VARCHAR}, #{supplierType,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, 
       #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{contactPhoneNumber,jdbcType=VARCHAR}, 
       #{supplierStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Supplier" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -148,6 +151,9 @@
       <if test="modifyUserId != null" >
         modify_user_id,
       </if>
+      <if test="enable != null" >
+        enable,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="supplierName != null" >
@@ -192,15 +198,18 @@
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.SupplierExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.SupplierExample" resultType="java.lang.Integer" >
     select count(*) from supplier
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.Supplier" >
     update supplier
     <set >
       <if test="supplierName != null" >
@@ -245,10 +254,13 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.Supplier" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.Supplier" >
     update supplier
     set supplier_name = #{supplierName,jdbcType=VARCHAR},
       supplier_type = #{supplierType,jdbcType=INTEGER},
@@ -263,7 +275,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

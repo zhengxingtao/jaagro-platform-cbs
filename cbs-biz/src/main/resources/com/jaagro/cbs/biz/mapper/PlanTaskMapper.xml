@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.PlanTaskMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.PlanTask" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.PlanTask" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plan_task_no" property="planTaskNo" jdbcType="VARCHAR" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
@@ -18,7 +18,7 @@
     <result column="money" property="money" jdbcType="DECIMAL" />
     <result column="plan_task_status" property="planTaskStatus" jdbcType="INTEGER" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -58,7 +58,7 @@
     weight, quantity, unit, goods_type, plan_time, execute_time, money, plan_task_status, 
     notes, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.PlanTaskExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PlanTaskExample" >
     select
     <if test="distinct" >
       distinct
@@ -91,7 +91,7 @@
     delete from plan_task
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.PlanTask" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.PlanTask" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -107,10 +107,10 @@
       #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=INTEGER}, 
       #{goodsType,jdbcType=INTEGER}, #{planTime,jdbcType=TIMESTAMP}, #{executeTime,jdbcType=TIMESTAMP}, 
       #{money,jdbcType=DECIMAL}, #{planTaskStatus,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.PlanTask" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PlanTask" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -224,7 +224,7 @@
         #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -240,13 +240,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.PlanTaskExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.PlanTaskExample" resultType="java.lang.Integer" >
     select count(*) from plan_task
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.PlanTask" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.PlanTask" >
     update plan_task
     <set >
       <if test="planTaskNo != null" >
@@ -295,7 +295,7 @@
         notes = #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -312,7 +312,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.PlanTask" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.PlanTask" >
     update plan_task
     set plan_task_no = #{planTaskNo,jdbcType=VARCHAR},
       plan_id = #{planId,jdbcType=INTEGER},
@@ -329,7 +329,7 @@
       money = #{money,jdbcType=DECIMAL},
       plan_task_status = #{planTaskStatus,jdbcType=INTEGER},
       notes = #{notes,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

@@ -3,7 +3,156 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.CoopMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
+    <resultMap id="CoopDeviceResultMap" type="com.jaagro.cbs.api.dto.plant.ReturnCoopDeviceDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="plant_id" property="plantId" jdbcType="INTEGER"/>
+        <result column="home_number" property="homeNumber" jdbcType="INTEGER"/>
+        <result column="capacity" property="capacity" jdbcType="INTEGER"/>
+        <result column="breeding_value" property="breedingValue" jdbcType="INTEGER"/>
+        <result column="device_quantity" property="deviceQuantity" jdbcType="INTEGER"/>
+        <result column="coop_status" property="coopStatus" jdbcType="INTEGER"/>
+        <result column="last_start_date" property="lastStartDate" jdbcType="DATE"/>
+        <result column="last_end_date" property="lastEndDate" jdbcType="DATE"/>
+        <result column="notes" property="notes" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <collection property="coopDevices" column="id"
+                    select="com.jaagro.cbs.biz.mapper.CoopDeviceMapperExt.selectByPrimaryKey"></collection>
+    </resultMap>
+    <select id="listCoopDeviceByCoopExample" resultMap="CoopDeviceResultMap" parameterType="com.jaagro.cbs.api.model.Coop">
+        select
+        <include refid="Base_Column_List"/>
+        from coop
+        where 1=1
+        <if test="id!=null">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="plantId!=null">
+            and plant_id=#{plantId}
+        </if>
+    </select>
 
-
+    <update id="batchUpdateByPrimaryKeySelective" parameterType="list">
+        update coop
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="coop_no =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.coopNo!=null">
+                        when id=#{i.id} then #{i.coopNo}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="customer_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.customerId!=null">
+                        when id=#{i.id} then #{i.customerId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plant_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.plantId!=null">
+                        when id=#{i.id} then #{i.plantId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="coop_name =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.coopName!=null">
+                        when id=#{i.id} then #{i.coopName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="capacity =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.capacity!=null">
+                        when id=#{i.id} then #{i.capacity}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="breeding_value =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.breedingValue!=null">
+                        when id=#{i.id} then #{i.breedingValue}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="device_quantity =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.deviceQuantity!=null">
+                        when id=#{i.id} then #{i.deviceQuantity}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="coop_status =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.coopStatus!=null">
+                        when id=#{i.id} then #{i.coopStatus}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="last_start_date =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.lastStartDate!=null">
+                        when id=#{i.id} then #{i.lastStartDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="last_end_date =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.lastEndDate!=null">
+                        when id=#{i.id} then #{i.lastEndDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="notes =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.notes!=null">
+                        when id=#{i.id} then #{i.notes}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.createTime!=null">
+                        when id=#{i.id} then #{i.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.createUserId!=null">
+                        when id=#{i.id} then #{i.createUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_time =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.modifyTime!=null">
+                        when id=#{i.id} then #{i.modifyTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_user_id =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.modifyUserId!=null">
+                        when id=#{i.id} then #{i.modifyUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="enable =case" suffix="end,">
+                <foreach collection="coopList" item="i" index="index">
+                    <if test="i.enable!=null">
+                        when id=#{i.id} then #{i.enable}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="coopList" separator="," item="i" index="index" close=")" open="(">
+            #{i.id}
+        </foreach>
+    </update>
 
 </mapper>

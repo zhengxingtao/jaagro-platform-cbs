@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.ProductMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.Product" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.Product" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
     <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
     <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="sku_no" property="skuNo" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="product_capacity" property="productCapacity" jdbcType="DECIMAL" />
+    <result column="capacity_unit" property="capacityUnit" jdbcType="INTEGER" />
+    <result column="package_unit" property="packageUnit" jdbcType="INTEGER" />
+    <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -39,9 +47,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_name, product_type, manufacturer, image_url, create_time
+    id, product_name, product_type, manufacturer, image_url, sku_no, purchase_price, 
+    sale_price, product_capacity, capacity_unit, package_unit, notes, create_time, enable
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.ProductExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.ProductExample" >
     select
     <if test="distinct" >
       distinct
@@ -74,16 +83,22 @@
     delete from product
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.Product" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.Product" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product (product_name, product_type, manufacturer, 
-      image_url, create_time)
+      image_url, sku_no, purchase_price, 
+      sale_price, product_capacity, capacity_unit, 
+      package_unit, notes, create_time, 
+      enable)
     values (#{productName,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{manufacturer,jdbcType=VARCHAR}, 
-      #{imageUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{imageUrl,jdbcType=VARCHAR}, #{skuNo,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, 
+      #{salePrice,jdbcType=DECIMAL}, #{productCapacity,jdbcType=DECIMAL}, #{capacityUnit,jdbcType=INTEGER}, 
+      #{packageUnit,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{enable,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.Product" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Product" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -101,8 +116,32 @@
       <if test="imageUrl != null" >
         image_url,
       </if>
+      <if test="skuNo != null" >
+        sku_no,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="productCapacity != null" >
+        product_capacity,
+      </if>
+      <if test="capacityUnit != null" >
+        capacity_unit,
+      </if>
+      <if test="packageUnit != null" >
+        package_unit,
+      </if>
+      <if test="notes != null" >
+        notes,
+      </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="enable != null" >
+        enable,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -118,18 +157,42 @@
       <if test="imageUrl != null" >
         #{imageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="skuNo != null" >
+        #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productCapacity != null" >
+        #{productCapacity,jdbcType=DECIMAL},
+      </if>
+      <if test="capacityUnit != null" >
+        #{capacityUnit,jdbcType=INTEGER},
+      </if>
+      <if test="packageUnit != null" >
+        #{packageUnit,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null" >
+        #{notes,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.ProductExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.ProductExample" resultType="java.lang.Integer" >
     select count(*) from product
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.Product" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.Product" >
     update product
     <set >
       <if test="productName != null" >
@@ -144,19 +207,51 @@
       <if test="imageUrl != null" >
         image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="skuNo != null" >
+        sku_no = #{skuNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productCapacity != null" >
+        product_capacity = #{productCapacity,jdbcType=DECIMAL},
+      </if>
+      <if test="capacityUnit != null" >
+        capacity_unit = #{capacityUnit,jdbcType=INTEGER},
+      </if>
+      <if test="packageUnit != null" >
+        package_unit = #{packageUnit,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null" >
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.Product" >
     update product
     set product_name = #{productName,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
       manufacturer = #{manufacturer,jdbcType=VARCHAR},
       image_url = #{imageUrl,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      sku_no = #{skuNo,jdbcType=VARCHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      product_capacity = #{productCapacity,jdbcType=DECIMAL},
+      capacity_unit = #{capacityUnit,jdbcType=INTEGER},
+      package_unit = #{packageUnit,jdbcType=INTEGER},
+      notes = #{notes,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

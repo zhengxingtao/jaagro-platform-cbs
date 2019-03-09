@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.PurchaseOrder" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.PurchaseOrder" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="signer_id" property="signerId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
     <result column="quantity" property="quantity" jdbcType="INTEGER" />
-    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="purchase_order_status" property="purchaseOrderStatus" jdbcType="INTEGER" />
     <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="plan_delivery_time" property="planDeliveryTime" jdbcType="DATE" />
     <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="notes" property="notes" jdbcType="VARCHAR" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="order_phase" property="orderPhase" jdbcType="INTEGER" />
+    <result column="plan_execute_time" property="planExecuteTime" jdbcType="TIMESTAMP" />
+    <result column="purchase_name" property="purchaseName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -51,11 +58,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, batch_no, product_type, product_id, weight, quantity, unit, price, 
-    amount, purchase_order_status, supplier_id, delivery_time, enable, create_time, create_user_id, 
-    modify_time, modify_user_id
+    id, customer_id, plan_id, signer_id, batch_no, purchase_no, product_type, weight, 
+    quantity, unit, price, amount, purchase_order_status, supplier_id, plan_delivery_time, 
+    delivery_time, notes, enable, create_time, create_user_id, modify_time, modify_user_id, 
+    order_phase, plan_execute_time, purchase_name
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.PurchaseOrderExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
     select
     <if test="distinct" >
       distinct
@@ -88,24 +96,30 @@
     delete from purchase_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.PurchaseOrder" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into purchase_order (customer_id, batch_no, product_type, 
-      product_id, weight, quantity, 
-      unit, price, amount, 
-      purchase_order_status, supplier_id, delivery_time, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
-    values (#{customerId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
-      #{productId,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, 
-      #{unit,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
-      #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{deliveryTime,jdbcType=TIMESTAMP}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+    insert into purchase_order (customer_id, plan_id, signer_id, 
+      batch_no, purchase_no, product_type, 
+      weight, quantity, unit, 
+      price, amount, purchase_order_status, 
+      supplier_id, plan_delivery_time, delivery_time, 
+      notes, enable, create_time, 
+      create_user_id, modify_time, modify_user_id, 
+      order_phase, plan_execute_time, purchase_name
+      )
+    values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
+      #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DECIMAL}, #{quantity,jdbcType=INTEGER}, #{unit,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, 
+      #{supplierId,jdbcType=INTEGER}, #{planDeliveryTime,jdbcType=DATE}, #{deliveryTime,jdbcType=TIMESTAMP}, 
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
+      #{orderPhase,jdbcType=INTEGER}, #{planExecuteTime,jdbcType=TIMESTAMP}, #{purchaseName,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.PurchaseOrder" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -114,14 +128,20 @@
       <if test="customerId != null" >
         customer_id,
       </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="signerId != null" >
+        signer_id,
+      </if>
       <if test="batchNo != null" >
         batch_no,
       </if>
+      <if test="purchaseNo != null" >
+        purchase_no,
+      </if>
       <if test="productType != null" >
         product_type,
-      </if>
-      <if test="productId != null" >
-        product_id,
       </if>
       <if test="weight != null" >
         weight,
@@ -144,8 +164,14 @@
       <if test="supplierId != null" >
         supplier_id,
       </if>
+      <if test="planDeliveryTime != null" >
+        plan_delivery_time,
+      </if>
       <if test="deliveryTime != null" >
         delivery_time,
+      </if>
+      <if test="notes != null" >
+        notes,
       </if>
       <if test="enable != null" >
         enable,
@@ -162,19 +188,34 @@
       <if test="modifyUserId != null" >
         modify_user_id,
       </if>
+      <if test="orderPhase != null" >
+        order_phase,
+      </if>
+      <if test="planExecuteTime != null" >
+        plan_execute_time,
+      </if>
+      <if test="purchaseName != null" >
+        purchase_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customerId != null" >
         #{customerId,jdbcType=INTEGER},
       </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="signerId != null" >
+        #{signerId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
+      <if test="purchaseNo != null" >
+        #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="productType != null" >
         #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
       </if>
       <if test="weight != null" >
         #{weight,jdbcType=DECIMAL},
@@ -183,7 +224,7 @@
         #{quantity,jdbcType=INTEGER},
       </if>
       <if test="unit != null" >
-        #{unit,jdbcType=VARCHAR},
+        #{unit,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
@@ -197,11 +238,17 @@
       <if test="supplierId != null" >
         #{supplierId,jdbcType=INTEGER},
       </if>
+      <if test="planDeliveryTime != null" >
+        #{planDeliveryTime,jdbcType=DATE},
+      </if>
       <if test="deliveryTime != null" >
         #{deliveryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="notes != null" >
+        #{notes,jdbcType=VARCHAR},
+      </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -215,28 +262,43 @@
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="orderPhase != null" >
+        #{orderPhase,jdbcType=INTEGER},
+      </if>
+      <if test="planExecuteTime != null" >
+        #{planExecuteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="purchaseName != null" >
+        #{purchaseName,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.PurchaseOrderExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" resultType="java.lang.Integer" >
     select count(*) from purchase_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.PurchaseOrder" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     update purchase_order
     <set >
       <if test="customerId != null" >
         customer_id = #{customerId,jdbcType=INTEGER},
       </if>
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="signerId != null" >
+        signer_id = #{signerId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
+      <if test="purchaseNo != null" >
+        purchase_no = #{purchaseNo,jdbcType=VARCHAR},
+      </if>
       <if test="productType != null" >
         product_type = #{productType,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="weight != null" >
         weight = #{weight,jdbcType=DECIMAL},
@@ -245,7 +307,7 @@
         quantity = #{quantity,jdbcType=INTEGER},
       </if>
       <if test="unit != null" >
-        unit = #{unit,jdbcType=VARCHAR},
+        unit = #{unit,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
@@ -259,11 +321,17 @@
       <if test="supplierId != null" >
         supplier_id = #{supplierId,jdbcType=INTEGER},
       </if>
+      <if test="planDeliveryTime != null" >
+        plan_delivery_time = #{planDeliveryTime,jdbcType=DATE},
+      </if>
       <if test="deliveryTime != null" >
         delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="notes != null" >
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -277,28 +345,44 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="orderPhase != null" >
+        order_phase = #{orderPhase,jdbcType=INTEGER},
+      </if>
+      <if test="planExecuteTime != null" >
+        plan_execute_time = #{planExecuteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="purchaseName != null" >
+        purchase_name = #{purchaseName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.PurchaseOrder" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     update purchase_order
     set customer_id = #{customerId,jdbcType=INTEGER},
+      plan_id = #{planId,jdbcType=INTEGER},
+      signer_id = #{signerId,jdbcType=INTEGER},
       batch_no = #{batchNo,jdbcType=VARCHAR},
+      purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
       weight = #{weight,jdbcType=DECIMAL},
       quantity = #{quantity,jdbcType=INTEGER},
-      unit = #{unit,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
       amount = #{amount,jdbcType=DECIMAL},
       purchase_order_status = #{purchaseOrderStatus,jdbcType=INTEGER},
       supplier_id = #{supplierId,jdbcType=INTEGER},
+      plan_delivery_time = #{planDeliveryTime,jdbcType=DATE},
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
-      enable = #{enable,jdbcType=TINYINT},
+      notes = #{notes,jdbcType=VARCHAR},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      order_phase = #{orderPhase,jdbcType=INTEGER},
+      plan_execute_time = #{planExecuteTime,jdbcType=TIMESTAMP},
+      purchase_name = #{purchaseName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

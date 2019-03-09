@@ -1,9 +1,12 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
-import com.jaagro.cbs.biz.model.Product;
-import com.jaagro.cbs.biz.model.ProductExample;
+import com.jaagro.cbs.api.dto.product.ListProductCriteria;
+import com.jaagro.cbs.api.model.Product;
+import com.jaagro.cbs.api.model.ProductExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,10 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 @Resource
 public interface ProductMapperExt extends BaseMapper<Product,ProductExample> {
 
-
-
+    /**
+     * 查询产品列表
+     * @param criteria
+     * @return
+     */
+    List<Product> listByCriteria(ListProductCriteria criteria);
 }

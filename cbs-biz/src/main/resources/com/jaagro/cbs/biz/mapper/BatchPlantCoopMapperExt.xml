@@ -3,7 +3,74 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BatchPlantCoopMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
+    <select id="listPlantIdByPlanId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select id from batch_plant_coop
+        where enable = 1
+        and plan_id = #{planId}
+        group by plant_id
+    </select>
 
+    <insert id="insertBatch" parameterType="list">
+        insert into batch_plant_coop (plan_id, plant_id, coop_id,
+        enable, create_time, create_user_id,
+        modify_time, modify_user_id)
+        values
+        <foreach collection="batchPlantCoops" item="item" separator=",">
 
+            (#{item.planId,jdbcType=INTEGER}, #{item.plantId,jdbcType=INTEGER}, #{item.coopId,jdbcType=INTEGER},
+            #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
+            #{item.modifyTime,jdbcType=TIMESTAMP}, #{item.modifyUserId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
 
+    <select id="listBreedingPlanCoopsForChoose" resultType="com.jaagro.cbs.api.dto.plan.BreedingPlanCoopDto">
+        SELECT
+            bpc.plant_id,
+            p.plant_name,
+            c.breeding_value,
+            c.capacity,
+            c.coop_name,
+            c.coop_status,
+            c.id,
+            c.device_quantity,
+            c.last_start_date,
+            c.last_end_date
+            FROM
+            batch_plant_coop bpc
+            LEFT JOIN plant p on bpc.plant_id = p.id
+            LEFT JOIN coop c ON bpc.plant_id = c.plant_id
+            WHERE
+            bpc.plan_id = #{planId}
+            AND coop_id IS NULL
+            AND bpc.`enable` = 1
+            AND c.`enable` = 1
+            AND c.coop_status = 1
+    </select>
+    <select id="getPlanIdByCoopId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT
+            plan_id
+        FROM
+            batch_plant_coop
+        WHERE
+            ENABLE = 1
+            AND coop_id = #{coopId}
+        ORDER BY
+            create_time DESC
+            LIMIT 1
+    </select>
+    <select id="listPlantCoopInfoByPlanId" resultType="com.jaagro.cbs.biz.bo.BatchPlantCoopBo">
+        SELECT
+            bpc.plant_id,
+            p.plant_name,
+            bpc.plan_id,
+            bpc.coop_id,
+            c.coop_name,
+            c.coop_no
+        FROM
+            batch_plant_coop bpc
+        LEFT JOIN plant p ON bpc.plan_id = p.id
+        LEFT JOIN coop c on bpc.coop_id = c.id
+        WHERE bpc.plan_id = #{planId,jdbcType=INTEGER}
+        AND bpc.coop_id is not null;
+    </select>
 </mapper>

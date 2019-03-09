@@ -4,6 +4,10 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-
+    <select id="listAllBreedingStandard"  resultMap="BaseResultMap">
+        SELECT 
+          <include refid="Base_Column_List"/>
+        FROM breeding_standard
+    </select>
 
 </mapper>

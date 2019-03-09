@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BatchInfoMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BatchInfo" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BatchInfo" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="start_amount" property="startAmount" jdbcType="INTEGER" />
     <result column="current_amount" property="currentAmount" jdbcType="INTEGER" />
@@ -19,7 +20,7 @@
     <result column="drug_value" property="drugValue" jdbcType="DECIMAL" />
     <result column="sale_value" property="saleValue" jdbcType="DECIMAL" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -55,12 +56,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, batch_no, start_amount, current_amount, start_day, finish_day, day_age, technician, 
-    technician_id, dead_amount, sale_amount, fodder_amount, fodder_value, babychick_value, 
-    drug_value, sale_value, balance, enable, create_time, create_user_id, modify_time, 
-    modify_user_id
+    id, plan_id, batch_no, start_amount, current_amount, start_day, finish_day, day_age, 
+    technician, technician_id, dead_amount, sale_amount, fodder_amount, fodder_value, 
+    babychick_value, drug_value, sale_value, balance, enable, create_time, create_user_id, 
+    modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BatchInfoExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BatchInfoExample" >
     select
     <if test="distinct" >
       distinct
@@ -93,33 +94,36 @@
     delete from batch_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BatchInfo" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BatchInfo" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into batch_info (batch_no, start_amount, current_amount, 
-      start_day, finish_day, day_age, 
-      technician, technician_id, dead_amount, 
-      sale_amount, fodder_amount, fodder_value, 
-      babychick_value, drug_value, sale_value, 
-      balance, enable, create_time, 
-      create_user_id, modify_time, modify_user_id
-      )
-    values (#{batchNo,jdbcType=VARCHAR}, #{startAmount,jdbcType=INTEGER}, #{currentAmount,jdbcType=INTEGER}, 
-      #{startDay,jdbcType=DATE}, #{finishDay,jdbcType=DATE}, #{dayAge,jdbcType=INTEGER}, 
-      #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, #{deadAmount,jdbcType=INTEGER}, 
-      #{saleAmount,jdbcType=INTEGER}, #{fodderAmount,jdbcType=DECIMAL}, #{fodderValue,jdbcType=DECIMAL}, 
-      #{babychickValue,jdbcType=DECIMAL}, #{drugValue,jdbcType=DECIMAL}, #{saleValue,jdbcType=DECIMAL}, 
-      #{balance,jdbcType=DECIMAL}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
-      )
+    insert into batch_info (plan_id, batch_no, start_amount, 
+      current_amount, start_day, finish_day, 
+      day_age, technician, technician_id, 
+      dead_amount, sale_amount, fodder_amount, 
+      fodder_value, babychick_value, drug_value, 
+      sale_value, balance, enable, 
+      create_time, create_user_id, modify_time, 
+      modify_user_id)
+    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{startAmount,jdbcType=INTEGER}, 
+      #{currentAmount,jdbcType=INTEGER}, #{startDay,jdbcType=DATE}, #{finishDay,jdbcType=DATE}, 
+      #{dayAge,jdbcType=INTEGER}, #{technician,jdbcType=VARCHAR}, #{technicianId,jdbcType=INTEGER}, 
+      #{deadAmount,jdbcType=INTEGER}, #{saleAmount,jdbcType=INTEGER}, #{fodderAmount,jdbcType=DECIMAL}, 
+      #{fodderValue,jdbcType=DECIMAL}, #{babychickValue,jdbcType=DECIMAL}, #{drugValue,jdbcType=DECIMAL}, 
+      #{saleValue,jdbcType=DECIMAL}, #{balance,jdbcType=DECIMAL}, #{enable,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BatchInfo" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BatchInfo" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into batch_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
       <if test="batchNo != null" >
         batch_no,
       </if>
@@ -185,6 +189,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -234,7 +241,7 @@
         #{balance,jdbcType=DECIMAL},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -250,15 +257,18 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BatchInfoExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BatchInfoExample" resultType="java.lang.Integer" >
     select count(*) from batch_info
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BatchInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BatchInfo" >
     update batch_info
     <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -308,7 +318,7 @@
         balance = #{balance,jdbcType=DECIMAL},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -325,9 +335,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BatchInfo" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BatchInfo" >
     update batch_info
-    set batch_no = #{batchNo,jdbcType=VARCHAR},
+    set plan_id = #{planId,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
       start_amount = #{startAmount,jdbcType=INTEGER},
       current_amount = #{currentAmount,jdbcType=INTEGER},
       start_day = #{startDay,jdbcType=DATE},
@@ -343,7 +354,7 @@
       drug_value = #{drugValue,jdbcType=DECIMAL},
       sale_value = #{saleValue,jdbcType=DECIMAL},
       balance = #{balance,jdbcType=DECIMAL},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

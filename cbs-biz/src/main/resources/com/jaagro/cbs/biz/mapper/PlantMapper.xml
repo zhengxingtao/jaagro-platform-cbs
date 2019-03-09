@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.PlantMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.Plant" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.Plant" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
     <result column="customer_id" property="customerId" jdbcType="INTEGER" />
     <result column="plant_name" property="plantName" jdbcType="VARCHAR" />
     <result column="plant_type" property="plantType" jdbcType="INTEGER" />
-    <result column="equity_type" property="equityType" jdbcType="INTEGER" />
+    <result column="equity_type" property="equityType" jdbcType="VARCHAR" />
     <result column="durable_years" property="durableYears" jdbcType="INTEGER" />
-    <result column="expandable" property="expandable" jdbcType="TINYINT" />
+    <result column="expandable" property="expandable" jdbcType="BIT" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="county" property="county" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -52,7 +52,7 @@
     id, tenant_id, customer_id, plant_name, plant_type, equity_type, durable_years, expandable, 
     province, city, county, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.PlantExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PlantExample" >
     select
     <if test="distinct" >
       distinct
@@ -85,7 +85,7 @@
     delete from plant
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.Plant" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.Plant" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -96,13 +96,13 @@
       create_user_id, modify_time, modify_user_id
       )
     values (#{tenantId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{plantName,jdbcType=VARCHAR}, 
-      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=INTEGER}, #{durableYears,jdbcType=INTEGER}, 
-      #{expandable,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{county,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{plantType,jdbcType=INTEGER}, #{equityType,jdbcType=VARCHAR}, #{durableYears,jdbcType=INTEGER}, 
+      #{expandable,jdbcType=BIT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.Plant" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.Plant" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -168,13 +168,13 @@
         #{plantType,jdbcType=INTEGER},
       </if>
       <if test="equityType != null" >
-        #{equityType,jdbcType=INTEGER},
+        #{equityType,jdbcType=VARCHAR},
       </if>
       <if test="durableYears != null" >
         #{durableYears,jdbcType=INTEGER},
       </if>
       <if test="expandable != null" >
-        #{expandable,jdbcType=TINYINT},
+        #{expandable,jdbcType=BIT},
       </if>
       <if test="province != null" >
         #{province,jdbcType=VARCHAR},
@@ -186,7 +186,7 @@
         #{county,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -202,13 +202,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.PlantExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.PlantExample" resultType="java.lang.Integer" >
     select count(*) from plant
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.Plant" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.Plant" >
     update plant
     <set >
       <if test="tenantId != null" >
@@ -224,13 +224,13 @@
         plant_type = #{plantType,jdbcType=INTEGER},
       </if>
       <if test="equityType != null" >
-        equity_type = #{equityType,jdbcType=INTEGER},
+        equity_type = #{equityType,jdbcType=VARCHAR},
       </if>
       <if test="durableYears != null" >
         durable_years = #{durableYears,jdbcType=INTEGER},
       </if>
       <if test="expandable != null" >
-        expandable = #{expandable,jdbcType=TINYINT},
+        expandable = #{expandable,jdbcType=BIT},
       </if>
       <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
         county = #{county,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -259,19 +259,19 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.Plant" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.Plant" >
     update plant
     set tenant_id = #{tenantId,jdbcType=INTEGER},
       customer_id = #{customerId,jdbcType=INTEGER},
       plant_name = #{plantName,jdbcType=VARCHAR},
       plant_type = #{plantType,jdbcType=INTEGER},
-      equity_type = #{equityType,jdbcType=INTEGER},
+      equity_type = #{equityType,jdbcType=VARCHAR},
       durable_years = #{durableYears,jdbcType=INTEGER},
-      expandable = #{expandable,jdbcType=TINYINT},
+      expandable = #{expandable,jdbcType=BIT},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
       county = #{county,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

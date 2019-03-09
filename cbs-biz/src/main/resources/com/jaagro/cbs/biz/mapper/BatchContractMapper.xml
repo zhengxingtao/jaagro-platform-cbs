@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BatchContractMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BatchContract" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BatchContract" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="contract_number" property="contractNumber" jdbcType="VARCHAR" />
@@ -15,9 +15,10 @@
     <result column="payment_method" property="paymentMethod" jdbcType="INTEGER" />
     <result column="prepaid_amount" property="prepaidAmount" jdbcType="DECIMAL" />
     <result column="fodder_price" property="fodderPrice" jdbcType="DECIMAL" />
+    <result column="delivery_method" property="deliveryMethod" jdbcType="INTEGER" />
     <result column="protection_price" property="protectionPrice" jdbcType="DECIMAL" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -55,10 +56,10 @@
   <sql id="Base_Column_List" >
     id, plan_id, contract_number, contract_status, customer_id, start_date, end_date, 
     contract_date, babychick_quantity, babychick_price, payment_method, prepaid_amount, 
-    fodder_price, protection_price, notes, enable, create_time, create_user_id, modify_time, 
-    modify_user_id
+    fodder_price, delivery_method, protection_price, notes, enable, create_time, create_user_id, 
+    modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BatchContractExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BatchContractExample" >
     select
     <if test="distinct" >
       distinct
@@ -91,7 +92,7 @@
     delete from batch_contract
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BatchContract" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BatchContract" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -99,18 +100,18 @@
       customer_id, start_date, end_date, 
       contract_date, babychick_quantity, babychick_price, 
       payment_method, prepaid_amount, fodder_price, 
-      protection_price, notes, enable, 
-      create_time, create_user_id, modify_time, 
-      modify_user_id)
+      delivery_method, protection_price, notes, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
     values (#{planId,jdbcType=INTEGER}, #{contractNumber,jdbcType=VARCHAR}, #{contractStatus,jdbcType=INTEGER}, 
       #{customerId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
       #{contractDate,jdbcType=TIMESTAMP}, #{babychickQuantity,jdbcType=INTEGER}, #{babychickPrice,jdbcType=DECIMAL}, 
       #{paymentMethod,jdbcType=INTEGER}, #{prepaidAmount,jdbcType=DECIMAL}, #{fodderPrice,jdbcType=DECIMAL}, 
-      #{protectionPrice,jdbcType=DECIMAL}, #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=INTEGER})
+      #{deliveryMethod,jdbcType=INTEGER}, #{protectionPrice,jdbcType=DECIMAL}, #{notes,jdbcType=VARCHAR}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BatchContract" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BatchContract" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -151,6 +152,9 @@
       </if>
       <if test="fodderPrice != null" >
         fodder_price,
+      </if>
+      <if test="deliveryMethod != null" >
+        delivery_method,
       </if>
       <if test="protectionPrice != null" >
         protection_price,
@@ -211,6 +215,9 @@
       <if test="fodderPrice != null" >
         #{fodderPrice,jdbcType=DECIMAL},
       </if>
+      <if test="deliveryMethod != null" >
+        #{deliveryMethod,jdbcType=INTEGER},
+      </if>
       <if test="protectionPrice != null" >
         #{protectionPrice,jdbcType=DECIMAL},
       </if>
@@ -218,7 +225,7 @@
         #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -234,13 +241,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BatchContractExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BatchContractExample" resultType="java.lang.Integer" >
     select count(*) from batch_contract
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BatchContract" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BatchContract" >
     update batch_contract
     <set >
       <if test="planId != null" >
@@ -279,6 +286,9 @@
       <if test="fodderPrice != null" >
         fodder_price = #{fodderPrice,jdbcType=DECIMAL},
       </if>
+      <if test="deliveryMethod != null" >
+        delivery_method = #{deliveryMethod,jdbcType=INTEGER},
+      </if>
       <if test="protectionPrice != null" >
         protection_price = #{protectionPrice,jdbcType=DECIMAL},
       </if>
@@ -286,7 +296,7 @@
         notes = #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -303,7 +313,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BatchContract" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BatchContract" >
     update batch_contract
     set plan_id = #{planId,jdbcType=INTEGER},
       contract_number = #{contractNumber,jdbcType=VARCHAR},
@@ -317,9 +327,10 @@
       payment_method = #{paymentMethod,jdbcType=INTEGER},
       prepaid_amount = #{prepaidAmount,jdbcType=DECIMAL},
       fodder_price = #{fodderPrice,jdbcType=DECIMAL},
+      delivery_method = #{deliveryMethod,jdbcType=INTEGER},
       protection_price = #{protectionPrice,jdbcType=DECIMAL},
       notes = #{notes,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="standard_id" property="standardId" jdbcType="INTEGER" />
     <result column="param_name" property="paramName" jdbcType="VARCHAR" />
@@ -11,12 +11,15 @@
     <result column="lower_limit" property="lowerLimit" jdbcType="DECIMAL" />
     <result column="upper_limit" property="upperLimit" jdbcType="DECIMAL" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
-    <result column="alarm" property="alarm" jdbcType="TINYINT" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="alarm" property="alarm" jdbcType="BIT" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="necessary" property="necessary" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -49,9 +52,10 @@
   </sql>
   <sql id="Base_Column_List" >
     id, standard_id, param_name, day_age, param_type, value_type, lower_limit, upper_limit, 
-    unit, alarm, enable, create_time, create_user_id, modify_time, modify_user_id
+    unit, alarm, param_value, status, necessary, create_time, create_user_id, modify_time, 
+    modify_user_id, enable
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameterExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameterExample" >
     select
     <if test="distinct" >
       distinct
@@ -84,22 +88,24 @@
     delete from breeding_standard_parameter
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into breeding_standard_parameter (standard_id, param_name, day_age, 
       param_type, value_type, lower_limit, 
       upper_limit, unit, alarm, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id)
+      param_value, status, necessary, 
+      create_time, create_user_id, modify_time, 
+      modify_user_id, enable)
     values (#{standardId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{dayAge,jdbcType=INTEGER}, 
       #{paramType,jdbcType=INTEGER}, #{valueType,jdbcType=INTEGER}, #{lowerLimit,jdbcType=DECIMAL}, 
-      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=TINYINT}, 
-      #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
+      #{upperLimit,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, #{alarm,jdbcType=BIT}, 
+      #{paramValue,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{necessary,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=INTEGER}, #{enable,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -132,8 +138,14 @@
       <if test="alarm != null" >
         alarm,
       </if>
-      <if test="enable != null" >
-        enable,
+      <if test="paramValue != null" >
+        param_value,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="necessary != null" >
+        necessary,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -146,6 +158,9 @@
       </if>
       <if test="modifyUserId != null" >
         modify_user_id,
+      </if>
+      <if test="enable != null" >
+        enable,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -174,10 +189,16 @@
         #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        #{alarm,jdbcType=TINYINT},
+        #{alarm,jdbcType=BIT},
       </if>
-      <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+      <if test="paramValue != null" >
+        #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="necessary != null" >
+        #{necessary,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -191,15 +212,18 @@
       <if test="modifyUserId != null" >
         #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameterExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameterExample" resultType="java.lang.Integer" >
     select count(*) from breeding_standard_parameter
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     update breeding_standard_parameter
     <set >
       <if test="standardId != null" >
@@ -227,10 +251,16 @@
         unit = #{unit,jdbcType=VARCHAR},
       </if>
       <if test="alarm != null" >
-        alarm = #{alarm,jdbcType=TINYINT},
+        alarm = #{alarm,jdbcType=BIT},
       </if>
-      <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+      <if test="paramValue != null" >
+        param_value = #{paramValue,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="necessary != null" >
+        necessary = #{necessary,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -244,10 +274,13 @@
       <if test="modifyUserId != null" >
         modify_user_id = #{modifyUserId,jdbcType=INTEGER},
       </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BreedingStandardParameter" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingStandardParameter" >
     update breeding_standard_parameter
     set standard_id = #{standardId,jdbcType=INTEGER},
       param_name = #{paramName,jdbcType=VARCHAR},
@@ -257,12 +290,15 @@
       lower_limit = #{lowerLimit,jdbcType=DECIMAL},
       upper_limit = #{upperLimit,jdbcType=DECIMAL},
       unit = #{unit,jdbcType=VARCHAR},
-      alarm = #{alarm,jdbcType=TINYINT},
-      enable = #{enable,jdbcType=TINYINT},
+      alarm = #{alarm,jdbcType=BIT},
+      param_value = #{paramValue,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      necessary = #{necessary,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

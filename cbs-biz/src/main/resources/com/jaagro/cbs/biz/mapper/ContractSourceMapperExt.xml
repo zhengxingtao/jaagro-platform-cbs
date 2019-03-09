@@ -4,6 +4,18 @@
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
 
-
+    <insert id="batchInsert" parameterType="list">
+        insert into contract_source (plan_id, plan_contract_id, source_type,
+        source_url, source_status, notes,
+        create_time, create_user_id, modify_time,
+        modify_user_id, enable)
+        values
+        <foreach collection="contractSourceList" item="item" separator=",">
+            (#{item.planId,jdbcType=INTEGER}, #{item.planContractId,jdbcType=INTEGER}, #{item.sourceType,jdbcType=INTEGER},
+            #{item.sourceUrl,jdbcType=VARCHAR}, #{item.sourceStatus,jdbcType=INTEGER}, #{item.notes,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER}, #{item.modifyTime,jdbcType=TIMESTAMP},
+            #{item.modifyUserId,jdbcType=INTEGER}, #{item.enable,jdbcType=BIT})
+        </foreach>
+    </insert>
 
 </mapper>

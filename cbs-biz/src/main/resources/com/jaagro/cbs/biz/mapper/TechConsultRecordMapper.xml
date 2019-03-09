@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jaagro.cbs.biz.mapper.TechConsultRecordMapperExt" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.TechConsultRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="customer_phone_number" property="customerPhoneNumber" jdbcType="VARCHAR" />
+    <result column="coop_id" property="coopId" jdbcType="INTEGER" />
+    <result column="coop_name" property="coopName" jdbcType="VARCHAR" />
+    <result column="plant_id" property="plantId" jdbcType="INTEGER" />
+    <result column="plant_name" property="plantName" jdbcType="VARCHAR" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="emergency_level" property="emergencyLevel" jdbcType="INTEGER" />
+    <result column="problem_desc" property="problemDesc" jdbcType="VARCHAR" />
+    <result column="tech_consult_status" property="techConsultStatus" jdbcType="INTEGER" />
+    <result column="handle_time" property="handleTime" jdbcType="TIMESTAMP" />
+    <result column="handle_user_id" property="handleUserId" jdbcType="INTEGER" />
+    <result column="handle_desc" property="handleDesc" jdbcType="VARCHAR" />
+    <result column="handle_type" property="handleType" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, customer_id, customer_name, customer_phone_number, coop_id, coop_name, plant_id, 
+    plant_name, plan_id, batch_no, emergency_level, problem_desc, tech_consult_status, 
+    handle_time, handle_user_id, handle_desc, handle_type, enable, create_time, create_user_id, 
+    modify_time, modify_user_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.TechConsultRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from tech_consult_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tech_consult_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tech_consult_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.TechConsultRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tech_consult_record (customer_id, customer_name, customer_phone_number, 
+      coop_id, coop_name, plant_id, 
+      plant_name, plan_id, batch_no, 
+      emergency_level, problem_desc, tech_consult_status, 
+      handle_time, handle_user_id, handle_desc, 
+      handle_type, enable, create_time, 
+      create_user_id, modify_time, modify_user_id
+      )
+    values (#{customerId,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, #{customerPhoneNumber,jdbcType=VARCHAR}, 
+      #{coopId,jdbcType=INTEGER}, #{coopName,jdbcType=VARCHAR}, #{plantId,jdbcType=INTEGER}, 
+      #{plantName,jdbcType=VARCHAR}, #{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, 
+      #{emergencyLevel,jdbcType=INTEGER}, #{problemDesc,jdbcType=VARCHAR}, #{techConsultStatus,jdbcType=INTEGER}, 
+      #{handleTime,jdbcType=TIMESTAMP}, #{handleUserId,jdbcType=INTEGER}, #{handleDesc,jdbcType=VARCHAR}, 
+      #{handleType,jdbcType=INTEGER}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.TechConsultRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tech_consult_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="customerPhoneNumber != null" >
+        customer_phone_number,
+      </if>
+      <if test="coopId != null" >
+        coop_id,
+      </if>
+      <if test="coopName != null" >
+        coop_name,
+      </if>
+      <if test="plantId != null" >
+        plant_id,
+      </if>
+      <if test="plantName != null" >
+        plant_name,
+      </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="emergencyLevel != null" >
+        emergency_level,
+      </if>
+      <if test="problemDesc != null" >
+        problem_desc,
+      </if>
+      <if test="techConsultStatus != null" >
+        tech_consult_status,
+      </if>
+      <if test="handleTime != null" >
+        handle_time,
+      </if>
+      <if test="handleUserId != null" >
+        handle_user_id,
+      </if>
+      <if test="handleDesc != null" >
+        handle_desc,
+      </if>
+      <if test="handleType != null" >
+        handle_type,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoneNumber != null" >
+        #{customerPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="coopId != null" >
+        #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="coopName != null" >
+        #{coopName,jdbcType=VARCHAR},
+      </if>
+      <if test="plantId != null" >
+        #{plantId,jdbcType=INTEGER},
+      </if>
+      <if test="plantName != null" >
+        #{plantName,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencyLevel != null" >
+        #{emergencyLevel,jdbcType=INTEGER},
+      </if>
+      <if test="problemDesc != null" >
+        #{problemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="techConsultStatus != null" >
+        #{techConsultStatus,jdbcType=INTEGER},
+      </if>
+      <if test="handleTime != null" >
+        #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleUserId != null" >
+        #{handleUserId,jdbcType=INTEGER},
+      </if>
+      <if test="handleDesc != null" >
+        #{handleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="handleType != null" >
+        #{handleType,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.TechConsultRecordExample" resultType="java.lang.Integer" >
+    select count(*) from tech_consult_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.TechConsultRecord" >
+    update tech_consult_record
+    <set >
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoneNumber != null" >
+        customer_phone_number = #{customerPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="coopId != null" >
+        coop_id = #{coopId,jdbcType=INTEGER},
+      </if>
+      <if test="coopName != null" >
+        coop_name = #{coopName,jdbcType=VARCHAR},
+      </if>
+      <if test="plantId != null" >
+        plant_id = #{plantId,jdbcType=INTEGER},
+      </if>
+      <if test="plantName != null" >
+        plant_name = #{plantName,jdbcType=VARCHAR},
+      </if>
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencyLevel != null" >
+        emergency_level = #{emergencyLevel,jdbcType=INTEGER},
+      </if>
+      <if test="problemDesc != null" >
+        problem_desc = #{problemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="techConsultStatus != null" >
+        tech_consult_status = #{techConsultStatus,jdbcType=INTEGER},
+      </if>
+      <if test="handleTime != null" >
+        handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handleUserId != null" >
+        handle_user_id = #{handleUserId,jdbcType=INTEGER},
+      </if>
+      <if test="handleDesc != null" >
+        handle_desc = #{handleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="handleType != null" >
+        handle_type = #{handleType,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.TechConsultRecord" >
+    update tech_consult_record
+    set customer_id = #{customerId,jdbcType=INTEGER},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      customer_phone_number = #{customerPhoneNumber,jdbcType=VARCHAR},
+      coop_id = #{coopId,jdbcType=INTEGER},
+      coop_name = #{coopName,jdbcType=VARCHAR},
+      plant_id = #{plantId,jdbcType=INTEGER},
+      plant_name = #{plantName,jdbcType=VARCHAR},
+      plan_id = #{planId,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      emergency_level = #{emergencyLevel,jdbcType=INTEGER},
+      problem_desc = #{problemDesc,jdbcType=VARCHAR},
+      tech_consult_status = #{techConsultStatus,jdbcType=INTEGER},
+      handle_time = #{handleTime,jdbcType=TIMESTAMP},
+      handle_user_id = #{handleUserId,jdbcType=INTEGER},
+      handle_desc = #{handleDesc,jdbcType=VARCHAR},
+      handle_type = #{handleType,jdbcType=INTEGER},
+      enable = #{enable,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

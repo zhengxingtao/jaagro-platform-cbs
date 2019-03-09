@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt" >
-  <resultMap id="BaseResultMap" type="com.jaagro.cbs.biz.model.BreedingRecord" >
+  <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.BreedingRecord" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="coop_id" property="coopId" jdbcType="INTEGER" />
     <result column="day_age" property="dayAge" jdbcType="INTEGER" />
     <result column="record_type" property="recordType" jdbcType="INTEGER" />
     <result column="breeding_value" property="breedingValue" jdbcType="DECIMAL" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="breeding_time" property="breedingTime" jdbcType="TIMESTAMP" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
-    <result column="enable" property="enable" jdbcType="TINYINT" />
+    <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -46,10 +48,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, batch_no, coop_id, day_age, record_type, breeding_value, unit, notes, enable, 
-    create_time, create_user_id, modify_time, modify_user_id
+    id, plan_id, batch_no, coop_id, day_age, record_type, breeding_value, unit, breeding_time, 
+    notes, enable, create_time, create_user_id, modify_time, modify_user_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.biz.model.BreedingRecordExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.BreedingRecordExample" >
     select
     <if test="distinct" >
       distinct
@@ -82,27 +84,30 @@
     delete from breeding_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.jaagro.cbs.biz.model.BreedingRecord" >
+  <insert id="insert" parameterType="com.jaagro.cbs.api.model.BreedingRecord" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into breeding_record (batch_no, coop_id, day_age, 
-      record_type, breeding_value, unit, 
-      notes, enable, create_time, 
-      create_user_id, modify_time, modify_user_id
-      )
-    values (#{batchNo,jdbcType=VARCHAR}, #{coopId,jdbcType=INTEGER}, #{dayAge,jdbcType=INTEGER}, 
-      #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, 
-      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
-      )
+    insert into breeding_record (plan_id, batch_no, coop_id, 
+      day_age, record_type, breeding_value, 
+      unit, breeding_time, notes, 
+      enable, create_time, create_user_id, 
+      modify_time, modify_user_id)
+    values (#{planId,jdbcType=INTEGER}, #{batchNo,jdbcType=VARCHAR}, #{coopId,jdbcType=INTEGER}, 
+      #{dayAge,jdbcType=INTEGER}, #{recordType,jdbcType=INTEGER}, #{breedingValue,jdbcType=DECIMAL}, 
+      #{unit,jdbcType=VARCHAR}, #{breedingTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, 
+      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.jaagro.cbs.biz.model.BreedingRecord" >
+  <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.BreedingRecord" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into breeding_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        plan_id,
+      </if>
       <if test="batchNo != null" >
         batch_no,
       </if>
@@ -120,6 +125,9 @@
       </if>
       <if test="unit != null" >
         unit,
+      </if>
+      <if test="breedingTime != null" >
+        breeding_time,
       </if>
       <if test="notes != null" >
         notes,
@@ -141,6 +149,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="planId != null" >
+        #{planId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -159,11 +170,14 @@
       <if test="unit != null" >
         #{unit,jdbcType=VARCHAR},
       </if>
+      <if test="breedingTime != null" >
+        #{breedingTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        #{enable,jdbcType=TINYINT},
+        #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -179,15 +193,18 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jaagro.cbs.biz.model.BreedingRecordExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.jaagro.cbs.api.model.BreedingRecordExample" resultType="java.lang.Integer" >
     select count(*) from breeding_record
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.biz.model.BreedingRecord" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.jaagro.cbs.api.model.BreedingRecord" >
     update breeding_record
     <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=INTEGER},
+      </if>
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
@@ -206,11 +223,14 @@
       <if test="unit != null" >
         unit = #{unit,jdbcType=VARCHAR},
       </if>
+      <if test="breedingTime != null" >
+        breeding_time = #{breedingTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
       </if>
       <if test="enable != null" >
-        enable = #{enable,jdbcType=TINYINT},
+        enable = #{enable,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -227,16 +247,18 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.biz.model.BreedingRecord" >
+  <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.BreedingRecord" >
     update breeding_record
-    set batch_no = #{batchNo,jdbcType=VARCHAR},
+    set plan_id = #{planId,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
       coop_id = #{coopId,jdbcType=INTEGER},
       day_age = #{dayAge,jdbcType=INTEGER},
       record_type = #{recordType,jdbcType=INTEGER},
       breeding_value = #{breedingValue,jdbcType=DECIMAL},
       unit = #{unit,jdbcType=VARCHAR},
+      breeding_time = #{breedingTime,jdbcType=TIMESTAMP},
       notes = #{notes,jdbcType=VARCHAR},
-      enable = #{enable,jdbcType=TINYINT},
+      enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
