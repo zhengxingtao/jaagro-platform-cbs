@@ -485,7 +485,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //养殖计划信息
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
         if (breedingPlan == null) {
-            throw new RuntimeException("当前养殖计划 + breedingPlan.getId() + 不存在");
+            throw new RuntimeException("当前养殖计划 " + planId + " 不存在");
         }
         BeanUtils.copyProperties(breedingPlan, returnBreedingPlanDto);
         //累计所有死淘数量
