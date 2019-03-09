@@ -77,7 +77,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 for (ReturnBreedingBatchDetailsDto returnBreedingBatchDetailsDto : returnBreedingBatchDetailsDtos) {
                     planIds.add(returnBreedingBatchDetailsDto.getId());
                     //累计所有上鸡计划所有数量
-                    totalPlanStock = totalPlanStock.add(new BigDecimal(returnBreedingBatchDetailsDto.getPlanChickenQuantity()));
+                    if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
+                        totalPlanStock = totalPlanStock.add(new BigDecimal(returnBreedingBatchDetailsDto.getPlanChickenQuantity()));
+                    }
                 }
                 if (!CollectionUtils.isEmpty(planIds)) {
                     //1.累计所有死淘数量
@@ -121,7 +123,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos = null;
         UserInfo currentUser = currentUserService.getCurrentUser();
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.getId() != null) {
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
             if (customerUser != null && customerUser.getRelevanceId() != null) {
                 returnBreedingBatchDetailsDtos = breedingPlanMapper.listBreedingPlanByCustomerId(customerUser.getRelevanceId());
@@ -168,8 +170,11 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                                 totalBreedingStock = breedingStock.subtract(deadAmount);
                             }
                             returnBreedingBatchDetailsDto
-                                    .setBreedingStock(totalBreedingStock)
-                                    .setStrPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingBatchDetailsDto.getPlanStatus()));
+                                    .setBreedingStock(totalBreedingStock);
+                            if (returnBreedingBatchDetailsDto.getPlanStatus() != null) {
+                                returnBreedingBatchDetailsDto
+                                        .setStrPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingBatchDetailsDto.getPlanStatus()));
+                            }
                         }
                     }
                 }
