@@ -32,26 +32,6 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     private String purchaseNo;
 
     /**
-     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
-     */
-    private Integer productType;
-
-    /**
-     * 采购重量
-     */
-    private BigDecimal weight;
-
-    /**
-     * 采购数量
-     */
-    private Integer quantity;
-
-    /**
-     * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
-     */
-    private Integer unit;
-
-    /**
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
     private String purchaseOrderStatus;
@@ -80,6 +60,4 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      * 采购订单商品
      */
     private List<ReturnProductDto> returnProductDtos;
-
-
 }

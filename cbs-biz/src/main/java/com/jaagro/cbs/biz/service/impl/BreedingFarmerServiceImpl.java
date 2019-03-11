@@ -296,6 +296,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 purchaseOrderExample.setOrderByClause("create_time DESC");
                 List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
                 for (PurchaseOrder purchaseOrder : purchaseOrderList) {
+
                     PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
                     BeanUtils.copyProperties(purchaseOrder, purchaseOrderDto);
                     if (ProductTypeEnum.SPROUT.getCode() == purchaseOrder.getProductType()) {
@@ -306,6 +307,20 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     }
                     if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
+                    }
+                    if (purchaseOrder.getId() != null) {
+                        PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+                        purchaseOrderItemsExample
+                                .createCriteria()
+                                .andEnableEqualTo(true)
+                                .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                        List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                        if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                            for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+
+
+                            }
+                        }
                     }
                     purchaseOrderDto.setStrProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()) + "任务");
                     purchaseOrderDtos.add(purchaseOrderDto);
@@ -353,6 +368,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         .andEnableEqualTo(true)
                         .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
                 List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                List<ReturnProductDto> returnProductDtos = new ArrayList<>();
                 if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
                     for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
                         ReturnProductDto returnProductDto = new ReturnProductDto();
@@ -375,7 +391,13 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                             returnProductDto
                                     .setUnit(OrderUnitEnum.getDescByCode(purchaseOrderItem.getUnit()));
                         }
+                        if (purchaseOrderItem.getQuantity() != null) {
+                            returnProductDto.setQuantity(purchaseOrderItem.getQuantity());
+
+                        }
+                        returnProductDtos.add(returnProductDto);
                     }
+                    returnFarmerPurchaseOrderDetailsDto.setReturnProductDtos(returnProductDtos);
                 }
             }
         }

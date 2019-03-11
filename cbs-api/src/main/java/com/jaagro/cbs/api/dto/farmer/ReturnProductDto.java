@@ -26,11 +26,6 @@ public class ReturnProductDto implements Serializable {
     private String productName;
 
     /**
-     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
-     */
-    private Integer productType;
-
-    /**
      * 购买数量 重量
      */
     private BigDecimal quantity;
@@ -38,8 +33,5 @@ public class ReturnProductDto implements Serializable {
     /**
      * 单位
      */
-
     private String unit;
-
-
 }
