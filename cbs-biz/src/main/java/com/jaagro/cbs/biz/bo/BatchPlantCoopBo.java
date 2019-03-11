@@ -37,4 +37,8 @@ public class BatchPlantCoopBo implements Serializable{
      * 鸡舍名称
      */
     private String coopName;
+    /**
+     * 在养数量
+     */
+    private Integer breedingValue;
 }

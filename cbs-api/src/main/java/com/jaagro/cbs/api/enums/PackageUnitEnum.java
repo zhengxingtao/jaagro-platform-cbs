@@ -7,13 +7,14 @@ package com.jaagro.cbs.api.enums;
 
 public enum PackageUnitEnum {
     /**
-     * 包装单位(1-瓶,2-袋,3-支,4-桶,5-盒)
+     * 包装单位(1-瓶,2-袋,3-只,4-桶,5-盒,6-吨)
      */
     BOTTLE(1, "BOTTLE", "瓶"),
     BAG(2, "BAG", "袋"),
-    PIECE(3, "PIECE", "支"),
+    PIECE(3, "PIECE", "只"),
     BARREL(4, "BARREL", "桶"),
-    BOX(5, "BOX", "盒");
+    BOX(5, "BOX", "盒"),
+    TONS(6, "TONS", "吨");
     private int code;
     private String type;
     private String desc;

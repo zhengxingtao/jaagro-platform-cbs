@@ -392,7 +392,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         }
                         if (purchaseOrderItem.getUnit() != null) {
                             returnProductDto
-                                    .setUnit(OrderUnitEnum.getDescByCode(purchaseOrderItem.getUnit()));
+                                    .setUnit(PackageUnitEnum.getDescByCode(purchaseOrderItem.getUnit()));
                         }
                         if (purchaseOrderItem.getQuantity() != null) {
                             returnProductDto.setQuantity(purchaseOrderItem.getQuantity());

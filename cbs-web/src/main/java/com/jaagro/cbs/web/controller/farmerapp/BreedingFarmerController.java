@@ -12,6 +12,7 @@ import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.enums.EmergencyLevelEnum;
 import com.jaagro.cbs.api.enums.UserTypeEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.BreedingRecordItems;
 import com.jaagro.cbs.api.model.Message;
 import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
@@ -317,9 +318,28 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(breedingRecordDto);
     }
 
+    @ApiOperation("获取农户应喂药列表")
+    @GetMapping("/listBreedingRecordDrug")
+    public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId,@RequestParam Integer coopId){
+        log.info("O listBreedingRecordDrug planId={},coopId={}",planId,coopId);
+        List<BreedingRecordItemsDto> recordItemsDtoList = breedingPlanService.listBreedingRecordDrug(planId,coopId);
+        if (!CollectionUtils.isEmpty(recordItemsDtoList)){
+            return BaseResponse.successInstance(recordItemsDtoList);
+        }else {
+            return BaseResponse.queryDataEmpty();
+        }
+    }
+
+    /**
+     * 上传养殖记录()
+     * @author yj
+     * @param createBreedingRecordDto
+     * @return
+     */
     @ApiOperation("上传养殖记录")
     @PostMapping("/uploadBreedingRecord")
     public BaseResponse uploadBreedingRecord(@RequestBody @Validated CreateBreedingRecordDto createBreedingRecordDto){
-        return null;
+        breedingPlanService.uploadBreedingRecord(createBreedingRecordDto);
+        return BaseResponse.successInstance("上传成功");
     }
 }

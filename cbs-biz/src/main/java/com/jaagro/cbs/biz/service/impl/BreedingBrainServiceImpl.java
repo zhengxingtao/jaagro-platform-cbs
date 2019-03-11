@@ -23,9 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -51,6 +49,8 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     @Autowired
     private BreedingBatchParameterMapperExt breedingBatchParameterMapper;
     @Autowired
+    private BreedingBatchDrugMapperExt breedingBatchDrugMapper;
+    @Autowired
     private RedisUtil redis;
     @Autowired
     private BatchInfoMapperExt batchInfoMapper;
@@ -69,12 +69,51 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      * @return
      */
     @Override
-    public List<PurchaseOrder> calculateDrugById(Integer planId) {
+    public List<PurchaseOrder> calculateDrugPurchaseOrderById(Integer planId) {
         List<PurchaseOrder> phaseOneOrders = new ArrayList<>();
+        try {
+            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+            Assert.notNull(breedingPlan, "养殖计划不存在");
+            log.info("O BreedingBrainServiceImpl.calculateDrugPurchaseOrderById input planId:{}", planId);
 
+            //养殖计划所用的参数
+            BreedingBatchDrugExample batchDrugExample = new BreedingBatchDrugExample();
+            batchDrugExample.createCriteria().andPlanIdEqualTo(planId).andEnableEqualTo(true);
+            batchDrugExample.setOrderByClause("day_age_end desc");
 
-        return null;
+            List<BreedingBatchDrug> batchDrugDos = breedingBatchDrugMapper.selectByExample(batchDrugExample);
+            if (!CollectionUtils.isEmpty(batchDrugDos)) {
+                Set<Integer> phaseOneProductIds = new HashSet<>();
+                Set<Integer> phaseTwoProductIds = new HashSet<>();
+                int i = 0;
+                for (BreedingBatchDrug batchDrugDo : batchDrugDos) {
+                    if (batchDrugDo.getStopDrugFlag()) {
+                        i = i + 1;
+                    }
+                    if (i <= 2) {
+                        if (!batchDrugDo.getStopDrugFlag()) {
+                            phaseOneProductIds.add(batchDrugDo.getProductId());
+                        }
+                    }
+                    if(i>=2){
+                        if (!batchDrugDo.getStopDrugFlag()) {
+                            phaseTwoProductIds.add(batchDrugDo.getProductId());
+                        }
+                    }
+                }
+
+                for (Integer productId : phaseOneProductIds) {
+
+                }
+            }
+
+        } catch (Exception ex) {
+            log.error("R BreedingBrainServiceImpl.getPhaseOneFoodWeightById  error:" + ex);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return phaseOneOrders;
     }
+
     /**
      * 根据养殖计划Id生成养殖第一阶段（1->14天）的相关订单：第一阶段的饲料订单、第一阶段的鸡苗订单
      *
@@ -385,10 +424,10 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     purchaseOrder.setPurchaseName("鸡苗采购 - 全部鸡苗配送");
                     purchaseOrder.setNotes("鸡苗采购 - 全部鸡苗配送");
                 }
-                purchaseOrderItem.setUnit(OrderUnitEnum.AN.getCode());
+                purchaseOrderItem.setUnit(PackageUnitEnum.PIECE.getCode());
             } else if (productType == ProductTypeEnum.FEED.getCode()) {
                 //饲料订单单位
-                purchaseOrderItem.setUnit(OrderUnitEnum.TONS.getCode());
+                purchaseOrderItem.setUnit(PackageUnitEnum.TONS.getCode());
                 if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                     String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-01";
                     purchaseOrder.setPurchaseNo(purchaseNo);
@@ -421,7 +460,6 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             } else {
                 //药品订单单位
             }
-
             //1.插入采购订单
             purchaseOrderMapper.insertSelective(purchaseOrder);
             //2.插入采购订单明细
@@ -539,6 +577,4 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         purchaseOrderMapper.deleteByCriteria(orderBo);
 
     }
-
-
 }
