@@ -18,4 +18,5 @@
           #{item.createUserId,jdbcType=INTEGER})
       </foreach>
     </insert>
+
 </mapper>

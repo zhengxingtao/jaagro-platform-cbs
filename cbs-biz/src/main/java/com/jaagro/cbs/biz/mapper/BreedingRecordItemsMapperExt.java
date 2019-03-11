@@ -28,4 +28,5 @@ public interface BreedingRecordItemsMapperExt extends BaseMapper<BreedingRecordI
      * @param breedingRecordItemsList
      */
     void batchInsert(@Param("breedingRecordItemsList") List<BreedingRecordItems> breedingRecordItemsList);
+
 }

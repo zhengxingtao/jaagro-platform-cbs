@@ -21,9 +21,10 @@
         </where>
     </select>
     <select id="queryPurchaseOrderByCondition" resultType="java.lang.Integer" parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
-        select o.id from purchase_order o, purchase_order_items i
+        select distinct o.id from purchase_order o, purchase_order_items i
         where o.id=i.purchase_order_id
               and i.product_id=#{productId}
+              and o.product_type = #{productType}
               and o.plan_id=#{planId} and o.order_phase=#{orderPhase}
     </select>
     <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
@@ -32,5 +33,22 @@
             <include refid="Example_Where_Clause" />
         </if>
     </delete>
+    <delete id="deleteByCriteria"  parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
+            UPDATE purchase_order_items
+            SET ENABLE = 0
+            where
+              purchase_order_id in
+                  (select id from purchase_order where plan_id = #{planId}
+                      AND order_phase = #{orderPhase}
+                      AND product_type = #{productType}
+                  );
+            UPDATE purchase_order
+            SET ENABLE = 0
+            WHERE
+                plan_id = #{planId}
+            AND order_phase = #{orderPhase}
+            AND product_type = #{productType}
 
+
+    </delete>
 </mapper>

@@ -4,6 +4,8 @@
 
     <!--          自动生成扩展XML author: generator on 2019/3/9                 -->
 
-
+<delete id="deleteByOrderId" parameterType="java.lang.Integer">
+    delete from purchase_order_items where purchase_order_id = #{orderId}
+</delete>
 
 </mapper>

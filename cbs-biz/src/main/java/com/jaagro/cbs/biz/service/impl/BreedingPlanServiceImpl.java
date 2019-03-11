@@ -7,6 +7,10 @@ import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.farmer.*;
+import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
+import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
+import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
@@ -93,6 +97,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private ProductMapperExt productMapper;
     @Autowired
     private BreedingRecordItemsMapperExt breedingRecordItemsMapper;
+    @Autowired
+    private PurchaseOrderItemsMapperExt purchaseOrderItemsMapper;
 
     /**
      * 创建养殖计划
@@ -634,14 +640,14 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
         BigDecimal breedingStock = null;
         BigDecimal totalBreedingStock = null;
-        if (breedingPlan.getPlanChickenQuantity() != null && accumulativeDeadAmount != null) {
+        if (breedingPlan.getPlanChickenQuantity() != null) {
             breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
         }
         if (breedingStock != null) {
             totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
         }
         if (totalBreedingStock != null) {
-            returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
+            returnBreedingPlanDto.setPlanChickenQuantity(totalBreedingStock.intValue());
         }
         //养殖场信息
         List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
@@ -682,10 +688,30 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         if (!CollectionUtils.isEmpty(purchaseOrders)) {
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
+                if (purchaseOrder.getId() != null) {
+                    PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+                    purchaseOrderItemsExample
+                            .createCriteria()
+                            .andEnableEqualTo(true)
+                            .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                    List<PurchaseOrderItems> purchaseOrderItemsList = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                    if (!CollectionUtils.isEmpty(purchaseOrderItemsList)) {
+                        PurchaseOrderItems purchase = purchaseOrderItemsList.get(0);
+                        for (PurchaseOrderItems purchaseOrderItems : purchaseOrderItemsList) {
+                            if (purchaseOrderItems.getQuantity() != null) {
+                                totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
+                            }
+                        }
+                        if (purchase.getUnit() != null) {
+                            returnPurchaseOrderDto
+                                    .setUnit(OrderUnitEnum.getDescByCode(purchase.getUnit()));
+                        }
+                    }
+                }
                 returnPurchaseOrderDto
-                        .setUnit(OrderUnitEnum.getDescByCode(purchaseOrder.getUnit()))
                         .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
@@ -968,27 +994,24 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andPurchaseOrderStatusEqualTo(purchaseOrderStatus);
         }
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-        //药品 种苗
-        boolean flag = ProductTypeEnum.DRUG.getCode() == productType || ProductTypeEnum.SPROUT.getCode() == productType;
-        if (flag) {
-            //统计数量
-            if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(new BigDecimal(purchaseOrder.getQuantity()));
+        for (PurchaseOrder purchaseOrder : purchaseOrders) {
+            PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+            if (purchaseOrder.getId() != null) {
+                purchaseOrderItemsExample
+                        .createCriteria()
+                        .andEnableEqualTo(true)
+                        .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                    for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+                        if (purchaseOrderItem.getQuantity() != null) {
+                            totalPlanFeedStatistics = totalPlanFeedStatistics.add((purchaseOrderItem.getQuantity()));
+                        }
+                    }
                 }
-                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
-        //饲料
-        if (ProductTypeEnum.FEED.getCode() == productType) {
-            //统计重量
-            if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(purchaseOrder.getWeight());
-                }
-                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
-            }
-        }
+        calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
         return calculatePurchaseOrderMap;
     }
 }

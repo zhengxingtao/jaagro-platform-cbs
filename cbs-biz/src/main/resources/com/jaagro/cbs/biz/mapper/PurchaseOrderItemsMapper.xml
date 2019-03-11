@@ -5,9 +5,11 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="purchase_order_id" property="purchaseOrderId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="enable" property="enable" jdbcType="BIT" />
+    <result column="unit" property="unit" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -39,7 +41,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, purchase_order_id, product_id, quantity, create_time, enable
+    id, purchase_order_id, product_id, quantity, create_time, enable, unit, price
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderItemsExample" >
     select
@@ -79,9 +81,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into purchase_order_items (purchase_order_id, product_id, quantity, 
-      create_time, enable)
-    values (#{purchaseOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT})
+      create_time, enable, unit, 
+      price)
+    values (#{purchaseOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{quantity,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}, #{unit,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrderItems" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -104,6 +108,12 @@
       <if test="enable != null" >
         enable,
       </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="purchaseOrderId != null" >
@@ -113,13 +123,19 @@
         #{productId,jdbcType=INTEGER},
       </if>
       <if test="quantity != null" >
-        #{quantity,jdbcType=INTEGER},
+        #{quantity,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="enable != null" >
         #{enable,jdbcType=BIT},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -139,13 +155,19 @@
         product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="quantity != null" >
-        quantity = #{quantity,jdbcType=INTEGER},
+        quantity = #{quantity,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="enable != null" >
         enable = #{enable,jdbcType=BIT},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -154,9 +176,11 @@
     update purchase_order_items
     set purchase_order_id = #{purchaseOrderId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
-      quantity = #{quantity,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      enable = #{enable,jdbcType=BIT}
+      enable = #{enable,jdbcType=BIT},
+      unit = #{unit,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

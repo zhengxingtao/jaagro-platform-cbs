@@ -58,6 +58,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private ProductMapperExt productMapper;
     @Autowired
     private BatchPlantCoopMapperExt batchPlantCoopMapper;
+    @Autowired
+    private PurchaseOrderItemsMapperExt purchaseOrderItemsMapper;
+
 
     /**
      * 农户端app 首页数据统计
@@ -343,20 +346,38 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                 returnFarmerPurchaseOrderDetailsDto.setOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
             }
-            /*
-            ProductExample productExample = new ProductExample();
-            productExample
-                    .createCriteria()
-                    .andIdEqualTo(purchaseOrder.getProductId());
-            //商品信息
-            List<Product> products = productMapper.selectByExample(productExample);
-            if (!CollectionUtils.isEmpty(products)) {
-                Product product = products.get(0);
-                if (product.getProductName() != null) {
-                    returnFarmerPurchaseOrderDetailsDto
-                            .setProductName(product.getProductName());
+            if (purchaseOrder.getId() != null) {
+                PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+                purchaseOrderItemsExample
+                        .createCriteria()
+                        .andEnableEqualTo(true)
+                        .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                    for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+                        ReturnProductDto returnProductDto = new ReturnProductDto();
+                        if (purchaseOrderItem.getProductId() != null) {
+                            ProductExample productExample = new ProductExample();
+                            productExample
+                                    .createCriteria()
+                                    .andIdEqualTo(purchaseOrderItem.getProductId())
+                                    .andEnableEqualTo(true);
+                            List<Product> products = productMapper.selectByExample(productExample);
+                            if (!CollectionUtils.isEmpty(products)) {
+                                Product product = products.get(0);
+                                if (product.getProductName() != null) {
+                                    returnProductDto
+                                            .setProductName(product.getProductName());
+                                }
+                            }
+                        }
+                        if (purchaseOrderItem.getUnit() != null) {
+                            returnProductDto
+                                    .setUnit(OrderUnitEnum.getDescByCode(purchaseOrderItem.getUnit()));
+                        }
+                    }
                 }
-            } */
+            }
         }
         return returnFarmerPurchaseOrderDetailsDto;
     }
@@ -375,8 +396,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         if (dto.getPurchaseOrderStatus() != null) {
             purchaseOrder
                     .setPurchaseOrderStatus(dto.getPurchaseOrderStatus());
+            purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
         }
-        purchaseOrderMapper.updateByPrimaryKeySelective(purchaseOrder);
     }
 
     /**
@@ -388,6 +409,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public PageInfo listPublishedChickenPlan(BreedingBatchParamDto dto) {
+        List<BreedingPlan> breedingPlans = null;
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         UserInfo currentUser = currentUserService.getCurrentUser();
         BreedingPlanExample breedingPlanExample = new BreedingPlanExample();
@@ -398,9 +420,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         .createCriteria()
                         .andCustomerIdEqualTo(customerUser.getRelevanceId())
                         .andEnableEqualTo(true);
+                breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
             }
         }
-        List<BreedingPlan> breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
+
         return new PageInfo(breedingPlans);
     }
 
@@ -412,16 +435,20 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public PageInfo listTechnicalInquiries(BreedingBatchParamDto dto) {
+        List<TechConsultRecord> techConsultRecords = null;
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         UserInfo currentUser = currentUserService.getCurrentUser();
         TechConsultRecordExample techConsultRecordExample = new TechConsultRecordExample();
         if (currentUser != null && currentUser.getId() != null) {
             GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
-            techConsultRecordExample
-                    .createCriteria()
-                    .andCustomerIdEqualTo(customerUser.getRelevanceId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                techConsultRecordExample
+                        .createCriteria()
+                        .andCustomerIdEqualTo(customerUser.getRelevanceId());
+                techConsultRecords = techConsultRecordMapper.selectByExample(techConsultRecordExample);
+            }
         }
-        List<TechConsultRecord> techConsultRecords = techConsultRecordMapper.selectByExample(techConsultRecordExample);
+
         return new PageInfo(techConsultRecords);
     }
 
