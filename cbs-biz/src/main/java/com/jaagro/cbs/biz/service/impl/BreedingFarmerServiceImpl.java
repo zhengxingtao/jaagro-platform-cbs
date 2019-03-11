@@ -346,34 +346,37 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                 returnFarmerPurchaseOrderDetailsDto.setOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
             }
-            PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
-
-            purchaseOrderItemsExample
-                    .createCriteria()
-                    .andEnableEqualTo(true)
-                    .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
-            List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
-            List<Integer> productIds = new ArrayList<>();
-            for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
-                if (purchaseOrderItem.getProductId() != null) {
-                    productIds.add(purchaseOrderItem.getProductId());
-                }
-            }
-            if (!CollectionUtils.isEmpty(productIds)) {
-                ProductExample productExample = new ProductExample();
-                productExample
+            if (purchaseOrder.getId() != null) {
+                PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+                purchaseOrderItemsExample
                         .createCriteria()
-                        .andIdIn(productIds)
-                        .andEnableEqualTo(true);
-                List<Product> products = productMapper.selectByExample(productExample);
-                List<ReturnProductDto> returnProductDtos = new ArrayList<>();
-                for (Product product : products) {
-                    ReturnProductDto returnProductDto = new ReturnProductDto();
-                    BeanUtils.copyProperties(product, returnProductDto);
-                    returnProductDtos.add(returnProductDto);
+                        .andEnableEqualTo(true)
+                        .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                    for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+                        ReturnProductDto returnProductDto = new ReturnProductDto();
+                        if (purchaseOrderItem.getProductId() != null) {
+                            ProductExample productExample = new ProductExample();
+                            productExample
+                                    .createCriteria()
+                                    .andIdEqualTo(purchaseOrderItem.getProductId())
+                                    .andEnableEqualTo(true);
+                            List<Product> products = productMapper.selectByExample(productExample);
+                            if (!CollectionUtils.isEmpty(products)) {
+                                Product product = products.get(0);
+                                if (product.getProductName() != null) {
+                                    returnProductDto
+                                            .setProductName(product.getProductName());
+                                }
+                            }
+                        }
+                        if (purchaseOrderItem.getUnit() != null) {
+                            returnProductDto
+                                    .setUnit(OrderUnitEnum.getDescByCode(purchaseOrderItem.getUnit()));
+                        }
+                    }
                 }
-                returnFarmerPurchaseOrderDetailsDto
-                        .setReturnProductDtos(returnProductDtos);
             }
         }
         return returnFarmerPurchaseOrderDetailsDto;

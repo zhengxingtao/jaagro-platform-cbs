@@ -6,7 +6,6 @@ import com.jaagro.cbs.api.constant.CertificateStatus;
 import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.farmer.*;
-import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
 import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
@@ -94,6 +93,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     private BatchCoopDailyMapperExt batchCoopDailyMapper;
     @Autowired
     private BreedingProgressService breedingProgressService;
+    @Autowired
+    private PurchaseOrderItemsMapperExt purchaseOrderItemsMapper;
 
     /**
      * 创建养殖计划
@@ -542,10 +543,30 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         if (!CollectionUtils.isEmpty(purchaseOrders)) {
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
+                if (purchaseOrder.getId() != null) {
+                    PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+                    purchaseOrderItemsExample
+                            .createCriteria()
+                            .andEnableEqualTo(true)
+                            .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                    List<PurchaseOrderItems> purchaseOrderItemsList = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                    if (!CollectionUtils.isEmpty(purchaseOrderItemsList)) {
+                        PurchaseOrderItems purchase = purchaseOrderItemsList.get(0);
+                        for (PurchaseOrderItems purchaseOrderItems : purchaseOrderItemsList) {
+                            if (purchaseOrderItems.getQuantity() != null) {
+                                totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
+                            }
+                        }
+                        if (purchase.getUnit() != null) {
+                            returnPurchaseOrderDto
+                                    .setUnit(OrderUnitEnum.getDescByCode(purchase.getUnit()));
+                        }
+                    }
+                }
                 returnPurchaseOrderDto
-                        .setUnit(OrderUnitEnum.getDescByCode(purchaseOrder.getUnit()))
                         .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
                         .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
                 //签收人信息
@@ -828,27 +849,24 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     .andPurchaseOrderStatusEqualTo(purchaseOrderStatus);
         }
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
-        //药品 种苗
-        boolean flag = ProductTypeEnum.DRUG.getCode() == productType || ProductTypeEnum.SPROUT.getCode() == productType;
-        if (flag) {
-            //统计数量
-            if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(new BigDecimal(purchaseOrder.getQuantity()));
+        for (PurchaseOrder purchaseOrder : purchaseOrders) {
+            PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
+            if (purchaseOrder.getId() != null) {
+                purchaseOrderItemsExample
+                        .createCriteria()
+                        .andEnableEqualTo(true)
+                        .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
+                List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
+                if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                    for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
+                        if (purchaseOrderItem.getQuantity() != null) {
+                            totalPlanFeedStatistics = totalPlanFeedStatistics.add((purchaseOrderItem.getQuantity()));
+                        }
+                    }
                 }
-                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
             }
         }
-        //饲料
-        if (ProductTypeEnum.FEED.getCode() == productType) {
-            //统计重量
-            if (!CollectionUtils.isEmpty(purchaseOrders)) {
-                for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                    totalPlanFeedStatistics = totalPlanFeedStatistics.add(purchaseOrder.getWeight());
-                }
-                calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
-            }
-        }
+        calculatePurchaseOrderMap.put(productType, totalPlanFeedStatistics);
         return calculatePurchaseOrderMap;
     }
 }

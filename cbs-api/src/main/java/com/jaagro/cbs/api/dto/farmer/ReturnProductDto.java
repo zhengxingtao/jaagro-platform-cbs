@@ -19,10 +19,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReturnProductDto implements Serializable {
-    /**
-     * 产品id
-     */
-    private Integer id;
 
     /**
      * 产品名称
@@ -35,38 +31,15 @@ public class ReturnProductDto implements Serializable {
     private Integer productType;
 
     /**
-     * 生产商名称
+     * 购买数量 重量
      */
-    private String manufacturer;
+    private BigDecimal quantity;
 
     /**
-     * 产品图片地址
+     * 单位
      */
-    private String imageUrl;
 
-    /**
-     * 采购单价
-     */
-    private BigDecimal purchasePrice;
+    private String unit;
 
-    /**
-     * 销售单价
-     */
-    private BigDecimal salePrice;
-
-    /**
-     * 商品容量
-     */
-    private BigDecimal productCapacity;
-
-    /**
-     * 容量单位(1-ml,2-g)
-     */
-    private Integer capacityUnit;
-
-    /**
-     * 包装单位(1-瓶,2-袋,3-支,4-桶,5-盒)
-     */
-    private Integer packageUnit;
 
 }
