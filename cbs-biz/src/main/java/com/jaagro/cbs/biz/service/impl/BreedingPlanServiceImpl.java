@@ -532,7 +532,6 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public ReturnChickenSignDetailsDto chickenSignDetails(Integer plantId) {
-        BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
         ReturnChickenSignDetailsDto returnChickenSignDetailsDto = new ReturnChickenSignDetailsDto();
         //养殖计划详情信息
         ReturnBreedingPlanDetailsDto returnBreedingPlanDetailsDto = breedingPlanDetails(plantId);
@@ -544,6 +543,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         if (!CollectionUtils.isEmpty(purchaseOrders)) {
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
+                BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 if (purchaseOrder.getId() != null) {
@@ -554,15 +554,15 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                             .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
                     List<PurchaseOrderItems> purchaseOrderItemsList = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
                     if (!CollectionUtils.isEmpty(purchaseOrderItemsList)) {
-                        PurchaseOrderItems purchaseOrderItemss = purchaseOrderItemsList.get(0);
+                        PurchaseOrderItems purchase = purchaseOrderItemsList.get(0);
                         for (PurchaseOrderItems purchaseOrderItems : purchaseOrderItemsList) {
                             if (purchaseOrderItems.getQuantity() != null) {
                                 totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
                             }
                         }
-                        if (purchaseOrderItemss.getUnit() != null) {
+                        if (purchase.getUnit() != null) {
                             returnPurchaseOrderDto
-                                    .setUnit(OrderUnitEnum.getDescByCode(purchaseOrderItemss.getUnit()));
+                                    .setUnit(OrderUnitEnum.getDescByCode(purchase.getUnit()));
                         }
                     }
                 }
