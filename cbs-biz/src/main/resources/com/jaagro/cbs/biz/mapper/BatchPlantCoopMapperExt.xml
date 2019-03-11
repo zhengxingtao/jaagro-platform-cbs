@@ -65,7 +65,8 @@
             bpc.plan_id,
             bpc.coop_id,
             c.coop_name,
-            c.coop_no
+            c.coop_no,
+            c.breeding_value
         FROM
             batch_plant_coop bpc
         LEFT JOIN plant p ON bpc.plan_id = p.id

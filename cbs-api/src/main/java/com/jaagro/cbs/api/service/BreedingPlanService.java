@@ -4,6 +4,8 @@ package com.jaagro.cbs.api.service;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamListDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingRecordItemsDto;
+import com.jaagro.cbs.api.dto.farmer.CreateBreedingRecordDto;
 import com.jaagro.cbs.api.dto.plan.*;
 
 import java.util.List;
@@ -101,6 +103,7 @@ public interface BreedingPlanService {
 
     /**
      * 养殖过程批次参数
+     * @author yj
      * @param planId
      * @param coopId
      * @param dayAge
@@ -110,6 +113,19 @@ public interface BreedingPlanService {
      */
     BreedingBatchParamListDto getBreedingBatchParamForApp(Integer planId, Integer coopId, Integer dayAge, String strDate) throws Exception;
 
+    /**
+     * 获取农户某个计划某个鸡舍每日应喂药列表
+     * @author yj
+     * @param planId
+     * @param coopId
+     * @return
+     */
+    List<BreedingRecordItemsDto> listBreedingRecordDrug(Integer planId, Integer coopId);
 
-
+    /**
+     * 农户端上传养殖记录
+     * @author yj
+     * @param createBreedingRecordDto
+     */
+    void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto);
 }
