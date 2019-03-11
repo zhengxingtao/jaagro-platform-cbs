@@ -10,9 +10,7 @@ public enum CapacityUnitEnum {
      * 容量单位(1-ml,2-g,3-L,4-kg)
      */
     ML(1, "ML", "毫升"),
-    G(2, "G", "克"),
-    L(3, "L", "升"),
-    KG(4, "KG", "千克");
+    G(2, "G", "克");
     private int code;
     private String type;
     private String desc;

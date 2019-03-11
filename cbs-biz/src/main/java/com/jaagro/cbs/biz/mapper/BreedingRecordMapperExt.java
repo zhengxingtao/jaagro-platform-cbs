@@ -1,9 +1,11 @@
 package com.jaagro.cbs.biz.mapper;
 
 import com.jaagro.cbs.api.dto.base.BatchInfoCriteriaDto;
+import com.jaagro.cbs.api.dto.farmer.BreedingRecordDto;
 import com.jaagro.cbs.api.model.BatchInfo;
 import com.jaagro.cbs.api.model.BreedingRecord;
 import com.jaagro.cbs.api.model.BreedingRecordExample;
+import com.jaagro.cbs.api.model.BreedingRecordItems;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -63,8 +65,16 @@ public interface BreedingRecordMapperExt extends BaseMapper<BreedingRecord, Bree
     /**
      * 死淘数量 -- 根据批次
      *
-     * @param record
+     * @param criteriaDto
      * @return
      */
     Integer sumDeadAmountByPlanId(BatchInfoCriteriaDto criteriaDto);
+
+    /**
+     * 根据条件查询养殖记录列表
+     * @param params
+     * @return
+     */
+    List<BreedingRecordDto> listByParams(BreedingRecord params);
+
 }

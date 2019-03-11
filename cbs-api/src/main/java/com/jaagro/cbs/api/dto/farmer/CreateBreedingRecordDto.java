@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 创建养殖记录参数
@@ -52,6 +53,7 @@ public class CreateBreedingRecordDto implements Serializable{
     private String notes;
 
     /**
-     *
+     * 喂料明细
      */
+    private List<BreedingRecordItemsDto> breedingRecordItemsDtoList;
 }
