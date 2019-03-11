@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.dto.order;
 
+import com.jaagro.cbs.api.dto.farmer.ReturnProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @description: 农户端采购订单详情
@@ -33,12 +35,6 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
      */
     private Integer productType;
-
-
-    /**
-     * 商品品名
-     */
-    private String productName;
 
     /**
      * 采购重量
@@ -79,6 +75,11 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      *
      */
     private String orderPhase;
+
+    /**
+     * 采购订单商品
+     */
+    private List<ReturnProductDto> returnProductDtos;
 
 
 }
