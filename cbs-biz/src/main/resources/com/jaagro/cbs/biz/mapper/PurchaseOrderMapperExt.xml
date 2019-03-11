@@ -24,6 +24,7 @@
         select o.id from purchase_order o, purchase_order_items i
         where o.id=i.purchase_order_id
               and i.product_id=#{productId}
+              and o.product_type = #{productType}
               and o.plan_id=#{planId} and o.order_phase=#{orderPhase}
     </select>
     <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
