@@ -296,7 +296,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 purchaseOrderExample.setOrderByClause("create_time DESC");
                 List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
                 for (PurchaseOrder purchaseOrder : purchaseOrderList) {
-
+                    BigDecimal totalPurchaseStatistics = BigDecimal.ZERO;
                     PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
                     BeanUtils.copyProperties(purchaseOrder, purchaseOrderDto);
                     if (ProductTypeEnum.SPROUT.getCode() == purchaseOrder.getProductType()) {
@@ -317,10 +317,13 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
                         if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
                             for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
-
+                                if (purchaseOrderItem.getQuantity() != null) {
+                                    totalPurchaseStatistics.add(purchaseOrderItem.getQuantity());
+                                }
 
                             }
                         }
+                        purchaseOrderDto.setQuantity(totalPurchaseStatistics);
                     }
                     purchaseOrderDto.setStrProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()) + "任务");
                     purchaseOrderDtos.add(purchaseOrderDto);

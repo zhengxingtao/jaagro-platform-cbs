@@ -41,14 +41,9 @@ public class PurchaseOrderDto implements Serializable {
     private String strProductType;
 
     /**
-     * 采购重量
+     * 采购数量 采购重量
      */
-    private BigDecimal weight;
-
-    /**
-     * 采购数量
-     */
-    private Integer quantity;
+    private BigDecimal quantity;
 
     /**
      * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
