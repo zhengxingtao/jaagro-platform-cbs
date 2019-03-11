@@ -40,5 +40,12 @@ public interface BreedingBrainService {
      */
     List<PurchaseOrder> calculatePhaseFourFoodWeightById(Integer planId);
 
+    /**
+     *
+     * @param planId
+     * @return
+     */
+    List<PurchaseOrder> calculateDrugById(Integer planId);
+
 
 }

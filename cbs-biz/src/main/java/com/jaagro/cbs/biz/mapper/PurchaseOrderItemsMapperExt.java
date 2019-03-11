@@ -14,6 +14,10 @@ import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 @Resource
 public interface PurchaseOrderItemsMapperExt extends BaseMapper<PurchaseOrderItems,PurchaseOrderItemsExample> {
 
-
-
+    /**
+     * 根据采购订单删除订单明细
+     * @param purchaseOrderId
+     * @return
+     */
+    int deleteByOrderId(Integer purchaseOrderId);
 }

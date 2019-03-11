@@ -39,4 +39,11 @@ public interface PurchaseOrderMapperExt extends BaseMapper<PurchaseOrder, Purcha
      */
     List<Integer> queryPurchaseOrderByCondition(PurchaseOrderBo orderBo);
 
+    /**
+     * 
+     * @param orderBo
+     * @return
+     */
+    int deleteByCriteria(PurchaseOrderBo orderBo);
+
 }
