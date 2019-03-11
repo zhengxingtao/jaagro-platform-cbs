@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @author :gavinwang
- * @date :2019/03/09
+ * @date :2019/03/11
  */
 @Data
 @NoArgsConstructor
@@ -53,27 +53,7 @@ public class PurchaseOrder implements Serializable {
     private Integer productType;
 
     /**
-     * 采购重量
-     */
-    private BigDecimal weight;
-
-    /**
-     * 采购数量
-     */
-    private Integer quantity;
-
-    /**
-     * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
-     */
-    private Integer unit;
-
-    /**
-     * 单价
-     */
-    private BigDecimal price;
-
-    /**
-     * 金额
+     * 订单总金额
      */
     private BigDecimal amount;
 

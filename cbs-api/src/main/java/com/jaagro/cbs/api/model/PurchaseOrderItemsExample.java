@@ -1,6 +1,7 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -318,52 +319,52 @@ public class PurchaseOrderItemsExample implements Serializable {
             return (Criteria) this;
         }
 
-        public Criteria andQuantityEqualTo(Integer value) {
+        public Criteria andQuantityEqualTo(BigDecimal value) {
             addCriterion("quantity =", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotEqualTo(Integer value) {
+        public Criteria andQuantityNotEqualTo(BigDecimal value) {
             addCriterion("quantity <>", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThan(Integer value) {
+        public Criteria andQuantityGreaterThan(BigDecimal value) {
             addCriterion("quantity >", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityGreaterThanOrEqualTo(Integer value) {
+        public Criteria andQuantityGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("quantity >=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThan(Integer value) {
+        public Criteria andQuantityLessThan(BigDecimal value) {
             addCriterion("quantity <", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityLessThanOrEqualTo(Integer value) {
+        public Criteria andQuantityLessThanOrEqualTo(BigDecimal value) {
             addCriterion("quantity <=", value, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityIn(List<Integer> values) {
+        public Criteria andQuantityIn(List<BigDecimal> values) {
             addCriterion("quantity in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotIn(List<Integer> values) {
+        public Criteria andQuantityNotIn(List<BigDecimal> values) {
             addCriterion("quantity not in", values, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityBetween(Integer value1, Integer value2) {
+        public Criteria andQuantityBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("quantity between", value1, value2, "quantity");
             return (Criteria) this;
         }
 
-        public Criteria andQuantityNotBetween(Integer value1, Integer value2) {
+        public Criteria andQuantityNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("quantity not between", value1, value2, "quantity");
             return (Criteria) this;
         }
@@ -485,6 +486,126 @@ public class PurchaseOrderItemsExample implements Serializable {
 
         public Criteria andEnableNotBetween(Boolean value1, Boolean value2) {
             addCriterion("enable not between", value1, value2, "enable");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIsNull() {
+            addCriterion("unit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIsNotNull() {
+            addCriterion("unit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitEqualTo(Integer value) {
+            addCriterion("unit =", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotEqualTo(Integer value) {
+            addCriterion("unit <>", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitGreaterThan(Integer value) {
+            addCriterion("unit >", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitGreaterThanOrEqualTo(Integer value) {
+            addCriterion("unit >=", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitLessThan(Integer value) {
+            addCriterion("unit <", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitLessThanOrEqualTo(Integer value) {
+            addCriterion("unit <=", value, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitIn(List<Integer> values) {
+            addCriterion("unit in", values, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotIn(List<Integer> values) {
+            addCriterion("unit not in", values, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitBetween(Integer value1, Integer value2) {
+            addCriterion("unit between", value1, value2, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitNotBetween(Integer value1, Integer value2) {
+            addCriterion("unit not between", value1, value2, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIsNull() {
+            addCriterion("price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIsNotNull() {
+            addCriterion("price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceEqualTo(BigDecimal value) {
+            addCriterion("price =", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotEqualTo(BigDecimal value) {
+            addCriterion("price <>", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThan(BigDecimal value) {
+            addCriterion("price >", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price >=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThan(BigDecimal value) {
+            addCriterion("price <", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price <=", value, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIn(List<BigDecimal> values) {
+            addCriterion("price in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotIn(List<BigDecimal> values) {
+            addCriterion("price not in", values, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price not between", value1, value2, "price");
             return (Criteria) this;
         }
     }
