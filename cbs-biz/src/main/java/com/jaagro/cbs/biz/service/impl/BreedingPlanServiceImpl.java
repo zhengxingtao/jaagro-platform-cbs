@@ -244,7 +244,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 breedingPlanDetailDto.setBreedingStock(new BigDecimal(theLatestBatchInfo.getCurrentAmount()))
                         .setFodderAmount(theLatestBatchInfo.getFodderAmount());
                 dayAge = theLatestBatchInfo.getDayAge();
-            }else {
+            } else {
                 breedingPlanDetailDto.setBreedingStock(new BigDecimal(breedingPlanDetailDto.getPlanChickenQuantity()));
                 breedingPlanDetailDto.setFodderAmount(new BigDecimal("0"));
             }
@@ -291,7 +291,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                             List<BatchCoopDaily> batchCoopDailyList = batchCoopDailyMapper.selectByExample(batchCoopDailyExample);
                             if (!CollectionUtils.isEmpty(batchCoopDailyList)) {
                                 batchCoopDto.setBreedingStock(batchCoopDailyList.get(0).getCurrentAmount());
-                            }else {
+                            } else {
                                 batchCoopDto.setBreedingStock(batchPlantCoopBo.getBreedingValue());
                             }
                             batchCoopDtoList.add(batchCoopDto);
@@ -432,24 +432,24 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     public void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto) {
         BreedingRecord breedingRecord = new BreedingRecord();
-        BeanUtils.copyProperties(createBreedingRecordDto,breedingRecord);
+        BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
         UserInfo userInfo = currentUserService.getCurrentUser();
         breedingRecord.setCreateTime(new Date())
                 .setCreateUserId(userInfo == null ? null : userInfo.getId())
                 .setEnable(Boolean.TRUE);
         breedingRecordMapper.insertSelective(breedingRecord);
-        if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())){
+        if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())) {
             List<BreedingRecordItems> breedingRecordItemsList = new ArrayList<>();
-            for (BreedingRecordItemsDto itemsDto : createBreedingRecordDto.getBreedingRecordItemsDtoList()){
+            for (BreedingRecordItemsDto itemsDto : createBreedingRecordDto.getBreedingRecordItemsDtoList()) {
                 BreedingRecordItems breedingRecordItems = new BreedingRecordItems();
-                BeanUtils.copyProperties(itemsDto,breedingRecordItems);
+                BeanUtils.copyProperties(itemsDto, breedingRecordItems);
                 breedingRecordItems.setBreedingRecordId(breedingRecord.getId())
-                                    .setCreateTime(new Date())
-                                    .setEnable(Boolean.TRUE)
-                                    .setCreateUserId(userInfo == null ? null : userInfo.getId());
+                        .setCreateTime(new Date())
+                        .setEnable(Boolean.TRUE)
+                        .setCreateUserId(userInfo == null ? null : userInfo.getId());
                 breedingRecordItemsList.add(breedingRecordItems);
             }
-            if (!CollectionUtils.isEmpty(breedingRecordItemsList)){
+            if (!CollectionUtils.isEmpty(breedingRecordItemsList)) {
                 breedingRecordItemsMapper.batchInsert(breedingRecordItemsList);
             }
         }
@@ -463,19 +463,19 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      */
     @Override
     public PageInfo<BreedingPlanDetailDto> listBreedingBatchForFarmer(BreedingBatchParamDto dto) {
-        PageHelper.startPage(dto.getPageNum(),dto.getPageSize());
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         UserInfo currentUser = currentUserService.getCurrentUser();
         Integer currentUserId = currentUser == null ? null : currentUser.getId();
-        if (currentUserId == null){
+        if (currentUserId == null) {
             throw new RuntimeException("获取当前登录用户信息失败");
         }
         GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
         Integer customerId = customerUser == null ? null : customerUser.getRelevanceId();
-        if (customerId == null){
+        if (customerId == null) {
             throw new RuntimeException("当前登录用户对应客户信息为空");
         }
         List<BreedingPlanDetailDto> breedingPlanDetailDtoList = breedingPlanMapper.listByCustomerId(customerId);
-        if (!CollectionUtils.isEmpty(breedingPlanDetailDtoList)){
+        if (!CollectionUtils.isEmpty(breedingPlanDetailDtoList)) {
             breedingPlanDetailDtoList.forEach(breedingPlanDetailDto -> generateBatchDetail(breedingPlanDetailDto));
         }
         return new PageInfo<BreedingPlanDetailDto>(breedingPlanDetailDtoList);
@@ -703,7 +703,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         if (!CollectionUtils.isEmpty(purchaseOrders)) {
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
+                BigDecimal totalPlanFeedStatistics = new BigDecimal(0);
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 if (purchaseOrder.getId() != null) {
@@ -717,7 +717,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         PurchaseOrderItems purchase = purchaseOrderItemsList.get(0);
                         for (PurchaseOrderItems purchaseOrderItems : purchaseOrderItemsList) {
                             if (purchaseOrderItems.getQuantity() != null) {
-                                totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
+                                totalPlanFeedStatistics = totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
                             }
                         }
                         if (purchase.getUnit() != null) {
