@@ -48,12 +48,12 @@ public class PurchaseOrderDto implements Serializable {
     /**
      * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
      */
-    private Integer unit;
+    private String strUnit;
 
     /**
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
-    private Integer purchaseOrderStatus;
+    private String strPurchaseOrderStatus;
 
     /**
      * 到货时间

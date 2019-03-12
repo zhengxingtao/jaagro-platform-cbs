@@ -296,7 +296,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 purchaseOrderExample.setOrderByClause("create_time DESC");
                 List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
                 for (PurchaseOrder purchaseOrder : purchaseOrderList) {
-                    BigDecimal totalPurchaseStatistics = BigDecimal.ZERO;
+                    BigDecimal totalPurchaseStatistics = new BigDecimal(0);
                     PurchaseOrderDto purchaseOrderDto = new PurchaseOrderDto();
                     BeanUtils.copyProperties(purchaseOrder, purchaseOrderDto);
                     if (ProductTypeEnum.SPROUT.getCode() == purchaseOrder.getProductType()) {
@@ -308,6 +308,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
                     }
+                    if (purchaseOrder.getPurchaseOrderStatus() != null) {
+                        purchaseOrderDto
+                                .setStrPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                    }
                     if (purchaseOrder.getId() != null) {
                         PurchaseOrderItemsExample purchaseOrderItemsExample = new PurchaseOrderItemsExample();
                         purchaseOrderItemsExample
@@ -316,11 +320,14 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                                 .andPurchaseOrderIdEqualTo(purchaseOrder.getId());
                         List<PurchaseOrderItems> purchaseOrderItems = purchaseOrderItemsMapper.selectByExample(purchaseOrderItemsExample);
                         if (!CollectionUtils.isEmpty(purchaseOrderItems)) {
+                            PurchaseOrderItems purchase = purchaseOrderItems.get(0);
                             for (PurchaseOrderItems purchaseOrderItem : purchaseOrderItems) {
                                 if (purchaseOrderItem.getQuantity() != null) {
-                                    totalPurchaseStatistics.add(purchaseOrderItem.getQuantity());
+                                    totalPurchaseStatistics = totalPurchaseStatistics.add(purchaseOrderItem.getQuantity());
                                 }
-
+                            }
+                            if (purchase.getUnit() != null) {
+                                purchaseOrderDto.setStrUnit(PackageUnitEnum.getDescByCode(purchase.getUnit()));
                             }
                         }
                         purchaseOrderDto.setQuantity(totalPurchaseStatistics);
