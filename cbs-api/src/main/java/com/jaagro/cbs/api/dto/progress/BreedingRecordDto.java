@@ -38,6 +38,10 @@ public class BreedingRecordDto implements Serializable {
   */
  private List<BreedingRecord> deathList;
  /**
+  * 养殖计划的鸡舍在某日龄上的死淘总数量
+  */
+ private Integer deathTotal;
+ /**
   * 养殖计划的鸡舍在某日龄上的喂料总次数
   */
  private Integer feedFoodTimes;

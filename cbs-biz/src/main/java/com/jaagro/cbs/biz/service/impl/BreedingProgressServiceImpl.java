@@ -266,8 +266,15 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //养殖计划的鸡舍在某日龄上的死淘记录
             FeedingFactoryBo deathBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.DEATH_AMOUNT.getCode());
-            breedingRecordDto.setDeathList(deathBo.getBreedingList());
-
+            List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
+            breedingRecordDto.setDeathList(deathAmountList);
+            if (!CollectionUtils.isEmpty(deathAmountList)){
+                Integer deathTotal = 0;
+                for (BreedingRecord breedingRecord : deathAmountList){
+                    deathTotal += breedingRecord.getBreedingValue().intValue();
+                }
+                breedingRecordDto.setDeathTotal(deathTotal);
+            }
             //养殖计划的鸡舍在某日龄上的应喂料总次数
             Integer shouldFeedFoodTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode());
             breedingRecordDto.setShouldFeedFoodTimes(shouldFeedFoodTimes);

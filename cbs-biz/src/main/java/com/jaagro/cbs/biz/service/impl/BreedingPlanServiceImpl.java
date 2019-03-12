@@ -238,6 +238,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             breedingPlanDetailDto.setStrPlanStatus(PlanStatusEnum.getDescByCode(breedingPlanDetailDto.getPlanStatus()));
             // 存栏量,今日耗料量
             BatchInfo theLatestBatchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
+
             // 日龄
             Integer dayAge = null;
             if (theLatestBatchInfo != null) {
@@ -351,7 +352,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             BreedingRecord params = new BreedingRecord();
             params.setPlanId(planId)
                     .setCoopId(coopId)
-                    .setDayAge(dayAge);
+                    .setDayAge(dayAge)
+                    .setRecordType(BreedingRecordTypeEnum.FEED_MEDICINE.getCode());
             List<BreedingRecordDto> breedingRecordDtoList = breedingRecordMapper.listByParams(params);
             if (!CollectionUtils.isEmpty(breedingRecordDtoList)) {
                 for (BreedingRecordDto breedingRecordDto : breedingRecordDtoList) {
@@ -410,7 +412,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 recordItemsDto.setCapacityUnit(CapacityUnitEnum.getTypeByCode(product.getCapacityUnit()));
                             }
                             if (coopQuantityStock != null && batchQuantityStock != null && breedingBatchDrug.getFeedVolume() != null) {
-                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0));
+                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0,BigDecimal.ROUND_UP));
                             }
                             recordItemsDtoList.add(recordItemsDto);
                         }
