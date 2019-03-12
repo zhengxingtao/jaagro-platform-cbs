@@ -432,13 +432,20 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author yj
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto) {
+        Integer planId = createBreedingRecordDto.getPlanId();
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (breedingPlan == null){
+            throw new RuntimeException("计划id="+planId+"不存在");
+        }
         BreedingRecord breedingRecord = new BreedingRecord();
         BeanUtils.copyProperties(createBreedingRecordDto,breedingRecord);
         UserInfo userInfo = currentUserService.getCurrentUser();
         breedingRecord.setCreateTime(new Date())
                 .setCreateUserId(userInfo == null ? null : userInfo.getId())
-                .setEnable(Boolean.TRUE);
+                .setEnable(Boolean.TRUE)
+                .setBatchNo(breedingPlan.getBatchNo());
         breedingRecordMapper.insertSelective(breedingRecord);
         if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())){
             List<BreedingRecordItems> breedingRecordItemsList = new ArrayList<>();
