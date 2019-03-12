@@ -216,7 +216,7 @@ public class BreedingFarmerController {
             }
         }
         pageInfo.setList(technicalInquiriesVos);
-        return BaseResponse.successInstance(technicalInquiriesVos);
+        return BaseResponse.successInstance(pageInfo);
     }
 
     @PostMapping("/listFarmerMessage")
