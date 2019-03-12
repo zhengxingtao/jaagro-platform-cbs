@@ -45,7 +45,7 @@ public interface BreedingBrainService {
      * @param planId
      * @return
      */
-    List<PurchaseOrder> calculateDrugById(Integer planId);
+    List<PurchaseOrder> calculateDrugPurchaseOrderById(Integer planId);
 
 
 }

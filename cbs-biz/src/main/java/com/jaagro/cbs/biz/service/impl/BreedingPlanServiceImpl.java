@@ -722,7 +722,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         }
                         if (purchase.getUnit() != null) {
                             returnPurchaseOrderDto
-                                    .setUnit(OrderUnitEnum.getDescByCode(purchase.getUnit()));
+                                    .setUnit(PackageUnitEnum.getDescByCode(purchase.getUnit()));
                         }
                     }
                 }
