@@ -665,10 +665,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal breedingStock = null;
         BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null) {
-            breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            if (accumulativeDeadAmount != null) {
+                breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            } else {
+                breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity());
+            }
         }
         if (breedingStock != null) {
-            totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
+            if (accumulativeSaleAmount != null) {
+                totalBreedingStock = totalBreedingStock.subtract(accumulativeSaleAmount);
+            }
         }
         if (totalBreedingStock != null) {
             returnBreedingPlanDto.setPlanChickenQuantity(totalBreedingStock.intValue());
