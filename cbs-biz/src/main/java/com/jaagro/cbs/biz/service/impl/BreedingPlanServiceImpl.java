@@ -412,7 +412,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 recordItemsDto.setCapacityUnit(CapacityUnitEnum.getTypeByCode(product.getCapacityUnit()));
                             }
                             if (coopQuantityStock != null && batchQuantityStock != null && breedingBatchDrug.getFeedVolume() != null) {
-                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0,BigDecimal.ROUND_UP));
+                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0, BigDecimal.ROUND_UP));
                             }
                             recordItemsDtoList.add(recordItemsDto);
                         }
@@ -436,8 +436,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     public void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto) {
         Integer planId = createBreedingRecordDto.getPlanId();
         BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-        if (breedingPlan == null){
-            throw new RuntimeException("计划id="+planId+"不存在");
+        if (breedingPlan == null) {
+            throw new RuntimeException("计划id=" + planId + "不存在");
         }
         BreedingRecord breedingRecord = new BreedingRecord();
         BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
@@ -665,7 +665,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal breedingStock = null;
         BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null) {
-            breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
         }
         if (breedingStock != null) {
             totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
