@@ -478,7 +478,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (!CollectionUtils.isEmpty(breedingPlanDetailDtoList)){
             breedingPlanDetailDtoList.forEach(breedingPlanDetailDto -> generateBatchDetail(breedingPlanDetailDto));
         }
-        return new PageInfo<BreedingPlanDetailDto>(breedingPlanDetailDtoList);
+        return new PageInfo<>(breedingPlanDetailDtoList);
     }
 
     private void filterBreedingBatchDrug(List<BreedingBatchDrug> breedingBatchDrugList, List<BreedingRecordItemsDto> recordItemsDtoList) {
@@ -515,7 +515,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     dayAgeDtoList.add(dayAgeDto);
                 }
             } else {
-                for (int i = dayAge - (showForApp - 1); i < dayAge; i++) {
+                for (int i = dayAge - (showForApp - 1); i <= dayAge; i++) {
                     DayAgeDto dayAgeDto = new DayAgeDto();
                     dayAgeDto.setDayAge(i);
                     dayAgeDto.setStrDate(sdf.format(DateUtils.addDays(now, i - dayAge)));
