@@ -262,7 +262,7 @@ public class BreedingFarmerController {
      */
     @PostMapping("/listBreedingBatchForFarmer")
     @ApiOperation("养殖页上鸡计划列表")
-    public BaseResponse listBreedingBatchForFarmer(@RequestBody BreedingBatchParamDto dto) {
+    public BaseResponse listBreedingBatchForFarmer(@RequestBody @Validated BreedingBatchParamDto dto) {
         log.info("O listBreedingBatchForFarmer params={}", dto);
         return BaseResponse.successInstance(breedingPlanService.listBreedingBatchForFarmer(dto));
     }
