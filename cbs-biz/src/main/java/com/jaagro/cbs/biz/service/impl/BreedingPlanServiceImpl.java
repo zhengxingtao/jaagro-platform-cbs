@@ -238,6 +238,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             breedingPlanDetailDto.setStrPlanStatus(PlanStatusEnum.getDescByCode(breedingPlanDetailDto.getPlanStatus()));
             // 存栏量,今日耗料量
             BatchInfo theLatestBatchInfo = batchInfoMapper.getTheLatestBatchInfo(planId);
+
             // 日龄
             Integer dayAge = null;
             if (theLatestBatchInfo != null) {
@@ -351,7 +352,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             BreedingRecord params = new BreedingRecord();
             params.setPlanId(planId)
                     .setCoopId(coopId)
-                    .setDayAge(dayAge);
+                    .setDayAge(dayAge)
+                    .setRecordType(BreedingRecordTypeEnum.FEED_MEDICINE.getCode());
             List<BreedingRecordDto> breedingRecordDtoList = breedingRecordMapper.listByParams(params);
             if (!CollectionUtils.isEmpty(breedingRecordDtoList)) {
                 for (BreedingRecordDto breedingRecordDto : breedingRecordDtoList) {
@@ -410,7 +412,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 recordItemsDto.setCapacityUnit(CapacityUnitEnum.getTypeByCode(product.getCapacityUnit()));
                             }
                             if (coopQuantityStock != null && batchQuantityStock != null && breedingBatchDrug.getFeedVolume() != null) {
-                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0));
+                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0,BigDecimal.ROUND_UP));
                             }
                             recordItemsDtoList.add(recordItemsDto);
                         }
@@ -430,13 +432,20 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author yj
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto) {
+        Integer planId = createBreedingRecordDto.getPlanId();
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        if (breedingPlan == null){
+            throw new RuntimeException("计划id="+planId+"不存在");
+        }
         BreedingRecord breedingRecord = new BreedingRecord();
         BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
         UserInfo userInfo = currentUserService.getCurrentUser();
         breedingRecord.setCreateTime(new Date())
                 .setCreateUserId(userInfo == null ? null : userInfo.getId())
-                .setEnable(Boolean.TRUE);
+                .setEnable(Boolean.TRUE)
+                .setBatchNo(breedingPlan.getBatchNo());
         breedingRecordMapper.insertSelective(breedingRecord);
         if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())) {
             List<BreedingRecordItems> breedingRecordItemsList = new ArrayList<>();
@@ -478,7 +487,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (!CollectionUtils.isEmpty(breedingPlanDetailDtoList)) {
             breedingPlanDetailDtoList.forEach(breedingPlanDetailDto -> generateBatchDetail(breedingPlanDetailDto));
         }
-        return new PageInfo<BreedingPlanDetailDto>(breedingPlanDetailDtoList);
+        return new PageInfo<>(breedingPlanDetailDtoList);
     }
 
     private void filterBreedingBatchDrug(List<BreedingBatchDrug> breedingBatchDrugList, List<BreedingRecordItemsDto> recordItemsDtoList) {
@@ -515,7 +524,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     dayAgeDtoList.add(dayAgeDto);
                 }
             } else {
-                for (int i = dayAge - (showForApp - 1); i < dayAge; i++) {
+                for (int i = dayAge - (showForApp - 1); i <= dayAge; i++) {
                     DayAgeDto dayAgeDto = new DayAgeDto();
                     dayAgeDto.setDayAge(i);
                     dayAgeDto.setStrDate(sdf.format(DateUtils.addDays(now, i - dayAge)));
