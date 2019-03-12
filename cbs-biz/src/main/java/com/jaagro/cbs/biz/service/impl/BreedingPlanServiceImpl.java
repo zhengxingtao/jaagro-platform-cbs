@@ -412,7 +412,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 recordItemsDto.setCapacityUnit(CapacityUnitEnum.getTypeByCode(product.getCapacityUnit()));
                             }
                             if (coopQuantityStock != null && batchQuantityStock != null && breedingBatchDrug.getFeedVolume() != null) {
-                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0, BigDecimal.ROUND_UP));
+                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0,BigDecimal.ROUND_UP));
                             }
                             recordItemsDtoList.add(recordItemsDto);
                         }
@@ -665,7 +665,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         BigDecimal breedingStock = null;
         BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null) {
-            breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            breedingStock = new BigDecimal(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
         }
         if (breedingStock != null) {
             totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
@@ -712,7 +712,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<PurchaseOrder> purchaseOrders = purchaseOrderMapper.selectByExample(purchaseOrderExample);
         if (!CollectionUtils.isEmpty(purchaseOrders)) {
             for (PurchaseOrder purchaseOrder : purchaseOrders) {
-                BigDecimal totalPlanFeedStatistics = new BigDecimal(0);
+                BigDecimal totalPlanFeedStatistics = BigDecimal.ZERO;
                 ReturnPurchaseOrderDto returnPurchaseOrderDto = new ReturnPurchaseOrderDto();
                 BeanUtils.copyProperties(purchaseOrder, returnPurchaseOrderDto);
                 if (purchaseOrder.getId() != null) {
@@ -726,7 +726,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         PurchaseOrderItems purchase = purchaseOrderItemsList.get(0);
                         for (PurchaseOrderItems purchaseOrderItems : purchaseOrderItemsList) {
                             if (purchaseOrderItems.getQuantity() != null) {
-                                totalPlanFeedStatistics = totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
+                                totalPlanFeedStatistics.add(purchaseOrderItems.getQuantity());
                             }
                         }
                         if (purchase.getUnit() != null) {
