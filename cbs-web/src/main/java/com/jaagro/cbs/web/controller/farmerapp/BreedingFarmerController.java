@@ -254,21 +254,17 @@ public class BreedingFarmerController {
         return BaseResponse.successInstance(pageInfo);
     }
     /**
-     * 批次详情
+     * 养殖页上鸡计划列表
      *
-     * @param planId
+     * @param dto
      * @return
      * @author yj
      */
-    @PostMapping("/getBatchDetail/{planId}")
-    @ApiOperation("批次详情")
-    public BaseResponse getBatchDetail(@PathVariable("planId") Integer planId) {
-        log.info("O getBatchDetail planId={}", planId);
-        BreedingPlanDetailDto breedingPlanDetailDto = breedingPlanService.getBatchDetail(planId);
-        if (breedingPlanDetailDto != null) {
-            return BaseResponse.successInstance(breedingPlanDetailDto);
-        }
-        return BaseResponse.queryDataEmpty();
+    @PostMapping("/listBreedingBatchForFarmer")
+    @ApiOperation("养殖页上鸡计划列表")
+    public BaseResponse listBreedingBatchForFarmer(@RequestBody @Validated BreedingBatchParamDto dto) {
+        log.info("O listBreedingBatchForFarmer params={}", dto);
+        return BaseResponse.successInstance(breedingPlanService.listBreedingBatchForFarmer(dto));
     }
 
     /**
@@ -331,7 +327,7 @@ public class BreedingFarmerController {
     }
 
     /**
-     * 上传养殖记录()
+     * 上传养殖记录
      * @author yj
      * @param createBreedingRecordDto
      * @return

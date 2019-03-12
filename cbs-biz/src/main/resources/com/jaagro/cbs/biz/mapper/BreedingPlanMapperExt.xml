@@ -53,6 +53,10 @@
         from breeding_plan
         where customer_id = #{customerId,jdbcType=INTEGER}
     </select>
-
+    <select id="listByCustomerId" resultType="com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto">
+        SELECT <include refid="Base_Column_List"/>
+        FROM breeding_plan
+        WHERE customer_id = #{customerId,jdbcType=INTEGER}
+    </select>
 
 </mapper>
