@@ -122,5 +122,8 @@
         <if test="dayAge != null">
             AND day_age = #{dayAge,jdbcType=INTEGER}
         </if>
+        <if test="recordType != null">
+            AND record_type = #{recordType,jdbcType=INTEGER}
+        </if>
     </select>
 </mapper>

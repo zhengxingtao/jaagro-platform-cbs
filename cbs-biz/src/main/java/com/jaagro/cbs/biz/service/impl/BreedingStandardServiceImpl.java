@@ -56,7 +56,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
             breedingStandardMapper.insertSelective(breedingStandard);
 
             int standardId = breedingStandard.getId();
-
             for (BreedingStandardParameter breedingStandardParameter : dto.getStandardParameterDos()) {
                 breedingStandardParameter.setStandardId(standardId)
                         .setStatus(1)
@@ -66,6 +65,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.insertSelective(breedingStandardParameter);
 
             }
+
             log.info("O BreedingStandardServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
         } catch (Exception e) {
             log.error("R BreedingStandardServiceImpl.createBreedingTemplate  error:" + e);

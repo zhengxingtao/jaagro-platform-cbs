@@ -2,10 +2,7 @@ package com.jaagro.cbs.api.service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.farmer.BreedingBatchParamListDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingRecordItemsDto;
-import com.jaagro.cbs.api.dto.farmer.CreateBreedingRecordDto;
+import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.plan.*;
 
 import java.util.List;
@@ -94,14 +91,6 @@ public interface BreedingPlanService {
      long getDayAge(Integer planId) throws Exception;
 
     /**
-     * 批次详情(农户app)
-     * @author yj
-     * @param planId
-     * @return
-     */
-    BreedingPlanDetailDto getBatchDetail(Integer planId);
-
-    /**
      * 养殖过程批次参数
      * @author yj
      * @param planId
@@ -128,4 +117,11 @@ public interface BreedingPlanService {
      * @param createBreedingRecordDto
      */
     void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto);
+
+    /**
+     * 养殖页上鸡计划列表查询
+     * @param dto
+     * @return
+     */
+    PageInfo<BreedingPlanDetailDto> listBreedingBatchForFarmer(BreedingBatchParamDto dto);
 }

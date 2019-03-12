@@ -12,8 +12,9 @@
         insert into breeding_record_items (breeding_record_id, product_id, breeding_value,
       breeding_time, enable, create_time,
       create_user_id)
+        values
       <foreach collection="breedingRecordItemsList" item="item" separator=",">
-          values (#{item.breedingRecordId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.breedingValue,jdbcType=DECIMAL},
+           (#{item.breedingRecordId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.breedingValue,jdbcType=DECIMAL},
           #{item.breedingTime,jdbcType=TIMESTAMP}, #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP},
           #{item.createUserId,jdbcType=INTEGER})
       </foreach>

@@ -162,14 +162,18 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 List<DeviceValueHistory> deviceValueHistoryDos = new ArrayList<DeviceValueHistory>();
                 if (isSameDay) {
                     //鸡舍绑定的设备采集上来的最新值
-                    DeviceValueExample deviceValueExample = new DeviceValueExample();
-                    deviceValueExample.createCriteria().andDeviceIdIn(new ArrayList<>(deviceIds));
-                    deviceValueDos = deviceValueMapper.selectByExample(deviceValueExample);
+                    if (!CollectionUtils.isEmpty(deviceIds)){
+                        DeviceValueExample deviceValueExample = new DeviceValueExample();
+                        deviceValueExample.createCriteria().andDeviceIdIn(new ArrayList<>(deviceIds));
+                        deviceValueDos = deviceValueMapper.selectByExample(deviceValueExample);
+                    }
                 } else {
                     //鸡舍绑定的设备历史值
-                    for (Integer deviceId : deviceIds) {
-                        DeviceValueHistory deviceValueHistory = deviceValueHistoryMapper.getLimitOneRecordByDeviceId(deviceId, strDate);
-                        deviceValueHistoryDos.add(deviceValueHistory);
+                    if (!CollectionUtils.isEmpty(deviceIds)){
+                        for (Integer deviceId : deviceIds) {
+                            DeviceValueHistory deviceValueHistory = deviceValueHistoryMapper.getLimitOneRecordByDeviceId(deviceId, strDate);
+                            deviceValueHistoryDos.add(deviceValueHistory);
+                        }
                     }
                 }
                 for (BreedingBatchParameter breedingBatchParameterDo : breedingBatchParameterDos) {
@@ -262,16 +266,22 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
             //养殖计划的鸡舍在某日龄上的死淘记录
             FeedingFactoryBo deathBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.DEATH_AMOUNT.getCode());
-            breedingRecordDto.setFeedMedicineList(deathBo.getBreedingList());
-            breedingRecordDto.setFeedMedicineTimes(deathBo.getFeedingTimes());
-
+            List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
+            breedingRecordDto.setDeathList(deathAmountList);
+            if (!CollectionUtils.isEmpty(deathAmountList)){
+                Integer deathTotal = 0;
+                for (BreedingRecord breedingRecord : deathAmountList){
+                    deathTotal += breedingRecord.getBreedingValue().intValue();
+                }
+                breedingRecordDto.setDeathTotal(deathTotal);
+            }
             //养殖计划的鸡舍在某日龄上的应喂料总次数
             Integer shouldFeedFoodTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode());
             breedingRecordDto.setShouldFeedFoodTimes(shouldFeedFoodTimes);
 
             //养殖计划的鸡舍在某日龄上的应喂水总次数
-            Integer shouldFeedWaterTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode());
-            breedingRecordDto.setShouldFeedFoodTimes(shouldFeedWaterTimes);
+            Integer shouldFeedWaterTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_WATER_NUM.getCode());
+            breedingRecordDto.setShouldFeedWaterTimes(shouldFeedWaterTimes);
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingRecordsById error:" + ex);
         }
