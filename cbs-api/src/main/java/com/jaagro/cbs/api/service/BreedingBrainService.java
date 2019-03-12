@@ -41,7 +41,7 @@ public interface BreedingBrainService {
     List<PurchaseOrder> calculatePhaseFourFoodWeightById(Integer planId);
 
     /**
-     *
+     * 根据养殖计划Id生成药品采购订单
      * @param planId
      * @return
      */
