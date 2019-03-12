@@ -2,6 +2,7 @@ package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
 
+import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
@@ -45,4 +46,11 @@ public interface BreedingPlanMapperExt extends BaseMapper<BreedingPlan, Breeding
      * @return
      */
     List<Integer> listBreedingPlanIdByCustomerId(@Param("customerId") Integer customerId);
+
+    /**
+     * 根据客户id查询
+     * @param customerId
+     * @return
+     */
+    List<BreedingPlanDetailDto> listByCustomerId(@Param("customerId") Integer customerId);
 }
