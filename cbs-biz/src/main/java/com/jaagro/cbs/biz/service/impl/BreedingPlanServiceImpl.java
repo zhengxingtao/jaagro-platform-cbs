@@ -11,7 +11,6 @@ import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
 import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
 import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
-import com.jaagro.cbs.api.dto.farmer.ReturnBreedingBatchDetailsDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
@@ -676,10 +675,13 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
         }
         if (breedingStock != null) {
-            returnBreedingPlanDto.setPlanChickenQuantity(breedingStock.intValue());
+            returnBreedingPlanDto.setBreedingStock(breedingStock.intValue());
+        }
+        if (breedingPlan.getPlanChickenQuantity() != null) {
+            returnBreedingPlanDto.setPlanChickenQuantity(breedingPlan.getPlanChickenQuantity());
         }
         //养殖场信息
-        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
+        List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(breedingPlan.getId());
         returnBreedingPlanDto.setPlants(plants);
         //养殖户信息
         CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
@@ -966,7 +968,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     if (paramValue != null && breedingStock != null) {
                         meat = paramValue.multiply(breedingStock);
                     }
-                    if (meat != null) {
+                    if (meat != null && accumulativeFeed != null) {
                         BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
                         returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);
                     }
