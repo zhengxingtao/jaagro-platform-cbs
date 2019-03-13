@@ -170,10 +170,16 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<ReturnBreedingPlanDto> planDtoList = breedingPlanMapper.listBreedingPlan(dto);
         for (ReturnBreedingPlanDto returnBreedingPlanDto : planDtoList) {
             //填充养殖户信息
-            ShowCustomerDto customer = customerClientService.getShowCustomerById(returnBreedingPlanDto.getCustomerId());
-            if (customer != null) {
-                returnBreedingPlanDto
-                        .setCustomerName(customer.getCustomerName());
+            if (returnBreedingPlanDto.getCustomerId() != null) {
+                ShowCustomerDto customer = customerClientService.getShowCustomerById(returnBreedingPlanDto.getCustomerId());
+                if (customer != null && customer.getCustomerName() != null) {
+                    returnBreedingPlanDto
+                            .setCustomerName(customer.getCustomerName());
+                }
+                CustomerContactsReturnDto customerContactByCustomer = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
+                if (customerContactByCustomer != null && customerContactByCustomer.getPhone() != null) {
+                    returnBreedingPlanDto.setCustomerPhone(customerContactByCustomer.getPhone());
+                }
             }
             //填充养殖场信息
             List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
@@ -430,7 +436,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             if (breedingPlan == null) {
                 throw new RuntimeException("计划id=" + planId + "不存在");
             }
-            int dayAge = (int)getDayAge(planId);
+            int dayAge = (int) getDayAge(planId);
             BreedingRecord breedingRecord = new BreedingRecord();
             BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
             UserInfo userInfo = currentUserService.getCurrentUser();
@@ -455,8 +461,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     breedingRecordItemsMapper.batchInsert(breedingRecordItemsList);
                 }
             }
-        }catch (Exception ex){
-            log.error("O uploadBreedingRecord error,param="+createBreedingRecordDto,ex);
+        } catch (Exception ex) {
+            log.error("O uploadBreedingRecord error,param=" + createBreedingRecordDto, ex);
             throw new RuntimeException("上传养殖记录失败");
         }
 
