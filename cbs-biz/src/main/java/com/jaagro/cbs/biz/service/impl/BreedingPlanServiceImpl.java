@@ -7,6 +7,7 @@ import com.jaagro.cbs.api.constant.ContractStatus;
 import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
+import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
@@ -166,11 +167,10 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         List<ReturnBreedingPlanDto> planDtoList = breedingPlanMapper.listBreedingPlan(dto);
         for (ReturnBreedingPlanDto returnBreedingPlanDto : planDtoList) {
             //填充养殖户信息
-            CustomerContactsReturnDto contactsReturnDto = customerClientService.getCustomerContactByCustomerId(returnBreedingPlanDto.getCustomerId());
-            if (contactsReturnDto != null) {
+            ShowCustomerDto customer = customerClientService.getShowCustomerById(returnBreedingPlanDto.getCustomerId());
+            if (customer != null) {
                 returnBreedingPlanDto
-                        .setCustomerName(contactsReturnDto.getContact())
-                        .setCustomerPhone(contactsReturnDto.getPhone());
+                        .setCustomerName(customer.getCustomerName());
             }
             //填充养殖场信息
             List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());

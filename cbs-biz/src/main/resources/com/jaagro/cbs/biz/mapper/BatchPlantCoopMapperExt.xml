@@ -74,4 +74,5 @@
         WHERE bpc.plan_id = #{planId,jdbcType=INTEGER}
         AND bpc.coop_id is not null;
     </select>
+
 </mapper>
