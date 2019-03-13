@@ -663,15 +663,20 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         //累计所有的出栏量
         BigDecimal accumulativeSaleAmount = batchInfoMapper.accumulativeSaleAmount(planId);
         BigDecimal breedingStock = null;
-        BigDecimal totalBreedingStock = null;
         if (breedingPlan.getPlanChickenQuantity() != null) {
-            breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            if (accumulativeDeadAmount != null) {
+                breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity()).subtract(accumulativeDeadAmount);
+            } else {
+                breedingStock = BigDecimal.valueOf(breedingPlan.getPlanChickenQuantity());
+            }
         }
         if (breedingStock != null) {
-            totalBreedingStock = breedingStock.subtract(accumulativeSaleAmount);
+            if (accumulativeSaleAmount != null) {
+                breedingStock = breedingStock.subtract(accumulativeSaleAmount);
+            }
         }
-        if (totalBreedingStock != null) {
-            returnBreedingPlanDto.setPlanChickenQuantity(totalBreedingStock.intValue());
+        if (breedingStock != null) {
+            returnBreedingPlanDto.setPlanChickenQuantity(breedingStock.intValue());
         }
         //养殖场信息
         List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
