@@ -26,7 +26,7 @@
         create_user_id, modify_time, modify_user_id
         )
         values
-        <foreach collection="dailyList" item="item">
+        <foreach collection="dailyList" item="item" separator=",">
             (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.coopId,jdbcType=INTEGER},
             #{item.dayAge,jdbcType=INTEGER}, #{item.startAmount,jdbcType=INTEGER},
             #{item.currentAmount,jdbcType=INTEGER},

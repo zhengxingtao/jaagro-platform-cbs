@@ -28,11 +28,6 @@ public class CreateBreedingRecordDto implements Serializable{
     private Integer coopId;
 
     /**
-     * 日龄
-     */
-    private Integer dayAge;
-
-    /**
      * 喂养类型（1-投料 2-喂药 3-通风 4-死淘 5-喂水。。。。）
      */
     private Integer recordType;
@@ -51,6 +46,11 @@ public class CreateBreedingRecordDto implements Serializable{
      * 备注
      */
     private String notes;
+
+    /**
+     * 饲喂时间
+     */
+    private Date breedingTime;
 
     /**
      * 喂料明细
