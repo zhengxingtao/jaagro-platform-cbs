@@ -8,9 +8,6 @@ import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ListEmployeeDto;
 import com.jaagro.cbs.api.dto.farmer.*;
-import com.jaagro.cbs.api.dto.farmer.BatchCoopDto;
-import com.jaagro.cbs.api.dto.farmer.BatchPlantDto;
-import com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto;
 import com.jaagro.cbs.api.dto.plan.*;
 import com.jaagro.cbs.api.dto.progress.BreedingBatchParamTrackingDto;
 import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
@@ -359,6 +356,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 breedingRecordItemsDto.setProductId(breedingRecordItems.getProductId());
                                 breedingRecordItemsDto.setProductName(product.getProductName());
                             }
+                            recordItemsDtoList.add(breedingRecordItemsDto);
                         }
                     }
                 }
@@ -402,7 +400,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                                 recordItemsDto.setCapacityUnit(CapacityUnitEnum.getTypeByCode(product.getCapacityUnit()));
                             }
                             if (coopQuantityStock != null && batchQuantityStock != null && breedingBatchDrug.getFeedVolume() != null) {
-                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0, BigDecimal.ROUND_UP));
+                                recordItemsDto.setBreedingValue(new BigDecimal(coopQuantityStock).divide(new BigDecimal(batchQuantityStock), 6, BigDecimal.ROUND_HALF_UP).multiply(breedingBatchDrug.getFeedVolume()).setScale(0, BigDecimal.ROUND_HALF_UP));
                             }
                             recordItemsDtoList.add(recordItemsDto);
                         }
@@ -430,7 +428,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             if (breedingPlan == null) {
                 throw new RuntimeException("计划id=" + planId + "不存在");
             }
-            int dayAge = (int)getDayAge(planId);
+            int dayAge = (int) getDayAge(planId);
             BreedingRecord breedingRecord = new BreedingRecord();
             BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
             UserInfo userInfo = currentUserService.getCurrentUser();
@@ -455,8 +453,8 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                     breedingRecordItemsMapper.batchInsert(breedingRecordItemsList);
                 }
             }
-        }catch (Exception ex){
-            log.error("O uploadBreedingRecord error,param="+createBreedingRecordDto,ex);
+        } catch (Exception ex) {
+            log.error("O uploadBreedingRecord error,param=" + createBreedingRecordDto, ex);
             throw new RuntimeException("上传养殖记录失败");
         }
 

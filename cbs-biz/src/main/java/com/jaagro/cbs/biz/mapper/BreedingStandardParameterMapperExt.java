@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,15 @@ public interface BreedingStandardParameterMapperExt extends BaseMapper<BreedingS
      */
     void deleteByStandardId(Integer id);
 
+    /**
+     * 批量插入
+     * @param parameterList
+     */
+    void batchInsert(@Param("parameterList") List<BreedingStandardParameter> parameterList);
+
+    /**
+     * 批量更新
+     * @param parameterList
+     */
+    void batchUpdateByPrimaryKeySelective(@Param("parameterList") List<BreedingStandardParameter> parameterList);
 }

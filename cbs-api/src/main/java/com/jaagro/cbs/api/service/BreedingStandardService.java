@@ -1,6 +1,7 @@
 package com.jaagro.cbs.api.service;
 
 
+import com.jaagro.cbs.api.dto.standard.BreedingParameterListDto;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
 import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
 import com.jaagro.cbs.api.model.BreedingStandard;
@@ -20,7 +21,7 @@ public interface BreedingStandardService {
      * @param dto
      * @return
      */
-    Boolean createBreedingTemplate(CreateBreedingStandardDto dto);
+    Integer createBreedingTemplate(CreateBreedingStandardDto dto);
 
     /**
      * 修改养殖模版与参数
@@ -28,7 +29,7 @@ public interface BreedingStandardService {
      * @param dto
      * @return
      */
-    Boolean updateBreedingTemplate(CreateBreedingStandardDto dto);
+    Integer updateBreedingTemplate(CreateBreedingStandardDto dto);
 
     /**
      * 根据养殖模板ID获取养殖模板详情
@@ -47,10 +48,9 @@ public interface BreedingStandardService {
     List<BreedingStandard> listAllBreedingStandard();
 
     /**
-     * 根据标准模板的ID获取该模板所有的参数
-     * @param standardId
-     * @return
+     * 创建或者更新养殖模板参数
+     * @param dto
      */
-    //List<BreedingStandardParameterDto> getStandardParameterById(Integer standardId);
+    void saveOrUpdateParameter(BreedingParameterListDto dto);
 
 }
