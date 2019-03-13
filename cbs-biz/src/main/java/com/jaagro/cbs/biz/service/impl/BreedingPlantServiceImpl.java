@@ -195,6 +195,11 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
                 //填充养殖场鸡舍数量
                 Integer coopCount = getCoopsCountByPlant(plant.getId());
                 plantDto.setCoopCount(coopCount);
+                //查询鸡舍信息
+                if (plant.getId() != null) {
+                    List<ReturnCoopDto> returnCoopDtos = listCoopByPlantId(plant.getId());
+                    plantDto.setReturnCoopDtos(returnCoopDtos);
+                }
                 returnPlantDtoList.add(plantDto);
             }
         }
@@ -285,4 +290,36 @@ public class BreedingPlantServiceImpl implements BreedingPlantService {
         return returnCoopDtoList;
     }
 
+
+    /**
+     * 通过养殖户id获取养殖场列表
+     *
+     * @param
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public List<ReturnPlantDto> listPlantAndCoopByPlantIds(List<Integer> planIds) {
+
+        PlantExample plantExample = new PlantExample();
+        plantExample.createCriteria()
+                .andIdIn(planIds)
+                .andEnableEqualTo(true);
+        plantExample.setOrderByClause("create_time desc");
+        List<Plant> plants = plantMapper.selectByExample(plantExample);
+        List<ReturnPlantDto> returnPlantDtoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(plants)) {
+            for (Plant plant : plants) {
+                ReturnPlantDto plantDto = new ReturnPlantDto();
+                BeanUtils.copyProperties(plant, plantDto);
+                //查询鸡舍信息
+                if (plant.getId() != null) {
+                    List<ReturnCoopDto> returnCoopDtos = listCoopByPlantId(plant.getId());
+                    plantDto.setReturnCoopDtos(returnCoopDtos);
+                }
+                returnPlantDtoList.add(plantDto);
+            }
+        }
+        return returnPlantDtoList;
+    }
 }

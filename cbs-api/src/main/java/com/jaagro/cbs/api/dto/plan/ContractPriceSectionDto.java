@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
+ * 回收价格区间
  * @author yj
  * @date 2019/2/25 15:25
  */

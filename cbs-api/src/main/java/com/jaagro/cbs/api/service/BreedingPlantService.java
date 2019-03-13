@@ -76,4 +76,6 @@ public interface BreedingPlantService {
      * @param coopId
      */
     void deleteCoop(Integer coopId);
+
+    List<ReturnPlantDto> listPlantAndCoopByPlantIds(List<Integer> planIds);
 }

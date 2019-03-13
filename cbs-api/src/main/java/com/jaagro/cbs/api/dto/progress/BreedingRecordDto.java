@@ -34,6 +34,14 @@ public class BreedingRecordDto implements Serializable {
   */
  private List<BreedingRecord> feedMedicineList;
  /**
+  * 养殖计划的鸡舍在某日龄上的死淘记录
+  */
+ private List<BreedingRecord> deathList;
+ /**
+  * 养殖计划的鸡舍在某日龄上的死淘总数量
+  */
+ private Integer deathTotal;
+ /**
   * 养殖计划的鸡舍在某日龄上的喂料总次数
   */
  private Integer feedFoodTimes;
@@ -53,7 +61,12 @@ public class BreedingRecordDto implements Serializable {
   * 养殖计划的鸡舍在某日龄上的喂药总量
   */
  private BigDecimal feedMedicineWeight;
-
-
-
+ /**
+  * 养殖计划的鸡舍在某日龄上的应喂料总次数
+  */
+ private Integer shouldFeedFoodTimes;
+ /**
+  * 养殖计划的鸡舍在某日龄上的应喂水总次数
+  */
+ private Integer shouldFeedWaterTimes;
 }

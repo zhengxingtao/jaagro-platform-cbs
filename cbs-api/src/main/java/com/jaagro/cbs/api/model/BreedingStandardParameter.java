@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author :gaoxin
+ * @date :2019/03/11
  */
 @Data
 @NoArgsConstructor
@@ -38,7 +38,7 @@ public class BreedingStandardParameter implements Serializable {
     private Integer dayAge;
 
     /**
-     * 参数类型（10-温度,11-湿度,12-光照强度,13-光照时间,14-氮气,15-二氧化碳,16-通风,17-负压值,20-饲喂(次/日),21-饲喂(克/日),22-体重(克/只/日),23-死淘(只),24-药品/疫苗)
+     * 参数类型（10-温度,11-湿度,12-光照强度,13-光照时间,14-氮气,15-二氧化碳,16-通风,17-负压值,20-喂料(次/日),21-喂水(次/日),22-饲喂(克/日),23-体重(克/只/日),24-死淘(只),25-药品/疫苗)
      */
     private Integer paramType;
 
@@ -58,7 +58,7 @@ public class BreedingStandardParameter implements Serializable {
     private BigDecimal upperLimit;
 
     /**
-     * 单位(摄氏度℃｜百分比%｜百万分比ppm｜立方英尺每分钟cfm｜小时H｜勒克斯lux｜只,｜次/日｜克/只/日)
+     * 单位(摄氏度℃｜百分比%｜百万分比ppm｜立方英尺每分钟cfm｜小时H｜勒克斯lux｜只,｜次/日｜克/只/日|只/M/平方)
      */
     private String unit;
 

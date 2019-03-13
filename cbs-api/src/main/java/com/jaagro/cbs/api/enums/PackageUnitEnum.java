@@ -1,30 +1,32 @@
 package com.jaagro.cbs.api.enums;
 
 /**
- * @author @Gao.
- * 单位
+ * @author gavin
+ * 产品product的包装单位
  */
 
-public enum UnitEnum {
+public enum PackageUnitEnum {
     /**
-     * 单位
+     * 包装单位(1-瓶,2-袋,3-只,4-桶,5-盒,6-吨)
      */
-    KG(1, "KG", "千克"),
-    AN(2, "AN", "只"),
-    ONE(3, "ONE", "个"),
-    TONS(4, "TONS", "吨");
+    BOTTLE(1, "BOTTLE", "瓶"),
+    BAG(2, "BAG", "袋"),
+    PIECE(3, "PIECE", "只"),
+    BARREL(4, "BARREL", "桶"),
+    BOX(5, "BOX", "盒"),
+    TONS(6, "TONS", "吨");
     private int code;
     private String type;
     private String desc;
 
-    UnitEnum(int code, String type, String desc) {
+    PackageUnitEnum(int code, String type, String desc) {
         this.code = code;
         this.type = type;
         this.desc = desc;
     }
 
     public static String getDescByCode(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (PackageUnitEnum type : PackageUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getDesc();
             }
@@ -33,7 +35,7 @@ public enum UnitEnum {
     }
 
     public static String getTypeByCode(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (PackageUnitEnum type : PackageUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type.getType();
             }
@@ -42,7 +44,7 @@ public enum UnitEnum {
     }
 
     public static Integer getCode(String desc) {
-        for (UnitEnum type : UnitEnum.values()) {
+        for (PackageUnitEnum type : PackageUnitEnum.values()) {
             if (type.getDesc().equalsIgnoreCase(desc)) {
                 return type.getCode();
             }
@@ -50,8 +52,8 @@ public enum UnitEnum {
         return null;
     }
 
-    public static UnitEnum toEnum(int code) {
-        for (UnitEnum type : UnitEnum.values()) {
+    public static PackageUnitEnum toEnum(int code) {
+        for (PackageUnitEnum type : PackageUnitEnum.values()) {
             if (type.getCode() == code) {
                 return type;
             }

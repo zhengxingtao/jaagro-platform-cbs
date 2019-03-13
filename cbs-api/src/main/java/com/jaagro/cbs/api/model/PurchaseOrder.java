@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
- * @date :2019/02/28
+ * @author :gaoxin
+ * @date :2019/03/11
  */
 @Data
 @NoArgsConstructor
@@ -38,11 +38,6 @@ public class PurchaseOrder implements Serializable {
     private Integer signerId;
 
     /**
-     * 产品id
-     */
-    private Integer productId;
-
-    /**
      * 批次号
      */
     private String batchNo;
@@ -58,32 +53,12 @@ public class PurchaseOrder implements Serializable {
     private Integer productType;
 
     /**
-     * 采购重量
-     */
-    private BigDecimal weight;
-
-    /**
-     * 采购数量
-     */
-    private Integer quantity;
-
-    /**
-     * 单位(1-千克｜2-只｜3-个｜ 4-吨等)
-     */
-    private Integer unit;
-
-    /**
-     * 单价
-     */
-    private BigDecimal price;
-
-    /**
-     * 金额
+     * 订单总金额
      */
     private BigDecimal amount;
 
     /**
-     * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
+     * 状态(1-已下单 ,2－待送达 ,3-已签收)
      */
     private Integer purchaseOrderStatus;
 
@@ -91,6 +66,11 @@ public class PurchaseOrder implements Serializable {
      * 供货商id
      */
     private Integer supplierId;
+
+    /**
+     * 计划送达时间
+     */
+    private Date planDeliveryTime;
 
     /**
      * 到货时间
@@ -126,6 +106,21 @@ public class PurchaseOrder implements Serializable {
      * 更新人
      */
     private Integer modifyUserId;
+
+    /**
+     * 订单阶段：1-第一阶段；2-第二阶段；3-第三阶段
+     */
+    private Integer orderPhase;
+
+    /**
+     * 采购执行时间
+     */
+    private Date planExecuteTime;
+
+    /**
+     * 采购名称
+     */
+    private String purchaseName;
 
     private static final long serialVersionUID = 1L;
 }

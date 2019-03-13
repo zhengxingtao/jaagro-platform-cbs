@@ -629,6 +629,66 @@ public class BreedingRecordExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andBreedingTimeIsNull() {
+            addCriterion("breeding_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeIsNotNull() {
+            addCriterion("breeding_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeEqualTo(Date value) {
+            addCriterion("breeding_time =", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeNotEqualTo(Date value) {
+            addCriterion("breeding_time <>", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeGreaterThan(Date value) {
+            addCriterion("breeding_time >", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("breeding_time >=", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeLessThan(Date value) {
+            addCriterion("breeding_time <", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeLessThanOrEqualTo(Date value) {
+            addCriterion("breeding_time <=", value, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeIn(List<Date> values) {
+            addCriterion("breeding_time in", values, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeNotIn(List<Date> values) {
+            addCriterion("breeding_time not in", values, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeBetween(Date value1, Date value2) {
+            addCriterion("breeding_time between", value1, value2, "breedingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreedingTimeNotBetween(Date value1, Date value2) {
+            addCriterion("breeding_time not between", value1, value2, "breedingTime");
+            return (Criteria) this;
+        }
+
         public Criteria andNotesIsNull() {
             addCriterion("notes is null");
             return (Criteria) this;
