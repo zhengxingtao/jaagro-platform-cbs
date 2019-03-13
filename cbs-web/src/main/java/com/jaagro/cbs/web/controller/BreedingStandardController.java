@@ -58,7 +58,9 @@ public class BreedingStandardController {
     @ApiOperation("新增或者修改养殖参数")
     @PostMapping("/breedingStandardParameter")
     public BaseResponse breedingStandardParameter(@RequestBody @Validated BreedingParameterListDto dto){
-        return null;
+        log.info("O breedingStandardParameter param={}",dto);
+        breedingStandardService.saveOrUpdateParameter(dto);
+        return BaseResponse.successInstance("保存成功");
     }
 
     /**

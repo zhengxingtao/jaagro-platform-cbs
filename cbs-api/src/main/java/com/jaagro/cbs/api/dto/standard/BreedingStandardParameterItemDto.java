@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 public class BreedingStandardParameterItemDto implements Serializable{
     private static final long serialVersionUID = -4310951495259536431L;
     /**
+     * 养殖模板参数id
+     */
+    private Integer id;
+    /**
      * 日龄
      */
     private Integer dayAge;

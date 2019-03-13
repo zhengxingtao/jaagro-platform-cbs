@@ -3,10 +3,154 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-
-
-<delete id="deleteByStandardId"  parameterType="java.lang.Integer" >
-    delete from breeding_standard_parameter
-    where standard_id = #{id,jdbcType=INTEGER}
-  </delete>
+    <delete id="deleteByStandardId" parameterType="java.lang.Integer">
+        delete from breeding_standard_parameter
+        where standard_id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="batchInsert" parameterType="list">
+        insert into breeding_standard_parameter (standard_id, param_name, day_age,
+        param_type, value_type, lower_limit,
+        upper_limit, unit, alarm,
+        param_value, status, necessary,
+        create_time, create_user_id, modify_time,
+        modify_user_id, enable)
+        values
+        <foreach collection="parameterList" separator="," item="item">
+            (#{item.standardId,jdbcType=INTEGER}, #{item.paramName,jdbcType=VARCHAR}, #{item.dayAge,jdbcType=INTEGER},
+            #{item.paramType,jdbcType=INTEGER}, #{item.valueType,jdbcType=INTEGER}, #{item.lowerLimit,jdbcType=DECIMAL},
+            #{item.upperLimit,jdbcType=DECIMAL}, #{item.unit,jdbcType=VARCHAR}, #{item.alarm,jdbcType=BIT},
+            #{item.paramValue,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, #{item.necessary,jdbcType=BIT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER},
+            #{item.modifyTime,jdbcType=TIMESTAMP},
+            #{item.modifyUserId,jdbcType=INTEGER}, #{item.enable,jdbcType=BIT})
+        </foreach>
+    </insert>
+    <update id="batchUpdateByPrimaryKeySelective" parameterType="list">
+        update breeding_standard_parameter
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="standard_id =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.standardId!=null">
+                        when id=#{i.id} then #{i.standardId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="param_name =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.paramName!=null">
+                        when id=#{i.id} then #{i.paramName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="day_age =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.dayAge!=null">
+                        when id=#{i.id} then #{i.dayAge}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="param_type =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.paramType!=null">
+                        when id=#{i.id} then #{i.paramType}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="value_type =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.valueType!=null">
+                        when id=#{i.id} then #{i.valueType}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="lower_limit =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.lowerLimit!=null">
+                        when id=#{i.id} then #{i.lowerLimit}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="upper_limit =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.upperLimit!=null">
+                        when id=#{i.id} then #{i.upperLimit}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="unit =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.unit!=null">
+                        when id=#{i.id} then #{i.unit}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="alarm =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.alarm!=null">
+                        when id=#{i.id} then #{i.alarm}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="param_value =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.paramValue!=null">
+                        when id=#{i.id} then #{i.paramValue}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.status!=null">
+                        when id=#{i.id} then #{i.status}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="necessary =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.necessary!=null">
+                        when id=#{i.id} then #{i.necessary}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.createTime!=null">
+                        when id=#{i.id} then #{i.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_id =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.createUserId!=null">
+                        when id=#{i.id} then #{i.createUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_time =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.modifyTime!=null">
+                        when id=#{i.id} then #{i.modifyTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="modify_user_id =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.modifyUserId!=null">
+                        when id=#{i.id} then #{i.modifyUserId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="enable =case" suffix="end,">
+                <foreach collection="parameterList" item="i" index="index">
+                    <if test="i.enable!=null">
+                        when id=#{i.id} then #{i.enable}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="coopList" separator="," item="i" index="index" close=")" open="(">
+            #{i.id}
+        </foreach>
+    </update>
 </mapper>
