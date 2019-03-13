@@ -1,8 +1,6 @@
 package com.jaagro.cbs.web.controller;
 
-import com.jaagro.cbs.api.dto.standard.BreedingParameterDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDetailDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.service.BreedingStandardService;
 import com.jaagro.utils.BaseResponse;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.Set;
 
 
 /**
- * @author gavin
+ * @author yj
  * @Date 20190222
  */
 @RestController
@@ -42,12 +41,9 @@ public class BreedingStandardController {
      */
     @ApiOperation("新增、修改养殖标准模板")
     @PostMapping("/breedingStandard")
-    public BaseResponse breedingStandard(@RequestBody BreedingStandardDto dto) {
+    public BaseResponse breedingStandard(@RequestBody @Validated CreateBreedingStandardDto dto) {
+        log.info("O breedingStandard param={}",dto);
         try {
-            Assert.notNull(dto.getStandardName(), "模板名称不能为空");
-            Assert.notNull(dto.getBreedingDays(), "养殖天数不能为空");
-            Assert.notNull(dto.getStandardParameterDos(), "养殖参数不能为空");
-            Assert.notEmpty(dto.getStandardParameterDos(), "养殖参数不能为空");
             if (null == dto.getId() || dto.getId() == 0) {
                 breedingStandardService.createBreedingTemplate(dto);
             } else {
@@ -59,6 +55,11 @@ public class BreedingStandardController {
         return BaseResponse.successInstance("保存成功");
     }
 
+    @ApiOperation("新增或者修改养殖参数")
+    @PostMapping("/breedingStandardParameter")
+    public BaseResponse breedingStandardParameter(@RequestBody @Validated BreedingParameterListDto dto){
+        return null;
+    }
 
     /**
      * 查询单个养殖模板详情
