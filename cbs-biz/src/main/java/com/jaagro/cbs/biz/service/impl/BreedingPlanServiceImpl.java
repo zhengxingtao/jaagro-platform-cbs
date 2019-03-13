@@ -365,7 +365,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
             // 查询当前日龄应喂药品
             BreedingBatchDrugExample batchDrugExample = new BreedingBatchDrugExample();
-            batchDrugExample.createCriteria().andPlanIdEqualTo(planId).andStopDrugFlagEqualTo(Boolean.FALSE).andDayAgeStartLessThanOrEqualTo(dayAge).andDayAgeEndGreaterThan(dayAge).andEnableEqualTo(Boolean.TRUE);
+            batchDrugExample.createCriteria().andPlanIdEqualTo(planId).andStopDrugFlagEqualTo(Boolean.FALSE).andDayAgeStartLessThanOrEqualTo(dayAge).andDayAgeEndGreaterThanOrEqualTo(dayAge).andEnableEqualTo(Boolean.TRUE);
             List<BreedingBatchDrug> breedingBatchDrugList = breedingBatchDrugMapper.selectByExample(batchDrugExample);
             if (!CollectionUtils.isEmpty(breedingBatchDrugList)) {
                 if (!CollectionUtils.isEmpty(recordItemsDtoList)) {

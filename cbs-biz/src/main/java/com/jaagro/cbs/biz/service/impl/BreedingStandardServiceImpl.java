@@ -1,6 +1,7 @@
 package com.jaagro.cbs.biz.service.impl;
 
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
@@ -32,7 +33,6 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     private CurrentUserService currentUserService;
     @Autowired
     private BreedingStandardMapperExt breedingStandardMapper;
-
     @Autowired
     private BreedingStandardParameterMapperExt standardParameterMapper;
 
@@ -42,38 +42,19 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      * @param dto
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean createBreedingTemplate(BreedingStandardDto dto) {
-        try {
-            log.info("O BreedingStandardServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
-            Integer currentUserId = getUserId();
-            BreedingStandard breedingStandard = new BreedingStandard();
-            breedingStandard.setBreedingType(dto.getBreedingType())
-                    .setBreedingDays(dto.getBreedingDays())
-                    .setStandardName(dto.getStandardName())
-                    .setCreateUserId(currentUserId)
-                    .setCreateTime(new Date());
-            breedingStandardMapper.insertSelective(breedingStandard);
-
-            int standardId = breedingStandard.getId();
-            for (BreedingStandardParameter breedingStandardParameter : dto.getStandardParameterDos()) {
-                breedingStandardParameter.setStandardId(standardId)
-                        .setStatus(1)
-                        .setCreateUserId(currentUserId)
-                        .setCreateTime(new Date());
-
-                standardParameterMapper.insertSelective(breedingStandardParameter);
-
-            }
-
-            log.info("O BreedingStandardServiceImpl.createBreedingTemplate standard_id:{} standardParams.size:{}", standardId, dto.getStandardParameterDos().size());
-        } catch (Exception e) {
-            log.error("R BreedingStandardServiceImpl.createBreedingTemplate  error:" + e);
-            return false;
-
+    public Boolean createBreedingTemplate(CreateBreedingStandardDto dto) {
+        log.info("O BreedingStandardServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
+        Integer currentUserId = getCurrentUserId();
+        BreedingStandard breedingStandard = new BreedingStandard();
+        BeanUtils.copyProperties(dto,breedingStandard);
+        breedingStandard.setCreateUserId(currentUserId)
+                .setCreateTime(new Date())
+                .setEnable(Boolean.TRUE);
+        Integer effective = breedingStandardMapper.insertSelective(breedingStandard);
+        if (effective == 1){
+            return true;
         }
-        return true;
-
+        return false;
     }
 
     /**
@@ -83,38 +64,18 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean updateBreedingTemplate(BreedingStandardDto dto) {
-        try {
-            log.info("O BreedingStandardServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
-            Integer currentUserId = getUserId();
-            BreedingStandard breedingStandard = new BreedingStandard();
-            breedingStandard.setId(dto.getId())
-                    .setBreedingType(dto.getBreedingType())
-                    .setBreedingDays(dto.getBreedingDays())
-                    .setStandardName(dto.getStandardName())
-                    .setModifyUserId(currentUserId)
-                    .setModifyTime(new Date());
-            breedingStandardMapper.updateByPrimaryKeySelective(breedingStandard);
-            //先删掉
-            standardParameterMapper.deleteByStandardId(dto.getId());
-            //再插入
-            for (BreedingStandardParameter breedingStandardParameter : dto.getStandardParameterDos()) {
-                breedingStandardParameter.setStandardId(dto.getId())
-                        .setStatus(breedingStandardParameter.getStatus())
-                        .setCreateUserId(currentUserId)
-                        .setCreateTime(new Date());
-
-                standardParameterMapper.insertSelective(breedingStandardParameter);
-
-            }
-            log.info("O BreedingStandardServiceImpl.updateBreedingTemplate standard_id:{} standardParams.size:{}", dto.getId(), dto.getStandardParameterDos().size());
-        } catch (Exception e) {
-            log.error("R BreedingStandardServiceImpl.updateBreedingTemplate  error:" + e);
-            return false;
-
+    public Boolean updateBreedingTemplate(CreateBreedingStandardDto dto) {
+        log.info("O BreedingStandardServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
+        Integer currentUserId = getCurrentUserId();
+        BreedingStandard breedingStandard = new BreedingStandard();
+        BeanUtils.copyProperties(dto,breedingStandard);
+        breedingStandard.setModifyTime(new Date())
+                .setModifyUserId(currentUserId);
+        Integer effective = breedingStandardMapper.updateByPrimaryKeySelective(breedingStandard);
+        if (effective == 1){
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -152,19 +113,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         return breedingStandardMapper.listAllBreedingStandard();
     }
 
-    private Integer getUserId() {
-        UserInfo userInfo = null;
-        try {
-            userInfo = currentUserService.getCurrentUser();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            log.error("获取当前用户失败：currentUserService.getCurrentUser()");
-            return 1;
-        }
-        if (null == userInfo) {
-            return 1;
-        } else {
-            return userInfo.getId();
-        }
+    private Integer getCurrentUserId() {
+        UserInfo  userInfo = currentUserService.getCurrentUser();
+        return userInfo == null ? null : userInfo.getId();
     }
 }
