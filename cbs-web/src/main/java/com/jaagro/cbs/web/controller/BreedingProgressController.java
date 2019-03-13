@@ -40,14 +40,14 @@ public class BreedingProgressController {
     private BreedingProgressService breedingProgressService;
 
     /**
-     * 养殖场-通过养殖户id获得养殖场列表
+     * 批次管理
      *
      * @return
      * @throws
      * @author baiyiran
      * @date 2019/2/26
      */
-    @ApiOperation("养殖场-通过养殖户id获得养殖场列表")
+    @ApiOperation("批次管理")
     @PostMapping("/listPlanByCriteria")
     public BaseResponse<PageInfo> listPlanByDto(@RequestBody BreedingPlanParamDto criteriaDto) {
         if (StringUtils.isEmpty(criteriaDto.getPageNum())) {
@@ -73,20 +73,21 @@ public class BreedingProgressController {
     }
 
     /**
-     *  养殖过程管理-根据养殖计划Id、养殖厂Id获取养殖过程头信息
+     * 养殖过程管理-根据养殖计划Id、养殖厂Id获取养殖过程头信息
+     *
      * @param paramVo
-     * @author gavin
      * @return
+     * @author gavin
      */
     @ApiOperation("根据养殖计划Id、养殖厂Id获取养殖过程头信息")
     @PostMapping("/getBreedingProgressHeader")
     public BaseResponse getBreedingProgressById(@RequestBody BreedingProgressParamVo paramVo) {
 
-        Assert.notNull(paramVo.getPlanId(),"养殖计划id不能为空");
-        Assert.notNull(paramVo.getPlantId(),"养殖厂id不能为空");
+        Assert.notNull(paramVo.getPlanId(), "养殖计划id不能为空");
+        Assert.notNull(paramVo.getPlantId(), "养殖厂id不能为空");
         BreedingProgressDto breedingProgressDto;
         try {
-            breedingProgressDto= breedingProgressService.getBreedingProgressById(paramVo.getPlanId(),paramVo.getPlantId());
+            breedingProgressDto = breedingProgressService.getBreedingProgressById(paramVo.getPlanId(), paramVo.getPlantId());
 
         } catch (Exception ex) {
             return BaseResponse.errorInstance("获取养殖过程头信息：" + ex.getMessage());
@@ -96,18 +97,19 @@ public class BreedingProgressController {
 
     /**
      * 获取养殖过程中某个鸡舍每天养殖参数详情
+     *
      * @param paramVo
-     * @author gavin
      * @return
+     * @author gavin
      */
     @ApiOperation("获取鸡舍某天养殖参数详情")
     @PostMapping("/getBreedingBatchParam")
     public BaseResponse getBreedingBatchParamById(@RequestBody BreedingProgressParamVo paramVo) {
 
-        Assert.notNull(paramVo.getPlanId(),"养殖计划id不能为空");
-        Assert.notNull(paramVo.getCoopId(),"鸡舍id不能为空");
-        Assert.notNull(paramVo.getDayAge(),"日龄不能为空");
-        Assert.notNull(paramVo.getStrDate(),"日龄对应的日期不能为空");
+        Assert.notNull(paramVo.getPlanId(), "养殖计划id不能为空");
+        Assert.notNull(paramVo.getCoopId(), "鸡舍id不能为空");
+        Assert.notNull(paramVo.getDayAge(), "日龄不能为空");
+        Assert.notNull(paramVo.getStrDate(), "日龄对应的日期不能为空");
 
         List<BreedingBatchParamTrackingDto> paramTrackingDtos;
         Integer planId = paramVo.getPlanId();
@@ -115,33 +117,35 @@ public class BreedingProgressController {
         Integer dayAge = paramVo.getDayAge();
         String strDate = paramVo.getStrDate();
         try {
-            paramTrackingDtos= breedingProgressService.getBreedingBatchParamById(planId,coopId,dayAge,strDate);
+            paramTrackingDtos = breedingProgressService.getBreedingBatchParamById(planId, coopId, dayAge, strDate);
 
         } catch (Exception ex) {
             return BaseResponse.errorInstance("获取每天养殖参数详情失败：" + ex.getMessage());
         }
         return BaseResponse.successInstance(paramTrackingDtos);
     }
+
     /**
      * 获取养殖过程中某天养殖喂养情况
+     *
      * @param paramVo
-     * @author gavin
      * @return
+     * @author gavin
      */
     @ApiOperation("获取养殖过程中某天养殖喂养情况")
     @PostMapping("/getBreedingRecordsById")
     public BaseResponse getBreedingRecordsById(@RequestBody BreedingProgressParamVo paramVo) {
 
-        Assert.notNull(paramVo.getPlanId(),"养殖计划id不能为空");
-        Assert.notNull(paramVo.getCoopId(),"鸡舍id不能为空");
-        Assert.notNull(paramVo.getDayAge(),"日龄不能为空");
+        Assert.notNull(paramVo.getPlanId(), "养殖计划id不能为空");
+        Assert.notNull(paramVo.getCoopId(), "鸡舍id不能为空");
+        Assert.notNull(paramVo.getDayAge(), "日龄不能为空");
 
         BreedingRecordDto breedingRecordDto;
         Integer planId = paramVo.getPlanId();
         Integer coopId = paramVo.getCoopId();
         Integer dayAge = paramVo.getDayAge();
         try {
-            breedingRecordDto= breedingProgressService.getBreedingRecordsById(planId,coopId,dayAge);
+            breedingRecordDto = breedingProgressService.getBreedingRecordsById(planId, coopId, dayAge);
 
         } catch (Exception ex) {
             return BaseResponse.errorInstance("获取某天养殖喂养情况失败：" + ex.getMessage());

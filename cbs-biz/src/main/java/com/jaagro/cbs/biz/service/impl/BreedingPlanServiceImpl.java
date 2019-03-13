@@ -179,21 +179,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             List<Plant> plants = breedingPlantService.listPlantInfoByPlanId(returnBreedingPlanDto.getId());
             returnBreedingPlanDto.setPlants(plants);
             //填充进度
-            BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
-            parameterExample.createCriteria()
-                    .andEnableEqualTo(true)
-                    .andPlanIdEqualTo(returnBreedingPlanDto.getId())
-                    .andBatchNoEqualTo(returnBreedingPlanDto.getBatchNo());
-            List<BreedingBatchParameter> breedingBatchParameters = breedingBatchParameterMapper.selectByExample(parameterExample);
-            if (!CollectionUtils.isEmpty(breedingBatchParameters)) {
-                BreedingBatchParameter parameter = breedingBatchParameters.get(0);
-                returnBreedingPlanDto.setAllDayAge(parameter.getDayAge());
-                try {
-                    long day = getDayAge(returnBreedingPlanDto.getId());
-                    returnBreedingPlanDto.setAlreadyDayAge((int) day);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            returnBreedingPlanDto.setAllDayAge(returnBreedingPlanDto.getBreedingDays());
+            try {
+                long day = getDayAge(returnBreedingPlanDto.getId());
+                returnBreedingPlanDto.setAlreadyDayAge((int) day);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
         return new PageInfo(planDtoList);
