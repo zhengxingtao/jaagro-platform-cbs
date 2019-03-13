@@ -69,6 +69,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
 
     /**
      * 根据养殖计划Id生成药品采购订单
+     *
      * @param planId
      * @return
      */
@@ -83,7 +84,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             //养殖计划所用的参数
             BreedingBatchDrugExample batchDrugExample = new BreedingBatchDrugExample();
             batchDrugExample.createCriteria().andPlanIdEqualTo(planId).andEnableEqualTo(true);
-            batchDrugExample.setOrderByClause("day_age_end desc");
+            batchDrugExample.setOrderByClause("day_age_end asc");
 
             List<BreedingBatchDrug> batchDrugDos = breedingBatchDrugMapper.selectByExample(batchDrugExample);
             if (!CollectionUtils.isEmpty(batchDrugDos)) {
@@ -116,9 +117,9 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         .setProductType(ProductTypeEnum.DRUG.getCode());
                 this.deleteByCriteria(orderBo);
                 //1.2: 保存第一个药品订单和订单明细
-                PurchaseOrder firstOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.DRUG.getCode());
+                PurchaseOrder firstOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.DRUG.getCode(),breedingPlan.getPlanTime());
                 Integer orderId = firstOrder.getId();
-                List<PurchaseOrderItems> phaseOneItems = getDrugPurchaseOrderItems(breedingPlan, phaseOneProductIds, phaseOneBatchDrugDos);
+                List<PurchaseOrderItems> phaseOneItems = this.getDrugPurchaseOrderItems(breedingPlan, phaseOneProductIds, phaseOneBatchDrugDos);
                 this.savePurchaseOrderItems(orderId, phaseOneItems);
                 phaseOneOrders.add(firstOrder);
 
@@ -129,10 +130,29 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         .setProductType(ProductTypeEnum.DRUG.getCode());
                 this.deleteByCriteria(orderBo);
                 //2.2: 保存第二个药品订单和订单明细
-                PurchaseOrder secondOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.DRUG.getCode());
+                //获取第二次停药日期
+                Map<Integer,String> progressDayAgesMap = new HashMap<>();
+                for(int j=0;j<breedingPlan.getBreedingDays();j++){
+                    progressDayAgesMap.put(j+1,DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(),j));
+                }
+                Date secondStopDrugDate = new Date();
+                int j = 0;
+                for (BreedingBatchDrug batchDrugDo : batchDrugDos) {
+                    if (batchDrugDo.getStopDrugFlag()) {
+                        j = j + 1;
+                    }
+                    if(j==2){
+                        String strSecondStopDrugDate=progressDayAgesMap.get(batchDrugDo.getDayAgeStart());
+                        if(!StringUtils.isEmpty(strSecondStopDrugDate)) {
+                            secondStopDrugDate = DateUtil.strToDate(strSecondStopDrugDate);
+                        }
+                        break;
+                    }
+                }
+                PurchaseOrder secondOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.DRUG.getCode(),secondStopDrugDate);
                 orderId = secondOrder.getId();
-                List<PurchaseOrderItems> phaseTwoItems = getDrugPurchaseOrderItems(breedingPlan, phaseTwoProductIds, phaseTwoBatchDrugDos);
-                savePurchaseOrderItems(orderId, phaseTwoItems);
+                List<PurchaseOrderItems> phaseTwoItems = this.getDrugPurchaseOrderItems(breedingPlan, phaseTwoProductIds, phaseTwoBatchDrugDos);
+                this.savePurchaseOrderItems(orderId, phaseTwoItems);
                 phaseOneOrders.add(secondOrder);
             }
 
@@ -179,7 +199,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                             .setProductType(ProductTypeEnum.FEED.getCode());
                     this.deleteByCriteria(orderBo);
                     //2.保存第一个饲料订单（小料510）
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.FEED.getCode());
+                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.FEED.getCode(),breedingPlan.getPlanTime());
                     //3. 保存订单明细
                     Integer orderId = purchaseOrder.getId();
                     List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -203,7 +223,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                             .setProductType(ProductTypeEnum.SPROUT.getCode());
                     this.deleteByCriteria(orderBo);
                     //2.插入鸡苗订单
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.SPROUT.getCode());
+                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.SPROUT.getCode(),breedingPlan.getPlanTime());
                     //3. 保存订单明细
                     Integer orderId = purchaseOrder.getId();
                     List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -269,7 +289,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         this.deleteByCriteria(orderBo);
 
                         //2.插入第二次饲料订单(15->19日龄小料510订单)
-                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode());
+                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
                         //3. 保存订单明细
                         Integer orderId = purchaseOrder.getId();
                         List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -333,7 +353,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         this.deleteByCriteria(orderBo);
 
                         //2.插入第二次饲料订单（20->28日龄大料511饲料订单）
-                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode());
+                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
                         //3. 保存订单明细
                         Integer orderId = purchaseOrder.getId();
                         List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -415,7 +435,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         this.deleteByCriteria(orderBo);
 
                         //2.插入第三次饲料订单（29->->计划养殖天数日龄大料511饲料订单）
-                        PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode());
+                        PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
                         //3. 保存订单明细
                         Integer orderId = purchaseOrder.getId();
                         List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -468,7 +488,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      * @param productType
      * @return
      */
-    private PurchaseOrder savePurchaseOrder(BreedingPlan plan, Integer phase, Integer productType) {
+    private PurchaseOrder savePurchaseOrder(BreedingPlan plan, Integer phase, Integer productType,Date calculateDate) {
         UserInfo currentUser = currentUserService.getCurrentUser();
         Integer userId = currentUser.getId();
         PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -496,29 +516,29 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-01";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(plan.getPlanTime(), -2));
-                purchaseOrder.setPlanDeliveryTime(plan.getPlanTime());
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
+                purchaseOrder.setPlanDeliveryTime(calculateDate);
                 purchaseOrder.setPurchaseName("饲料采购 - 第一次饲料配送");
                 purchaseOrder.setNotes("饲料采购 - 第一次饲料配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_TWO.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-02";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(new Date(), 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(new Date(), 3));
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
+                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
                 purchaseOrder.setPurchaseName("饲料采购 - 第二次饲料配送");
                 purchaseOrder.setNotes("饲料采购 - 第二次饲料配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_THREE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-03";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(new Date(), 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(new Date(), 3));
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
+                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
                 purchaseOrder.setPurchaseName("饲料采购 - 第二次饲料配送");
                 purchaseOrder.setNotes("饲料采购 - 第二次饲料配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_FOUR.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-04";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(new Date(), 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(new Date(), 3));
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
+                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
                 purchaseOrder.setPurchaseName("饲料采购 - 第三次饲料配送");
                 purchaseOrder.setNotes("饲料采购 - 第三次饲料配送");
             }
@@ -526,17 +546,18 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_DRUG_PREFIX) + "-01";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(plan.getPlanTime(), -2));
-                purchaseOrder.setPlanDeliveryTime(plan.getPlanTime());
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
+                purchaseOrder.setPlanDeliveryTime(calculateDate);
                 purchaseOrder.setPurchaseName("药品采购 - 第一次药品配送");
                 purchaseOrder.setNotes("药品采购 - 第一次药品配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_TWO.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_DRUG_PREFIX) + "-02";
                 purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(new Date(), 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(new Date(), 3));
+                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
+                purchaseOrder.setPlanDeliveryTime(calculateDate);
                 purchaseOrder.setPurchaseName("药品采购 - 第二次药品配送");
                 purchaseOrder.setNotes("药品采购 - 第二次药品配送");
+
             }
         }
         //1.插入采购订单
@@ -546,6 +567,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     }
 
     private void savePurchaseOrderItems(Integer orderId, List<PurchaseOrderItems> orderItems) {
+        BigDecimal orderAmount = BigDecimal.ZERO;
         for (PurchaseOrderItems orderItem : orderItems) {
             Integer productId = orderItem.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);
@@ -559,7 +581,9 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 if (product.getProductType() == ProductTypeEnum.DRUG.getCode()) {
                     BigDecimal productCapacity = product.getProductCapacity() == null ? new BigDecimal("1") : product.getProductCapacity();
                     BigDecimal packageQuantity = orderItem.getQuantity().divide(productCapacity, 0, BigDecimal.ROUND_UP);
-                    orderItem.setPrice(packageQuantity.multiply(purchasePrice));
+                    BigDecimal price = packageQuantity.multiply(purchasePrice);
+                    orderItem.setPrice(price);
+                    orderAmount = orderAmount.add(price);
                 } else {
                     orderItem.setPrice(orderItem.getQuantity().multiply(purchasePrice));
                 }
@@ -567,6 +591,12 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 purchaseOrderItemsMapper.insert(orderItem);
             }
         }
+        PurchaseOrder order  = new PurchaseOrder();
+        order.setAmount(orderAmount);
+        order.setId(orderId);
+        order.setModifyTime(new Date());
+        purchaseOrderMapper.updateByPrimaryKeySelective(order);
+
     }
 
     /**
@@ -587,7 +617,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     BigDecimal a = new BigDecimal((float) breedingPlan.getPlanChickenQuantity() / 1000).setScale(3, BigDecimal.ROUND_HALF_UP);
                     BigDecimal b = a.multiply(batchDrugDo.getFeedVolume());
                     BigDecimal c = b.multiply(new BigDecimal(batchDrugDo.getDays()));
-                    totalFeedDrug.add(c);
+                    totalFeedDrug = totalFeedDrug.add(c);
                 }
             }
             PurchaseOrderItems purchaseOrderItemsDo = new PurchaseOrderItems();
