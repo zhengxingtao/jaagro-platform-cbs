@@ -53,6 +53,11 @@ public class CreateBreedingRecordDto implements Serializable{
     private String notes;
 
     /**
+     * 饲喂时间
+     */
+    private Date breedingTime;
+
+    /**
      * 喂料明细
      */
     private List<BreedingRecordItemsDto> breedingRecordItemsDtoList;
