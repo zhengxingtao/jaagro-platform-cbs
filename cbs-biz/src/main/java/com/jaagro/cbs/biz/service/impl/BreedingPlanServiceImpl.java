@@ -675,7 +675,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             }
         }
         if (breedingStock != null) {
-            returnBreedingPlanDto.setBreedingStock(breedingStock.intValue());
+            returnBreedingPlanDto.setResidueChickenQuantity(breedingStock.intValue());
         }
         if (breedingPlan.getPlanChickenQuantity() != null) {
             returnBreedingPlanDto.setPlanChickenQuantity(breedingPlan.getPlanChickenQuantity());

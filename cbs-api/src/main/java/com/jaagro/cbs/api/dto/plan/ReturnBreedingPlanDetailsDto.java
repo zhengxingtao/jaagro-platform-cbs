@@ -53,7 +53,7 @@ public class ReturnBreedingPlanDetailsDto implements Serializable {
     /**
      * 剩余上鸡数量
      */
-    private Integer breedingStock;
+    private Integer residueChickenQuantity;
 
     /**
      * 上鸡时间
