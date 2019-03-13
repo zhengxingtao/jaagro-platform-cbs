@@ -433,34 +433,42 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void uploadBreedingRecord(CreateBreedingRecordDto createBreedingRecordDto) {
-        Integer planId = createBreedingRecordDto.getPlanId();
-        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-        if (breedingPlan == null) {
-            throw new RuntimeException("计划id=" + planId + "不存在");
-        }
-        BreedingRecord breedingRecord = new BreedingRecord();
-        BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
-        UserInfo userInfo = currentUserService.getCurrentUser();
-        breedingRecord.setCreateTime(new Date())
-                .setCreateUserId(userInfo == null ? null : userInfo.getId())
-                .setEnable(Boolean.TRUE)
-                .setBatchNo(breedingPlan.getBatchNo());
-        breedingRecordMapper.insertSelective(breedingRecord);
-        if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())) {
-            List<BreedingRecordItems> breedingRecordItemsList = new ArrayList<>();
-            for (BreedingRecordItemsDto itemsDto : createBreedingRecordDto.getBreedingRecordItemsDtoList()) {
-                BreedingRecordItems breedingRecordItems = new BreedingRecordItems();
-                BeanUtils.copyProperties(itemsDto, breedingRecordItems);
-                breedingRecordItems.setBreedingRecordId(breedingRecord.getId())
-                        .setCreateTime(new Date())
-                        .setEnable(Boolean.TRUE)
-                        .setCreateUserId(userInfo == null ? null : userInfo.getId());
-                breedingRecordItemsList.add(breedingRecordItems);
+        try {
+            Integer planId = createBreedingRecordDto.getPlanId();
+            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+            if (breedingPlan == null) {
+                throw new RuntimeException("计划id=" + planId + "不存在");
             }
-            if (!CollectionUtils.isEmpty(breedingRecordItemsList)) {
-                breedingRecordItemsMapper.batchInsert(breedingRecordItemsList);
+            int dayAge = (int)getDayAge(planId);
+            BreedingRecord breedingRecord = new BreedingRecord();
+            BeanUtils.copyProperties(createBreedingRecordDto, breedingRecord);
+            UserInfo userInfo = currentUserService.getCurrentUser();
+            breedingRecord.setCreateTime(new Date())
+                    .setCreateUserId(userInfo == null ? null : userInfo.getId())
+                    .setEnable(Boolean.TRUE)
+                    .setBatchNo(breedingPlan.getBatchNo())
+                    .setDayAge(dayAge);
+            breedingRecordMapper.insertSelective(breedingRecord);
+            if (!CollectionUtils.isEmpty(createBreedingRecordDto.getBreedingRecordItemsDtoList())) {
+                List<BreedingRecordItems> breedingRecordItemsList = new ArrayList<>();
+                for (BreedingRecordItemsDto itemsDto : createBreedingRecordDto.getBreedingRecordItemsDtoList()) {
+                    BreedingRecordItems breedingRecordItems = new BreedingRecordItems();
+                    BeanUtils.copyProperties(itemsDto, breedingRecordItems);
+                    breedingRecordItems.setBreedingRecordId(breedingRecord.getId())
+                            .setCreateTime(new Date())
+                            .setEnable(Boolean.TRUE)
+                            .setCreateUserId(userInfo == null ? null : userInfo.getId());
+                    breedingRecordItemsList.add(breedingRecordItems);
+                }
+                if (!CollectionUtils.isEmpty(breedingRecordItemsList)) {
+                    breedingRecordItemsMapper.batchInsert(breedingRecordItemsList);
+                }
             }
+        }catch (Exception ex){
+            log.error("O uploadBreedingRecord error,param="+createBreedingRecordDto,ex);
+            throw new RuntimeException("上传养殖记录失败");
         }
+
     }
 
     /**
