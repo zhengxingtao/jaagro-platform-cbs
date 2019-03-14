@@ -494,7 +494,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private Integer getDayAge(Date beginDate) throws Exception {
         Integer day = 0;
         Date endDate = new Date();
-        if (beginDate == null && endDate == null) {
+        if (beginDate == null) {
             return day;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
