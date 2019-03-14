@@ -745,11 +745,18 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                         }
                     }
                 }
-                returnPurchaseOrderDto
-                        .setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()))
-                        .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                if (purchaseOrder.getProductType() != null) {
+                    returnPurchaseOrderDto.setProductType(ProductTypeEnum.getDescByCode(purchaseOrder.getProductType()));
+                }
+                if (purchaseOrder.getPurchaseOrderStatus() != null) {
+                    returnPurchaseOrderDto
+                            .setPurchaseOrderStatus(PurchaseOrderStatusEnum.getDescByCode(purchaseOrder.getPurchaseOrderStatus()));
+                }
                 //签收人信息
-                BaseResponse<UserInfo> globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
+                BaseResponse<UserInfo> globalUser = null;
+                if (purchaseOrder.getSignerId() != null) {
+                    globalUser = userClientService.getGlobalUser(purchaseOrder.getSignerId());
+                }
                 if (globalUser != null && globalUser.getData() != null) {
                     UserInfo userInfo = globalUser.getData();
                     if (userInfo != null && userInfo.getName() != null) {
@@ -967,10 +974,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 //计算理论料肉比
                 if (breedingBatchParameter.getParamValue() != null && MathUtil.isNum(breedingBatchParameter.getParamValue())) {
                     BigDecimal paramValue = new BigDecimal(breedingBatchParameter.getParamValue());
-                    BigDecimal meat = null;
-                    if (paramValue != null && breedingStock != null) {
-                        meat = paramValue.multiply(breedingStock);
-                    }
+                    BigDecimal meat = paramValue.multiply(breedingStock);
                     if (meat != null && accumulativeFeed != null) {
                         BigDecimal feedMeatRate = meat.divide(accumulativeFeed);
                         returnBreedingDetailsDto.setFeedMeatRate(feedMeatRate);

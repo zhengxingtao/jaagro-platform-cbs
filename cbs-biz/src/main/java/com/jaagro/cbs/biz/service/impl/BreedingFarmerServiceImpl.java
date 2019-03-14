@@ -275,7 +275,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     @Override
     public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
         List<Integer> purchaseOrderStatus = new ArrayList<>();
-        if (dto != null && dto.getPurchaseOrderStatus() == null) {
+        if (dto.getPurchaseOrderStatus() == null) {
             for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
                 purchaseOrderStatus.add(type.getCode());
             }

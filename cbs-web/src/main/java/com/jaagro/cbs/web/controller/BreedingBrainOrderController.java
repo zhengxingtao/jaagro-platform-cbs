@@ -1,7 +1,10 @@
 package com.jaagro.cbs.web.controller;
 
+import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
+import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
 import com.jaagro.cbs.api.model.PurchaseOrder;
 import com.jaagro.cbs.api.service.BreedingBrainService;
+import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.utils.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,8 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,6 +27,8 @@ public class BreedingBrainOrderController {
 
     @Autowired
     private BreedingBrainService breedingBrainService;
+    @Autowired
+    private BreedingPurchaseOrderService breedingPurchaseOrderService;
 
 
     @ApiOperation("根据养殖计划Id计算并生成药品采购订单")
@@ -37,5 +44,11 @@ public class BreedingBrainOrderController {
         return BaseResponse.successInstance(purchaseOrders);
     }
 
+    @PostMapping("/listPurchaseOrderPreset")
+    @ApiOperation("养殖大脑采购预置")
+    public BaseResponse listPurchaseOrderPreset(@RequestBody PurchaseOrderPresetCriteriaDto dto) {
+        breedingPurchaseOrderService.listPurchaseOrderPreset(dto);
 
+        return BaseResponse.successInstance("录入合同成功");
+    }
 }

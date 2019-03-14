@@ -54,9 +54,17 @@
         where customer_id = #{customerId,jdbcType=INTEGER}
     </select>
     <select id="listByCustomerId" resultType="com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM breeding_plan
         WHERE customer_id = #{customerId,jdbcType=INTEGER}
     </select>
-
+    <select id="listPurchaseOrderPreset" resultType="com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto"
+            parameterType="com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto">
+         select
+             bp.batch_no batchNo,bp.customer_id customerId, po.purchase_name purchaseName,
+             po.id purchaseOrderId,po.purchase_no purchaseNo,po.purchase_order_status purchaseOrderStatus,
+             po.plan_execute_time planExecuteTime,po.plan_delivery_time planDeliveryTime
+         from breeding_plan bp inner join purchase_order po on bp.id=po.plan_id
+    </select>
 </mapper>
