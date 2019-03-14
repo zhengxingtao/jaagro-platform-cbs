@@ -45,10 +45,9 @@ public class BreedingBrainOrderController {
     @PostMapping("/listPurchaseOrderPreset")
     @ApiOperation("养殖大脑采购预置")
     public BaseResponse listPurchaseOrderPreset(@RequestBody PurchaseOrderPresetCriteriaDto dto) {
-        breedingPurchaseOrderService.listPurchaseOrderPreset(dto);
-
-        return BaseResponse.successInstance("录入合同成功");
+        return BaseResponse.successInstance(breedingPurchaseOrderService.listPurchaseOrderPreset(dto));
     }
+
     @ApiOperation("根据养殖计划Id计算1->14天饲料订单")
     @PostMapping("/calculatePhaseOneFoodWeightById/{planId}")
     public BaseResponse calculatePhaseOneFoodWeightById(@PathVariable("planId") Integer planId) {

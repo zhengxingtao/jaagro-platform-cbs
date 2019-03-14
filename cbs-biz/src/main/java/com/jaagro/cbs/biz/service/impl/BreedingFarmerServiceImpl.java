@@ -273,7 +273,8 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @author: @Gao.
      */
     @Override
-    public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
+    public PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<Integer> purchaseOrderStatus = new ArrayList<>();
         if (dto.getPurchaseOrderStatus() == null) {
             for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
@@ -337,7 +338,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 }
             }
         }
-        return purchaseOrderDtos;
+        return new PageInfo(purchaseOrderDtos);
     }
 
     /**

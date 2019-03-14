@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @description: 采购预置查询条件
@@ -27,4 +28,28 @@ public class PurchaseOrderPresetCriteriaDto implements Serializable {
      */
     private Integer pageSize;
 
+    /**
+     * 批次号
+     */
+    private String batchNo;
+
+    /**
+     * 客户姓名 手机 查询 条件
+     */
+    private String customerInfo;
+
+    /**
+     * 录单人
+     */
+    private String createUserName;
+
+    /**
+     * 采购订单状态
+     */
+    private Integer purchaseOrderStatus;
+
+    /**
+     * 客户id
+     */
+    private List<Integer> customerIds;
 }

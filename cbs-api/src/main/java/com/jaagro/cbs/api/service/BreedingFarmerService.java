@@ -52,7 +52,7 @@ public interface BreedingFarmerService {
      * @return
      * @author @Gao.
      */
-    List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto);
+   PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto);
 
     /**
      * 农户端采购订单详情
