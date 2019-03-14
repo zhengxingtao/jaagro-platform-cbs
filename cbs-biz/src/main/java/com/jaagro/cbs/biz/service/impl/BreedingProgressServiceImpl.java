@@ -71,7 +71,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         log.info("O BreedingProgressServiceImpl.getBreedingProgressById input planId:{},plantId:{}", planId, plantId);
         BreedingProgressDto breedingProgressDto = new BreedingProgressDto();
         try {
-            BeanUtils.copyProperties(breedingPlan,breedingProgressDto);
+            BeanUtils.copyProperties(breedingPlan, breedingProgressDto);
             //该计划上报死掉的鸡
             BreedingRecordExample breedingRecordExample = new BreedingRecordExample();
             breedingRecordExample.createCriteria().andPlanIdEqualTo(planId).andRecordTypeEqualTo(BreedingRecordTypeEnum.DEATH_AMOUNT.getCode()).andEnableEqualTo(true);
@@ -95,11 +95,12 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 List<Coop> coopDos = new ArrayList<>();
                 for (BatchPlantCoop batchPlantCoop : batchPlantCoopDos) {
                     plantIds.add(batchPlantCoop.getPlantId());
-                    Coop coopDo = coopMapper.selectByPrimaryKey(batchPlantCoop.getCoopId());
-                    coopDos.add(coopDo);
+                    if (!StringUtils.isEmpty(batchPlantCoop.getCoopId())) {
+                        Coop coopDo = coopMapper.selectByPrimaryKey(batchPlantCoop.getCoopId());
+                        coopDos.add(coopDo);
+                    }
                 }
-                List<Coop> coops = coopDos.stream().filter(c -> plantId.equals(c.getPlantId())).collect(Collectors.toList());
-                breedingProgressDto.setCoops(coops);
+                breedingProgressDto.setCoops(coopDos);
             }
 
             CustomerContactsReturnDto customerDto = customerClientService.getCustomerContactByCustomerId(breedingPlan.getCustomerId());
@@ -108,11 +109,11 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 breedingProgressDto.setCustomerName(customerDto.getCustomerName());
                 breedingProgressDto.setCustomerAddress(customerDto.getAddress());
             }
-            List<Map<Integer,String>> progressDayAges = new ArrayList<>();
-            for(int i=0;i<breedingPlan.getBreedingDays();i++){
-                Map<Integer,String> map = new HashMap<>();
+            List<Map<Integer, String>> progressDayAges = new ArrayList<>();
+            for (int i = 0; i < breedingPlan.getBreedingDays(); i++) {
+                Map<Integer, String> map = new HashMap<>();
 
-                map.put(i+1,DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(),i));
+                map.put(i + 1, DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), i));
 
                 progressDayAges.add(map);
             }
@@ -162,14 +163,14 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 List<DeviceValueHistory> deviceValueHistoryDos = new ArrayList<DeviceValueHistory>();
                 if (isSameDay) {
                     //鸡舍绑定的设备采集上来的最新值
-                    if (!CollectionUtils.isEmpty(deviceIds)){
+                    if (!CollectionUtils.isEmpty(deviceIds)) {
                         DeviceValueExample deviceValueExample = new DeviceValueExample();
                         deviceValueExample.createCriteria().andDeviceIdIn(new ArrayList<>(deviceIds));
                         deviceValueDos = deviceValueMapper.selectByExample(deviceValueExample);
                     }
                 } else {
                     //鸡舍绑定的设备历史值
-                    if (!CollectionUtils.isEmpty(deviceIds)){
+                    if (!CollectionUtils.isEmpty(deviceIds)) {
                         for (Integer deviceId : deviceIds) {
                             DeviceValueHistory deviceValueHistory = deviceValueHistoryMapper.getLimitOneRecordByDeviceId(deviceId, strDate);
                             deviceValueHistoryDos.add(deviceValueHistory);
@@ -268,19 +269,19 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             FeedingFactoryBo deathBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.DEATH_AMOUNT.getCode());
             List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
             breedingRecordDto.setDeathList(deathAmountList);
-            if (!CollectionUtils.isEmpty(deathAmountList)){
+            if (!CollectionUtils.isEmpty(deathAmountList)) {
                 Integer deathTotal = 0;
-                for (BreedingRecord breedingRecord : deathAmountList){
+                for (BreedingRecord breedingRecord : deathAmountList) {
                     deathTotal += breedingRecord.getBreedingValue().intValue();
                 }
                 breedingRecordDto.setDeathTotal(deathTotal);
             }
             //养殖计划的鸡舍在某日龄上的应喂料总次数
-            Integer shouldFeedFoodTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode());
+            Integer shouldFeedFoodTimes = getShouldFeedTime(planId, dayAge, BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode());
             breedingRecordDto.setShouldFeedFoodTimes(shouldFeedFoodTimes);
 
             //养殖计划的鸡舍在某日龄上的应喂水总次数
-            Integer shouldFeedWaterTimes = getShouldFeedTime(planId,dayAge, BreedingStandardParamEnum.FEEDING_WATER_NUM.getCode());
+            Integer shouldFeedWaterTimes = getShouldFeedTime(planId, dayAge, BreedingStandardParamEnum.FEEDING_WATER_NUM.getCode());
             breedingRecordDto.setShouldFeedWaterTimes(shouldFeedWaterTimes);
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingRecordsById error:" + ex);
@@ -292,9 +293,9 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
         BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
         parameterExample.createCriteria().andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge).andParamTypeEqualTo(paramType);
         List<BreedingBatchParameter> batchParameterList = breedingBatchParameterMapper.selectByExample(parameterExample);
-        if(!CollectionUtils.isEmpty(batchParameterList)){
+        if (!CollectionUtils.isEmpty(batchParameterList)) {
             String paramValue = batchParameterList.get(0).getParamValue();
-            if (StringUtils.hasText(paramValue)){
+            if (StringUtils.hasText(paramValue)) {
                 return Integer.parseInt(paramValue);
             }
         }
