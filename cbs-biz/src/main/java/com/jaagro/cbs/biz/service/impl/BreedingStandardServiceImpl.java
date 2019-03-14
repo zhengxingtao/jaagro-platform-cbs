@@ -1,6 +1,8 @@
 package com.jaagro.cbs.biz.service.impl;
 
+import com.jaagro.cbs.api.dto.standard.BreedingParameterListDto;
 import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.BreedingStandardParameterItemDto;
 import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
@@ -12,17 +14,20 @@ import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * 养殖大脑管理
  *
- * @author gavin
+ * @author yj
  * @date :2019/02/22
  */
 @Slf4j
@@ -42,7 +47,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      * @param dto
      */
     @Override
-    public Boolean createBreedingTemplate(CreateBreedingStandardDto dto) {
+    public Integer createBreedingTemplate(CreateBreedingStandardDto dto) {
         log.info("O BreedingStandardServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
         Integer currentUserId = getCurrentUserId();
         BreedingStandard breedingStandard = new BreedingStandard();
@@ -50,11 +55,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         breedingStandard.setCreateUserId(currentUserId)
                 .setCreateTime(new Date())
                 .setEnable(Boolean.TRUE);
-        Integer effective = breedingStandardMapper.insertSelective(breedingStandard);
-        if (effective == 1){
-            return true;
-        }
-        return false;
+        breedingStandardMapper.insertSelective(breedingStandard);
+        return breedingStandard.getId();
     }
 
     /**
@@ -64,18 +66,15 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
      * @return
      */
     @Override
-    public Boolean updateBreedingTemplate(CreateBreedingStandardDto dto) {
+    public Integer updateBreedingTemplate(CreateBreedingStandardDto dto) {
         log.info("O BreedingStandardServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
         Integer currentUserId = getCurrentUserId();
         BreedingStandard breedingStandard = new BreedingStandard();
         BeanUtils.copyProperties(dto,breedingStandard);
         breedingStandard.setModifyTime(new Date())
                 .setModifyUserId(currentUserId);
-        Integer effective = breedingStandardMapper.updateByPrimaryKeySelective(breedingStandard);
-        if (effective == 1){
-            return true;
-        }
-        return false;
+        breedingStandardMapper.updateByPrimaryKeySelective(breedingStandard);
+        return breedingStandard.getId();
     }
 
     /**
@@ -111,6 +110,57 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Override
     public List<BreedingStandard> listAllBreedingStandard() {
         return breedingStandardMapper.listAllBreedingStandard();
+    }
+
+    /**
+     * 创建或者更新养殖模板参数
+     *
+     * @param dto
+     */
+    @Override
+    public void saveOrUpdateParameter(BreedingParameterListDto dto) {
+        List<BreedingStandardParameterItemDto> breedingStandardParameterList = dto.getBreedingStandardParameterList();
+        if (!CollectionUtils.isEmpty(breedingStandardParameterList)){
+            List<BreedingStandardParameterItemDto> newParameterList = new ArrayList<>();
+            List<BreedingStandardParameterItemDto> oldParameterList = new ArrayList<>();
+            for (BreedingStandardParameterItemDto itemDto : breedingStandardParameterList){
+                if (itemDto.getId() != null){
+                    oldParameterList.add(itemDto);
+                }else{
+                    newParameterList.add(itemDto);
+                }
+            }
+            Integer currentUserId = getCurrentUserId();
+            if (!CollectionUtils.isEmpty(newParameterList)){
+                List<BreedingStandardParameter> parameterList = new ArrayList<>();
+                for (BreedingStandardParameterItemDto itemDto : newParameterList){
+                    BreedingStandardParameter parameter = new BreedingStandardParameter();
+                    BeanUtils.copyProperties(dto,parameter);
+                    BeanUtils.copyProperties(itemDto,parameter);
+                    if (dto.getAlarm() == null){
+                        parameter.setAlarm(Boolean.FALSE);
+                    }
+                    parameter.setEnable(Boolean.TRUE)
+                            .setCreateTime(new Date())
+                            .setCreateUserId(currentUserId);
+                    parameterList.add(parameter);
+                }
+                standardParameterMapper.batchInsert(parameterList);
+            }
+            if (!CollectionUtils.isEmpty(oldParameterList)){
+                List<BreedingStandardParameter> parameterList = new ArrayList<>();
+                for (BreedingStandardParameterItemDto itemDto : oldParameterList){
+                    BreedingStandardParameter parameter = new BreedingStandardParameter();
+                    BeanUtils.copyProperties(dto,parameter);
+                    BeanUtils.copyProperties(itemDto,parameter);
+                    parameter
+                            .setModifyTime(new Date())
+                            .setModifyUserId(currentUserId);
+                    parameterList.add(parameter);
+                }
+                standardParameterMapper.batchUpdateByPrimaryKeySelective(parameterList);
+            }
+        }
     }
 
     private Integer getCurrentUserId() {

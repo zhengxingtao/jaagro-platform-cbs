@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
 public class DateUtil {
 
     private static Calendar fromCal = Calendar.getInstance();
-    private static  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 日期添加指定天数
@@ -63,7 +64,21 @@ public class DateUtil {
         return dateString;
     }
 
+    /**
+     * 将短时间格式字符串转换为时间 yyyy-MM-dd
+     * gavin
+     *
+     * @param strDate
+     * @return
+     */
+    public static Date strToDate(String strDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        ParsePosition pos = new ParsePosition(0);
+        Date strtodate = formatter.parse(strDate, pos);
+        return strtodate;
+    }
+
     public static void main(String[] args) {
-        System.out.println(getStringDateShort());
+        System.out.println(strToDate("2019-03-12"));
     }
 }
