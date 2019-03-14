@@ -273,9 +273,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @author: @Gao.
      */
     @Override
-    public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
+    public PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<Integer> purchaseOrderStatus = new ArrayList<>();
-        if (dto != null && dto.getPurchaseOrderStatus() == null) {
+        if (dto.getPurchaseOrderStatus() == null) {
             for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
                 purchaseOrderStatus.add(type.getCode());
             }
@@ -337,7 +338,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 }
             }
         }
-        return purchaseOrderDtos;
+        return new PageInfo(purchaseOrderDtos);
     }
 
     /**
@@ -494,7 +495,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private Integer getDayAge(Date beginDate) throws Exception {
         Integer day = 0;
         Date endDate = new Date();
-        if (beginDate == null && endDate == null) {
+        if (beginDate == null) {
             return day;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
