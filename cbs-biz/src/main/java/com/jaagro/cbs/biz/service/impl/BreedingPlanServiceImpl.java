@@ -206,7 +206,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (breedingPlan != null) {
             Date beginDate = breedingPlan.getPlanTime();
             Date endDate = new Date();
-            if (beginDate == null && endDate == null) {
+            if (beginDate == null) {
                 return day;
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

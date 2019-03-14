@@ -63,9 +63,9 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
     private BreedingPlanService breedingPlanService;
     @Autowired
     private MaterialConfigMapperExt materialConfigMapper;
-    private String PO_FOOD_PREFIX = "OS";
-    private String PO_SPROUT_PREFIX = "OM";
-    private String PO_DRUG_PREFIX = "OY";
+    private final String PO_FOOD_PREFIX = "OS";
+    private final String PO_SPROUT_PREFIX = "OM";
+    private final String PO_DRUG_PREFIX = "OY";
 
     /**
      * 根据养殖计划Id生成药品采购订单
@@ -117,7 +117,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         .setProductType(ProductTypeEnum.DRUG.getCode());
                 this.deleteByCriteria(orderBo);
                 //1.2: 保存第一个药品订单和订单明细
-                PurchaseOrder firstOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.DRUG.getCode(),breedingPlan.getPlanTime());
+                PurchaseOrder firstOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.DRUG.getCode(), breedingPlan.getPlanTime());
                 Integer orderId = firstOrder.getId();
                 List<PurchaseOrderItems> phaseOneItems = this.getDrugPurchaseOrderItems(breedingPlan, phaseOneProductIds, phaseOneBatchDrugDos);
                 this.savePurchaseOrderItems(orderId, phaseOneItems);
@@ -131,9 +131,9 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 this.deleteByCriteria(orderBo);
                 //2.2: 保存第二个药品订单和订单明细
                 //获取第二次停药日期
-                Map<Integer,String> progressDayAgesMap = new HashMap<>();
-                for(int j=0;j<breedingPlan.getBreedingDays();j++){
-                    progressDayAgesMap.put(j+1,DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(),j));
+                Map<Integer, String> progressDayAgesMap = new HashMap<>();
+                for (int j = 0; j < breedingPlan.getBreedingDays(); j++) {
+                    progressDayAgesMap.put(j + 1, DateUtil.accumulateDateByDay(breedingPlan.getPlanTime(), j));
                 }
                 Date secondStopDrugDate = new Date();
                 int j = 0;
@@ -141,15 +141,15 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     if (batchDrugDo.getStopDrugFlag()) {
                         j = j + 1;
                     }
-                    if(j==2){
-                        String strSecondStopDrugDate=progressDayAgesMap.get(batchDrugDo.getDayAgeStart());
-                        if(!StringUtils.isEmpty(strSecondStopDrugDate)) {
+                    if (j == 2) {
+                        String strSecondStopDrugDate = progressDayAgesMap.get(batchDrugDo.getDayAgeStart());
+                        if (!StringUtils.isEmpty(strSecondStopDrugDate)) {
                             secondStopDrugDate = DateUtil.strToDate(strSecondStopDrugDate);
                         }
                         break;
                     }
                 }
-                PurchaseOrder secondOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.DRUG.getCode(),secondStopDrugDate);
+                PurchaseOrder secondOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.DRUG.getCode(), secondStopDrugDate);
                 orderId = secondOrder.getId();
                 List<PurchaseOrderItems> phaseTwoItems = this.getDrugPurchaseOrderItems(breedingPlan, phaseTwoProductIds, phaseTwoBatchDrugDos);
                 this.savePurchaseOrderItems(orderId, phaseTwoItems);
@@ -192,14 +192,14 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 if (PhaseOneWeight.compareTo(BigDecimal.ZERO) == 1) {
                     //单位由克化成吨
                     PhaseOneWeight = PhaseOneWeight.divide(new BigDecimal(1000 * 1000)).setScale(3, BigDecimal.ROUND_HALF_UP);
-                    //1.删除鸡苗订单
+                    //1.删除第一个饲料订单
                     PurchaseOrderBo orderBo = new PurchaseOrderBo();
                     orderBo.setPlanId(planId)
                             .setOrderPhase(PurchaseOrderPhaseEnum.PHASE_ONE.getCode())
                             .setProductType(ProductTypeEnum.FEED.getCode());
                     this.deleteByCriteria(orderBo);
                     //2.保存第一个饲料订单（小料510）
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.FEED.getCode(),breedingPlan.getPlanTime());
+                    PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.FEED.getCode(), breedingPlan.getPlanTime());
                     //3. 保存订单明细
                     Integer orderId = purchaseOrder.getId();
                     List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -207,7 +207,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     purchaseOrderItemsDo.setProductId(feedConfig.getProductId());
                     purchaseOrderItemsDo.setQuantity(PhaseOneWeight);
                     orderItems.add(purchaseOrderItemsDo);
-                    savePurchaseOrderItems(orderId, orderItems);
+                    this.savePurchaseOrderItems(orderId, orderItems);
 
                     phaseOneOrders.add(purchaseOrder);
                 }
@@ -223,7 +223,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                             .setProductType(ProductTypeEnum.SPROUT.getCode());
                     this.deleteByCriteria(orderBo);
                     //2.插入鸡苗订单
-                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.SPROUT.getCode(),breedingPlan.getPlanTime());
+                    PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.SPROUT.getCode(), breedingPlan.getPlanTime());
                     //3. 保存订单明细
                     Integer orderId = purchaseOrder.getId();
                     List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -289,7 +289,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         this.deleteByCriteria(orderBo);
 
                         //2.插入第二次饲料订单(15->19日龄小料510订单)
-                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
+                        PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode(), new Date());
                         //3. 保存订单明细
                         Integer orderId = purchaseOrder.getId();
                         List<PurchaseOrderItems> orderItems = new ArrayList<>();
@@ -297,7 +297,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         purchaseOrderItemsDo.setProductId(feedConfig.getProductId());
                         purchaseOrderItemsDo.setQuantity(PhaseTwo1Weight);
                         orderItems.add(purchaseOrderItemsDo);
-                        savePurchaseOrderItems(orderId, orderItems);
+                        this.savePurchaseOrderItems(orderId, orderItems);
 
                         phaseTwoOrders.add(purchaseOrder);
                     }
@@ -318,59 +318,62 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<PurchaseOrder> calculatePhaseThreeFoodWeightById(Integer planId) {
+    public List<PurchaseOrder> calculatePhaseThreeFoodWeightById(Integer planId) throws Exception {
         List<PurchaseOrder> phaseTwoOrders = new ArrayList<>();
-        try {
-            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-            Assert.notNull(breedingPlan, "养殖计划不存在");
-            log.info("O BreedingBrainServiceImpl.calculatePhaseTwoFoodWeightById input planId:{}", planId);
-            //饲料采购第二阶段区间配置
-            MaterialConfig feedConfig = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode());
-            if (null != feedConfig) {
-                Integer dayAgeStart = feedConfig.getDayAgeStart();
-                Integer dayAgeEnd = feedConfig.getDayAgeEnd();
-                long currentDayAgeLong = breedingPlanService.getDayAge(planId);
-                //提前3天下单
-                int ageDay12 = 12;
-                if (currentDayAgeLong == ageDay12) {
-                    //获取第12日龄存栏数
-                    BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, ageDay12);
-                    Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
+        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+        Assert.notNull(breedingPlan, "养殖计划不存在");
+        log.info("O BreedingBrainServiceImpl.calculatePhaseTwoFoodWeightById input planId:{}", planId);
+        //饲料采购第二阶段区间配置
+        MaterialConfig feedConfigPhaseTwo = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode());
+        MaterialConfig feedConfigPhaseThree = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode());
+        if (null == feedConfigPhaseTwo) {
+            throw new NullPointerException("请先配置第二阶段日龄区间与需要采购的产品");
+        }
+        if (null == feedConfigPhaseThree) {
+            throw new NullPointerException("请先配置第三阶段日龄区间与需要采购的产品");
+        }
+        if (null != feedConfigPhaseThree && null != feedConfigPhaseTwo) {
+            Integer dayAgeStart = feedConfigPhaseThree.getDayAgeStart() == null ? 0 : feedConfigPhaseThree.getDayAgeStart();
+            Integer dayAgeEnd = feedConfigPhaseThree.getDayAgeEnd() == null ? 0 : feedConfigPhaseThree.getDayAgeEnd();
+            long currentDayAgeLong = breedingPlanService.getDayAge(planId);
+            //跟第二阶段小料510饲料采购订单同一天生成即第二阶段起始日龄提前3天下单
+            int ageDay12 = feedConfigPhaseTwo.getDayAgeStart() - 3;
+            if (currentDayAgeLong == ageDay12) {
+                //获取第12日龄存栏数
+                BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, ageDay12);
+                Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
 
-                    //20->28日龄区间每天每只鸡吃的饲料（大料511）总和
-                    BigDecimal totalFeedWeight2028 = getSumFoodWeightByPlanIdAndDayAgeArea(planId, dayAgeStart, dayAgeEnd);
-                    //第二阶段大料511需要采购的数量
-                    BigDecimal PhaseTwo2Weight = totalFeedWeight2028.multiply(new BigDecimal(ageDay12LivingQuantity));
-                    if (PhaseTwo2Weight.compareTo(BigDecimal.ZERO) == 1) {
-                        //克转换成吨
-                        PhaseTwo2Weight = PhaseTwo2Weight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
+                //20->28日龄区间每天每只鸡吃的饲料（大料511）总和
+                BigDecimal totalFeedWeight2028 = getSumFoodWeightByPlanIdAndDayAgeArea(planId, dayAgeStart, dayAgeEnd);
+                //第二阶段大料511需要采购的数量
+                BigDecimal PhaseTwo2Weight = totalFeedWeight2028.multiply(new BigDecimal(ageDay12LivingQuantity));
+                if (PhaseTwo2Weight.compareTo(BigDecimal.ZERO) == 1) {
+                    //克转换成吨
+                    PhaseTwo2Weight = PhaseTwo2Weight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
 
-                        //1.删除第二次饲料订单和明细
-                        PurchaseOrderBo orderBo = new PurchaseOrderBo();
-                        orderBo.setPlanId(planId)
-                                .setOrderPhase(PurchaseOrderPhaseEnum.PHASE_THREE.getCode())
-                                .setProductType(ProductTypeEnum.FEED.getCode());
-                        this.deleteByCriteria(orderBo);
+                    //1.删除第二次饲料订单和明细
+                    PurchaseOrderBo orderBo = new PurchaseOrderBo();
+                    orderBo.setPlanId(planId)
+                            .setOrderPhase(PurchaseOrderPhaseEnum.PHASE_THREE.getCode())
+                            .setProductType(ProductTypeEnum.FEED.getCode());
+                    this.deleteByCriteria(orderBo);
 
-                        //2.插入第二次饲料订单（20->28日龄大料511饲料订单）
-                        PurchaseOrder purchaseOrder = savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
-                        //3. 保存订单明细
-                        Integer orderId = purchaseOrder.getId();
-                        List<PurchaseOrderItems> orderItems = new ArrayList<>();
-                        PurchaseOrderItems purchaseOrderItemsDo = new PurchaseOrderItems();
-                        purchaseOrderItemsDo.setProductId(feedConfig.getProductId());
-                        purchaseOrderItemsDo.setQuantity(PhaseTwo2Weight);
-                        orderItems.add(purchaseOrderItemsDo);
-                        savePurchaseOrderItems(orderId, orderItems);
+                    //2.插入第二次饲料订单（20->28日龄大料511饲料订单）
+                    PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode(), new Date());
+                    //3. 保存订单明细
+                    Integer orderId = purchaseOrder.getId();
+                    List<PurchaseOrderItems> orderItems = new ArrayList<>();
+                    PurchaseOrderItems purchaseOrderItemsDo = new PurchaseOrderItems();
+                    purchaseOrderItemsDo.setProductId(feedConfigPhaseThree.getProductId());
+                    purchaseOrderItemsDo.setQuantity(PhaseTwo2Weight);
+                    orderItems.add(purchaseOrderItemsDo);
+                    this.savePurchaseOrderItems(orderId, orderItems);
 
-                        phaseTwoOrders.add(purchaseOrder);
-                    }
+                    phaseTwoOrders.add(purchaseOrder);
                 }
             }
-        } catch (Exception ex) {
-            log.error("R BreedingBrainServiceImpl.calculatePhaseTwoFoodWeightById  error:" + ex);
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
+
         return phaseTwoOrders;
     }
 
@@ -391,25 +394,37 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             Assert.notNull(breedingPlan, "养殖计划不存在");
             log.info("O BreedingBrainServiceImpl.calculatePhaseThreeFoodWeightById input planId:{}", planId);
 
-            MaterialConfig feedConfig = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode());
-            if (null != feedConfig) {
-                Integer dayAgeStart = feedConfig.getDayAgeStart();
+            MaterialConfig feedConfigPhaseTwo = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_TWO.getCode(), ProductTypeEnum.FEED.getCode());
+            MaterialConfig feedConfigPhaseThree = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_THREE.getCode(), ProductTypeEnum.FEED.getCode());
+            MaterialConfig feedConfigPhaseFour = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode());
+            if (null == feedConfigPhaseTwo) {
+                throw new NullPointerException("请先配置第二阶段日龄区间与需要采购的产品");
+            }
+            if (null == feedConfigPhaseThree) {
+                throw new NullPointerException("请先配置第三阶段日龄区间与需要采购的产品");
+            }
+            if (null == feedConfigPhaseFour) {
+                throw new NullPointerException("请先配置第四阶段日龄区间与需要采购的产品");
+            }
+
+            if (null != feedConfigPhaseFour) {
+                Integer dayAgeStart = feedConfigPhaseFour.getDayAgeStart();
                 int breedingDays = breedingPlan.getBreedingDays();
                 long currentDayAgeLong = breedingPlanService.getDayAge(planId);
                 //提前3天下单
                 int ageDay26 = dayAgeStart - 3;
                 if (currentDayAgeLong == ageDay26) {
                     //获取第12日龄存栏数
-                    BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, 12);
+                    BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, feedConfigPhaseTwo.getDayAgeStart() - 3);
                     Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
                     //获取第19日龄存栏数
-                    BatchInfoBo ageDay19BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, 19);
+                    BatchInfoBo ageDay19BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, feedConfigPhaseThree.getDayAgeStart() - 1);
                     Integer ageDay19LivingQuantity = ageDay19BatchInfoBo.getCurrentAmount();
                     //获取提前3天即第26日龄存栏数
                     BatchInfoBo ageDay26BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, ageDay26);
                     Integer ageDay26LivingQuantity = ageDay26BatchInfoBo.getCurrentAmount();
                     //20->28日龄区间每天每只鸡吃的饲料总和
-                    BigDecimal totalFeedWeight2028 = getSumFoodWeightByPlanIdAndDayAgeArea(planId, 20, 28);
+                    BigDecimal totalFeedWeight2028 = getSumFoodWeightByPlanIdAndDayAgeArea(planId, feedConfigPhaseThree.getDayAgeStart(), feedConfigPhaseThree.getDayAgeEnd());
                     //29->breedingDays日龄区间每天每只鸡吃的饲料总和
                     BigDecimal totalFeedWeight29BreedingDays = getSumFoodWeightByPlanIdAndDayAgeArea(planId, dayAgeStart, breedingDays);
 
@@ -420,13 +435,13 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     //12->19日龄期间剩余的饲料
                     BigDecimal b = totalFeedWeight2028.multiply(new BigDecimal(diffLivingQuantity1219));
                     //计算 20->26日龄区间剩余饲料
-                    BigDecimal c = getSumLeftFoodWeightByPlanIdAndDayAgeArea(planId, 20, 26);
+                    BigDecimal c = getSumLeftFoodWeightByPlanIdAndDayAgeArea(planId, feedConfigPhaseThree.getDayAgeStart(), ageDay26);
                     //第三次大料511需要采购的数量
-                    BigDecimal PhaseThreeWeight = a.subtract(b).subtract(c);
+                    BigDecimal PhaseFourWeight = a.subtract(b).subtract(c);
 
-                    if (PhaseThreeWeight.compareTo(BigDecimal.ZERO) == 1) {
+                    if (PhaseFourWeight.compareTo(BigDecimal.ZERO) == 1) {
                         //克转换成吨
-                        PhaseThreeWeight = PhaseThreeWeight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
+                        PhaseFourWeight = PhaseFourWeight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
                         //1.删除第三次饲料订单和明细
                         PurchaseOrderBo orderBo = new PurchaseOrderBo();
                         orderBo.setPlanId(planId)
@@ -435,13 +450,13 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                         this.deleteByCriteria(orderBo);
 
                         //2.插入第三次饲料订单（29->->计划养殖天数日龄大料511饲料订单）
-                        PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode(),new Date());
+                        PurchaseOrder purchaseOrder = this.savePurchaseOrder(breedingPlan, PurchaseOrderPhaseEnum.PHASE_FOUR.getCode(), ProductTypeEnum.FEED.getCode(), new Date());
                         //3. 保存订单明细
                         Integer orderId = purchaseOrder.getId();
                         List<PurchaseOrderItems> orderItems = new ArrayList<>();
                         PurchaseOrderItems purchaseOrderItemsDo = new PurchaseOrderItems();
-                        purchaseOrderItemsDo.setProductId(feedConfig.getProductId());
-                        purchaseOrderItemsDo.setQuantity(PhaseThreeWeight);
+                        purchaseOrderItemsDo.setProductId(feedConfigPhaseFour.getProductId());
+                        purchaseOrderItemsDo.setQuantity(PhaseFourWeight);
                         orderItems.add(purchaseOrderItemsDo);
                         savePurchaseOrderItems(orderId, orderItems);
 
@@ -488,7 +503,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      * @param productType
      * @return
      */
-    private PurchaseOrder savePurchaseOrder(BreedingPlan plan, Integer phase, Integer productType,Date calculateDate) {
+    private PurchaseOrder savePurchaseOrder(BreedingPlan plan, Integer phase, Integer productType, Date calculateDate) {
         UserInfo currentUser = currentUserService.getCurrentUser();
         Integer userId = currentUser.getId();
         PurchaseOrder purchaseOrder = new PurchaseOrder();
@@ -591,7 +606,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 purchaseOrderItemsMapper.insert(orderItem);
             }
         }
-        PurchaseOrder order  = new PurchaseOrder();
+        PurchaseOrder order = new PurchaseOrder();
         order.setAmount(orderAmount);
         order.setId(orderId);
         order.setModifyTime(new Date());
@@ -639,8 +654,8 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         List<BreedingBatchParameter> breedingBatchParameterDos;
         //从redis里去取养殖计划的喂养参数
         String key = planId + BreedingStandardParamEnum.FEEDING_WEIGHT.getType() + DateUtil.getStringDateShort();
-        String BatchParameterListJson = redis.get(key);
-        if (StringUtils.isEmpty(BatchParameterListJson)) {
+        String batchParameterListJson = redis.get(key);
+        if (StringUtils.isEmpty(batchParameterListJson)) {
             //养殖计划所用的参数
             BreedingBatchParameterExample batchParameterExample = new BreedingBatchParameterExample();
             batchParameterExample.createCriteria().andPlanIdEqualTo(planId)
@@ -651,7 +666,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 redis.set(key, JsonUtils.objectToJson(breedingBatchParameterDos), 1800);
             }
         } else {
-            breedingBatchParameterDos = JsonUtils.jsonToList(BatchParameterListJson, BreedingBatchParameter.class);
+            breedingBatchParameterDos = JsonUtils.jsonToList(batchParameterListJson, BreedingBatchParameter.class);
         }
 
         BigDecimal totalFeedWeight = BigDecimal.ZERO;
@@ -678,9 +693,9 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         BatchInfoBo batchInfoBo = new BatchInfoBo();
         //从redis里去取养殖计划所有日龄的死淘、存栏记录
         String key = planId + BreedingStandardParamEnum.DIE.getType();
-        String BatchInfoListJson = redis.get(key);
+        String batchInfoListJson = redis.get(key);
         List<BatchInfo> batchInfoDos;
-        if (StringUtils.isEmpty(BatchInfoListJson)) {
+        if (StringUtils.isEmpty(batchInfoListJson)) {
             //养殖计划过程中的死淘记录
             BatchInfoExample example = new BatchInfoExample();
             example.createCriteria().andPlanIdEqualTo(planId).andEnableEqualTo(true);
@@ -689,14 +704,15 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 redis.set(key, JsonUtils.objectToJson(batchInfoDos), 1800);
             }
         } else {
-            batchInfoDos = JsonUtils.jsonToList(BatchInfoListJson, BatchInfo.class);
+            batchInfoDos = JsonUtils.jsonToList(batchInfoListJson, BatchInfo.class);
         }
-
-        List<BatchInfo> batchInfoList = batchInfoDos.stream().filter(c -> c.getDayAge().equals(dayAge)).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(batchInfoList)) {
-            BatchInfo batchInfo = batchInfoList.get(0);
-            batchInfoBo.setDeadAmount(batchInfo.getDeadAmount());
-            batchInfoBo.setCurrentAmount(batchInfo.getCurrentAmount());
+        if (!CollectionUtils.isEmpty(batchInfoDos)) {
+            List<BatchInfo> batchInfoList = batchInfoDos.stream().filter(c -> c.getDayAge().equals(dayAge)).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(batchInfoList)) {
+                BatchInfo batchInfo = batchInfoList.get(0);
+                batchInfoBo.setDeadAmount(batchInfo.getDeadAmount());
+                batchInfoBo.setCurrentAmount(batchInfo.getCurrentAmount());
+            }
         }
         return batchInfoBo;
     }
@@ -724,10 +740,11 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         } else {
             materialConfigDos = JsonUtils.jsonToList(materialConfigListJson, MaterialConfig.class);
         }
-
-        List<MaterialConfig> configs = materialConfigDos.stream().filter(c -> c.getOrderPhase().equals(phase) && c.getProductType().equals(productType)).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(configs)) {
-            return configs.get(0);
+        if (!CollectionUtils.isEmpty(materialConfigDos)) {
+            List<MaterialConfig> configs = materialConfigDos.stream().filter(c -> c.getOrderPhase().equals(phase) && c.getProductType().equals(productType)).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(configs)) {
+                return configs.get(0);
+            }
         }
         return null;
     }

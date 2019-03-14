@@ -269,9 +269,9 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             FeedingFactoryBo deathBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.DEATH_AMOUNT.getCode());
             List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
             breedingRecordDto.setDeathList(deathAmountList);
-            if (!CollectionUtils.isEmpty(deathAmountList)) {
-                Integer deathTotal = 0;
-                for (BreedingRecord breedingRecord : deathAmountList) {
+            if (!CollectionUtils.isEmpty(deathAmountList)){
+                int deathTotal = 0;
+                for (BreedingRecord breedingRecord : deathAmountList){
                     deathTotal += breedingRecord.getBreedingValue().intValue();
                 }
                 breedingRecordDto.setDeathTotal(deathTotal);

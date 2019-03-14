@@ -1,7 +1,6 @@
 package com.jaagro.cbs.web.controller;
 
 import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
-import com.jaagro.cbs.api.dto.plan.CreatePlanContractDto;
 import com.jaagro.cbs.api.model.PurchaseOrder;
 import com.jaagro.cbs.api.service.BreedingBrainService;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +48,17 @@ public class BreedingBrainOrderController {
         breedingPurchaseOrderService.listPurchaseOrderPreset(dto);
 
         return BaseResponse.successInstance("录入合同成功");
+    }
+    @ApiOperation("根据养殖计划Id计算1->14天饲料订单")
+    @PostMapping("/calculatePhaseOneFoodWeightById/{planId}")
+    public BaseResponse calculatePhaseOneFoodWeightById(@PathVariable("planId") Integer planId) {
+        List<PurchaseOrder> purchaseOrders;
+        Assert.notNull(planId, "养殖计划id不能为空");
+        try {
+            purchaseOrders = breedingBrainService.calculatePhaseOneFoodWeightById(planId);
+        } catch (Exception ex) {
+            return BaseResponse.errorInstance("1->14天饲料订单失败：" + ex);
+        }
+        return BaseResponse.successInstance(purchaseOrders);
     }
 }
