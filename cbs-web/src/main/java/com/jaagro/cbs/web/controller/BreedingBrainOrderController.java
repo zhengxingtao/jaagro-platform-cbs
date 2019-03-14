@@ -37,5 +37,16 @@ public class BreedingBrainOrderController {
         return BaseResponse.successInstance(purchaseOrders);
     }
 
-
+    @ApiOperation("根据养殖计划Id计算1->14天饲料订单")
+    @PostMapping("/calculatePhaseOneFoodWeightById/{planId}")
+    public BaseResponse calculatePhaseOneFoodWeightById(@PathVariable("planId") Integer planId) {
+        List<PurchaseOrder> purchaseOrders;
+        Assert.notNull(planId, "养殖计划id不能为空");
+        try {
+            purchaseOrders = breedingBrainService.calculatePhaseOneFoodWeightById(planId);
+        } catch (Exception ex) {
+            return BaseResponse.errorInstance("1->14天饲料订单失败：" + ex);
+        }
+        return BaseResponse.successInstance(purchaseOrders);
+    }
 }

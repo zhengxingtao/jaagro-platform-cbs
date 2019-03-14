@@ -31,7 +31,7 @@ public interface BreedingBrainService {
      * @param planId
      * @return
      */
-    List<PurchaseOrder> calculatePhaseThreeFoodWeightById(Integer planId);
+    List<PurchaseOrder> calculatePhaseThreeFoodWeightById(Integer planId) throws Exception;
     /**
      * 根据养殖计划Id生成29->计划养殖天数的饲料订单
      * 饲料采购 - 第三次饲料配送

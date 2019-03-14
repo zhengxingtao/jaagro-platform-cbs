@@ -269,7 +269,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
             breedingRecordDto.setDeathList(deathAmountList);
             if (!CollectionUtils.isEmpty(deathAmountList)){
-                Integer deathTotal = 0;
+                int deathTotal = 0;
                 for (BreedingRecord breedingRecord : deathAmountList){
                     deathTotal += breedingRecord.getBreedingValue().intValue();
                 }
