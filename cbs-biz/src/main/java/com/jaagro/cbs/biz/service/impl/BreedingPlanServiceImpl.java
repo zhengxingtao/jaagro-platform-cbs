@@ -326,7 +326,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         strDate = strDateAppendYear(strDate);
         List<BreedingBatchParamTrackingDto> breedingBatchParam = breedingProgressService.getBreedingBatchParamById(planId, coopId, dayAge, strDate);
         breedingBatchParamListDto.setBreedingBatchParamTrackingDtoList(breedingBatchParam);
-        return breedingBatchParamListDto;
+        return breedingBatchParamListDto; 
     }
 
     /**
