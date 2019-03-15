@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.order.AccumulationPurchaseOrderParamDto;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
+import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDetailsDto;
 import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto;
 import com.jaagro.cbs.api.enums.PackageUnitEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
@@ -100,8 +101,14 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
         return new PageInfo(returnPurchaseOrderPresetDtos);
     }
 
+    /**
+     * 采购预置详情
+     *
+     * @param purchaseOrderId
+     * @return
+     */
     @Override
-    public void purchaseOrderPresetDetails(Integer purchaseOrderId) {
-
+    public ReturnPurchaseOrderPresetDetailsDto purchaseOrderPresetDetails(Integer purchaseOrderId) {
+        return null;
     }
 }
