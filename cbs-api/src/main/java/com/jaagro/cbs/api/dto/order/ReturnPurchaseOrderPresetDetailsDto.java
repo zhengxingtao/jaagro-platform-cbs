@@ -27,6 +27,16 @@ public class ReturnPurchaseOrderPresetDetailsDto implements Serializable {
     private String batchNo;
 
     /**
+     * 计划上鸡数量
+     */
+    private Integer planChickenQuantity;
+
+    /**
+     * 上鸡时间
+     */
+    private Date planTime;
+
+    /**
      * 商品采购单编号
      */
     private String purchaseNo;
@@ -35,6 +45,10 @@ public class ReturnPurchaseOrderPresetDetailsDto implements Serializable {
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
     private String purchaseOrderStatus;
+    /**
+     * 计划送达时间
+     */
+    private Date planDeliveryTime;
 
     /**
      * 开单时间
@@ -44,22 +58,29 @@ public class ReturnPurchaseOrderPresetDetailsDto implements Serializable {
     /**
      * 待送达时间
      */
-    private Date planDeliveryTime;
-
-    /**
-     * 到货时间
-     */
     private Date deliveryTime;
 
     /**
-     *
+     * 签收时间
      */
-    private String orderPhase;
+    private Date signerTime;
 
+    /**
+     * 养殖户名称
+     */
+    private String customerName;
+
+    /**
+     * 养殖户电话
+     */
+    private String customerPhone;
+
+    /**
+     * 养殖户地址
+     */
+    private String customerAddress;
     /**
      * 采购订单商品
      */
     private List<ReturnProductDto> returnProductDtos;
-
-
 }

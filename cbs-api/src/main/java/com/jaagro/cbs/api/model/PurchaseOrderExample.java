@@ -896,6 +896,66 @@ public class PurchaseOrderExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andSignerTimeIsNull() {
+            addCriterion("signer_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeIsNotNull() {
+            addCriterion("signer_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeEqualTo(Date value) {
+            addCriterion("signer_time =", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeNotEqualTo(Date value) {
+            addCriterion("signer_time <>", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeGreaterThan(Date value) {
+            addCriterion("signer_time >", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("signer_time >=", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeLessThan(Date value) {
+            addCriterion("signer_time <", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeLessThanOrEqualTo(Date value) {
+            addCriterion("signer_time <=", value, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeIn(List<Date> values) {
+            addCriterion("signer_time in", values, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeNotIn(List<Date> values) {
+            addCriterion("signer_time not in", values, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeBetween(Date value1, Date value2) {
+            addCriterion("signer_time between", value1, value2, "signerTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignerTimeNotBetween(Date value1, Date value2) {
+            addCriterion("signer_time not between", value1, value2, "signerTime");
+            return (Criteria) this;
+        }
+
         public Criteria andNotesIsNull() {
             addCriterion("notes is null");
             return (Criteria) this;

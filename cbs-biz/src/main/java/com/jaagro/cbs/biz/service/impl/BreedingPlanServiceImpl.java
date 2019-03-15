@@ -166,7 +166,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         for (ReturnBreedingPlanDto returnBreedingPlanDto : planDtoList) {
             //填充养殖户信息
             if (returnBreedingPlanDto.getCustomerId() != null) {
-                ShowCustomerDto customerInfo = getCustomerInfo(returnBreedingPlanDto.getCustomerId());
+                CustomerInfoParamDto customerInfo = getCustomerInfo(returnBreedingPlanDto.getCustomerId());
                 if (customerInfo.getCustomerName() != null) {
                     returnBreedingPlanDto
                             .setCustomerName(customerInfo.getCustomerName());
@@ -216,11 +216,27 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @author @Gao.
      */
     @Override
-    public ShowCustomerDto getCustomerInfo(Integer customerId) {
-        ShowCustomerDto showCustomerDto = new ShowCustomerDto();
+    public CustomerInfoParamDto getCustomerInfo(Integer customerId) {
+        CustomerInfoParamDto showCustomerDto = new CustomerInfoParamDto();
         ShowCustomerDto customer = customerClientService.getShowCustomerById(customerId);
-        if (customer != null && customer.getCustomerName() != null) {
-            showCustomerDto.setCustomerName(customer.getCustomerName());
+        if (customer != null) {
+            StringBuilder sb = new StringBuilder();
+            if (customer.getCustomerName() != null) {
+                showCustomerDto.setCustomerName(customer.getCustomerName());
+            }
+            if (customer.getProvince() != null) {
+                sb.append(customer.getProvince());
+            }
+            if (customer.getCity() != null) {
+                sb.append(customer.getCity());
+            }
+            if (customer.getCounty() != null) {
+                sb.append(customer.getCounty());
+            }
+            if (customer.getAddress() != null) {
+                sb.append(customer.getAddress());
+            }
+            showCustomerDto.setCustomerAddress(sb.toString());
         }
         CustomerContactsReturnDto customerContactByCustomer = customerClientService.getCustomerContactByCustomerId(customerId);
         if (customerContactByCustomer != null && customerContactByCustomer.getPhone() != null) {
@@ -363,7 +379,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         strDate = strDateAppendYear(strDate);
         List<BreedingBatchParamTrackingDto> breedingBatchParam = breedingProgressService.getBreedingBatchParamById(planId, coopId, dayAge, strDate);
         breedingBatchParamListDto.setBreedingBatchParamTrackingDtoList(breedingBatchParam);
-        return breedingBatchParamListDto; 
+        return breedingBatchParamListDto;
     }
 
     /**

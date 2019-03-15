@@ -3,6 +3,7 @@ package com.jaagro.cbs.api.service;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.order.*;
+import com.jaagro.cbs.api.dto.plan.ReturnCustomerInfoDto;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public interface BreedingFarmerService {
      * @return
      * @author @Gao.
      */
-   PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto);
+    PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto);
 
     /**
      * 农户端采购订单详情
@@ -87,5 +88,12 @@ public interface BreedingFarmerService {
      * @return
      */
     PageInfo listTechnicalInquiries(BreedingBatchParamDto dto);
+
+    /**
+     * 获取客户名称与id
+     *
+     * @return
+     */
+    ReturnCustomerInfoDto getCustomerInfo();
 
 }

@@ -148,7 +148,7 @@ public interface BreedingPlanService {
      * @return
      */
 
-    ShowCustomerDto getCustomerInfo(Integer customerId);
+    CustomerInfoParamDto getCustomerInfo(Integer customerId);
 
 
     /**

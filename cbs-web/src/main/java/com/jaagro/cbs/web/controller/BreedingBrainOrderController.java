@@ -71,6 +71,6 @@ public class BreedingBrainOrderController {
         if (purchaseOrderId == null) {
             return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id不能为空");
         }
-        return BaseResponse.successInstance(null);
+        return BaseResponse.successInstance(breedingPurchaseOrderService.purchaseOrderPresetDetails(purchaseOrderId));
     }
 }

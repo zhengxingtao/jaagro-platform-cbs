@@ -30,7 +30,22 @@ public class ShowCustomerDto implements Serializable {
     private String enableDirectOrder;
 
     /**
-     * 主手机号
+     * 城市
      */
-    private String customerPhone;
+    private String city;
+
+    /**
+     * 省
+     */
+    private String province;
+
+    /**
+     * 区
+     */
+    private String county;
+
+    /**
+     * 详细地址
+     */
+    private String address;
 }

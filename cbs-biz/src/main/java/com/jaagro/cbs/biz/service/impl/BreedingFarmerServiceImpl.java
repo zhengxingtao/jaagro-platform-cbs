@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.order.*;
+import com.jaagro.cbs.api.dto.plan.ReturnCustomerInfoDto;
 import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
@@ -483,6 +484,32 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         }
 
         return new PageInfo(techConsultRecords);
+    }
+
+    /**
+     * 获取客户名称与id
+     *
+     * @return
+     * @author: @Gao.
+     */
+    @Override
+    public ReturnCustomerInfoDto getCustomerInfo() {
+        ReturnCustomerInfoDto customerInfoDto = new ReturnCustomerInfoDto();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                customerInfoDto
+                        .setCustomerId(customerUser.getRelevanceId());
+                ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
+                boolean flag = showCustomer != null && showCustomer.getCustomerName() != null;
+                if (flag) {
+                    customerInfoDto
+                            .setCustomerName(showCustomer.getCustomerName());
+                }
+            }
+        }
+        return customerInfoDto;
     }
 
     /**

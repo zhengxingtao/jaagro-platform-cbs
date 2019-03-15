@@ -27,6 +27,11 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     private String batchNo;
 
     /**
+     * 养殖计划id
+     */
+    private Integer planId;
+
+    /**
      * 商品采购单编号
      */
     private String purchaseNo;
@@ -42,14 +47,19 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     private Date createTime;
 
     /**
-     * 待送达时间
+     * 计划送达时间
      */
     private Date planDeliveryTime;
 
     /**
-     * 到货时间
+     * 待签收时间
      */
     private Date deliveryTime;
+
+    /**
+     * 签收时间
+     */
+    private Date signerTime;
 
     /**
      *

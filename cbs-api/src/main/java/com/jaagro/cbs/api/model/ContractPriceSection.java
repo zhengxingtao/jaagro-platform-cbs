@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 
 /**
  * @author :gaoxin
- * @date :2019/03/11
+ * @date :2019/03/15
  */
 @Data
 @NoArgsConstructor
@@ -38,17 +38,17 @@ public class ContractPriceSection implements Serializable {
     private BigDecimal recyclingPrice;
 
     /**
-     * 体重区间下限
+     * 体重区间下限(包含)
      */
     private BigDecimal weightLower;
 
     /**
-     * 体重区间上限
+     * 体重区间上限(不包含)
      */
     private BigDecimal weightUpper;
 
     /**
-     * 是否是市场价(0-不是,1-是)
+     *  是否是市场价(0-不是,1-是)
      */
     private Boolean marketPriceFlag;
 

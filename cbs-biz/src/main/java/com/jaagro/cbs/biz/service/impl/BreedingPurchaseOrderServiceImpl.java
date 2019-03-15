@@ -2,26 +2,23 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.base.CustomerContactsReturnDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
-import com.jaagro.cbs.api.dto.order.AccumulationPurchaseOrderParamDto;
-import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
-import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDetailsDto;
-import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto;
+import com.jaagro.cbs.api.dto.order.*;
+import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.enums.PackageUnitEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
-import com.jaagro.cbs.api.model.PurchaseOrderItems;
-import com.jaagro.cbs.api.model.PurchaseOrderItemsExample;
+import com.jaagro.cbs.api.model.BreedingPlan;
+import com.jaagro.cbs.api.model.BreedingPlanExample;
+import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
-import com.jaagro.cbs.api.service.BreedingPlantService;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.mapper.PurchaseOrderItemsMapperExt;
 import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -46,6 +43,10 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
     private UserClientService userClientService;
     @Autowired
     private CurrentUserService currentUserService;
+    @Autowired
+    private BreedingFarmerService breedingFarmerService;
+    @Autowired
+    private CustomerClientService customerClientService;
 
     /**
      * 采购预置列表
@@ -64,7 +65,7 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
         if (!CollectionUtils.isEmpty(returnPurchaseOrderPresetDtos)) {
             for (ReturnPurchaseOrderPresetDto returnPurchaseOrderPresetDto : returnPurchaseOrderPresetDtos) {
                 if (returnPurchaseOrderPresetDto.getCustomerId() != null) {
-                    ShowCustomerDto customerInfo = breedingPlanService.getCustomerInfo(returnPurchaseOrderPresetDto.getCustomerId());
+                    CustomerInfoParamDto customerInfo = breedingPlanService.getCustomerInfo(returnPurchaseOrderPresetDto.getCustomerId());
                     if (customerInfo.getCustomerName() != null && customerInfo.getCustomerPhone() != null) {
                         returnPurchaseOrderPresetDto
                                 .setCustomerPhone(customerInfo.getCustomerPhone())
@@ -109,6 +110,50 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
      */
     @Override
     public ReturnPurchaseOrderPresetDetailsDto purchaseOrderPresetDetails(Integer purchaseOrderId) {
-        return null;
+        ReturnFarmerPurchaseOrderDetailsDto returnFarmerPurchaseOrderDetailsDto = breedingFarmerService.purchaseOrderDetails(purchaseOrderId);
+        ReturnPurchaseOrderPresetDetailsDto returnPurchaseOrderPresetDetailsDto = new ReturnPurchaseOrderPresetDetailsDto();
+        //采购信息
+        if (returnFarmerPurchaseOrderDetailsDto != null) {
+            BeanUtils.copyProperties(returnFarmerPurchaseOrderDetailsDto, returnPurchaseOrderPresetDetailsDto);
+            if (returnFarmerPurchaseOrderDetailsDto.getReturnProductDtos() != null) {
+                returnPurchaseOrderPresetDetailsDto.setReturnProductDtos(returnFarmerPurchaseOrderDetailsDto.getReturnProductDtos());
+            }
+            //批次信息
+            if (returnFarmerPurchaseOrderDetailsDto.getPlanId() != null) {
+                BreedingPlanExample breedingPlanExample = new BreedingPlanExample();
+                breedingPlanExample
+                        .createCriteria()
+                        .andEnableEqualTo(true)
+                        .andIdEqualTo(returnFarmerPurchaseOrderDetailsDto.getPlanId());
+                List<BreedingPlan> breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
+                if (!CollectionUtils.isEmpty(breedingPlans)) {
+                    BreedingPlan breedingPlan = breedingPlans.get(0);
+                    if (breedingPlan.getPlanChickenQuantity() != null) {
+                        returnPurchaseOrderPresetDetailsDto.setPlanChickenQuantity(breedingPlan.getPlanChickenQuantity());
+                    }
+                    if (breedingPlan.getPlanTime() != null) {
+                        returnPurchaseOrderPresetDetailsDto.setPlanTime(breedingPlan.getPlanTime());
+                    }
+                    //客户信息
+                    if (breedingPlan.getCustomerId() != null) {
+                        CustomerInfoParamDto customerInfo = breedingPlanService.getCustomerInfo(breedingPlan.getCustomerId());
+                        if (customerInfo != null) {
+                            if (customerInfo.getCustomerName() != null) {
+                                returnPurchaseOrderPresetDetailsDto
+                                        .setCustomerName(customerInfo.getCustomerName());
+                            }
+                            if (customerInfo.getCustomerPhone() != null) {
+                                returnPurchaseOrderPresetDetailsDto
+                                        .setCustomerPhone(customerInfo.getCustomerPhone());
+                            }
+                            if (customerInfo.getCustomerAddress() != null) {
+                                returnPurchaseOrderPresetDetailsDto.setCustomerAddress(customerInfo.getCustomerAddress());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return returnPurchaseOrderPresetDetailsDto;
     }
 }

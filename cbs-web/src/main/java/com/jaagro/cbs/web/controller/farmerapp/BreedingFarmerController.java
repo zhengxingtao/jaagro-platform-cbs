@@ -343,4 +343,10 @@ public class BreedingFarmerController {
         breedingPlanService.uploadBreedingRecord(createBreedingRecordDto);
         return BaseResponse.successInstance("上传成功");
     }
+
+    @GetMapping("/getCustomerInfo")
+    @ApiOperation("获取客户基本信息")
+    public BaseResponse getCustomerInfo() {
+        return BaseResponse.successInstance(breedingFarmerService.getCustomerInfo());
+    }
 }
