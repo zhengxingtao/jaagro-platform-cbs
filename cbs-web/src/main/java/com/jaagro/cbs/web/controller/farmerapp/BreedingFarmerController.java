@@ -12,7 +12,6 @@ import com.jaagro.cbs.api.dto.progress.BreedingRecordDto;
 import com.jaagro.cbs.api.enums.EmergencyLevelEnum;
 import com.jaagro.cbs.api.enums.UserTypeEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
-import com.jaagro.cbs.api.model.BreedingRecordItems;
 import com.jaagro.cbs.api.model.Message;
 import com.jaagro.cbs.api.model.TechConsultRecord;
 import com.jaagro.cbs.api.service.BreedingFarmerService;

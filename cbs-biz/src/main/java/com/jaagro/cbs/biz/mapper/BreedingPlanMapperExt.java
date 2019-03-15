@@ -8,6 +8,8 @@ import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
 import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto;
 import com.jaagro.cbs.api.dto.plan.BreedingPlanParamDto;
 import com.jaagro.cbs.api.dto.plan.ReturnBreedingPlanDto;
+import com.jaagro.cbs.api.dto.standard.BreedingParamTemplateCriteria;
+import com.jaagro.cbs.api.dto.standard.ReturnBreedingParamTemplateDto;
 import com.jaagro.cbs.api.model.BreedingPlan;
 import com.jaagro.cbs.api.model.BreedingPlanExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
@@ -63,4 +65,12 @@ public interface BreedingPlanMapperExt extends BaseMapper<BreedingPlan, Breeding
      * @author @Gao.
      */
     List<ReturnPurchaseOrderPresetDto> listPurchaseOrderPreset(PurchaseOrderPresetCriteriaDto dto);
+
+    /**
+     * 养殖大脑 养殖参数列表
+     *
+     * @param criteria
+     * @return
+     */
+    List<ReturnBreedingParamTemplateDto> listBreedingParamTemplate(BreedingParamTemplateCriteria criteria);
 }

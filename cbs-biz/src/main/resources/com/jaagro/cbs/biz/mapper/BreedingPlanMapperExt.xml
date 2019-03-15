@@ -63,7 +63,8 @@
             parameterType="com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto">
         select
         bp.batch_no batchNo,bp.customer_id customerId, po.purchase_name purchaseName,
-        po.id purchaseOrderId,po.purchase_no purchaseNo,po.product_type productType,po.purchase_order_status purchaseOrderStatus,
+        po.id purchaseOrderId,po.purchase_no purchaseNo,po.product_type productType,po.purchase_order_status
+        purchaseOrderStatus,
         po.plan_execute_time planExecuteTime,po.plan_delivery_time planDeliveryTime ,po.signer_id signerId
         from breeding_plan bp inner join purchase_order po on bp.id=po.plan_id
         <where>
@@ -79,6 +80,29 @@
             </if>
             <if test="createUserName!=null">
                 and bp.create_user_name like concat('%', #{createUserName},'%')
+            </if>
+        </where>
+    </select>
+    <select id="listBreedingParamTemplate" resultType="com.jaagro.cbs.api.dto.standard.ReturnBreedingParamTemplateDto"
+            parameterType="com.jaagro.cbs.api.dto.standard.BreedingParamTemplateCriteria">
+        select distinct bp.id, bp.batch_no ,bp.customer_id,
+        bp.plan_chicken_quantity,bp.plan_time ,bp.plan_status,bp.create_user_name,bs.standard_name
+        from breeding_plan bp inner join breeding_batch_parameter bbp on (bp.id=bbp.param_id)
+        inner join breeding_standard_parameter bsp on (bbp.param_id=bsp.id)
+        inner join breeding_standard bs on (bsp.standard_id=bs.id )
+        <where>
+            1=1
+            <if test="customerIds!=null">
+                and bp.customer_id IN
+                <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
+                    ${customerId}
+                </foreach>
+            </if>
+            <if test="planStatus!=null">
+                and bp.plan_status=#{planStatus}
+            </if>
+            <if test="batchNo!=null">
+                and bp.batch_no like concat('%', #{batchNo},'%')
             </if>
         </where>
     </select>
