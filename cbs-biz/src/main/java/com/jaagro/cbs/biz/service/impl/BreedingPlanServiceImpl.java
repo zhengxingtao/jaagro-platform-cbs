@@ -200,22 +200,27 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
      * @return
      */
     @Override
-    public long getDayAge(Integer planId) throws Exception {
+    public long getDayAge(Integer planId) {
         long day = 0;
-        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
-        if (breedingPlan != null) {
-            Date beginDate = breedingPlan.getPlanTime();
-            Date endDate = new Date();
-            if (beginDate == null) {
+        try {
+            BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(planId);
+            if (breedingPlan != null) {
+                Date beginDate = breedingPlan.getPlanTime();
+                Date endDate = new Date();
+                if (beginDate == null) {
+                    return day;
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                beginDate = sdf.parse(sdf.format(beginDate));
+                endDate = sdf.parse(sdf.format(endDate));
+                day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
+            } else {
                 return day;
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            beginDate = sdf.parse(sdf.format(beginDate));
-            endDate = sdf.parse(sdf.format(endDate));
-            day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
-        } else {
-            throw new NullPointerException("计划不存在");
+        } catch (Exception ex) {
+            log.error("R BreedingPlanServiceImpl.getDayAge 根据计划id获取当前系统时间的日龄 error:" + ex);
         }
+
         return day + 1;
     }
 
