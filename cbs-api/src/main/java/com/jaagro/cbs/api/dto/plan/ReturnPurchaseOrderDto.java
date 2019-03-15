@@ -49,15 +49,11 @@ public class ReturnPurchaseOrderDto implements Serializable {
      */
     private String signerPhone;
 
-    /**
-     * 采购重量
-     */
-    private BigDecimal weight;
 
     /**
-     * 采购数量
+     * 采购数量 采购重量
      */
-    private Integer quantity;
+    private BigDecimal quantity;
 
     /**
      * 单位(千克｜只｜个｜ 吨等)

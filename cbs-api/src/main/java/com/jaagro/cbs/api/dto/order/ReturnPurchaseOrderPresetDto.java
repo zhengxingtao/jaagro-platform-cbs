@@ -35,6 +35,11 @@ public class ReturnPurchaseOrderPresetDto implements Serializable {
     private String purchaseNo;
 
     /**
+     * 货物类型
+     */
+    private Integer productType;
+
+    /**
      * 采购名称
      */
     private String purchaseName;
@@ -50,6 +55,11 @@ public class ReturnPurchaseOrderPresetDto implements Serializable {
     private String strUnit;
 
     /**
+     * 客户id
+     */
+    private Integer customerId;
+
+    /**
      * 养殖户的名称
      */
     private String customerName;
@@ -57,6 +67,21 @@ public class ReturnPurchaseOrderPresetDto implements Serializable {
      *
      */
     private String customerPhone;
+
+    /**
+     * 签收人的id
+     */
+    private Integer signerId;
+
+    /**
+     * 签收人姓名
+     */
+    private String signerName;
+
+    /**
+     * 签收人名称
+     */
+    private String signerPhone;
 
     /**
      * 采购执行时间

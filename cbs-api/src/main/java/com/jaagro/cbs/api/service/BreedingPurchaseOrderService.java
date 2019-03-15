@@ -1,5 +1,6 @@
 package com.jaagro.cbs.api.service;
 
+import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto;
 import com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto;
 
@@ -18,5 +19,8 @@ public interface BreedingPurchaseOrderService {
      * @return
      * @author @Gao.
      */
-    List<ReturnPurchaseOrderPresetDto> listPurchaseOrderPreset(PurchaseOrderPresetCriteriaDto dto);
+    PageInfo listPurchaseOrderPreset(PurchaseOrderPresetCriteriaDto dto);
+
+
+    void purchaseOrderPresetDetails(Integer purchaseOrderId);
 }

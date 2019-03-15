@@ -130,7 +130,7 @@ public class BreedingFarmerController {
     @ApiOperation("采购订单详情")
     public BaseResponse purchaseOrderDetails(@PathVariable("purchaseOrderId") Integer purchaseOrderId) {
         if (purchaseOrderId == null) {
-            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id详情");
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "采购订单id不能为空");
         }
         return BaseResponse.successInstance(breedingFarmerService.purchaseOrderDetails(purchaseOrderId));
     }
@@ -254,6 +254,7 @@ public class BreedingFarmerController {
         pageInfo.setList(farmerMessageVos);
         return BaseResponse.successInstance(pageInfo);
     }
+
     /**
      * 养殖页上鸡计划列表
      *
@@ -270,46 +271,48 @@ public class BreedingFarmerController {
 
     /**
      * 查询鸡舍养殖过程批次参数
-     * @author yj
+     *
      * @param paramVo
      * @return
+     * @author yj
      */
     @PostMapping("/getBreedingBatchParamForApp")
     @ApiOperation("查询鸡舍养殖过程批次参数")
-    public BaseResponse getBreedingBatchParamForApp(@RequestBody BreedingProgressParamVo paramVo){
-        log.info("O getBreedingBatchParamForApp paramVo={}",paramVo);
-        Assert.notNull(paramVo.getPlanId(),"养殖计划id不能为空");
-        Assert.notNull(paramVo.getCoopId(),"鸡舍id不能为空");
+    public BaseResponse getBreedingBatchParamForApp(@RequestBody BreedingProgressParamVo paramVo) {
+        log.info("O getBreedingBatchParamForApp paramVo={}", paramVo);
+        Assert.notNull(paramVo.getPlanId(), "养殖计划id不能为空");
+        Assert.notNull(paramVo.getCoopId(), "鸡舍id不能为空");
         Integer planId = paramVo.getPlanId();
         Integer coopId = paramVo.getCoopId();
         Integer dayAge = paramVo.getDayAge();
         String strDate = paramVo.getStrDate();
         try {
-            BreedingBatchParamListDto breedingBatchParamListDto = breedingPlanService.getBreedingBatchParamForApp(planId,coopId,dayAge,strDate);
+            BreedingBatchParamListDto breedingBatchParamListDto = breedingPlanService.getBreedingBatchParamForApp(planId, coopId, dayAge, strDate);
             return BaseResponse.successInstance(breedingBatchParamListDto);
-        }catch (Exception ex){
-            log.error("O getBreedingBatchParamForApp error paramVo="+paramVo,ex);
+        } catch (Exception ex) {
+            log.error("O getBreedingBatchParamForApp error paramVo=" + paramVo, ex);
             return BaseResponse.errorInstance("查询鸡舍养殖过程批次参数异常");
         }
     }
 
     /**
      * 查询批次养殖记录
-     * @author yj
+     *
      * @param planId
      * @param coopId
      * @return
+     * @author yj
      */
     @ApiOperation("查询批次养殖记录")
     @GetMapping("/listBatchBreedingRecord")
-    public BaseResponse listBatchBreedingRecord(@RequestParam Integer planId,@RequestParam Integer coopId){
-        log.info("O listBatchBreedingRecord planId={},coopId={}",planId,coopId);
+    public BaseResponse listBatchBreedingRecord(@RequestParam Integer planId, @RequestParam Integer coopId) {
+        log.info("O listBatchBreedingRecord planId={},coopId={}", planId, coopId);
         BreedingRecordDto breedingRecordDto;
         try {
             long dayAge = breedingPlanService.getDayAge(planId);
-            breedingRecordDto= breedingProgressService.getBreedingRecordsById(planId,coopId,(int)dayAge);
-        }catch (Exception ex){
-            log.error("O listBatchBreedingRecord error planId="+planId+",coopId="+coopId,ex);
+            breedingRecordDto = breedingProgressService.getBreedingRecordsById(planId, coopId, (int) dayAge);
+        } catch (Exception ex) {
+            log.error("O listBatchBreedingRecord error planId=" + planId + ",coopId=" + coopId, ex);
             return BaseResponse.errorInstance("查询批次养殖记录异常");
         }
         return BaseResponse.successInstance(breedingRecordDto);
@@ -317,25 +320,26 @@ public class BreedingFarmerController {
 
     @ApiOperation("获取农户应喂药列表")
     @GetMapping("/listBreedingRecordDrug")
-    public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId,@RequestParam Integer coopId){
-        log.info("O listBreedingRecordDrug planId={},coopId={}",planId,coopId);
-        List<BreedingRecordItemsDto> recordItemsDtoList = breedingPlanService.listBreedingRecordDrug(planId,coopId);
-        if (!CollectionUtils.isEmpty(recordItemsDtoList)){
+    public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId, @RequestParam Integer coopId) {
+        log.info("O listBreedingRecordDrug planId={},coopId={}", planId, coopId);
+        List<BreedingRecordItemsDto> recordItemsDtoList = breedingPlanService.listBreedingRecordDrug(planId, coopId);
+        if (!CollectionUtils.isEmpty(recordItemsDtoList)) {
             return BaseResponse.successInstance(recordItemsDtoList);
-        }else {
+        } else {
             return BaseResponse.queryDataEmpty();
         }
     }
 
     /**
      * 上传养殖记录
-     * @author yj
+     *
      * @param createBreedingRecordDto
      * @return
+     * @author yj
      */
     @ApiOperation("上传养殖记录")
     @PostMapping("/uploadBreedingRecord")
-    public BaseResponse uploadBreedingRecord(@RequestBody @Validated CreateBreedingRecordDto createBreedingRecordDto){
+    public BaseResponse uploadBreedingRecord(@RequestBody @Validated CreateBreedingRecordDto createBreedingRecordDto) {
         breedingPlanService.uploadBreedingRecord(createBreedingRecordDto);
         return BaseResponse.successInstance("上传成功");
     }

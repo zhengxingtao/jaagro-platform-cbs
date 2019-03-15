@@ -63,8 +63,8 @@
             parameterType="com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto">
         select
         bp.batch_no batchNo,bp.customer_id customerId, po.purchase_name purchaseName,
-        po.id purchaseOrderId,po.purchase_no purchaseNo,po.purchase_order_status purchaseOrderStatus,
-        po.plan_execute_time planExecuteTime,po.plan_delivery_time planDeliveryTime
+        po.id purchaseOrderId,po.purchase_no purchaseNo,po.product_type productType,po.purchase_order_status purchaseOrderStatus,
+        po.plan_execute_time planExecuteTime,po.plan_delivery_time planDeliveryTime ,po.signer_id signerId
         from breeding_plan bp inner join purchase_order po on bp.id=po.plan_id
         <where>
             1=1
