@@ -104,6 +104,7 @@
             <if test="batchNo!=null">
                 and bp.batch_no like concat('%', #{batchNo},'%')
             </if>
+            and plan_status in (2,3,4,5,6)
         </where>
     </select>
 </mapper>
