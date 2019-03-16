@@ -49,15 +49,26 @@ public class TechConsultServiceImpl implements TechConsultService {
 
         TechConsultRecordExample example = new TechConsultRecordExample();
         TechConsultRecordExample.Criteria criteriaOne = example.createCriteria();
-
-        criteriaOne.andTechConsultStatusEqualTo(dto.getStatus());
-        criteriaOne.andBatchNoLike(dto.getBatchNo() + "%");
-        criteriaOne.andCustomerNameLike(dto.getKeyWord() + "%");
+        if(null != dto.getStatus()) {
+            criteriaOne.andTechConsultStatusEqualTo(dto.getStatus());
+        }
+        if(null != dto.getBatchNo()) {
+            criteriaOne.andBatchNoLike(dto.getBatchNo() + "%");
+        }
+        if(null != dto.getKeyWord()) {
+            criteriaOne.andCustomerNameLike(dto.getKeyWord() + "%");
+        }
 
         TechConsultRecordExample.Criteria criteriaTwo = example.createCriteria();
-        criteriaTwo.andTechConsultStatusEqualTo(dto.getStatus());
-        criteriaTwo.andBatchNoLike(dto.getBatchNo() + "%");
-        criteriaTwo.andCustomerPhoneNumberLike(dto.getKeyWord() + "%");
+        if(null != dto.getStatus()) {
+            criteriaTwo.andTechConsultStatusEqualTo(dto.getStatus());
+        }
+        if(null != dto.getBatchNo()) {
+            criteriaTwo.andBatchNoLike(dto.getBatchNo() + "%");
+        }
+        if(null != dto.getKeyWord()) {
+            criteriaTwo.andCustomerPhoneNumberLike(dto.getKeyWord() + "%");
+        }
         example.or(criteriaTwo);
         List<TechConsultRecord> techConsultRecordDos = techConsultRecordMapper.selectByExample(example);
 

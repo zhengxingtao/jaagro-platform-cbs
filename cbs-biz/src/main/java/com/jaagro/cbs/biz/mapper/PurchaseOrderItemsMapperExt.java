@@ -3,6 +3,7 @@ package com.jaagro.cbs.biz.mapper;
 import javax.annotation.Resource;
 import com.jaagro.cbs.api.model.PurchaseOrderItems;
 import com.jaagro.cbs.api.model.PurchaseOrderItemsExample;
+import com.jaagro.cbs.biz.bo.PurchaseOrderBo;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 
 
@@ -20,4 +21,10 @@ public interface PurchaseOrderItemsMapperExt extends BaseMapper<PurchaseOrderIte
      * @return
      */
     int deleteByOrderId(Integer purchaseOrderId);
+    /**
+     *
+     * @param orderBo
+     * @return
+     */
+    int deleteByCriteria(PurchaseOrderBo orderBo);
 }

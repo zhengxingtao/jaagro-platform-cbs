@@ -34,21 +34,10 @@
         </if>
     </delete>
     <delete id="deleteByCriteria"  parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
-            UPDATE purchase_order_items
-            SET ENABLE = 0
-            where
-              purchase_order_id in
-                  (select id from purchase_order where plan_id = #{planId}
-                      AND order_phase = #{orderPhase}
-                      AND product_type = #{productType}
-                  );
-            UPDATE purchase_order
-            SET ENABLE = 0
+            delete from purchase_order
             WHERE
                 plan_id = #{planId}
             AND order_phase = #{orderPhase}
             AND product_type = #{productType}
-
-
     </delete>
 </mapper>

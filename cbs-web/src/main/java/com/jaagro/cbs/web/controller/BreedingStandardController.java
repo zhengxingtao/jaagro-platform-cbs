@@ -7,6 +7,7 @@ import com.jaagro.cbs.api.service.BreedingStandardService;
 import com.jaagro.cbs.web.vo.standard.BreedingStandardDrugItemVo;
 import com.jaagro.cbs.web.vo.standard.BreedingStandardDrugListVo;
 import com.jaagro.utils.BaseResponse;
+import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -173,5 +174,16 @@ public class BreedingStandardController {
             detailDto.setDayAgeList(new ArrayList<>(dayAgeSet));
         }
         return detailDto;
+    }
+    @PostMapping("/listBreedingParamTemplate")
+    @ApiOperation("养殖参数模板列表")
+    public BaseResponse listBreedingParamTemplate(@RequestBody BreedingParamTemplateCriteria dto) {
+        if (dto.getPageNum() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "起始页不能为空");
+        }
+        if (dto.getPageSize() == null) {
+            return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), "每页条数不能为空");
+        }
+        return BaseResponse.successInstance(breedingStandardService.listBreedingParamTemplate(dto));
     }
 }

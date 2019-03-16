@@ -7,7 +7,7 @@ package com.jaagro.cbs.api.enums;
 
 public enum CapacityUnitEnum {
     /**
-     * 容量单位(1-ml,2-g,3-L,4-kg)
+     * 容量单位(1-ml,2-g)
      */
     ML(1, "ml", "毫升"),
     G(2, "g", "克");

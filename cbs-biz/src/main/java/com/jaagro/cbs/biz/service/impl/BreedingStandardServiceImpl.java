@@ -4,20 +4,25 @@ import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.enums.ParameterStatusEnum;
 import com.jaagro.cbs.api.enums.SortTypeEnum;
 import com.jaagro.cbs.api.model.BreedingBatchParameter;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
+import com.jaagro.cbs.api.dto.standard.*;
+import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
+import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingStandardService;
 import com.jaagro.cbs.biz.mapper.BreedingStandardDrugMapperExt;
+import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt;
 import com.jaagro.constant.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -41,6 +46,10 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     private BreedingStandardParameterMapperExt standardParameterMapper;
     @Autowired
     private BreedingStandardDrugMapperExt breedingStandardDrugMapper;
+    @Autowired
+    private BreedingPlanMapperExt breedingPlanMapper;
+    @Autowired
+    private BreedingPlanService breedingPlanService;
 
     /**
      * 创建养殖模版与参数
@@ -162,6 +171,41 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 standardParameterMapper.batchUpdateByPrimaryKeySelective(parameterList);
             }
         }
+    }
+
+    /**
+     * 养殖大脑 养殖参数列表
+     *
+     * @param criteria
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public PageInfo listBreedingParamTemplate(BreedingParamTemplateCriteria criteria) {
+        PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
+        if (criteria.getCustomerInfo() != null) {
+            List<Integer> listCustomerIds = breedingPlanService.listCustomerIdsByKeyword(criteria.getCustomerInfo());
+            criteria.setCustomerIds(listCustomerIds);
+        }
+        List<ReturnBreedingParamTemplateDto> returnBreedingParamTemplateDtos = breedingPlanMapper.listBreedingParamTemplate(criteria);
+        for (ReturnBreedingParamTemplateDto returnBreedingParamTemplateDto : returnBreedingParamTemplateDtos) {
+            if (returnBreedingParamTemplateDto.getPlanStatus() != null) {
+                returnBreedingParamTemplateDto
+                        .setStrPlanStatus(PlanStatusEnum.getDescByCode(returnBreedingParamTemplateDto.getPlanStatus()));
+                if (returnBreedingParamTemplateDto.getCustomerId() != null) {
+                    CustomerInfoParamDto customerInfo = breedingPlanService.getCustomerInfo(returnBreedingParamTemplateDto.getCustomerId());
+                    if (customerInfo != null) {
+                        if (customerInfo.getCustomerName() != null) {
+                            returnBreedingParamTemplateDto.setCustomerName(customerInfo.getCustomerName());
+                        }
+                        if (customerInfo.getCustomerPhone() != null) {
+                            returnBreedingParamTemplateDto.setCustomerPhone(customerInfo.getCustomerPhone());
+                        }
+                    }
+                }
+            }
+        }
+        return new PageInfo(returnBreedingParamTemplateDtos);
     }
 
     /**

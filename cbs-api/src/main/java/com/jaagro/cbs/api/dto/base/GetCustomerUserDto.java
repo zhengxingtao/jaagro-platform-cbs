@@ -24,4 +24,6 @@ public class GetCustomerUserDto implements Serializable {
      */
     private Integer relevanceId;
 
+
+
 }
