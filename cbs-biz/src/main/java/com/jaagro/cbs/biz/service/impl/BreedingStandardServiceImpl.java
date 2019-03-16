@@ -253,7 +253,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                     .setStandardId(standardId)
                     .setStatus(parameter.getStatus())
                     .setUnit(parameter.getUnit())
-                    .setValueType(parameter.getValueType());
+                    .setValueType(parameter.getValueType())
+                    .setDisplayOrder(parameter.getDisplayOrder());
             List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
             for (BreedingStandardParameter parameterIn : parameterList){
                 BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
@@ -297,12 +298,28 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         if (CollectionUtils.isEmpty(parameterTypeDtoList)){
             throw new RuntimeException("养殖模板参数为空");
         }
-        if (SortTypeEnum.UP.equals(sortType)){
+        for (ParameterTypeDto parameterTypeDto : parameterTypeDtoList){
+            if (dto.getParamName().equals(parameterTypeDto.getParamName()) && dto.getParamType().equals(parameterTypeDto.getParamType())){
+                if (SortTypeEnum.UP.equals(sortType)){
 
-        }else {
+                }else {
 
+                }
+            }
         }
+
         return result;
+    }
+
+    /**
+     * 获取养殖模板基本信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public BreedingStandard getStandardBaseInfoById(Integer id) {
+        return breedingStandardMapper.selectByPrimaryKey(id);
     }
 
     private Integer getCurrentUserId() {

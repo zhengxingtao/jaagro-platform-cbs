@@ -68,7 +68,7 @@ public interface BreedingRecordMapperExt extends BaseMapper<BreedingRecord, Bree
      * @param criteriaDto
      * @return
      */
-    Integer sumDeadAmountByPlanId(BatchInfoCriteriaDto criteriaDto);
+    int sumDeadAmountByPlanId(BatchInfoCriteriaDto criteriaDto);
 
     /**
      * 根据条件查询养殖记录列表

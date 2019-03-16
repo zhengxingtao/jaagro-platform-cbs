@@ -40,4 +40,10 @@ public class ChangeParameterDisplayOrderDto implements Serializable {
     @NotNull(message = "{sortType.NotNull}")
     @Min(value = 1,message = "{sortType.Min}")
     private Integer sortType;
+    /**
+     * 展示顺序
+     */
+    @NotNull(message = "{displayOrder.NotNull}")
+    @Min(value = 1,message = "{displayOrder.Min}")
+    private Integer displayOrder;
 }

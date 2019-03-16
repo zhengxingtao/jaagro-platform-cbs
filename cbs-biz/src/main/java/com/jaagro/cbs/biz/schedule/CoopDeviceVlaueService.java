@@ -121,16 +121,4 @@ public class CoopDeviceVlaueService {
         }
     }
 
-    /**
-     * 根据计划id获取当前日龄
-     *
-     * @param planId
-     * @return
-     */
-    private Integer getDayAge(Integer planId) {
-        Integer dayAge = 0;
-
-        return dayAge;
-    }
-
 }

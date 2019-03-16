@@ -22,8 +22,8 @@
         insert into batch_coop_daily (plan_id, batch_no, coop_id,
         day_age, start_amount, current_amount,
         dead_amount, sale_amount, fodder_times,
-        fodder_amount, enable, create_time,
-        create_user_id, modify_time, modify_user_id
+        fodder_amount,
+        create_user_id
         )
         values
         <foreach collection="dailyList" item="item" separator=",">
@@ -32,9 +32,8 @@
             #{item.currentAmount,jdbcType=INTEGER},
             #{item.deadAmount,jdbcType=INTEGER}, #{item.saleAmount,jdbcType=INTEGER},
             #{item.fodderTimes,jdbcType=INTEGER},
-            #{item.fodderAmount,jdbcType=DECIMAL}, #{item.enable,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP},
-            #{item.createUserId,jdbcType=INTEGER}, #{item.modifyTime,jdbcType=TIMESTAMP},
-            #{item.modifyUserId,jdbcType=INTEGER}
+            #{item.fodderAmount,jdbcType=DECIMAL},
+            #{item.createUserId,jdbcType=INTEGER}
             )
         </foreach>
     </insert>

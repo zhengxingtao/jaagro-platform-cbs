@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 养殖参数类型
+ *
  * @author yj
  * @date 2019/3/15 16:04
  */
@@ -37,20 +38,62 @@ public class ParameterTypeDto implements Serializable {
     private Integer displayOrder;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
-        if (!super.equals(o)) {return false;}
-        ParameterTypeDto that = (ParameterTypeDto) o;
-        return Objects.equals(standardId, that.standardId) &&
-                Objects.equals(paramName, that.paramName) &&
-                Objects.equals(paramType, that.paramType)&&
-                Objects.equals(displayOrder, that.displayOrder);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj instanceof ParameterTypeDto) {
+            ParameterTypeDto other = (ParameterTypeDto) obj;
+            if (equalsInteger(this.standardId, other.standardId) &&
+                    equalsStr(this.paramName, other.paramName) &&
+                    equalsInteger(this.paramType, other.paramType) &&
+                    equalsInteger(this.displayOrder, other.displayOrder)
+                    ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean equalsStr(String str1, String str2) {
+        if (StringUtils.isEmpty(str1) && StringUtils.isEmpty(str2)) {
+            return true;
+        }
+        if (!StringUtils.isEmpty(str1) && str1.equals(str2)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean equalsInteger(Integer a, Integer b) {
+        if (a == null && b == null) {
+            return true;
+        }
+        if (a != null && a.equals(b)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
+        int result = 17;
+        result = 31 * result + (standardId == null ? 0 : standardId.hashCode());
+        result = 31 * result + (paramName == null ? 0 : paramName.hashCode());
+        result = 31 * result + (paramType == null ? 0 : paramType.hashCode());
+        result = 31 * result + (displayOrder == null ? 0 : displayOrder.hashCode());
+        return result;
+    }
 
-        return Objects.hash(super.hashCode(), standardId, paramName, paramType,displayOrder);
+    public static void main(String[] args) {
+        ParameterTypeDto typeDto1 = new ParameterTypeDto(4,"温度",10,1);
+        ParameterTypeDto typeDto2 = new ParameterTypeDto(4,"温度",10,1);
+        System.out.println(typeDto1.equals(typeDto2));
+        System.out.println(typeDto1.hashCode() == typeDto2.hashCode());
     }
 }

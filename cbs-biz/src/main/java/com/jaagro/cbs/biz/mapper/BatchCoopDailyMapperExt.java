@@ -32,7 +32,7 @@ public interface BatchCoopDailyMapperExt extends BaseMapper<BatchCoopDaily, Batc
      *
      * @param dailyList
      */
-    void batchInsert(List<BatchCoopDaily> dailyList);
+    void batchInsert(@Param("dailyList") List<BatchCoopDaily> dailyList);
 
     /**
      * 根据日期删除
