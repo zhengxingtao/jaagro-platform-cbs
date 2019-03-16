@@ -297,11 +297,16 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         if (CollectionUtils.isEmpty(parameterTypeDtoList)){
             throw new RuntimeException("养殖模板参数为空");
         }
-        if (SortTypeEnum.UP.equals(sortType)){
+        for (ParameterTypeDto parameterTypeDto : parameterTypeDtoList){
+            if (dto.getParamName().equals(parameterTypeDto.getParamName()) && dto.getParamType().equals(parameterTypeDto.getParamType())){
+                if (SortTypeEnum.UP.equals(sortType)){
 
-        }else {
+                }else {
 
+                }
+            }
         }
+
         return result;
     }
 

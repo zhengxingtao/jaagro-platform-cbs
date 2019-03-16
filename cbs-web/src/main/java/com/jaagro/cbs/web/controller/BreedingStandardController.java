@@ -46,16 +46,17 @@ public class BreedingStandardController {
     @PostMapping("/breedingStandard")
     public BaseResponse breedingStandard(@RequestBody @Validated CreateBreedingStandardDto dto) {
         log.info("O breedingStandard param={}",dto);
+        Integer id;
         try {
             if (null == dto.getId() || dto.getId() == 0) {
-                breedingStandardService.createBreedingTemplate(dto);
+                id = breedingStandardService.createBreedingTemplate(dto);
             } else {
-                breedingStandardService.updateBreedingTemplate(dto);
+                id = breedingStandardService.updateBreedingTemplate(dto);
             }
         } catch (Exception ex) {
             return BaseResponse.errorInstance("保存失败：" + ex.getMessage());
         }
-        return BaseResponse.successInstance("保存成功");
+        return BaseResponse.successInstance(id);
     }
 
     @ApiOperation("根据养殖模板id获取养殖参数模块列表")
