@@ -37,10 +37,13 @@ public class MessageServiceImpl implements MessageService {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         MessageExample messageExample = new MessageExample();
         MessageExample.Criteria criteria = messageExample.createCriteria();
+        List<Message> messages = null;
         if (dto.getToUserId() != null && dto.getToUserType() != null) {
-            criteria.andToUserIdEqualTo(dto.getToUserId());
+            criteria
+                    .andToUserTypeEqualTo(dto.getToUserType())
+                    .andToUserIdEqualTo(dto.getToUserId());
+            messages = messageMapper.selectByExample(messageExample);
         }
-        List<Message> messages = messageMapper.selectByExample(messageExample);
         return new PageInfo(messages);
     }
 }

@@ -6,6 +6,7 @@ import com.jaagro.cbs.api.dto.base.GetCustomerUserDto;
 import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.farmer.*;
 import com.jaagro.cbs.api.dto.order.*;
+import com.jaagro.cbs.api.dto.plan.ReturnCustomerInfoDto;
 import com.jaagro.cbs.api.enums.*;
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.api.service.BreedingFarmerService;
@@ -273,9 +274,10 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      * @author: @Gao.
      */
     @Override
-    public List<PurchaseOrderDto> listPurchaseOrder(PurchaseOrderListParamDto dto) {
+    public PageInfo listPurchaseOrder(PurchaseOrderListParamDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<Integer> purchaseOrderStatus = new ArrayList<>();
-        if (dto != null && dto.getPurchaseOrderStatus() == null) {
+        if (dto.getPurchaseOrderStatus() == null) {
             for (PurchaseOrderStatusEnum type : PurchaseOrderStatusEnum.values()) {
                 purchaseOrderStatus.add(type.getCode());
             }
@@ -337,7 +339,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 }
             }
         }
-        return purchaseOrderDtos;
+        return new PageInfo(purchaseOrderDtos);
     }
 
     /**
@@ -485,6 +487,32 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     }
 
     /**
+     * 获取客户名称与id
+     *
+     * @return
+     * @author: @Gao.
+     */
+    @Override
+    public ReturnCustomerInfoDto getCustomerInfo() {
+        ReturnCustomerInfoDto customerInfoDto = new ReturnCustomerInfoDto();
+        UserInfo currentUser = currentUserService.getCurrentUser();
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                customerInfoDto
+                        .setCustomerId(customerUser.getRelevanceId());
+                ShowCustomerDto showCustomer = customerClientService.getShowCustomerById(customerUser.getRelevanceId());
+                boolean flag = showCustomer != null && showCustomer.getCustomerName() != null;
+                if (flag) {
+                    customerInfoDto
+                            .setCustomerName(showCustomer.getCustomerName());
+                }
+            }
+        }
+        return customerInfoDto;
+    }
+
+    /**
      * 根据上鸡计划时间获取当前日龄
      *
      * @param beginDate
@@ -494,7 +522,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
     private Integer getDayAge(Date beginDate) throws Exception {
         Integer day = 0;
         Date endDate = new Date();
-        if (beginDate == null && endDate == null) {
+        if (beginDate == null) {
             return day;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

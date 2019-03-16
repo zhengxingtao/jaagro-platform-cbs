@@ -7,29 +7,34 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @description: 农户端采购订单详情
+ * @description: 采购预置订单详情
  * @author: @Gao.
- * @create: 2019-03-07 10:56
+ * @create: 2019-03-15 09:51
  **/
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
+public class ReturnPurchaseOrderPresetDetailsDto implements Serializable {
+
     /**
      * 批次号
      */
     private String batchNo;
 
     /**
-     * 养殖计划id
+     * 计划上鸡数量
      */
-    private Integer planId;
+    private Integer planChickenQuantity;
+
+    /**
+     * 上鸡时间
+     */
+    private Date planTime;
 
     /**
      * 商品采购单编号
@@ -40,6 +45,10 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
      * 状态(0-待审核,1-审核通过,2－已完成送货 ,3-审核拒绝)
      */
     private String purchaseOrderStatus;
+    /**
+     * 计划送达时间
+     */
+    private Date planDeliveryTime;
 
     /**
      * 开单时间
@@ -47,12 +56,7 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     private Date createTime;
 
     /**
-     * 计划送达时间
-     */
-    private Date planDeliveryTime;
-
-    /**
-     * 待签收时间
+     * 待送达时间
      */
     private Date deliveryTime;
 
@@ -62,10 +66,19 @@ public class ReturnFarmerPurchaseOrderDetailsDto implements Serializable {
     private Date signerTime;
 
     /**
-     *
+     * 养殖户名称
      */
-    private String orderPhase;
+    private String customerName;
 
+    /**
+     * 养殖户电话
+     */
+    private String customerPhone;
+
+    /**
+     * 养殖户地址
+     */
+    private String customerAddress;
     /**
      * 采购订单商品
      */

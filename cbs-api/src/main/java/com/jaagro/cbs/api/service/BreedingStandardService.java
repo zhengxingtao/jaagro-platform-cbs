@@ -1,9 +1,8 @@
 package com.jaagro.cbs.api.service;
 
 
-import com.jaagro.cbs.api.dto.standard.BreedingParameterListDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
+import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.model.BreedingStandard;
 
 import java.util.List;
@@ -52,5 +51,13 @@ public interface BreedingStandardService {
      * @param dto
      */
     void saveOrUpdateParameter(BreedingParameterListDto dto);
+
+    /**
+     * 养殖大脑 养殖参数列表
+     *
+     * @param criteria
+     * @return
+     */
+   PageInfo listBreedingParamTemplate(BreedingParamTemplateCriteria criteria);
 
 }

@@ -14,6 +14,7 @@
     <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
     <result column="plan_delivery_time" property="planDeliveryTime" jdbcType="DATE" />
     <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <result column="signer_time" property="signerTime" jdbcType="TIMESTAMP" />
     <result column="notes" property="notes" jdbcType="VARCHAR" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -55,9 +56,9 @@
   </sql>
   <sql id="Base_Column_List" >
     id, customer_id, plan_id, signer_id, batch_no, purchase_no, product_type, amount, 
-    purchase_order_status, supplier_id, plan_delivery_time, delivery_time, notes, enable, 
-    create_time, create_user_id, modify_time, modify_user_id, order_phase, plan_execute_time, 
-    purchase_name
+    purchase_order_status, supplier_id, plan_delivery_time, delivery_time, signer_time, 
+    notes, enable, create_time, create_user_id, modify_time, modify_user_id, order_phase, 
+    plan_execute_time, purchase_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
     select
@@ -99,17 +100,19 @@
     insert into purchase_order (customer_id, plan_id, signer_id, 
       batch_no, purchase_no, product_type, 
       amount, purchase_order_status, supplier_id, 
-      plan_delivery_time, delivery_time, notes, 
-      enable, create_time, create_user_id, 
-      modify_time, modify_user_id, order_phase, 
-      plan_execute_time, purchase_name)
+      plan_delivery_time, delivery_time, signer_time, 
+      notes, enable, create_time, 
+      create_user_id, modify_time, modify_user_id, 
+      order_phase, plan_execute_time, purchase_name
+      )
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
       #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
       #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, 
-      #{planDeliveryTime,jdbcType=DATE}, #{deliveryTime,jdbcType=TIMESTAMP}, #{notes,jdbcType=VARCHAR}, 
-      #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{orderPhase,jdbcType=INTEGER}, 
-      #{planExecuteTime,jdbcType=TIMESTAMP}, #{purchaseName,jdbcType=VARCHAR})
+      #{planDeliveryTime,jdbcType=DATE}, #{deliveryTime,jdbcType=TIMESTAMP}, #{signerTime,jdbcType=TIMESTAMP}, 
+      #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
+      #{orderPhase,jdbcType=INTEGER}, #{planExecuteTime,jdbcType=TIMESTAMP}, #{purchaseName,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrder" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -149,6 +152,9 @@
       </if>
       <if test="deliveryTime != null" >
         delivery_time,
+      </if>
+      <if test="signerTime != null" >
+        signer_time,
       </if>
       <if test="notes != null" >
         notes,
@@ -211,6 +217,9 @@
       </if>
       <if test="deliveryTime != null" >
         #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signerTime != null" >
+        #{signerTime,jdbcType=TIMESTAMP},
       </if>
       <if test="notes != null" >
         #{notes,jdbcType=VARCHAR},
@@ -283,6 +292,9 @@
       <if test="deliveryTime != null" >
         delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="signerTime != null" >
+        signer_time = #{signerTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="notes != null" >
         notes = #{notes,jdbcType=VARCHAR},
       </if>
@@ -326,6 +338,7 @@
       supplier_id = #{supplierId,jdbcType=INTEGER},
       plan_delivery_time = #{planDeliveryTime,jdbcType=DATE},
       delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      signer_time = #{signerTime,jdbcType=TIMESTAMP},
       notes = #{notes,jdbcType=VARCHAR},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
