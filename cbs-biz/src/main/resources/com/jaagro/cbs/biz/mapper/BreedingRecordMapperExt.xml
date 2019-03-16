@@ -3,23 +3,24 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/2/21                 -->
-    <resultMap id="DetailResultMap" type="com.jaagro.cbs.api.dto.farmer.BreedingRecordDto" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="plan_id" property="planId" jdbcType="INTEGER" />
-        <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-        <result column="coop_id" property="coopId" jdbcType="INTEGER" />
-        <result column="day_age" property="dayAge" jdbcType="INTEGER" />
-        <result column="record_type" property="recordType" jdbcType="INTEGER" />
-        <result column="breeding_value" property="breedingValue" jdbcType="DECIMAL" />
-        <result column="unit" property="unit" jdbcType="VARCHAR" />
-        <result column="breeding_time" property="breedingTime" jdbcType="TIMESTAMP" />
-        <result column="notes" property="notes" jdbcType="VARCHAR" />
-        <result column="enable" property="enable" jdbcType="BIT" />
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-        <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
-        <collection property="breedingRecordItemsList" column="id" select="com.jaagro.cbs.biz.mapper.BreedingRecordItemsMapperExt.listByBreedingRecordId"/>
+    <resultMap id="DetailResultMap" type="com.jaagro.cbs.api.dto.farmer.BreedingRecordDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="plan_id" property="planId" jdbcType="INTEGER"/>
+        <result column="batch_no" property="batchNo" jdbcType="VARCHAR"/>
+        <result column="coop_id" property="coopId" jdbcType="INTEGER"/>
+        <result column="day_age" property="dayAge" jdbcType="INTEGER"/>
+        <result column="record_type" property="recordType" jdbcType="INTEGER"/>
+        <result column="breeding_value" property="breedingValue" jdbcType="DECIMAL"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="breeding_time" property="breedingTime" jdbcType="TIMESTAMP"/>
+        <result column="notes" property="notes" jdbcType="VARCHAR"/>
+        <result column="enable" property="enable" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER"/>
+        <collection property="breedingRecordItemsList" column="id"
+                    select="com.jaagro.cbs.biz.mapper.BreedingRecordItemsMapperExt.listByBreedingRecordId"/>
     </resultMap>
     <select id="listSumByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
@@ -98,7 +99,7 @@
             r.plan_id
     </select>
     <select id="sumDeadAmountByPlanId" parameterType="com.jaagro.cbs.api.dto.base.BatchInfoCriteriaDto"
-            resultType="java.lang.Integer">
+            resultType="int">
         SELECT
             sum(breeding_value) as breeding_value
         FROM
@@ -110,7 +111,8 @@
             AND record_type = 4
     </select>
     <select id="listByParams" resultMap="DetailResultMap" parameterType="com.jaagro.cbs.api.model.BreedingRecord">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM breeding_record
         WHERE 1=1
         <if test="planId != null">
