@@ -3,7 +3,14 @@
 <mapper namespace="com.jaagro.cbs.biz.mapper.BreedingStandardDrugMapperExt">
 
     <!--          自动生成扩展XML author: generator on 2019/3/8                 -->
-
+    <select id="listBreedingStandardDrugs" resultType="com.jaagro.cbs.api.dto.standard.BreedingStandardDrugDto">
+        SELECT
+	      bsd.*,p.capacity_unit,p.product_name
+        FROM
+            breeding_standard_drug bsd
+        LEFT JOIN product p ON bsd.product_id = p.id
+        WHERE bsd.breeding_standard_id = #{standardId}
+    </select>
 
 
 </mapper>

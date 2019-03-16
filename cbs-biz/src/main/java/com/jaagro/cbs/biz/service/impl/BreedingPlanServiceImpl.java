@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -310,7 +311,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (dayAge == null) {
             dayAge = (int) getDayAge(planId);
         }
-        if (strDate == null) {
+        if (!StringUtils.hasText(strDate)) {
             strDate = dateFormatDay.format(now);
         }
         // 日龄数据
@@ -337,9 +338,7 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
             int dayAge = (int) getDayAge(planId);
             // 查询当日喂药记录
             BreedingRecord params = new BreedingRecord();
-            params.setPlanId(planId)
-                    .setCoopId(coopId)
-                    .setDayAge(dayAge)
+            params.setPlanId(planId).setCoopId(coopId).setDayAge(dayAge)
                     .setRecordType(BreedingRecordTypeEnum.FEED_MEDICINE.getCode());
             List<BreedingRecordDto> breedingRecordDtoList = breedingRecordMapper.listByParams(params);
             if (!CollectionUtils.isEmpty(breedingRecordDtoList)) {
@@ -601,6 +600,12 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
         if (!CollectionUtils.isEmpty(contractPriceSectionDtoList)) {
             List<ContractPriceSection> contractPriceSectionList = new ArrayList<>();
             for (ContractPriceSectionDto dto : contractPriceSectionDtoList) {
+                if (dto.getWeightLower().compareTo(new BigDecimal("99.99")) == 1 || dto.getWeightUpper().compareTo(new BigDecimal("99.99")) == 1){
+                    throw new RuntimeException("鸡重起止要小于100");
+                }
+                if (dto.getRecyclingPrice().compareTo(new BigDecimal("9999.99")) == 1){
+                    throw new RuntimeException("回收价格要小于10000");
+                }
                 ContractPriceSection contractPriceSection = new ContractPriceSection();
                 BeanUtils.copyProperties(dto, contractPriceSection);
                 contractPriceSection.setContractId(batchContract.getId())

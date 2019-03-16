@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/11
+ * @author :asus
+ * @date :2019/03/16
  */
 @Data
 @NoArgsConstructor
@@ -73,9 +73,14 @@ public class PurchaseOrder implements Serializable {
     private Date planDeliveryTime;
 
     /**
-     * 到货时间
+     * 待送达时间
      */
     private Date deliveryTime;
+
+    /**
+     * 签收时间
+     */
+    private Date signerTime;
 
     /**
      * 采购商品备注
@@ -88,7 +93,7 @@ public class PurchaseOrder implements Serializable {
     private Boolean enable;
 
     /**
-     * 创建时间
+     * 创建时间（下单时间）
      */
     private Date createTime;
 

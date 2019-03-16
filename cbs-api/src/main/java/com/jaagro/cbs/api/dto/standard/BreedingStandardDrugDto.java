@@ -1,41 +1,30 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.api.dto.standard;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
- * @author :asus
- * @date :2019/03/16
+ * 药品信息
+ * @author yj
+ * @date 2019/3/15 21:51
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
-public class BreedingBatchDrug implements Serializable {
+public class BreedingStandardDrugDto implements Serializable {
+    private static final long serialVersionUID = -2990378342745928460L;
     /**
-     * 养殖计划药品配置表id
+     * 养殖参数模板药品配置表id
      */
     private Integer id;
 
     /**
-     * 计划id
+     * 养殖模板id
      */
-    private Integer planId;
-
-    /**
-     * 批次号
-     */
-    private String batchNo;
-
-    /**
-     * 养殖参数模板药品配置表id
-     */
-    private Integer standardDrugId;
+    private Integer breedingStandardId;
 
     /**
      * 商品id
@@ -63,14 +52,14 @@ public class BreedingBatchDrug implements Serializable {
     private Boolean stopDrugFlag;
 
     /**
-     * 该日龄区间天数
-     */
-    private Integer days;
-
-    /**
      * 千只日喂量
      */
     private BigDecimal feedVolume;
+
+    /**
+     * 该日龄区间天数
+     */
+    private Integer days;
 
     /**
      * 是否有效(0-无效,1-有效)
@@ -97,5 +86,14 @@ public class BreedingBatchDrug implements Serializable {
      */
     private Integer modifyUserId;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 产品名称
+     */
+    private String productName;
+
+    /**
+     * 容量单位(1-ml,2-g)
+     */
+    private Integer capacityUnit;
+
 }

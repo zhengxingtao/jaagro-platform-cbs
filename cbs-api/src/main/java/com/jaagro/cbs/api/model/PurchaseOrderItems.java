@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/11
+ * @author :asus
+ * @date :2019/03/16
  */
 @Data
 @NoArgsConstructor
@@ -45,7 +45,7 @@ public class PurchaseOrderItems implements Serializable {
     private Boolean enable;
 
     /**
-     * 1-千克｜2-只｜3-个｜ 4-吨
+     * 跟产品表的包装单位一致(1-瓶,2-袋,3-只,4-桶,5-盒, 6-吨)
      */
     private Integer unit;
 

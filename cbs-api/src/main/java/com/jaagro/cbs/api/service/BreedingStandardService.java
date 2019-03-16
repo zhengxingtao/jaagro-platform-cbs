@@ -1,10 +1,10 @@
 package com.jaagro.cbs.api.service;
 
 
-import com.jaagro.cbs.api.dto.standard.BreedingParameterListDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.model.BreedingStandard;
+import com.jaagro.cbs.api.model.BreedingStandardParameter;
+import org.jboss.logging.Param;
 
 import java.util.List;
 
@@ -53,4 +53,33 @@ public interface BreedingStandardService {
      */
     void saveOrUpdateParameter(BreedingParameterListDto dto);
 
+    /**
+     * 查询养殖模板下的参数分类列表
+     * @param standardId
+     * @return
+     */
+    List<ParameterTypeDto> listParameterNameByStandardId(Integer standardId);
+
+    /**
+     * 根据模板id参数名称参数类型查看养殖模板参数
+     * @param standardId
+     * @param paramName
+     * @param paramType
+     * @return
+     */
+    BreedingParameterListDto listParameterListByName(Integer standardId, String paramName, Integer paramType);
+
+    /**
+     * 根据模板id查询药品配置信息
+     * @param standardId
+     * @return
+     */
+    List<BreedingStandardDrugDto> listBreedingStandardDrugs(Integer standardId);
+
+    /**
+     * 更新参数排序
+     * @param dto
+     * @return
+     */
+    List<ParameterTypeDto> changeParameterDisplayOrder(ChangeParameterDisplayOrderDto dto);
 }

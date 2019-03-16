@@ -318,12 +318,7 @@ public class BreedingFarmerController {
     @GetMapping("/listBreedingRecordDrug")
     public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId,@RequestParam Integer coopId){
         log.info("O listBreedingRecordDrug planId={},coopId={}",planId,coopId);
-        List<BreedingRecordItemsDto> recordItemsDtoList = breedingPlanService.listBreedingRecordDrug(planId,coopId);
-        if (!CollectionUtils.isEmpty(recordItemsDtoList)){
-            return BaseResponse.successInstance(recordItemsDtoList);
-        }else {
-            return BaseResponse.queryDataEmpty();
-        }
+        return BaseResponse.successInstance(breedingPlanService.listBreedingRecordDrug(planId,coopId));
     }
 
     /**

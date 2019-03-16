@@ -1,13 +1,14 @@
 package com.jaagro.cbs.biz.service.impl;
 
-import com.jaagro.cbs.api.dto.standard.BreedingParameterListDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardDto;
-import com.jaagro.cbs.api.dto.standard.BreedingStandardParameterItemDto;
-import com.jaagro.cbs.api.dto.standard.CreateBreedingStandardDto;
+import com.jaagro.cbs.api.dto.standard.*;
+import com.jaagro.cbs.api.enums.ParameterStatusEnum;
+import com.jaagro.cbs.api.enums.SortTypeEnum;
+import com.jaagro.cbs.api.model.BreedingBatchParameter;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
 import com.jaagro.cbs.api.service.BreedingStandardService;
+import com.jaagro.cbs.biz.mapper.BreedingStandardDrugMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt;
 import com.jaagro.constant.UserInfo;
@@ -20,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 养殖大脑管理
@@ -40,6 +39,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     private BreedingStandardMapperExt breedingStandardMapper;
     @Autowired
     private BreedingStandardParameterMapperExt standardParameterMapper;
+    @Autowired
+    private BreedingStandardDrugMapperExt breedingStandardDrugMapper;
 
     /**
      * 创建养殖模版与参数
@@ -51,7 +52,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         log.info("O BreedingStandardServiceImpl.createBreedingTemplate input BreedingStandardDto:{}", dto);
         Integer currentUserId = getCurrentUserId();
         BreedingStandard breedingStandard = new BreedingStandard();
-        BeanUtils.copyProperties(dto,breedingStandard);
+        BeanUtils.copyProperties(dto, breedingStandard);
         breedingStandard.setCreateUserId(currentUserId)
                 .setCreateTime(new Date())
                 .setEnable(Boolean.TRUE);
@@ -70,7 +71,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         log.info("O BreedingStandardServiceImpl.updateBreedingTemplate input BreedingStandardDto:{}", dto);
         Integer currentUserId = getCurrentUserId();
         BreedingStandard breedingStandard = new BreedingStandard();
-        BeanUtils.copyProperties(dto,breedingStandard);
+        BeanUtils.copyProperties(dto, breedingStandard);
         breedingStandard.setModifyTime(new Date())
                 .setModifyUserId(currentUserId);
         breedingStandardMapper.updateByPrimaryKeySelective(breedingStandard);
@@ -120,24 +121,24 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Override
     public void saveOrUpdateParameter(BreedingParameterListDto dto) {
         List<BreedingStandardParameterItemDto> breedingStandardParameterList = dto.getBreedingStandardParameterList();
-        if (!CollectionUtils.isEmpty(breedingStandardParameterList)){
+        if (!CollectionUtils.isEmpty(breedingStandardParameterList)) {
             List<BreedingStandardParameterItemDto> newParameterList = new ArrayList<>();
             List<BreedingStandardParameterItemDto> oldParameterList = new ArrayList<>();
-            for (BreedingStandardParameterItemDto itemDto : breedingStandardParameterList){
-                if (itemDto.getId() != null){
+            for (BreedingStandardParameterItemDto itemDto : breedingStandardParameterList) {
+                if (itemDto.getId() != null) {
                     oldParameterList.add(itemDto);
-                }else{
+                } else {
                     newParameterList.add(itemDto);
                 }
             }
             Integer currentUserId = getCurrentUserId();
-            if (!CollectionUtils.isEmpty(newParameterList)){
+            if (!CollectionUtils.isEmpty(newParameterList)) {
                 List<BreedingStandardParameter> parameterList = new ArrayList<>();
-                for (BreedingStandardParameterItemDto itemDto : newParameterList){
+                for (BreedingStandardParameterItemDto itemDto : newParameterList) {
                     BreedingStandardParameter parameter = new BreedingStandardParameter();
-                    BeanUtils.copyProperties(dto,parameter);
-                    BeanUtils.copyProperties(itemDto,parameter);
-                    if (dto.getAlarm() == null){
+                    BeanUtils.copyProperties(dto, parameter);
+                    BeanUtils.copyProperties(itemDto, parameter);
+                    if (dto.getAlarm() == null) {
                         parameter.setAlarm(Boolean.FALSE);
                     }
                     parameter.setEnable(Boolean.TRUE)
@@ -147,12 +148,12 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 }
                 standardParameterMapper.batchInsert(parameterList);
             }
-            if (!CollectionUtils.isEmpty(oldParameterList)){
+            if (!CollectionUtils.isEmpty(oldParameterList)) {
                 List<BreedingStandardParameter> parameterList = new ArrayList<>();
-                for (BreedingStandardParameterItemDto itemDto : oldParameterList){
+                for (BreedingStandardParameterItemDto itemDto : oldParameterList) {
                     BreedingStandardParameter parameter = new BreedingStandardParameter();
-                    BeanUtils.copyProperties(dto,parameter);
-                    BeanUtils.copyProperties(itemDto,parameter);
+                    BeanUtils.copyProperties(dto, parameter);
+                    BeanUtils.copyProperties(itemDto, parameter);
                     parameter
                             .setModifyTime(new Date())
                             .setModifyUserId(currentUserId);
@@ -163,8 +164,108 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         }
     }
 
+    /**
+     * 查询养殖模板下的参数分类列表
+     *
+     * @param standardId
+     * @return
+     */
+    @Override
+    public List<ParameterTypeDto> listParameterNameByStandardId(Integer standardId) {
+        BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
+        Assert.notNull(breedingStandard, "模板不存在");
+        BreedingStandardParameterExample example = new BreedingStandardParameterExample();
+        example.createCriteria().andStandardIdEqualTo(standardId).andEnableEqualTo(Boolean.TRUE);
+        List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
+        Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
+        if (!CollectionUtils.isEmpty(parameterList)) {
+            for (BreedingStandardParameter parameter : parameterList) {
+                // 同一养殖模板下相同参数名称相同参数类型展示顺序一样
+                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getDisplayOrder()));
+            }
+        }
+        return new ArrayList<>(parameterTypeDtoSet);
+    }
+
+    /**
+     * 根据模板id参数名称参数类型查看养殖模板参数
+     *
+     * @param standardId
+     * @param paramName
+     * @param paramType
+     * @return
+     */
+    @Override
+    public BreedingParameterListDto listParameterListByName(Integer standardId, String paramName, Integer paramType) {
+        BreedingStandardParameterExample parameterExample = new BreedingStandardParameterExample();
+        parameterExample.createCriteria().andEnableEqualTo(Boolean.TRUE)
+                .andStandardIdEqualTo(standardId).andParamTypeEqualTo(paramType).andParamNameEqualTo(paramName);
+        parameterExample.setOrderByClause("day_age asc");
+        List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(parameterExample);
+        if (!CollectionUtils.isEmpty(parameterList)){
+            BreedingParameterListDto dto = new BreedingParameterListDto();
+            BreedingStandardParameter parameter = parameterList.get(0);
+            dto.setAlarm(parameter.getAlarm())
+                    .setNecessary(parameter.getNecessary())
+                    .setParamName(paramName)
+                    .setParamType(paramType)
+                    .setStandardId(standardId)
+                    .setStatus(parameter.getStatus())
+                    .setUnit(parameter.getUnit())
+                    .setValueType(parameter.getValueType());
+            List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
+            for (BreedingStandardParameter parameterIn : parameterList){
+                BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
+                itemDto.setDayAge(parameterIn.getDayAge())
+                        .setId(parameterIn.getId())
+                        .setLowerLimit(parameterIn.getLowerLimit())
+                        .setUpperLimit(parameterIn.getUpperLimit())
+                        .setParamValue(parameterIn.getParamValue());
+                breedingStandardParameterList.add(itemDto);
+            }
+            dto.setBreedingStandardParameterList(breedingStandardParameterList);
+            return dto;
+        }
+        return null;
+    }
+
+    /**
+     * 根据模板id查询药品配置信息
+     *
+     * @param standardId
+     * @return
+     */
+    @Override
+    public List<BreedingStandardDrugDto> listBreedingStandardDrugs(Integer standardId) {
+        return breedingStandardDrugMapper.listBreedingStandardDrugs(standardId);
+    }
+
+    /**
+     * 更新参数排序
+     * @param dto
+     * @return
+     */
+    @Override
+    public List<ParameterTypeDto> changeParameterDisplayOrder(ChangeParameterDisplayOrderDto dto) {
+        List<ParameterTypeDto> result = new ArrayList<>();
+        Integer sortType = dto.getSortType();
+        if (!SortTypeEnum.UP.equals(sortType) && !SortTypeEnum.DOWN.equals(sortType)){
+            throw new RuntimeException("排序类型不正确");
+        }
+        List<ParameterTypeDto> parameterTypeDtoList = listParameterNameByStandardId(dto.getStandardId());
+        if (CollectionUtils.isEmpty(parameterTypeDtoList)){
+            throw new RuntimeException("养殖模板参数为空");
+        }
+        if (SortTypeEnum.UP.equals(sortType)){
+
+        }else {
+
+        }
+        return result;
+    }
+
     private Integer getCurrentUserId() {
-        UserInfo  userInfo = currentUserService.getCurrentUser();
+        UserInfo userInfo = currentUserService.getCurrentUser();
         return userInfo == null ? null : userInfo.getId();
     }
 }

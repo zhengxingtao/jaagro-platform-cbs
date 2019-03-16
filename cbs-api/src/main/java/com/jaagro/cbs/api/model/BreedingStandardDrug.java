@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/11
+ * @author :asus
+ * @date :2019/03/16
  */
 @Data
 @NoArgsConstructor
@@ -38,12 +38,12 @@ public class BreedingStandardDrug implements Serializable {
     private String skuNo;
 
     /**
-     * 日龄起
+     * 日龄起(包含)
      */
     private Integer dayAgeStart;
 
     /**
-     * 日龄止
+     * 日龄止(包含)
      */
     private Integer dayAgeEnd;
 
