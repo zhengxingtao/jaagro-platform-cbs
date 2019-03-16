@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.enums.SortTypeEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingStandardService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
+import com.jaagro.cbs.biz.mapper.BreedingStandardDrugMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingStandardParameterMapperExt;
 import com.jaagro.constant.UserInfo;
@@ -21,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 养殖大脑管理
@@ -41,6 +41,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     private BreedingStandardMapperExt breedingStandardMapper;
     @Autowired
     private BreedingStandardParameterMapperExt standardParameterMapper;
+    @Autowired
+    private BreedingStandardDrugMapperExt breedingStandardDrugMapper;
     @Autowired
     private BreedingPlanMapperExt breedingPlanMapper;
     @Autowired
@@ -201,6 +203,106 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
             }
         }
         return new PageInfo(returnBreedingParamTemplateDtos);
+    }
+
+    /**
+     * 查询养殖模板下的参数分类列表
+     *
+     * @param standardId
+     * @return
+     */
+    @Override
+    public List<ParameterTypeDto> listParameterNameByStandardId(Integer standardId) {
+        BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
+        Assert.notNull(breedingStandard, "模板不存在");
+        BreedingStandardParameterExample example = new BreedingStandardParameterExample();
+        example.createCriteria().andStandardIdEqualTo(standardId).andEnableEqualTo(Boolean.TRUE);
+        List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
+        Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
+        if (!CollectionUtils.isEmpty(parameterList)) {
+            for (BreedingStandardParameter parameter : parameterList) {
+                // 同一养殖模板下相同参数名称相同参数类型展示顺序一样
+                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getDisplayOrder()));
+            }
+        }
+        return new ArrayList<>(parameterTypeDtoSet);
+    }
+
+    /**
+     * 根据模板id参数名称参数类型查看养殖模板参数
+     *
+     * @param standardId
+     * @param paramName
+     * @param paramType
+     * @return
+     */
+    @Override
+    public BreedingParameterListDto listParameterListByName(Integer standardId, String paramName, Integer paramType) {
+        BreedingStandardParameterExample parameterExample = new BreedingStandardParameterExample();
+        parameterExample.createCriteria().andEnableEqualTo(Boolean.TRUE)
+                .andStandardIdEqualTo(standardId).andParamTypeEqualTo(paramType).andParamNameEqualTo(paramName);
+        parameterExample.setOrderByClause("day_age asc");
+        List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(parameterExample);
+        if (!CollectionUtils.isEmpty(parameterList)){
+            BreedingParameterListDto dto = new BreedingParameterListDto();
+            BreedingStandardParameter parameter = parameterList.get(0);
+            dto.setAlarm(parameter.getAlarm())
+                    .setNecessary(parameter.getNecessary())
+                    .setParamName(paramName)
+                    .setParamType(paramType)
+                    .setStandardId(standardId)
+                    .setStatus(parameter.getStatus())
+                    .setUnit(parameter.getUnit())
+                    .setValueType(parameter.getValueType());
+            List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
+            for (BreedingStandardParameter parameterIn : parameterList){
+                BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
+                itemDto.setDayAge(parameterIn.getDayAge())
+                        .setId(parameterIn.getId())
+                        .setLowerLimit(parameterIn.getLowerLimit())
+                        .setUpperLimit(parameterIn.getUpperLimit())
+                        .setParamValue(parameterIn.getParamValue());
+                breedingStandardParameterList.add(itemDto);
+            }
+            dto.setBreedingStandardParameterList(breedingStandardParameterList);
+            return dto;
+        }
+        return null;
+    }
+
+    /**
+     * 根据模板id查询药品配置信息
+     *
+     * @param standardId
+     * @return
+     */
+    @Override
+    public List<BreedingStandardDrugDto> listBreedingStandardDrugs(Integer standardId) {
+        return breedingStandardDrugMapper.listBreedingStandardDrugs(standardId);
+    }
+
+    /**
+     * 更新参数排序
+     * @param dto
+     * @return
+     */
+    @Override
+    public List<ParameterTypeDto> changeParameterDisplayOrder(ChangeParameterDisplayOrderDto dto) {
+        List<ParameterTypeDto> result = new ArrayList<>();
+        Integer sortType = dto.getSortType();
+        if (!SortTypeEnum.UP.equals(sortType) && !SortTypeEnum.DOWN.equals(sortType)){
+            throw new RuntimeException("排序类型不正确");
+        }
+        List<ParameterTypeDto> parameterTypeDtoList = listParameterNameByStandardId(dto.getStandardId());
+        if (CollectionUtils.isEmpty(parameterTypeDtoList)){
+            throw new RuntimeException("养殖模板参数为空");
+        }
+        if (SortTypeEnum.UP.equals(sortType)){
+
+        }else {
+
+        }
+        return result;
     }
 
     private Integer getCurrentUserId() {

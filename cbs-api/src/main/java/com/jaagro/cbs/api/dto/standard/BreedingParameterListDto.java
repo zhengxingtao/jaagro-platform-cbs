@@ -65,6 +65,13 @@ public class BreedingParameterListDto implements Serializable{
     private Boolean alarm;
 
     /**
+     * 展示顺序
+     */
+    @NotNull(message = "{displayOrder.NotNull}")
+    @Min(value = 1,message = "{displayOrder.Min}")
+    private Integer displayOrder;
+
+    /**
      /**
      * 养殖参数列表
      */

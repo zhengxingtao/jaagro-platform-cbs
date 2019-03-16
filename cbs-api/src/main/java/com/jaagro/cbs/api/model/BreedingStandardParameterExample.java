@@ -819,6 +819,66 @@ public class BreedingStandardParameterExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andThresholdDirectionIsNull() {
+            addCriterion("threshold_direction is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionIsNotNull() {
+            addCriterion("threshold_direction is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionEqualTo(Integer value) {
+            addCriterion("threshold_direction =", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionNotEqualTo(Integer value) {
+            addCriterion("threshold_direction <>", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionGreaterThan(Integer value) {
+            addCriterion("threshold_direction >", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionGreaterThanOrEqualTo(Integer value) {
+            addCriterion("threshold_direction >=", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionLessThan(Integer value) {
+            addCriterion("threshold_direction <", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionLessThanOrEqualTo(Integer value) {
+            addCriterion("threshold_direction <=", value, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionIn(List<Integer> values) {
+            addCriterion("threshold_direction in", values, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionNotIn(List<Integer> values) {
+            addCriterion("threshold_direction not in", values, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionBetween(Integer value1, Integer value2) {
+            addCriterion("threshold_direction between", value1, value2, "thresholdDirection");
+            return (Criteria) this;
+        }
+
+        public Criteria andThresholdDirectionNotBetween(Integer value1, Integer value2) {
+            addCriterion("threshold_direction not between", value1, value2, "thresholdDirection");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -936,6 +996,66 @@ public class BreedingStandardParameterExample implements Serializable {
 
         public Criteria andNecessaryNotBetween(Boolean value1, Boolean value2) {
             addCriterion("necessary not between", value1, value2, "necessary");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderIsNull() {
+            addCriterion("display_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderIsNotNull() {
+            addCriterion("display_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderEqualTo(Integer value) {
+            addCriterion("display_order =", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderNotEqualTo(Integer value) {
+            addCriterion("display_order <>", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderGreaterThan(Integer value) {
+            addCriterion("display_order >", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("display_order >=", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderLessThan(Integer value) {
+            addCriterion("display_order <", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("display_order <=", value, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderIn(List<Integer> values) {
+            addCriterion("display_order in", values, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderNotIn(List<Integer> values) {
+            addCriterion("display_order not in", values, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderBetween(Integer value1, Integer value2) {
+            addCriterion("display_order between", value1, value2, "displayOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("display_order not between", value1, value2, "displayOrder");
             return (Criteria) this;
         }
 
