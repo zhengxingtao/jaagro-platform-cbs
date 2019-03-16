@@ -311,6 +311,17 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         return result;
     }
 
+    /**
+     * 获取养殖模板基本信息
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public BreedingStandard getStandardBaseInfoById(Integer id) {
+        return breedingStandardMapper.selectByPrimaryKey(id);
+    }
+
     private Integer getCurrentUserId() {
         UserInfo userInfo = currentUserService.getCurrentUser();
         return userInfo == null ? null : userInfo.getId();

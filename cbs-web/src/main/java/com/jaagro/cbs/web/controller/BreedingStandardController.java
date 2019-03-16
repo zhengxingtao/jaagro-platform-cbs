@@ -2,8 +2,10 @@ package com.jaagro.cbs.web.controller;
 
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.enums.CapacityUnitEnum;
+import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.service.BreedingStandardService;
+import com.jaagro.cbs.web.vo.standard.BreedingStandardBaseVo;
 import com.jaagro.cbs.web.vo.standard.BreedingStandardDrugItemVo;
 import com.jaagro.cbs.web.vo.standard.BreedingStandardDrugListVo;
 import com.jaagro.utils.BaseResponse;
@@ -11,6 +13,7 @@ import com.jaagro.utils.ResponseStatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
@@ -57,6 +60,18 @@ public class BreedingStandardController {
             return BaseResponse.errorInstance("保存失败：" + ex.getMessage());
         }
         return BaseResponse.successInstance(id);
+    }
+
+    @ApiOperation("查看养殖模板基本信息")
+    @GetMapping("/breedingStandard/{id}")
+    public BaseResponse getBreedingStandard(@PathVariable Integer id){
+        log.info("O getBreedingStandard id={}",id);
+        BreedingStandard standard = breedingStandardService.getStandardBaseInfoById(id);
+        BreedingStandardBaseVo vo = new BreedingStandardBaseVo();
+        if (standard != null){
+            BeanUtils.copyProperties(standard,vo);
+        }
+        return BaseResponse.successInstance(vo);
     }
 
     @ApiOperation("根据养殖模板id获取养殖参数模块列表")

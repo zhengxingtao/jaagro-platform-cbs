@@ -92,4 +92,11 @@ public interface BreedingStandardService {
      * @return
      */
     List<ParameterTypeDto> changeParameterDisplayOrder(ChangeParameterDisplayOrderDto dto);
+
+    /**
+     * 获取养殖模板基本信息
+     * @param id
+     * @return
+     */
+    BreedingStandard getStandardBaseInfoById(Integer id);
 }
