@@ -318,8 +318,8 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         if (null == feedConfigPhaseThree) {
             throw new NullPointerException("请先配置第三阶段日龄区间与需要采购的产品");
         }
-        Integer dayAgeStart = feedConfigPhaseThree.getDayAgeStart() == null ? 0 : feedConfigPhaseThree.getDayAgeStart();
-        Integer dayAgeEnd = feedConfigPhaseThree.getDayAgeEnd() == null ? 0 : feedConfigPhaseThree.getDayAgeEnd();
+        int dayAgeStart = feedConfigPhaseThree.getDayAgeStart() == null ? 0 : feedConfigPhaseThree.getDayAgeStart();
+        int dayAgeEnd = feedConfigPhaseThree.getDayAgeEnd() == null ? 0 : feedConfigPhaseThree.getDayAgeEnd();
         long currentDayAgeLong = breedingPlanService.getDayAge(planId);
         //跟第二阶段小料510饲料采购订单同一天生成即第二阶段起始日龄提前3天下单
         int ageDay12 = feedConfigPhaseTwo.getDayAgeStart() - 3;
@@ -478,7 +478,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         for (int i = startDayAge; i <= endDayAge; i++) {
             //获取某个日龄的死淘数
             BatchInfoBo batchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, i);
-            Integer deadAmount = batchInfoBo.getDeadAmount() == null ? 0 : batchInfoBo.getDeadAmount();
+            int deadAmount = batchInfoBo.getDeadAmount() == null ? 0 : batchInfoBo.getDeadAmount();
             int nextAgeDay = i + 1;
             BigDecimal areaTotalFeedWeight = getSumFoodWeightByPlanIdAndDayAgeArea(planId, nextAgeDay, toDayAge);
             //日龄死淘数乘以接下来的日龄区间每天吃的饲料总和

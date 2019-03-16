@@ -91,10 +91,8 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             example.createCriteria().andPlanIdEqualTo(planId).andPlantIdEqualTo(plantId).andEnableEqualTo(true);
             List<BatchPlantCoop> batchPlantCoopDos = batchPlantCoopMapper.selectByExample(example);
             if (!CollectionUtils.isEmpty(batchPlantCoopDos)) {
-                Set<Integer> plantIds = new HashSet<>();
                 List<Coop> coopDos = new ArrayList<>();
                 for (BatchPlantCoop batchPlantCoop : batchPlantCoopDos) {
-                    plantIds.add(batchPlantCoop.getPlantId());
                     if (!StringUtils.isEmpty(batchPlantCoop.getCoopId())) {
                         Coop coopDo = coopMapper.selectByPrimaryKey(batchPlantCoop.getCoopId());
                         coopDos.add(coopDo);
