@@ -253,7 +253,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                     .setStandardId(standardId)
                     .setStatus(parameter.getStatus())
                     .setUnit(parameter.getUnit())
-                    .setValueType(parameter.getValueType());
+                    .setValueType(parameter.getValueType())
+                    .setDisplayOrder(parameter.getDisplayOrder());
             List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
             for (BreedingStandardParameter parameterIn : parameterList){
                 BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
