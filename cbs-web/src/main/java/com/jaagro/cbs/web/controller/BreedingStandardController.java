@@ -124,7 +124,8 @@ public class BreedingStandardController {
     @ApiOperation("养殖参数模板药品配置")
     @PostMapping("/breedingStandardDrugs")
     public BaseResponse breedingStandardDrugs(@RequestBody @Validated ValidList<BreedingStandardDrugListVo> drugList){
-        log.info("");
+        log.info("O breedingStandardDrugs drugList={}",drugList);
+        return null;
     }
 
     @ApiOperation("查询所有的养殖模板")
