@@ -19,5 +19,5 @@ public interface ProductService {
      * @param criteria
      * @return
      */
-    PageInfo listByCriteria(ListProductCriteria criteria);
+    List<Product> listByCriteria(ListProductCriteria criteria);
 }

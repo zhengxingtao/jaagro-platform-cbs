@@ -1,5 +1,6 @@
 package com.jaagro.cbs.web.controller;
 
+import com.jaagro.cbs.api.dto.ValidList;
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.enums.CapacityUnitEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
@@ -102,12 +103,28 @@ public class BreedingStandardController {
         log.info("O changeParameterDisplayOrder param={}",dto);
         return BaseResponse.successInstance(breedingStandardService.changeParameterDisplayOrder(dto));
     }
+
+    @ApiOperation("删除养殖参数配置信息")
+    @DeleteMapping("/delBreedingStandardParam")
+    public BaseResponse delBreedingStandardParam(@RequestBody @Validated DelBreedingStandardParamDto dto){
+        log.info("O delBreedingStandardParam dto={}",dto);
+        breedingStandardService.delBreedingStandardParam(dto);
+        return BaseResponse.successInstance("删除成功");
+    }
+
+
     @ApiOperation("查询养殖模板药品配置信息")
     @GetMapping("listBreedingStandardDrugs/{standardId}")
     public BaseResponse listBreedingStandardDrugs(@PathVariable("standardId") Integer standardId){
         log.info("O listBreedingStandardDrugs standardId={}",standardId);
         List<BreedingStandardDrugListVo> breedingStandardDrugListVoList = generateStandardDrugs(breedingStandardService.listBreedingStandardDrugs(standardId));
         return BaseResponse.successInstance(breedingStandardDrugListVoList);
+    }
+
+    @ApiOperation("养殖参数模板药品配置")
+    @PostMapping("/breedingStandardDrugs")
+    public BaseResponse breedingStandardDrugs(@RequestBody @Validated ValidList<BreedingStandardDrugListVo> drugList){
+        log.info("");
     }
 
     @ApiOperation("查询所有的养殖模板")

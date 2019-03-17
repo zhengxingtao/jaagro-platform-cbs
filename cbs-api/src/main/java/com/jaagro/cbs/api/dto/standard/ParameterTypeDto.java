@@ -55,8 +55,7 @@ public class ParameterTypeDto implements Serializable {
             ParameterTypeDto other = (ParameterTypeDto) obj;
             if (equalsInteger(this.standardId, other.standardId) &&
                     equalsStr(this.paramName, other.paramName) &&
-                    equalsInteger(this.paramType, other.paramType) &&
-                    equalsInteger(this.displayOrder, other.displayOrder)
+                    equalsInteger(this.paramType, other.paramType)
                     ) {
                 return true;
             }
@@ -90,7 +89,6 @@ public class ParameterTypeDto implements Serializable {
         result = 31 * result + (standardId == null ? 0 : standardId.hashCode());
         result = 31 * result + (paramName == null ? 0 : paramName.hashCode());
         result = 31 * result + (paramType == null ? 0 : paramType.hashCode());
-        result = 31 * result + (displayOrder == null ? 0 : displayOrder.hashCode());
         return result;
     }
 

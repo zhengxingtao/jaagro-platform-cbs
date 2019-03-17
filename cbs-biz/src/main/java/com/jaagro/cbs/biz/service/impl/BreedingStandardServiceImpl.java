@@ -219,7 +219,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         BreedingStandardParameterExample example = new BreedingStandardParameterExample();
         example.createCriteria().andStandardIdEqualTo(standardId).andEnableEqualTo(Boolean.TRUE);
         List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
-        List<ParameterTypeDto> initParameterTypeDtoList = getInitParameterTypeDtoSet(standardId);
+        Set<ParameterTypeDto> initParameterTypeDtoSet = getInitParameterTypeDtoSet(standardId);
         Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
         if (!CollectionUtils.isEmpty(parameterList)) {
             for (BreedingStandardParameter parameter : parameterList) {
@@ -227,12 +227,25 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                 parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getUnit(),parameter.getDisplayOrder()));
             }
         }
+        if (!CollectionUtils.isEmpty(parameterTypeDtoSet)){
+            Iterator<ParameterTypeDto> iterator = parameterTypeDtoSet.iterator();
+            while (iterator.hasNext()){
+                ParameterTypeDto dto = iterator.next();
+                for (ParameterTypeDto init : initParameterTypeDtoSet){
+                    if (!init.getParamName().equals(dto.getParamName()) || !init.getParamType().equals(dto.getParamType())){
+                        parameterTypeDtoSet.add(init);
+                    }
+                }
+            }
+        }else {
+            parameterTypeDtoSet.addAll(initParameterTypeDtoSet);
+        }
         List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(parameterTypeDtoSet);
         return parameterTypeDtoList;
     }
 
-    private List<ParameterTypeDto> getInitParameterTypeDtoSet(Integer standardId) {
-        List<ParameterTypeDto> result  = new ArrayList<>();
+    private Set<ParameterTypeDto> getInitParameterTypeDtoSet(Integer standardId) {
+        Set<ParameterTypeDto> result  = new HashSet<>();
         ParameterTypeDto parameterTypeDtoWeight = new ParameterTypeDto(standardId,"体重标准", BreedingStandardParamEnum.WEIGHT.getCode(),"克",1);
         result.add(parameterTypeDtoWeight);
         ParameterTypeDto parameterTypeDtoFeedingWeight = new ParameterTypeDto(standardId,"饲喂重量", BreedingStandardParamEnum.FEEDING_WEIGHT.getCode(),"克",2);
@@ -270,7 +283,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                     .setStatus(parameter.getStatus())
                     .setUnit(parameter.getUnit())
                     .setValueType(parameter.getValueType())
-                    .setDisplayOrder(parameter.getDisplayOrder());
+                    .setDisplayOrder(parameter.getDisplayOrder())
+                    .setThresholdDirection(parameter.getThresholdDirection());
             List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
             for (BreedingStandardParameter parameterIn : parameterList){
                 BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
@@ -336,6 +350,16 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
     @Override
     public BreedingStandard getStandardBaseInfoById(Integer id) {
         return breedingStandardMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 删除养殖模板参数
+     *
+     * @param dto
+     */
+    @Override
+    public void delBreedingStandardParam(DelBreedingStandardParamDto dto) {
+        standardParameterMapper.delByCondition(dto);
     }
 
     private Integer getCurrentUserId() {

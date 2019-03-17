@@ -99,4 +99,10 @@ public interface BreedingStandardService {
      * @return
      */
     BreedingStandard getStandardBaseInfoById(Integer id);
+
+    /**
+     * 删除养殖模板参数
+     * @param dto
+     */
+    void delBreedingStandardParam(DelBreedingStandardParamDto dto);
 }

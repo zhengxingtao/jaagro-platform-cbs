@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 改变养殖模板参数排序参数
+ * 删除养殖模板参数参数
  * @author yj
- * @date 2019/3/16 11:17
+ * @date 2019/3/17 14:16
  */
 @Data
 @Accessors(chain = true)
-public class ChangeParameterDisplayOrderDto implements Serializable {
-    private static final long serialVersionUID = -3496782206369272495L;
+public class DelBreedingStandardParamDto implements Serializable{
+    private static final long serialVersionUID = -5755579744033733709L;
     /**
      * 养殖模板id
      */
@@ -34,16 +34,4 @@ public class ChangeParameterDisplayOrderDto implements Serializable {
     @NotNull(message = "{paramType.NotNull}")
     @Min(value = 1,message = "{paramType.Min}")
     private Integer paramType;
-    /**
-     * 排序类型(1-向上,2-向下)
-     */
-    @NotNull(message = "{sortType.NotNull}")
-    @Min(value = 1,message = "{sortType.Min}")
-    private Integer sortType;
-    /**
-     * 变更前展示顺序
-     */
-    @NotNull(message = "{displayOrder.NotNull}")
-    @Min(value = 1,message = "{displayOrder.Min}")
-    private Integer displayOrder;
 }
