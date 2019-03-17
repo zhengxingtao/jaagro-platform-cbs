@@ -2,12 +2,14 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.ValidList;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.enums.BreedingStandardParamEnum;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.SortTypeEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
+import com.jaagro.cbs.api.model.BreedingStandardDrug;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -362,6 +364,55 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         standardParameterMapper.delByCondition(dto);
     }
 
+    /**
+     * 养殖模板药品配置
+     *
+     * @param drugList
+     */
+    @Override
+    public void configurationDrugs(ValidList<BreedingStandardDrugListDto> drugList) {
+        if (!CollectionUtils.isEmpty(drugList)){
+            Integer standardId = drugList.get(0).getStandardId();
+            Integer currentUserId = getCurrentUserId();
+            breedingStandardDrugMapper.delByStandardId(standardId);
+            List<BreedingStandardDrug> standardDrugList = new ArrayList<>();
+            for (BreedingStandardDrugListDto dto : drugList){
+                List<BreedingStandardDrugItemDto> drugItemVoList = dto.getBreedingStandardDrugItemVoList();
+                if (CollectionUtils.isEmpty(drugItemVoList)){
+                    BreedingStandardDrug drug = generateStandardDrug(dto, currentUserId);
+                    standardDrugList.add(drug);
+                }else {
+                    for (BreedingStandardDrugItemDto itemDto : drugItemVoList){
+                        BreedingStandardDrug drug = generateStandardDrug(dto, currentUserId);
+                        drug.setFeedVolume(itemDto.getFeedVolume())
+                                .setProductId(itemDto.getProductId())
+                                .setSkuNo(itemDto.getSkuNo());
+                        standardDrugList.add(drug);
+                    }
+                }
+            }
+            breedingStandardDrugMapper.batchInsert(standardDrugList);
+        }else {
+            throw new RuntimeException("药品配置信息列表为空");
+        }
+    }
+
+    private BreedingStandardDrug generateStandardDrug(BreedingStandardDrugListDto dto,Integer currentUserId){
+        BreedingStandardDrug drug = new BreedingStandardDrug();
+        drug.setBreedingStandardId(dto.getStandardId())
+                .setCreateUserId(currentUserId)
+                .setDayAgeEnd(dto.getDayAgeEnd())
+                .setDayAgeStart(dto.getDayAgeStart());
+        if (dto.getDayAgeEnd() != null && dto.getDayAgeStart() != null){
+            drug.setDays(dto.getDayAgeEnd()-dto.getDayAgeStart()+1);
+        }
+        if (dto.getStopDrugFlag() == null){
+            drug.setStopDrugFlag(Boolean.FALSE);
+        }else {
+            drug.setStopDrugFlag(dto.getStopDrugFlag());
+        }
+        return drug;
+    }
     private Integer getCurrentUserId() {
         UserInfo userInfo = currentUserService.getCurrentUser();
         return userInfo == null ? null : userInfo.getId();

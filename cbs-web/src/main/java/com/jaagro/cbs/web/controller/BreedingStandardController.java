@@ -123,9 +123,13 @@ public class BreedingStandardController {
 
     @ApiOperation("养殖参数模板药品配置")
     @PostMapping("/breedingStandardDrugs")
-    public BaseResponse breedingStandardDrugs(@RequestBody @Validated ValidList<BreedingStandardDrugListVo> drugList){
+    public BaseResponse breedingStandardDrugs(@RequestBody @Validated ValidList<BreedingStandardDrugListDto> drugList){
         log.info("O breedingStandardDrugs drugList={}",drugList);
-        return null;
+        if (CollectionUtils.isEmpty(drugList)){
+            return BaseResponse.errorInstance("参数为空");
+        }
+        breedingStandardService.configurationDrugs(drugList);
+        return BaseResponse.successInstance("配置成功");
     }
 
     @ApiOperation("查询所有的养殖模板")
