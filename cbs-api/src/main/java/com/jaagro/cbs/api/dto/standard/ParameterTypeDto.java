@@ -33,6 +33,10 @@ public class ParameterTypeDto implements Serializable {
      */
     private Integer paramType;
     /**
+     * 单位
+     */
+    private String unit;
+    /**
      * 展示顺序
      */
     private Integer displayOrder;
@@ -90,10 +94,4 @@ public class ParameterTypeDto implements Serializable {
         return result;
     }
 
-    public static void main(String[] args) {
-        ParameterTypeDto typeDto1 = new ParameterTypeDto(4,"温度",10,1);
-        ParameterTypeDto typeDto2 = new ParameterTypeDto(4,"温度",10,1);
-        System.out.println(typeDto1.equals(typeDto2));
-        System.out.println(typeDto1.hashCode() == typeDto2.hashCode());
-    }
 }

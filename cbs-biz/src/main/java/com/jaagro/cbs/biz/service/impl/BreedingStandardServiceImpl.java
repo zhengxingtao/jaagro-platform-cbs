@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.dto.standard.*;
+import com.jaagro.cbs.api.enums.BreedingStandardParamEnum;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.SortTypeEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
@@ -218,14 +219,29 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         BreedingStandardParameterExample example = new BreedingStandardParameterExample();
         example.createCriteria().andStandardIdEqualTo(standardId).andEnableEqualTo(Boolean.TRUE);
         List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
+        List<ParameterTypeDto> initParameterTypeDtoList = getInitParameterTypeDtoSet(standardId);
         Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
         if (!CollectionUtils.isEmpty(parameterList)) {
             for (BreedingStandardParameter parameter : parameterList) {
                 // 同一养殖模板下相同参数名称相同参数类型展示顺序一样
-                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getDisplayOrder()));
+                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getUnit(),parameter.getDisplayOrder()));
             }
         }
-        return new ArrayList<>(parameterTypeDtoSet);
+        List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(parameterTypeDtoSet);
+        return parameterTypeDtoList;
+    }
+
+    private List<ParameterTypeDto> getInitParameterTypeDtoSet(Integer standardId) {
+        List<ParameterTypeDto> result  = new ArrayList<>();
+        ParameterTypeDto parameterTypeDtoWeight = new ParameterTypeDto(standardId,"体重标准", BreedingStandardParamEnum.WEIGHT.getCode(),"克",1);
+        result.add(parameterTypeDtoWeight);
+        ParameterTypeDto parameterTypeDtoFeedingWeight = new ParameterTypeDto(standardId,"饲喂重量", BreedingStandardParamEnum.FEEDING_WEIGHT.getCode(),"克",2);
+        result.add(parameterTypeDtoFeedingWeight);
+        ParameterTypeDto parameterTypeDtoFeedingFodderNum = new ParameterTypeDto(standardId,"喂料次数", BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode(),"次",3);
+        result.add(parameterTypeDtoFeedingFodderNum);
+        ParameterTypeDto parameterTypeDtoDie = new ParameterTypeDto(standardId,"死淘", BreedingStandardParamEnum.DIE.getCode(),"%",4);
+        result.add(parameterTypeDtoDie);
+        return result;
     }
 
     /**
