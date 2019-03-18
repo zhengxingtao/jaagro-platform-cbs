@@ -437,11 +437,13 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
             if (purchaseOrder.getProductType() != null) {
                 if (ProductTypeEnum.SPROUT.getCode() == purchaseOrder.getProductType()) {
                     if (purchaseOrder.getPlanId() != null) {
-                        BreedingPlan breedingPlan = new BreedingPlan();
-                        breedingPlan
-                                .setPlanStatus(PlanStatusEnum.BREEDING.getCode())
-                                .setId(purchaseOrder.getPlanId());
-                        breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+                        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(purchaseOrder.getPlanId());
+                        if (breedingPlan != null && PlanStatusEnum.SIGN_CHICKEN.getCode() == breedingPlan.getPlanStatus()) {
+                            breedingPlan
+                                    .setPlanStatus(PlanStatusEnum.BREEDING.getCode())
+                                    .setId(purchaseOrder.getPlanId());
+                            breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+                        }
                     }
                 }
             }
@@ -480,7 +482,6 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
             }
         }
-
         return new PageInfo(breedingPlans);
     }
 
