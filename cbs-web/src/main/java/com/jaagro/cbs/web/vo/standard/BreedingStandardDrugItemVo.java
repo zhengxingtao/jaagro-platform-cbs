@@ -26,6 +26,11 @@ public class BreedingStandardDrugItemVo implements Serializable {
     private Integer productId;
 
     /**
+     * sku编码
+     */
+    private String skuNo;
+
+    /**
      * 产品名称
      */
     private String productName;

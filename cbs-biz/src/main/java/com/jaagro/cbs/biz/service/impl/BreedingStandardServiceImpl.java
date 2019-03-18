@@ -403,6 +403,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         BreedingStandardDrug drug = new BreedingStandardDrug();
         drug.setBreedingStandardId(dto.getStandardId())
                 .setCreateUserId(currentUserId)
+                .setCreateTime(new Date())
+                .setEnable(Boolean.TRUE)
                 .setDayAgeEnd(dto.getDayAgeEnd())
                 .setDayAgeStart(dto.getDayAgeStart());
         if (dto.getDayAgeEnd() != null && dto.getDayAgeStart() != null){
