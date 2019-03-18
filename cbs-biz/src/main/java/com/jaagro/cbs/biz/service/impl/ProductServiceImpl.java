@@ -40,10 +40,8 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     @Override
-    public PageInfo listByCriteria(ListProductCriteria criteria) {
-        PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
-        List<Product> productList = productMapper.listByCriteria(criteria);
-        return new PageInfo(productList);
+    public List<Product> listByCriteria(ListProductCriteria criteria) {
+         return productMapper.listByCriteria(criteria);
     }
 
     /**

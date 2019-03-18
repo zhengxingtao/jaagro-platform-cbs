@@ -20,19 +20,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ListProductCriteria implements Serializable{
     /**
-     * 当前页
-     */
-    @NotNull(message = "{pageNum.NotNull}")
-    @Min(value = 1,message = "{pageNum.Min}")
-    private int pageNum;
-
-    /**
-     * 每页的数量
-     */
-    @NotNull(message = "{pageSize.NotNull}")
-    @Min(value = 1,message = "{pageSize.Min}")
-    private int pageSize;
-    /**
      * 产品名称
      */
     private String productName;
@@ -42,8 +29,4 @@ public class ListProductCriteria implements Serializable{
      */
     private Integer productType;
 
-    /**
-     * 生产商名称
-     */
-    private String manufacturer;
 }

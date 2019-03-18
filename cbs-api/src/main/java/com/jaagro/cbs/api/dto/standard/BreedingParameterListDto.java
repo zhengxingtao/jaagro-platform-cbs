@@ -65,6 +65,16 @@ public class BreedingParameterListDto implements Serializable{
     private Boolean alarm;
 
     /**
+     * 临界值方向(1->=,2<=)
+     */
+    private Integer thresholdDirection;
+
+    /**
+     * 展示顺序
+     */
+    private Integer displayOrder;
+
+    /**
      /**
      * 养殖参数列表
      */

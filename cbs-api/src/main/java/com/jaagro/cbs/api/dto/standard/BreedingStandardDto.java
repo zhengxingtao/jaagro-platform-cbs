@@ -25,6 +25,7 @@ public class BreedingStandardDto implements Serializable {
      * 养殖标准方案表id
      */
     private Integer id;
+
     /**
      * 标准方案名称
      */

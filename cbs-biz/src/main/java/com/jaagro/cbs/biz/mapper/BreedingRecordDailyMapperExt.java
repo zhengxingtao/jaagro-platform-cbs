@@ -30,5 +30,5 @@ public interface BreedingRecordDailyMapperExt extends BaseMapper<BreedingRecordD
      *
      * @param dailyList
      */
-    void insertBatch(List<BreedingRecordDaily> dailyList);
+    void insertBatch(@Param("dailyList") List<BreedingRecordDaily> dailyList);
 }

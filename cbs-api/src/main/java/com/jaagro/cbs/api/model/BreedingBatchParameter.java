@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/15
+ * @author :asus
+ * @date :2019/03/16
  */
 @Data
 @NoArgsConstructor
@@ -88,6 +88,11 @@ public class BreedingBatchParameter implements Serializable {
     private String paramValue;
 
     /**
+     * 临界值方向(1->=,2<=)
+     */
+    private Integer thresholdDirection;
+
+    /**
      * 养殖参数状态（1-启用 0 -未启用）
      */
     private Integer status;
@@ -96,6 +101,11 @@ public class BreedingBatchParameter implements Serializable {
      * 是否必要(0-不必要,1-必要)
      */
     private Boolean necessary;
+
+    /**
+     * 展示顺序
+     */
+    private Integer displayOrder;
 
     /**
      * 是否有效(0-无效,1-有效)

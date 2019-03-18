@@ -40,10 +40,10 @@ public class ProductController {
 
     @ApiOperation("获取产品列表")
     @PostMapping("/listProductByCriteria")
-    public BaseResponse listProductByCriteria(@RequestBody @Validated ListProductCriteria criteria) {
-        PageInfo pageInfo = productService.listByCriteria(criteria);
-        return BaseResponse.successInstance(pageInfo);
+    public BaseResponse listProductByCriteria(@RequestBody @Validated ListProductCriteria criteria){
+        return BaseResponse.successInstance(productService.listByCriteria(criteria));
     }
+
 
     @PostMapping("/addProductToStock")
     @ApiOperation("库存管理商品添加")

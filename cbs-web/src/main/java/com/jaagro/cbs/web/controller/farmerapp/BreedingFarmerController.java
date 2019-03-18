@@ -319,14 +319,9 @@ public class BreedingFarmerController {
 
     @ApiOperation("获取农户应喂药列表")
     @GetMapping("/listBreedingRecordDrug")
-    public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId, @RequestParam Integer coopId) {
-        log.info("O listBreedingRecordDrug planId={},coopId={}", planId, coopId);
-        List<BreedingRecordItemsDto> recordItemsDtoList = breedingPlanService.listBreedingRecordDrug(planId, coopId);
-        if (!CollectionUtils.isEmpty(recordItemsDtoList)) {
-            return BaseResponse.successInstance(recordItemsDtoList);
-        } else {
-            return BaseResponse.queryDataEmpty();
-        }
+    public BaseResponse listBreedingRecordDrug(@RequestParam Integer planId,@RequestParam Integer coopId){
+        log.info("O listBreedingRecordDrug planId={},coopId={}",planId,coopId);
+        return BaseResponse.successInstance(breedingPlanService.listBreedingRecordDrug(planId,coopId));
     }
 
     /**
