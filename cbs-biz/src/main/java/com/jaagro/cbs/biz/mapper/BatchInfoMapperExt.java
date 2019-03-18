@@ -33,7 +33,7 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
      *
      * @param batchInfoList
      */
-    void insertBatch(List<BatchInfo> batchInfoList);
+    void insertBatch(@Param("batchInfoList") List<BatchInfo> batchInfoList);
 
     /**
      * 根据批次、日期 查询 上一次的剩余数

@@ -21,7 +21,7 @@
         create_time, create_user_id, modify_time,
         modify_user_id)
         values
-        <foreach collection="batchInfoList" item="item">
+        <foreach collection="batchInfoList" item="item" separator=",">
             (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.startAmount,jdbcType=INTEGER},
             #{item.currentAmount,jdbcType=INTEGER}, #{item.startDay,jdbcType=DATE}, #{item.finishDay,jdbcType=DATE},
             #{item.dayAge,jdbcType=INTEGER}, #{item.technician,jdbcType=VARCHAR}, #{item.technicianId,jdbcType=INTEGER},
