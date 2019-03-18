@@ -2,7 +2,6 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jaagro.cbs.api.dto.base.ShowCustomerDto;
 import com.jaagro.cbs.api.dto.order.*;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.enums.PackageUnitEnum;
@@ -13,7 +12,6 @@ import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
-import com.jaagro.cbs.biz.service.CustomerClientService;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -23,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -42,11 +39,7 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
     @Autowired
     private UserClientService userClientService;
     @Autowired
-    private CurrentUserService currentUserService;
-    @Autowired
     private BreedingFarmerService breedingFarmerService;
-    @Autowired
-    private CustomerClientService customerClientService;
 
     /**
      * 采购预置列表

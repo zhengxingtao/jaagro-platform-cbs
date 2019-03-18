@@ -307,6 +307,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     if (ProductTypeEnum.FEED.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "批饲料配送");
                     }
+
                     if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
                     }

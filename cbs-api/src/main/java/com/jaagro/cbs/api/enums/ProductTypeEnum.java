@@ -12,6 +12,7 @@ public enum ProductTypeEnum {
     FEED(2, "FEED", "饲料"),
     DRUG(3, "DRUG", "药品");
 
+
     private int code;
     private String type;
     private String desc;

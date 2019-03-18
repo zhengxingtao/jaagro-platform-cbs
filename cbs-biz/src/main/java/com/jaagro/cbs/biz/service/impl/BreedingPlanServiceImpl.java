@@ -133,10 +133,14 @@ public class BreedingPlanServiceImpl implements BreedingPlanService {
                 BatchPlantCoop batchPlantCoop = new BatchPlantCoop();
                 batchPlantCoop
                         .setCreateTime(new Date())
-                        .setPlanId(breedingPlan.getId())
-                        .setCreateUserId(currentUser.getId())
                         .setPlantId(plantId)
                         .setEnable(Boolean.TRUE);
+                if (currentUser != null && currentUser.getId() != null) {
+                    batchPlantCoop.setCreateUserId(currentUser.getId());
+                }
+                if (breedingPlan != null && breedingPlan.getId() != null) {
+                    batchPlantCoop.setPlanId(breedingPlan.getId());
+                }
                 batchPlantCoops.add(batchPlantCoop);
             }
             if (!CollectionUtils.isEmpty(batchPlantCoops)) {

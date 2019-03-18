@@ -59,6 +59,11 @@ public class ReturnBreedingParamTemplateDto implements Serializable {
     private Integer planChickenQuantity;
 
     /**
+     * 养殖参数模板id
+     */
+    private Integer breedingStandardId;
+
+    /**
      * 上鸡时间
      */
     private Date planTime;
