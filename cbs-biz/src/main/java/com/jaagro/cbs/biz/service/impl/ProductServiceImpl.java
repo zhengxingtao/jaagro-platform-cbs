@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> listByCriteria(ListProductCriteria criteria) {
-         return productMapper.listByCriteria(criteria);
+        return productMapper.listByCriteria(criteria);
     }
 
     /**

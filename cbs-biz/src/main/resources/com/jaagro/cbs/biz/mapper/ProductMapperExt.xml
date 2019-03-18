@@ -14,9 +14,6 @@
         <if test="productType != null">
             and product_type = #{productType}
         </if>
-        <if test="manufacturer != null and manufacturer != ''">
-            <![CDATA[and (manufacturer like concat('%',#{manufacturer},'%') )]]>
-        </if>
     </select>
 
 </mapper>
