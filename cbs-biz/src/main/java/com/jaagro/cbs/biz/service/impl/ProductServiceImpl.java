@@ -1,7 +1,5 @@
 package com.jaagro.cbs.biz.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.product.ListProductCriteria;
 import com.jaagro.cbs.api.model.Product;
 import com.jaagro.cbs.api.service.ProductService;
@@ -21,6 +19,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductMapperExt productMapper;
+
     /**
      * 根据条件查询产品
      *
@@ -29,6 +28,6 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> listByCriteria(ListProductCriteria criteria) {
-         return productMapper.listByCriteria(criteria);
+        return productMapper.listByCriteria(criteria);
     }
 }
