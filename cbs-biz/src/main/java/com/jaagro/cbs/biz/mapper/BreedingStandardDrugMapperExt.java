@@ -25,4 +25,16 @@ public interface BreedingStandardDrugMapperExt extends BaseMapper<BreedingStanda
      * @return
      */
     List<BreedingStandardDrugDto> listBreedingStandardDrugs(@Param("standardId") Integer standardId);
+
+    /**
+     * 根据养殖模板id删除
+     * @param standardId
+     */
+    void delByStandardId(@Param("standardId") Integer standardId);
+
+    /**
+     * 批量插入
+     * @param standardDrugList
+     */
+    void batchInsert(@Param("standardDrugList") List<BreedingStandardDrug> standardDrugList);
 }

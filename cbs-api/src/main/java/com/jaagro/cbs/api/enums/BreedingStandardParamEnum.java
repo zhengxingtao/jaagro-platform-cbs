@@ -20,10 +20,10 @@ public enum BreedingStandardParamEnum {
     VENTILATION(16, "VENTILATION", "通风"),
     NEGATIVE_PRESSURE(17, "NEGATIVE_PRESSURE", "负压值"),
     DENSITY(18,"DENSITY","密度"),
-    FEEDING_FODDER_NUM(20, "FEEDING_FODDER_NUM", "喂料(次/日)"),
-    FEEDING_WATER_NUM(21, "FEEDING_WATER_NUM", "喂水(次/日)"),
-    FEEDING_WEIGHT(22, "FEEDING_WEIGHT", "饲喂(克/只/日)"),
-    WEIGHT(23, "WEIGHT", "体重(克/只/日)"),
+    FEEDING_FODDER_NUM(20, "FEEDING_FODDER_NUM", "喂料次数(次/日)"),
+    FEEDING_WATER_NUM(21, "FEEDING_WATER_NUM", "喂水次数(次/日)"),
+    FEEDING_WEIGHT(22, "FEEDING_WEIGHT", "饲喂重量(克/只/日)"),
+    WEIGHT(23, "WEIGHT", "体重标准(克/只/日)"),
     DIE(24, "DIE", "死淘(只)"),
     DRUG(25, "DRUG", "药品/疫苗");
     private int code;

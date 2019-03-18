@@ -2,6 +2,7 @@ package com.jaagro.cbs.api.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.ValidList;
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.dto.standard.*;
 import com.jaagro.cbs.api.model.BreedingStandard;
@@ -99,4 +100,17 @@ public interface BreedingStandardService {
      * @return
      */
     BreedingStandard getStandardBaseInfoById(Integer id);
+
+    /**
+     * 删除养殖模板参数
+     * @param dto
+     */
+    void delBreedingStandardParam(DelBreedingStandardParamDto dto);
+
+    /**
+     * 养殖模板药品配置
+     * @param drugList
+     */
+    void configurationDrugs(ValidList<BreedingStandardDrugListDto> drugList);
+
 }

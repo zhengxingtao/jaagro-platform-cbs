@@ -1,6 +1,7 @@
-package com.jaagro.cbs.web.vo.standard;
+package com.jaagro.cbs.api.dto.standard;
 
 import lombok.Data;
+import lombok.Value;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Min;
@@ -9,22 +10,24 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 养殖模板药品配置信息
+ * 养殖计划药品参数
  * @author yj
- * @date 2019/3/15 22:08
+ * @date 2019/3/17 17:42
  */
 @Data
 @Accessors(chain = true)
-public class BreedingStandardDrugListVo implements Serializable {
-    private static final long serialVersionUID = -1577874593401935360L;
+public class BreedingStandardDrugListDto implements Serializable{
     /**
      * 日龄起(包含)
      */
+    @NotNull(message = "{dayAgeStart.NotNull}")
     private Integer dayAgeStart;
 
     /**
      * 日龄止(包含)
      */
+    @NotNull(message = "{dayAgeEnd.NotNull}")
+    @Min(value = 1,message = "{dayAgeEnd.Min}")
     private Integer dayAgeEnd;
 
     /**
@@ -35,10 +38,12 @@ public class BreedingStandardDrugListVo implements Serializable {
     /**
      * 养殖模板id
      */
+    @NotNull(message = "{standardId.NotNull}")
+    @Min(value = 1,message = "{standardId.Min}")
     private Integer standardId;
 
     /**
      * 药品配置明细列表
      */
-    private List<BreedingStandardDrugItemVo> breedingStandardDrugItemVoList;
+    private List<BreedingStandardDrugItemDto> breedingStandardDrugItemVoList;
 }

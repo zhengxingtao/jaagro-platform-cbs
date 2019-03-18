@@ -11,6 +11,23 @@
         LEFT JOIN product p ON bsd.product_id = p.id
         WHERE bsd.breeding_standard_id = #{standardId}
     </select>
-
-
+    <delete id="delByStandardId">
+        DELETE FROM breeding_standard_drug
+        WHERE breeding_standard_id = #{standardId}
+    </delete>
+    <insert id="batchInsert" parameterType="list">
+        insert into breeding_standard_drug (breeding_standard_id, product_id, sku_no,
+          day_age_start, day_age_end, stop_drug_flag,
+          feed_volume, days, enable,
+          create_time, create_user_id, modify_time,
+          modify_user_id)
+        values
+        <foreach collection="standardDrugList" item="item" separator=",">
+            (#{item.breedingStandardId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.skuNo,jdbcType=VARCHAR},
+            #{item.dayAgeStart,jdbcType=INTEGER}, #{item.dayAgeEnd,jdbcType=INTEGER}, #{item.stopDrugFlag,jdbcType=BIT},
+            #{item.feedVolume,jdbcType=DECIMAL}, #{item.days,jdbcType=INTEGER}, #{item.enable,jdbcType=BIT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserId,jdbcType=INTEGER}, #{item.modifyTime,jdbcType=TIMESTAMP},
+            #{item.modifyUserId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
 </mapper>

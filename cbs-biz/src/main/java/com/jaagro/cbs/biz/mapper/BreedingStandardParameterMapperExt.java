@@ -1,6 +1,7 @@
 package com.jaagro.cbs.biz.mapper;
 
 import javax.annotation.Resource;
+import com.jaagro.cbs.api.dto.standard.DelBreedingStandardParamDto;
 import com.jaagro.cbs.api.dto.standard.ListBreedingStandardCriteria;
 import com.jaagro.cbs.api.model.BreedingStandard;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
@@ -36,4 +37,11 @@ public interface BreedingStandardParameterMapperExt extends BaseMapper<BreedingS
      * @param parameterList
      */
     void batchUpdateByPrimaryKeySelective(@Param("parameterList") List<BreedingStandardParameter> parameterList);
+
+    /**
+     * 根据条件删除参数
+     * @param dto
+     * @return
+     */
+    Integer delByCondition(DelBreedingStandardParamDto dto);
 }

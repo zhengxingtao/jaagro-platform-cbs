@@ -2,11 +2,14 @@ package com.jaagro.cbs.biz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.ValidList;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
 import com.jaagro.cbs.api.dto.standard.*;
+import com.jaagro.cbs.api.enums.BreedingStandardParamEnum;
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
 import com.jaagro.cbs.api.enums.SortTypeEnum;
 import com.jaagro.cbs.api.model.BreedingStandard;
+import com.jaagro.cbs.api.model.BreedingStandardDrug;
 import com.jaagro.cbs.api.model.BreedingStandardParameter;
 import com.jaagro.cbs.api.model.BreedingStandardParameterExample;
 import com.jaagro.cbs.api.service.BreedingPlanService;
@@ -218,14 +221,42 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         BreedingStandardParameterExample example = new BreedingStandardParameterExample();
         example.createCriteria().andStandardIdEqualTo(standardId).andEnableEqualTo(Boolean.TRUE);
         List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
+        Set<ParameterTypeDto> initParameterTypeDtoSet = getInitParameterTypeDtoSet(standardId);
         Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
         if (!CollectionUtils.isEmpty(parameterList)) {
             for (BreedingStandardParameter parameter : parameterList) {
                 // 同一养殖模板下相同参数名称相同参数类型展示顺序一样
-                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getDisplayOrder()));
+                parameterTypeDtoSet.add(new ParameterTypeDto(standardId, parameter.getParamName(), parameter.getParamType(),parameter.getUnit(),parameter.getDisplayOrder()));
             }
         }
-        return new ArrayList<>(parameterTypeDtoSet);
+        if (!CollectionUtils.isEmpty(parameterTypeDtoSet)){
+            Iterator<ParameterTypeDto> iterator = parameterTypeDtoSet.iterator();
+            while (iterator.hasNext()){
+                ParameterTypeDto dto = iterator.next();
+                for (ParameterTypeDto init : initParameterTypeDtoSet){
+                    if (!init.getParamName().equals(dto.getParamName()) || !init.getParamType().equals(dto.getParamType())){
+                        parameterTypeDtoSet.add(init);
+                    }
+                }
+            }
+        }else {
+            parameterTypeDtoSet.addAll(initParameterTypeDtoSet);
+        }
+        List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(parameterTypeDtoSet);
+        return parameterTypeDtoList;
+    }
+
+    private Set<ParameterTypeDto> getInitParameterTypeDtoSet(Integer standardId) {
+        Set<ParameterTypeDto> result  = new HashSet<>();
+        ParameterTypeDto parameterTypeDtoWeight = new ParameterTypeDto(standardId,"体重标准", BreedingStandardParamEnum.WEIGHT.getCode(),"克",1);
+        result.add(parameterTypeDtoWeight);
+        ParameterTypeDto parameterTypeDtoFeedingWeight = new ParameterTypeDto(standardId,"饲喂重量", BreedingStandardParamEnum.FEEDING_WEIGHT.getCode(),"克",2);
+        result.add(parameterTypeDtoFeedingWeight);
+        ParameterTypeDto parameterTypeDtoFeedingFodderNum = new ParameterTypeDto(standardId,"喂料次数", BreedingStandardParamEnum.FEEDING_FODDER_NUM.getCode(),"次",3);
+        result.add(parameterTypeDtoFeedingFodderNum);
+        ParameterTypeDto parameterTypeDtoDie = new ParameterTypeDto(standardId,"死淘", BreedingStandardParamEnum.DIE.getCode(),"%",4);
+        result.add(parameterTypeDtoDie);
+        return result;
     }
 
     /**
@@ -254,7 +285,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
                     .setStatus(parameter.getStatus())
                     .setUnit(parameter.getUnit())
                     .setValueType(parameter.getValueType())
-                    .setDisplayOrder(parameter.getDisplayOrder());
+                    .setDisplayOrder(parameter.getDisplayOrder())
+                    .setThresholdDirection(parameter.getThresholdDirection());
             List<BreedingStandardParameterItemDto> breedingStandardParameterList = new ArrayList<>();
             for (BreedingStandardParameter parameterIn : parameterList){
                 BreedingStandardParameterItemDto itemDto = new BreedingStandardParameterItemDto();
@@ -322,6 +354,65 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         return breedingStandardMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 删除养殖模板参数
+     *
+     * @param dto
+     */
+    @Override
+    public void delBreedingStandardParam(DelBreedingStandardParamDto dto) {
+        standardParameterMapper.delByCondition(dto);
+    }
+
+    /**
+     * 养殖模板药品配置
+     *
+     * @param drugList
+     */
+    @Override
+    public void configurationDrugs(ValidList<BreedingStandardDrugListDto> drugList) {
+        if (!CollectionUtils.isEmpty(drugList)){
+            Integer standardId = drugList.get(0).getStandardId();
+            Integer currentUserId = getCurrentUserId();
+            breedingStandardDrugMapper.delByStandardId(standardId);
+            List<BreedingStandardDrug> standardDrugList = new ArrayList<>();
+            for (BreedingStandardDrugListDto dto : drugList){
+                List<BreedingStandardDrugItemDto> drugItemVoList = dto.getBreedingStandardDrugItemVoList();
+                if (CollectionUtils.isEmpty(drugItemVoList)){
+                    BreedingStandardDrug drug = generateStandardDrug(dto, currentUserId);
+                    standardDrugList.add(drug);
+                }else {
+                    for (BreedingStandardDrugItemDto itemDto : drugItemVoList){
+                        BreedingStandardDrug drug = generateStandardDrug(dto, currentUserId);
+                        drug.setFeedVolume(itemDto.getFeedVolume())
+                                .setProductId(itemDto.getProductId())
+                                .setSkuNo(itemDto.getSkuNo());
+                        standardDrugList.add(drug);
+                    }
+                }
+            }
+            breedingStandardDrugMapper.batchInsert(standardDrugList);
+        }else {
+            throw new RuntimeException("药品配置信息列表为空");
+        }
+    }
+
+    private BreedingStandardDrug generateStandardDrug(BreedingStandardDrugListDto dto,Integer currentUserId){
+        BreedingStandardDrug drug = new BreedingStandardDrug();
+        drug.setBreedingStandardId(dto.getStandardId())
+                .setCreateUserId(currentUserId)
+                .setDayAgeEnd(dto.getDayAgeEnd())
+                .setDayAgeStart(dto.getDayAgeStart());
+        if (dto.getDayAgeEnd() != null && dto.getDayAgeStart() != null){
+            drug.setDays(dto.getDayAgeEnd()-dto.getDayAgeStart()+1);
+        }
+        if (dto.getStopDrugFlag() == null){
+            drug.setStopDrugFlag(Boolean.FALSE);
+        }else {
+            drug.setStopDrugFlag(dto.getStopDrugFlag());
+        }
+        return drug;
+    }
     private Integer getCurrentUserId() {
         UserInfo userInfo = currentUserService.getCurrentUser();
         return userInfo == null ? null : userInfo.getId();
