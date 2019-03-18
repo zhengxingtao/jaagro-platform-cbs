@@ -61,7 +61,7 @@ public class ReturnBreedingParamTemplateDto implements Serializable {
     /**
      * 养殖参数模板id
      */
-    private Integer breedingStandardId;
+    private Integer standardId;
 
     /**
      * 上鸡时间
