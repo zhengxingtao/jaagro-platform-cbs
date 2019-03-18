@@ -6,7 +6,9 @@ import com.jaagro.cbs.api.model.BreedingPlanExample;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.utils.DateUtil;
 import com.jaagro.cbs.biz.utils.JsonUtils;
+import com.jaagro.cbs.biz.utils.RedisLock;
 import com.jaagro.cbs.biz.utils.RedisUtil;
+import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +37,9 @@ public class BreedingBrainService {
     private com.jaagro.cbs.api.service.BreedingBrainService breedingBrainService;
     @Autowired
     private RedisUtil redis;
+    @Autowired
+    private RedisLock redisLock;
+
 
     /**
      * 第二阶段510饲料、511饲料自动生成养殖计划采购订单
@@ -44,8 +49,8 @@ public class BreedingBrainService {
     @Scheduled(cron = "0 * * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void calculatePhaseTwoFoodWeight() {
-
-        List<BreedingPlan> breedingPlanList = this.getBreedingPlanList();
+        log.info("calculatePhaseTwoFoodWeight:定时钟执行开始");
+        List<BreedingPlan> breedingPlanList = this.getBreedingPlanList("calculatePhaseTwoFoodWeight");
         for (BreedingPlan breedingPlan : breedingPlanList) {
             try {
                 breedingBrainService.calculatePhaseTwoFoodWeightById(breedingPlan);
@@ -55,6 +60,7 @@ public class BreedingBrainService {
                 continue;
             }
         }
+        log.info("calculatePhaseTwoFoodWeight:定时钟执行结束");
     }
 
     /**
@@ -65,8 +71,8 @@ public class BreedingBrainService {
     @Scheduled(cron = "0 * * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void calculatePhaseFourFoodWeight() {
-
-        List<BreedingPlan> breedingPlanList = this.getBreedingPlanList();
+        log.info("calculatePhaseFourFoodWeight:定时钟执行开始");
+        List<BreedingPlan> breedingPlanList = this.getBreedingPlanList("calculatePhaseFourFoodWeight");
         for (BreedingPlan breedingPlan : breedingPlanList) {
             try {
                 breedingBrainService.calculatePhaseFourFoodWeightById(breedingPlan);
@@ -75,11 +81,18 @@ public class BreedingBrainService {
                 continue;
             }
         }
+        log.info("calculatePhaseFourFoodWeight:定时钟执行结束");
     }
 
-    private List<BreedingPlan> getBreedingPlanList() {
-        List<BreedingPlan> breedingPlanList;
+    private List<BreedingPlan> getBreedingPlanList(String method) {
+        //加锁
+        long time = System.currentTimeMillis() + 10 * 1000;
+        boolean success = redisLock.lock("Scheduled:redisLock:"+method, String.valueOf(time));
+        if (!success) {
+            throw new RuntimeException("请求正在处理中");
+        }
 
+        List<BreedingPlan> breedingPlanList;
         //从redis里去取养殖计划
         String key = "BreedingPlanList-" + DateUtil.getStringDateShort();
         String breedingPlanListJson = redis.get(key);
@@ -103,6 +116,8 @@ public class BreedingBrainService {
         } else {
             breedingPlanList = JsonUtils.jsonToList(breedingPlanListJson, BreedingPlan.class);
         }
+
+        redis.del("Scheduled:redisLock:"+method);
         return breedingPlanList;
     }
 
