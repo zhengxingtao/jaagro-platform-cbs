@@ -1,6 +1,8 @@
 package com.jaagro.cbs.api.service;
 
 import com.github.pagehelper.PageInfo;
+import com.jaagro.cbs.api.dto.product.CreateProductDto;
+import com.jaagro.cbs.api.dto.product.ListDrugCriteria;
 import com.jaagro.cbs.api.dto.product.ListProductCriteria;
 import com.jaagro.cbs.api.model.Product;
 
@@ -20,4 +22,19 @@ public interface ProductService {
      * @return
      */
     PageInfo listByCriteria(ListProductCriteria criteria);
+
+    /**
+     * 库存管理商品添加
+     *
+     * @param dto
+     */
+    void addProductToStock(CreateProductDto dto);
+
+    /**
+     * 商品库存列表
+     *
+     * @param criteria
+     * @return
+     */
+    PageInfo listDrugStock(ListDrugCriteria criteria);
 }
