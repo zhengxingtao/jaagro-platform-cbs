@@ -223,6 +223,7 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         List<BreedingStandardParameter> parameterList = standardParameterMapper.selectByExample(example);
         Set<ParameterTypeDto> initParameterTypeDtoSet = getInitParameterTypeDtoSet(standardId);
         Set<ParameterTypeDto> parameterTypeDtoSet = new HashSet<>();
+        Set<ParameterTypeDto> result = new HashSet<>();
         if (!CollectionUtils.isEmpty(parameterList)) {
             for (BreedingStandardParameter parameter : parameterList) {
                 // 同一养殖模板下相同参数名称相同参数类型展示顺序一样
@@ -233,16 +234,17 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
             Iterator<ParameterTypeDto> iterator = parameterTypeDtoSet.iterator();
             while (iterator.hasNext()){
                 ParameterTypeDto dto = iterator.next();
+                result.add(dto);
                 for (ParameterTypeDto init : initParameterTypeDtoSet){
                     if (!init.getParamName().equals(dto.getParamName()) || !init.getParamType().equals(dto.getParamType())){
-                        parameterTypeDtoSet.add(init);
+                        result.add(init);
                     }
                 }
             }
         }else {
-            parameterTypeDtoSet.addAll(initParameterTypeDtoSet);
+            result.addAll(initParameterTypeDtoSet);
         }
-        List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(parameterTypeDtoSet);
+        List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(result);
         return parameterTypeDtoList;
     }
 
