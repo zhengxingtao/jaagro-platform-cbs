@@ -18,6 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReturnPurchaseOrderManageDto {
+
     /**
      * 养殖采购订单表id
      */
@@ -29,19 +30,13 @@ public class ReturnPurchaseOrderManageDto {
     private Integer customerId;
 
     /**
-     * 养殖计划id
+     * 养殖户的名称
      */
-    private Integer planId;
-
+    private String customerName;
     /**
-     * 签收人id
+     *
      */
-    private Integer signerId;
-
-    /**
-     * 批次号
-     */
-    private String batchNo;
+    private String customerPhone;
 
     /**
      * 商品采购单编号
@@ -54,9 +49,14 @@ public class ReturnPurchaseOrderManageDto {
     private Integer productType;
 
     /**
+     *
+     */
+    private String strProductType;
+
+    /**
      * 订单总金额
      */
-    private BigDecimal amount;
+    private BigDecimal totalPrice;
 
     /**
      * 状态(1-已下单 ,2－待送达 ,3-已签收)
@@ -64,67 +64,12 @@ public class ReturnPurchaseOrderManageDto {
     private Integer purchaseOrderStatus;
 
     /**
-     * 供货商id
+     * 状态
      */
-    private Integer supplierId;
-
-    /**
-     * 计划送达时间
-     */
-    private Date planDeliveryTime;
-
-    /**
-     * 待送达时间
-     */
-    private Date deliveryTime;
-
-    /**
-     * 签收时间
-     */
-    private Date signerTime;
-
-    /**
-     * 采购商品备注
-     */
-    private String notes;
-
-    /**
-     * 是否有效(0-无效,1-有效)
-     */
-    private Boolean enable;
+    private String strPurchaseOrderStatus;
 
     /**
      * 创建时间（下单时间）
      */
     private Date createTime;
-
-    /**
-     * 创建人
-     */
-    private Integer createUserId;
-
-    /**
-     * 更新时间
-     */
-    private Date modifyTime;
-
-    /**
-     * 更新人
-     */
-    private Integer modifyUserId;
-
-    /**
-     * 订单阶段：1-第一阶段；2-第二阶段；3-第三阶段
-     */
-    private Integer orderPhase;
-
-    /**
-     * 采购执行时间
-     */
-    private Date planExecuteTime;
-
-    /**
-     * 采购名称
-     */
-    private String purchaseName;
 }
