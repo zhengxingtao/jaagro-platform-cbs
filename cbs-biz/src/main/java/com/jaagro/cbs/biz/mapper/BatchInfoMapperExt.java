@@ -98,4 +98,6 @@ public interface BatchInfoMapperExt extends BaseMapper<BatchInfo, BatchInfoExamp
      * @return
      */
     BigDecimal accumulativeTotalSaleAmount(@Param("planIds") Set planIds);
+
+
 }
