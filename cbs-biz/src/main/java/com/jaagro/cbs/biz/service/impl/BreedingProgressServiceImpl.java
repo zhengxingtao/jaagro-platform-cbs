@@ -9,6 +9,8 @@ import com.jaagro.cbs.api.enums.BreedingRecordTypeEnum;
 import com.jaagro.cbs.api.enums.BreedingStandardParamEnum;
 import com.jaagro.cbs.api.enums.DeviceStatusEnum;
 import com.jaagro.cbs.api.model.*;
+import com.jaagro.cbs.api.service.BreedingBrainService;
+import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingProgressService;
 import com.jaagro.cbs.biz.bo.FeedingFactoryBo;
 import com.jaagro.cbs.biz.mapper.*;
@@ -56,6 +58,14 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
     private DeviceValueHistoryMapperExt deviceValueHistoryMapper;
     @Autowired
     private CustomerClientService customerClientService;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
+    @Autowired
+    private BatchInfoMapperExt batchInfoMapper;
+    @Autowired
+    private BreedingBrainService breedingBrainService;
+    @Autowired
+    private BreedingPlanService breedingPlanService;
 
     /**
      * 根据养殖计划Id、养殖厂Id获取养殖过程喂养头信息
@@ -116,7 +126,21 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
                 progressDayAges.add(map);
             }
             breedingProgressDto.setProgressDayAges(progressDayAges);
+            //养殖计划剩余饲料总和
+            BigDecimal totalLeftFood = this.getLeftFeedFoodByPlanId(planId);
+            breedingProgressDto.setLeftFood(totalLeftFood);
 
+            //获取当前日龄
+            Long currentDayAgeLong = breedingPlanService.getDayAge(planId);
+            //获取当前日龄的所需要的饲料总和
+            BigDecimal dayAgeFeedWeight = breedingBrainService.getSumFoodWeightByPlanIdAndDayAgeArea(planId, currentDayAgeLong.intValue(), currentDayAgeLong.intValue());
+            //当天需要的饲料总和 = 当天存栏量乘以当天每只鸡需要的饲料  单位：克
+            BigDecimal oneDayNeedFood = livingQuantity.multiply(dayAgeFeedWeight);
+            if (oneDayNeedFood.compareTo(BigDecimal.ZERO) == 1) {
+                totalLeftFood =totalLeftFood.multiply(new BigDecimal("1000"));
+                int usageDays = totalLeftFood.divide(oneDayNeedFood, 0, BigDecimal.ROUND_DOWN).intValue();
+                breedingProgressDto.setUsageDays(usageDays);
+            }
         } catch (Exception ex) {
             log.error("R BreedingProgressServiceImpl.getBreedingProgressById  error:" + ex);
         }
@@ -267,9 +291,9 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
             FeedingFactoryBo deathBo = feedingRecordFactory(planId, coopId, dayAge, BreedingRecordTypeEnum.DEATH_AMOUNT.getCode());
             List<BreedingRecord> deathAmountList = deathBo.getBreedingList();
             breedingRecordDto.setDeathList(deathAmountList);
-            if (!CollectionUtils.isEmpty(deathAmountList)){
+            if (!CollectionUtils.isEmpty(deathAmountList)) {
                 int deathTotal = 0;
-                for (BreedingRecord breedingRecord : deathAmountList){
+                for (BreedingRecord breedingRecord : deathAmountList) {
                     deathTotal += breedingRecord.getBreedingValue().intValue();
                 }
                 breedingRecordDto.setDeathTotal(deathTotal);
@@ -289,7 +313,7 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
     private Integer getShouldFeedTime(Integer planId, Integer dayAge, Integer paramType) {
         BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
-        parameterExample.createCriteria().andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge).andParamTypeEqualTo(paramType);
+        parameterExample.createCriteria().andPlanIdEqualTo(planId).andDayAgeEqualTo(dayAge).andParamTypeEqualTo(paramType).andEnableEqualTo(true);
         List<BreedingBatchParameter> batchParameterList = breedingBatchParameterMapper.selectByExample(parameterExample);
         if (!CollectionUtils.isEmpty(batchParameterList)) {
             String paramValue = batchParameterList.get(0).getParamValue();
@@ -319,4 +343,30 @@ public class BreedingProgressServiceImpl implements BreedingProgressService {
 
         return feedingFactoryBo;
     }
+
+    /**
+     * 计算养殖计划剩余饲料 单位：千克
+     *
+     * @param planId
+     * @return
+     */
+    private BigDecimal getLeftFeedFoodByPlanId(int planId) {
+        BigDecimal leftFeedFood = BigDecimal.ZERO;
+        //获取已签收的饲料总和
+        BigDecimal totalSignedFood = purchaseOrderMapper.getTotalSignedFoodByPlanId(planId);
+        if (null == totalSignedFood) {
+            totalSignedFood = BigDecimal.ZERO;
+        }
+        //已喂养饲料总和
+        BigDecimal totalFeededFood = batchInfoMapper.accumulativeFeed(planId);
+        if (null == totalFeededFood) {
+            totalFeededFood = BigDecimal.ZERO;
+        }
+        //剩余饲料 = 已签收的饲料总和 - 已喂养饲料总和
+        leftFeedFood = totalSignedFood.subtract(totalFeededFood);
+
+        return leftFeedFood;
+
+    }
+
 }

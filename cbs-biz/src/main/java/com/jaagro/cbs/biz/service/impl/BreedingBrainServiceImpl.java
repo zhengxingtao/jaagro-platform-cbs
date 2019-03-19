@@ -201,7 +201,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         //计算出来的订单重量如果大于0，则插入生产并插入该订单
         if (PhaseOneWeight.compareTo(BigDecimal.ZERO) == 1) {
             //单位由克化成吨
-            PhaseOneWeight = PhaseOneWeight.divide(new BigDecimal(1000 * 1000)).setScale(3, BigDecimal.ROUND_HALF_UP);
+            PhaseOneWeight = PhaseOneWeight.divide(new BigDecimal(1000000)).setScale(3, BigDecimal.ROUND_HALF_UP);
             //1.删除第一个饲料订单
             PurchaseOrderBo orderBo = new PurchaseOrderBo();
             orderBo.setPlanId(planId)
@@ -660,7 +660,8 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      * @param endDayAge
      * @return 返回某个养殖计划在给定的日龄区间每天每只鸡吃的饲料总和，出来的单位是 克
      */
-    private BigDecimal getSumFoodWeightByPlanIdAndDayAgeArea(Integer planId, Integer startDayAge, Integer endDayAge) {
+    @Override
+    public BigDecimal getSumFoodWeightByPlanIdAndDayAgeArea(Integer planId, Integer startDayAge, Integer endDayAge) {
         List<BreedingBatchParameter> breedingBatchParameterDos;
         //从redis里去取养殖计划的喂养参数
         String key = planId + BreedingStandardParamEnum.FEEDING_WEIGHT.getType() + DateUtil.getStringDateShort();

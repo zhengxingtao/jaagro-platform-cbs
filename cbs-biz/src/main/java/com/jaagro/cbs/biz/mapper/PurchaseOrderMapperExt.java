@@ -46,4 +46,11 @@ public interface PurchaseOrderMapperExt extends BaseMapper<PurchaseOrder, Purcha
      */
     int deleteByCriteria(PurchaseOrderBo orderBo);
 
+    /**
+     * 根据养殖计划id获取已经签收的饲料
+     * @param planId
+     * @return
+     */
+    BigDecimal getTotalSignedFoodByPlanId(Integer planId);
+
 }

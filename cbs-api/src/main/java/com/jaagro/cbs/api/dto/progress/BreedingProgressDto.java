@@ -86,4 +86,13 @@ public class BreedingProgressDto implements Serializable {
      */
     private List<Map<Integer,String>> progressDayAges;
 
+    /**
+     * 养殖计划剩余饲料
+     */
+    private BigDecimal leftFood;
+
+    /**
+     * 预计剩余饲料还可以使用的天数
+     */
+    private int usageDays;
 }

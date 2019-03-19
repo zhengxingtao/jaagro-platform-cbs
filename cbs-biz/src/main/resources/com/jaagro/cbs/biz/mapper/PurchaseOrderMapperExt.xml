@@ -40,4 +40,20 @@
             AND order_phase = #{orderPhase}
             AND product_type = #{productType}
     </delete>
+
+    <select id="getTotalSignedFoodByPlanId" resultType="java.math.BigDecimal">
+        SELECT
+            sum(poi.quantity) * 1000 AS totalFood
+        FROM
+            purchase_order po,
+            purchase_order_items poi
+        WHERE
+            po.id = poi.purchase_order_id
+        AND po.product_type = 2
+        AND po.purchase_order_status = 3
+        AND po.plan_id = #{planId}
+        AND po.`enable` = 1
+        AND poi.`enable` = 1;
+
+    </select>
 </mapper>
