@@ -38,7 +38,7 @@ public class SequenceCodeUtils {
         StringBuilder genSeqCode = new StringBuilder();
         String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         String currentDate = date.substring(2, date.length());
-        RedisAtomicLong entityIdCounter = null;
+        RedisAtomicLong entityIdCounter;
         try {
             entityIdCounter = new RedisAtomicLong(prefix + currentDate, redisTemplate.getConnectionFactory());
         } catch (Exception e) {

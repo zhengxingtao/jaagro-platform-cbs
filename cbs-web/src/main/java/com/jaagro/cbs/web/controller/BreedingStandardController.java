@@ -114,7 +114,7 @@ public class BreedingStandardController {
 
 
     @ApiOperation("查询养殖模板药品配置信息")
-    @GetMapping("listBreedingStandardDrugs/{standardId}")
+    @GetMapping("/listBreedingStandardDrugs/{standardId}")
     public BaseResponse listBreedingStandardDrugs(@PathVariable("standardId") Integer standardId){
         log.info("O listBreedingStandardDrugs standardId={}",standardId);
         List<BreedingStandardDrugListVo> breedingStandardDrugListVoList = generateStandardDrugs(breedingStandardService.listBreedingStandardDrugs(standardId));
@@ -163,11 +163,13 @@ public class BreedingStandardController {
                 drugListVo.setDayAgeStart(startDayAge);
                 List<BreedingStandardDrugItemVo> breedingStandardDrugItemVoList = new ArrayList<>();
                 drugListVo.setBreedingStandardDrugItemVoList(breedingStandardDrugItemVoList);
+                listVoList.add(drugListVo);
             }
             for (BreedingStandardDrugDto drugDto : breedingStandardDrugListDtoList){
                 for (BreedingStandardDrugListVo drugListVo : listVoList){
                     if (drugDto.getDayAgeStart() != null && drugDto.getDayAgeStart().equals(drugListVo.getDayAgeStart())){
                         drugListVo.setDayAgeEnd(drugDto.getDayAgeEnd())
+                                .setStandardId(drugDto.getBreedingStandardId())
                                 .setStopDrugFlag(drugDto.getStopDrugFlag());
                         if (!drugDto.getStopDrugFlag()){
                             List<BreedingStandardDrugItemVo> drugItemVoList = drugListVo.getBreedingStandardDrugItemVoList();
@@ -176,6 +178,7 @@ public class BreedingStandardController {
                                     .setFeedVolume(drugDto.getFeedVolume())
                                     .setId(drugDto.getId())
                                     .setProductId(drugDto.getProductId())
+                                    .setSkuNo(drugDto.getSkuNo())
                                     .setProductName(drugDto.getProductName());
                             drugItemVoList.add(drugItemVo);
                         }

@@ -307,6 +307,7 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                     if (ProductTypeEnum.FEED.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "批饲料配送");
                     }
+
                     if (ProductTypeEnum.DRUG.getCode() == purchaseOrder.getProductType()) {
                         purchaseOrderDto.setStrOrderPhase("第" + PurchaseOrderPhaseEnum.getDescByCode(purchaseOrder.getOrderPhase()) + "次药品配送");
                     }
@@ -424,6 +425,30 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
      */
     @Override
     public void updatePurchaseOrder(UpdatePurchaseOrderParamDto dto) {
+        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+        purchaseOrderExample
+                .createCriteria()
+                .andEnableEqualTo(true)
+                .andIdEqualTo(dto.getPurchaseOrderId());
+        List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+        if (!CollectionUtils.isEmpty(purchaseOrderList)) {
+            PurchaseOrder purchaseOrder = purchaseOrderList.get(0);
+            //种苗已签收 更改养殖计划状态为养殖中
+            if (purchaseOrder.getProductType() != null) {
+                if (ProductTypeEnum.SPROUT.getCode() == purchaseOrder.getProductType()) {
+                    if (purchaseOrder.getPlanId() != null) {
+                        BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(purchaseOrder.getPlanId());
+                        if (breedingPlan != null && PlanStatusEnum.SIGN_CHICKEN.getCode() == breedingPlan.getPlanStatus()) {
+                            breedingPlan
+                                    .setPlanStatus(PlanStatusEnum.BREEDING.getCode())
+                                    .setId(purchaseOrder.getPlanId());
+                            breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+                        }
+                    }
+                }
+            }
+        }
+        //更新采购单状态
         PurchaseOrder purchaseOrder = new PurchaseOrder();
         purchaseOrder
                 .setId(dto.getPurchaseOrderId());
@@ -457,7 +482,6 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                 breedingPlans = breedingPlanMapper.selectByExample(breedingPlanExample);
             }
         }
-
         return new PageInfo(breedingPlans);
     }
 

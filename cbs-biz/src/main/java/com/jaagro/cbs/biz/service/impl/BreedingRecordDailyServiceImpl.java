@@ -3,12 +3,14 @@ package com.jaagro.cbs.biz.service.impl;
 import com.jaagro.cbs.api.model.BreedingRecord;
 import com.jaagro.cbs.api.model.BreedingRecordDaily;
 import com.jaagro.cbs.api.service.BreedingRecordDailyService;
-import com.jaagro.cbs.biz.mapper.*;
+import com.jaagro.cbs.biz.mapper.BreedingRecordDailyMapperExt;
+import com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +32,8 @@ public class BreedingRecordDailyServiceImpl implements BreedingRecordDailyServic
      */
     @Override
     public void breedingRecordDaily() {
-        String todayDate = new Date().toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String todayDate = sdf.format(new Date());
         //批次日汇总列表
         List<BreedingRecordDaily> dailyList = new ArrayList<>();
 
