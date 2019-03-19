@@ -8,6 +8,7 @@ import com.jaagro.cbs.api.enums.CapacityUnitEnum;
 import com.jaagro.cbs.api.enums.PackageUnitEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.Product;
+import com.jaagro.cbs.api.model.TenantDrugStock;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.cbs.api.service.ProductService;
 import com.jaagro.cbs.biz.service.OssSignUrlClientService;
@@ -86,6 +87,12 @@ public class SupplyChainController {
                 if (!CollectionUtils.isEmpty(urls)) {
                     drugStockVo.setImageUrl(urls.get(0).toString());
                 }
+                if (product.getId() != null) {
+                    TenantDrugStock drugStock = productService.getDrugStock(product.getId());
+                    if (drugStock != null && drugStock.getStockQuantity() != null) {
+                      drugStockVo.setStockQuantity(drugStock.getStockQuantity());
+                    }
+                }
                 drugStockVos.add(drugStockVo);
             }
         }
@@ -93,9 +100,9 @@ public class SupplyChainController {
         return BaseResponse.successInstance(pageInfo);
     }
 
-    @PostMapping("/purchaseOrderManage")
+    @PostMapping("/listPurchasingManagement")
     @ApiOperation("采购管理商品添加")
-    public BaseResponse purchasingManagement(@RequestBody PurchaseOrderManageCriteria criteria) {
+    public BaseResponse listPurchasingManagement(@RequestBody PurchaseOrderManageCriteria criteria) {
         return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
     }
 }

@@ -4,12 +4,8 @@
   <resultMap id="BaseResultMap" type="com.jaagro.cbs.api.model.TenantDrugStock" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
-    <result column="sku_no" property="skuNo" jdbcType="VARCHAR" />
-    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
-    <result column="drug_name" property="drugName" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="stock_quantity" property="stockQuantity" jdbcType="INTEGER" />
-    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
-    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
     <result column="alarm" property="alarm" jdbcType="BIT" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -47,8 +43,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, tenant_id, sku_no, image_url, drug_name, stock_quantity, purchase_price, sale_price, 
-    alarm, enable, create_time, create_user_id, modify_time, modify_user_id
+    id, tenant_id, product_id, stock_quantity, alarm, enable, create_time, create_user_id, 
+    modify_time, modify_user_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.TenantDrugStockExample" >
     select
@@ -87,14 +83,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tenant_drug_stock (tenant_id, sku_no, image_url, 
-      drug_name, stock_quantity, purchase_price, 
-      sale_price, alarm, enable, create_time, 
+    insert into tenant_drug_stock (tenant_id, product_id, stock_quantity, 
+      alarm, enable, create_time, 
       create_user_id, modify_time, modify_user_id
       )
-    values (#{tenantId,jdbcType=INTEGER}, #{skuNo,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, 
-      #{drugName,jdbcType=VARCHAR}, #{stockQuantity,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, 
-      #{salePrice,jdbcType=DECIMAL}, #{alarm,jdbcType=BIT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{tenantId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{stockQuantity,jdbcType=INTEGER}, 
+      #{alarm,jdbcType=BIT}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}
       )
   </insert>
@@ -107,23 +101,11 @@
       <if test="tenantId != null" >
         tenant_id,
       </if>
-      <if test="skuNo != null" >
-        sku_no,
-      </if>
-      <if test="imageUrl != null" >
-        image_url,
-      </if>
-      <if test="drugName != null" >
-        drug_name,
+      <if test="productId != null" >
+        product_id,
       </if>
       <if test="stockQuantity != null" >
         stock_quantity,
-      </if>
-      <if test="purchasePrice != null" >
-        purchase_price,
-      </if>
-      <if test="salePrice != null" >
-        sale_price,
       </if>
       <if test="alarm != null" >
         alarm,
@@ -148,23 +130,11 @@
       <if test="tenantId != null" >
         #{tenantId,jdbcType=INTEGER},
       </if>
-      <if test="skuNo != null" >
-        #{skuNo,jdbcType=VARCHAR},
-      </if>
-      <if test="imageUrl != null" >
-        #{imageUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="drugName != null" >
-        #{drugName,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="stockQuantity != null" >
         #{stockQuantity,jdbcType=INTEGER},
-      </if>
-      <if test="purchasePrice != null" >
-        #{purchasePrice,jdbcType=DECIMAL},
-      </if>
-      <if test="salePrice != null" >
-        #{salePrice,jdbcType=DECIMAL},
       </if>
       <if test="alarm != null" >
         #{alarm,jdbcType=BIT},
@@ -198,23 +168,11 @@
       <if test="tenantId != null" >
         tenant_id = #{tenantId,jdbcType=INTEGER},
       </if>
-      <if test="skuNo != null" >
-        sku_no = #{skuNo,jdbcType=VARCHAR},
-      </if>
-      <if test="imageUrl != null" >
-        image_url = #{imageUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="drugName != null" >
-        drug_name = #{drugName,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="stockQuantity != null" >
         stock_quantity = #{stockQuantity,jdbcType=INTEGER},
-      </if>
-      <if test="purchasePrice != null" >
-        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
-      </if>
-      <if test="salePrice != null" >
-        sale_price = #{salePrice,jdbcType=DECIMAL},
       </if>
       <if test="alarm != null" >
         alarm = #{alarm,jdbcType=BIT},
@@ -240,12 +198,8 @@
   <update id="updateByPrimaryKey" parameterType="com.jaagro.cbs.api.model.TenantDrugStock" >
     update tenant_drug_stock
     set tenant_id = #{tenantId,jdbcType=INTEGER},
-      sku_no = #{skuNo,jdbcType=VARCHAR},
-      image_url = #{imageUrl,jdbcType=VARCHAR},
-      drug_name = #{drugName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
       stock_quantity = #{stockQuantity,jdbcType=INTEGER},
-      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
-      sale_price = #{salePrice,jdbcType=DECIMAL},
       alarm = #{alarm,jdbcType=BIT},
       enable = #{enable,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

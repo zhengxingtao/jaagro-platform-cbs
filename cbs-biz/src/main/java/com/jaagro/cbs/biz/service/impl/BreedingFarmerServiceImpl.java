@@ -75,41 +75,44 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
         HashSet<Integer> planIds = new HashSet<>();
         UserInfo currentUser = currentUserService.getCurrentUser();
         ReturnBreedingFarmerIndexDto returnBreedingFarmerIndexDto = new ReturnBreedingFarmerIndexDto();
-        if (currentUser != null) {
-            List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos = breedingPlanMapper.listBreedingPlanByCustomerId(currentUser.getId());
-            if (!CollectionUtils.isEmpty(returnBreedingBatchDetailsDtos)) {
-                for (ReturnBreedingBatchDetailsDto returnBreedingBatchDetailsDto : returnBreedingBatchDetailsDtos) {
-                    planIds.add(returnBreedingBatchDetailsDto.getId());
-                    //累计所有上鸡计划所有数量
-                    if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
-                        totalPlanStock = totalPlanStock.add(new BigDecimal(returnBreedingBatchDetailsDto.getPlanChickenQuantity()));
+        if (currentUser != null && currentUser.getId() != null) {
+            GetCustomerUserDto customerUser = userClientService.getCustomerUserById(currentUser.getId());
+            if (customerUser != null && customerUser.getRelevanceId() != null) {
+                List<ReturnBreedingBatchDetailsDto> returnBreedingBatchDetailsDtos = breedingPlanMapper.listBreedingPlanByCustomerId(customerUser.getRelevanceId());
+                if (!CollectionUtils.isEmpty(returnBreedingBatchDetailsDtos)) {
+                    for (ReturnBreedingBatchDetailsDto returnBreedingBatchDetailsDto : returnBreedingBatchDetailsDtos) {
+                        planIds.add(returnBreedingBatchDetailsDto.getId());
+                        //累计所有上鸡计划所有数量
+                        if (returnBreedingBatchDetailsDto.getPlanChickenQuantity() != null) {
+                            totalPlanStock = totalPlanStock.add(new BigDecimal(returnBreedingBatchDetailsDto.getPlanChickenQuantity()));
+                        }
                     }
-                }
-                if (!CollectionUtils.isEmpty(planIds)) {
-                    //1.累计所有死淘数量
-                    BigDecimal accumulativeTotalDeadAmount = batchInfoMapper.accumulativeTotalDeadAmount(planIds);
-                    //2.累计所有出栏数量
-                    BigDecimal accumulativeTotalSaleAmount = batchInfoMapper.accumulativeTotalSaleAmount(planIds);
-                    //3.累计所有喂养饲料
-                    BigDecimal accumulativeTotalFeed = batchInfoMapper.accumulativeTotalFeed(planIds);
-                    //当前存栏量
-                    BigDecimal totalBreedingStock = totalPlanStock.subtract(accumulativeTotalDeadAmount).subtract(accumulativeTotalSaleAmount);
-                    //环控异常指数
-                    BigDecimal accumulativeTotalAbnormalWarn = deviceAlarmLogMapper.accumulativeTotalAbnormalWarn(planIds);
-                    //饲料库存
-                    PurchaseOrderParamDto purchaseOrderParamDto = new PurchaseOrderParamDto();
-                    purchaseOrderParamDto
-                            .setPlanIds(planIds)
-                            .setProductType(ProductTypeEnum.FEED.getCode());
-                    BigDecimal planFeedWeight = purchaseOrderMapper.calculateTotalPlanFeedWeight(purchaseOrderParamDto);
-                    if (planFeedWeight != null) {
-                        BigDecimal totalFeedStock = planFeedWeight.subtract(accumulativeTotalFeed);
+                    if (!CollectionUtils.isEmpty(planIds)) {
+                        //1.累计所有死淘数量
+                        BigDecimal accumulativeTotalDeadAmount = batchInfoMapper.accumulativeTotalDeadAmount(planIds);
+                        //2.累计所有出栏数量
+                        BigDecimal accumulativeTotalSaleAmount = batchInfoMapper.accumulativeTotalSaleAmount(planIds);
+                        //3.累计所有喂养饲料
+                        BigDecimal accumulativeTotalFeed = batchInfoMapper.accumulativeTotalFeed(planIds);
+                        //当前存栏量
+                        BigDecimal totalBreedingStock = totalPlanStock.subtract(accumulativeTotalDeadAmount).subtract(accumulativeTotalSaleAmount);
+                        //环控异常指数
+                        BigDecimal accumulativeTotalAbnormalWarn = deviceAlarmLogMapper.accumulativeTotalAbnormalWarn(planIds);
+                        //饲料库存
+                        PurchaseOrderParamDto purchaseOrderParamDto = new PurchaseOrderParamDto();
+                        purchaseOrderParamDto
+                                .setPlanIds(planIds)
+                                .setProductType(ProductTypeEnum.FEED.getCode());
+                        BigDecimal planFeedWeight = purchaseOrderMapper.calculateTotalPlanFeedWeight(purchaseOrderParamDto);
+                        if (planFeedWeight != null) {
+                            BigDecimal totalFeedStock = planFeedWeight.subtract(accumulativeTotalFeed);
+                            returnBreedingFarmerIndexDto
+                                    .setTotalFeedStock(totalFeedStock);
+                        }
                         returnBreedingFarmerIndexDto
-                                .setTotalFeedStock(totalFeedStock);
+                                .setTotalBreedingStock(totalBreedingStock)
+                                .setTotalAbnormalWarn(accumulativeTotalAbnormalWarn);
                     }
-                    returnBreedingFarmerIndexDto
-                            .setTotalBreedingStock(totalBreedingStock)
-                            .setTotalAbnormalWarn(accumulativeTotalAbnormalWarn);
                 }
             }
         }
@@ -137,7 +140,9 @@ public class BreedingFarmerServiceImpl implements BreedingFarmerService {
                         Integer dayAge = null;
                         try {
                             //获取当前日龄
-                            dayAge = getDayAge(returnBreedingBatchDetailsDto.getPlanTime());
+                            if (returnBreedingBatchDetailsDto.getPlanTime() != null) {
+                                dayAge = getDayAge(returnBreedingBatchDetailsDto.getPlanTime());
+                            }
                         } catch (Exception e) {
                             log.info("R breedingFarmerIndex getDayAge error", e);
                         }

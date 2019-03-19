@@ -46,6 +46,8 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
     @Autowired
     private PurchaseOrderMapperExt purchaseOrderMapper;
 
+
+
     /**
      * 采购预置列表
      *
@@ -163,8 +165,13 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
      * @author @Gao.
      */
     @Override
-    public List<ReturnPurchaseOrderManageDto> purchaseOrderManage(PurchaseOrderManageCriteria criteria) {
-
+    public List<ReturnPurchaseOrderManageDto> listPurchasingManagement(PurchaseOrderManageCriteria criteria) {
+        PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
+        if (criteria.getCustomerInfo() != null) {
+            List<Integer> listCustomerIds = breedingPlanService.listCustomerIdsByKeyword(criteria.getCustomerInfo());
+            criteria.setCustomerIds(listCustomerIds);
+        }
+        List<ReturnPurchaseOrderManageDto> returnPurchaseOrderManageDtos = purchaseOrderMapper.listPurchasingManagement(criteria);
         return null;
     }
 }

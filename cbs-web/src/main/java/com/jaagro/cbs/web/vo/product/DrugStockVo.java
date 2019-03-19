@@ -42,7 +42,7 @@ public class DrugStockVo implements Serializable {
     /**
      * 库存数量
      */
-    private BigDecimal stockQuantity;
+    private Integer stockQuantity;
 
     /**
      * SKU编码

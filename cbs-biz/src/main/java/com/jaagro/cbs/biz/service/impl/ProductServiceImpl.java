@@ -8,14 +8,15 @@ import com.jaagro.cbs.api.dto.product.ListProductCriteria;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.Product;
 import com.jaagro.cbs.api.model.ProductExample;
+import com.jaagro.cbs.api.model.TenantDrugStock;
 import com.jaagro.cbs.api.service.ProductService;
 import com.jaagro.cbs.biz.mapper.ProductMapperExt;
+import com.jaagro.cbs.biz.mapper.TenantDrugStockMapperExt;
 import com.jaagro.cbs.biz.utils.SequenceCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 
 import java.util.Arrays;
@@ -32,6 +33,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapperExt productMapper;
     @Autowired
     private SequenceCodeUtils sequenceCodeUtils;
+    @Autowired
+    private TenantDrugStockMapperExt tenantDrugStockMapper;
 
     /**
      * 根据条件查询产品
@@ -83,5 +86,16 @@ public class ProductServiceImpl implements ProductService {
         condition.andProductTypeIn(drugType);
         List<Product> products = productMapper.selectByExample(productExample);
         return new PageInfo(products);
+    }
+
+    /**
+     * 获取药品库存
+     *
+     * @param drugStockId
+     * @return
+     */
+    @Override
+    public TenantDrugStock getDrugStock(Integer drugStockId) {
+        return tenantDrugStockMapper.selectByPrimaryKey(drugStockId);
     }
 }

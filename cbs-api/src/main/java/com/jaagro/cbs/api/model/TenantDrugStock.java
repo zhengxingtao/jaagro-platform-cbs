@@ -1,7 +1,6 @@
 package com.jaagro.cbs.api.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gavinwang
+ * @author :gaoxin
  * @date :2019/03/19
  */
 @Data
@@ -28,34 +27,14 @@ public class TenantDrugStock implements Serializable {
     private Integer tenantId;
 
     /**
-     * sku编码
+     * 产品id
      */
-    private String skuNo;
-
-    /**
-     * 药品图片地址
-     */
-    private String imageUrl;
-
-    /**
-     * 药品名称
-     */
-    private String drugName;
+    private Integer productId;
 
     /**
      * 库存数量
      */
     private Integer stockQuantity;
-
-    /**
-     * 采购单价
-     */
-    private BigDecimal purchasePrice;
-
-    /**
-     * 销售单价
-     */
-    private BigDecimal salePrice;
 
     /**
      * 是否参与预警(0-不参与,1-参与)
