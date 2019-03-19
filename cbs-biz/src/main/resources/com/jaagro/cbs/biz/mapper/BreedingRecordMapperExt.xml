@@ -43,7 +43,11 @@
     </select>
     <select id="listCoopDailySumByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
-            plan_id ,batch_no,coop_id,day_age,SUM(breeding_value) as breeding_value
+            plan_id ,
+            batch_no,
+            coop_id,
+            day_age,
+            SUM(breeding_value) as breeding_value
         FROM
             breeding_record
         WHERE

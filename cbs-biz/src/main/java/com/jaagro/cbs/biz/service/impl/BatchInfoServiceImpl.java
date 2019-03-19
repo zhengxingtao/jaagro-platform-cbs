@@ -42,7 +42,7 @@ public class BatchInfoServiceImpl implements BatchInfoService {
      * @return
      */
     private Date getBeforeYesterdayDate() {
-        return DateUtils.addDays(new Date(), -2);
+        return DateUtils.addDays(new Date(), -1);
     }
 
     /**
@@ -65,11 +65,6 @@ public class BatchInfoServiceImpl implements BatchInfoService {
             criteriaDto.setTodayDate(todayDate);
             for (BatchInfo info : batchInfoList) {
                 BreedingPlan breedingPlan = breedingPlanMapper.selectByPrimaryKey(info.getPlanId());
-                //死淘数量
-                criteriaDto.setPlanId(info.getPlanId());
-                int deadAmount = 0;
-                deadAmount = breedingRecordMapper.sumDeadAmountByPlanId(criteriaDto);
-                info.setDeadAmount(deadAmount);
                 //起始喂养数量 && 剩余喂养数量
                 BatchInfo batchInfo = new BatchInfo();
                 batchInfo.setCreateTime(getBeforeYesterdayDate()).setPlanId(info.getPlanId());
@@ -77,7 +72,9 @@ public class BatchInfoServiceImpl implements BatchInfoService {
                 if (currentAmount != null && currentAmount > 0) {
                     info.setStartAmount(currentAmount);
                     // 剩余喂养数量=起始-死淘
-                    info.setCurrentAmount(info.getStartAmount() - info.getDeadAmount());
+                    if (info.getDeadAmount() != null && info.getDeadAmount() > 0) {
+                        info.setCurrentAmount(info.getStartAmount() - info.getDeadAmount());
+                    }
                 } else {
                     //查询不到记录，就用breeding_plan的计划上鸡数量
                     if (breedingPlan != null) {

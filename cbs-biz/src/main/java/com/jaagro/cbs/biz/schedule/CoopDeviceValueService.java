@@ -48,9 +48,10 @@ public class CoopDeviceValueService {
     @Scheduled(cron = "0 0/10 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void coopDeviceValue() {
+        log.info("coopDeviceValue:定时钟执行开始");
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:redisLock:coopDeviceValue", String.valueOf(time));
+        boolean success = redisLock.lock("Scheduled:redisLock:coopDeviceValue", String.valueOf(time), null, null);
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }
@@ -70,6 +71,7 @@ public class CoopDeviceValueService {
 
             redis.del("Scheduled:redisLock:coopDeviceValue");
         }
+        log.info("coopDeviceValue:定时钟执行结束");
     }
 
     /**

@@ -44,9 +44,9 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
      *
      * @return
      */
-    private String getYesterday() {
+    private String getDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(DateUtils.addDays(new Date(), -1));
+        return sdf.format(new Date());
     }
 
     /**
@@ -56,11 +56,11 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
     public void batchCoopDaily() {
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:BatchCoopDailyService:batchCoopDaily", String.valueOf(time));
+        boolean success = redisLock.lock("Scheduled:BatchCoopDailyService:batchCoopDaily", String.valueOf(time), null, null);
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }
-        String todayDate = getYesterday();
+        String todayDate = getDay();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
         //从BreedingRecord统计
