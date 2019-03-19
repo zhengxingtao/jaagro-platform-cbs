@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @description: 供应链采购订单
@@ -17,13 +18,25 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchaseOrderManageCriteria implements Serializable {
+
     /**
      * 当前页
      */
     private Integer pageNum;
+
     /**
      * 每页的数量
      */
     private Integer pageSize;
+
+    /**
+     * 客户id
+     */
+    private List<Integer> customerIds;
+
+    /**
+     * 客户姓名 手机 查询 条件
+     */
+    private String customerInfo;
 
 }

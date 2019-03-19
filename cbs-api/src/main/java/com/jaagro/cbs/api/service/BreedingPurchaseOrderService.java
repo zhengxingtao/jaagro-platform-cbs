@@ -40,5 +40,5 @@ public interface BreedingPurchaseOrderService {
      * @return
      * @author @Gao.
      */
-    List<ReturnPurchaseOrderManageDto> purchaseOrderManage(PurchaseOrderManageCriteria criteria);
+    List<ReturnPurchaseOrderManageDto> listPurchasingManagement(PurchaseOrderManageCriteria criteria);
 }

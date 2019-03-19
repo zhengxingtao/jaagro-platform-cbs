@@ -5,6 +5,7 @@ import com.jaagro.cbs.api.dto.product.CreateProductDto;
 import com.jaagro.cbs.api.dto.product.ListDrugCriteria;
 import com.jaagro.cbs.api.dto.product.ListProductCriteria;
 import com.jaagro.cbs.api.model.Product;
+import com.jaagro.cbs.api.model.TenantDrugStock;
 
 import java.util.List;
 
@@ -37,4 +38,12 @@ public interface ProductService {
      * @return
      */
     PageInfo listDrugStock(ListDrugCriteria criteria);
+
+    /**
+     * 获取药品库存
+     *
+     * @param drugStockId
+     * @return
+     */
+    TenantDrugStock getDrugStock(Integer drugStockId);
 }

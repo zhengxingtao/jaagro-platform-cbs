@@ -40,7 +40,7 @@ public class BreedingRecordDailyServiceImpl implements BreedingRecordDailyServic
     public void breedingRecordDaily() {
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:redisLock:breedingRecordDaily", String.valueOf(time), null, null);
+        boolean success = redisLock.lock("Scheduled:redisLock:breedingRecordDaily", String.valueOf(time),null,null);
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }

@@ -20,24 +20,44 @@
             </if>
         </where>
     </select>
-    <select id="queryPurchaseOrderByCondition" resultType="java.lang.Integer" parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
+    <select id="queryPurchaseOrderByCondition" resultType="java.lang.Integer"
+            parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
         select distinct o.id from purchase_order o, purchase_order_items i
         where o.id=i.purchase_order_id
               and i.product_id=#{productId}
               and o.product_type = #{productType}
               and o.plan_id=#{planId} and o.order_phase=#{orderPhase}
     </select>
-    <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample" >
+    <delete id="deleteByExample" parameterType="com.jaagro.cbs.api.model.PurchaseOrderExample">
         delete from purchase_order
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <delete id="deleteByCriteria"  parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
+    <delete id="deleteByCriteria" parameterType="com.jaagro.cbs.biz.bo.PurchaseOrderBo">
             delete from purchase_order
             WHERE
                 plan_id = #{planId}
             AND order_phase = #{orderPhase}
             AND product_type = #{productType}
     </delete>
+    <select id="listPurchasingManagement" parameterType="com.jaagro.cbs.api.dto.supplychain.PurchaseOrderManageCriteria"
+            resultType="com.jaagro.cbs.api.dto.supplychain.ReturnPurchaseOrderManageDto">
+        select id, purchase_no, product_type,total_price ,purchase_order_status ,create_time from purchase_order
+        <where>
+            enable=1
+            <if test="customerIds!=null">
+                and bp.customer_id in
+                <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
+                    ${customerId}
+                </foreach>
+            </if>
+            <if test="purchaseNo!=null">
+                and purchase_no=#{purchaseNo}
+            </if>
+            <if test="productType!=null">
+                and product_type=#{productType}
+            </if>
+        </where>
+    </select>
 </mapper>
