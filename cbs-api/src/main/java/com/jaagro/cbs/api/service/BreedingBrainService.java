@@ -3,6 +3,7 @@ package com.jaagro.cbs.api.service;
 import com.jaagro.cbs.api.model.BreedingPlan;
 import com.jaagro.cbs.api.model.PurchaseOrder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -58,5 +59,12 @@ public interface BreedingBrainService {
      */
     BreedingPlan getBreedingPlanById(Integer planId);
 
+    /**
+     * @param planId
+     * @param startDayAge
+     * @param endDayAge
+     * @return 返回某个养殖计划在给定的日龄区间每天每只鸡吃的饲料总和，出来的单位是 克
+     */
+    BigDecimal getSumFoodWeightByPlanIdAndDayAgeArea(Integer planId, Integer startDayAge, Integer endDayAge);
 
 }
