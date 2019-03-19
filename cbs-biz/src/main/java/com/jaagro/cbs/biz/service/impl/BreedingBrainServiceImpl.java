@@ -582,7 +582,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
      * @param contract
      */
     private void savePurchaseOrderItems(Integer orderId, List<PurchaseOrderItems> orderItems, BatchContract contract) {
-        BigDecimal orderAmount = BigDecimal.ZERO;
+        BigDecimal orderTotalPrice = BigDecimal.ZERO;
         for (PurchaseOrderItems orderItem : orderItems) {
             Integer productId = orderItem.getProductId();
             Product product = productMapper.selectByPrimaryKey(productId);
@@ -597,24 +597,27 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                     BigDecimal productCapacity = product.getProductCapacity() == null ? new BigDecimal("1") : product.getProductCapacity();
                     BigDecimal packageQuantity = orderItem.getQuantity().divide(productCapacity, 0, BigDecimal.ROUND_UP);
                     BigDecimal price = packageQuantity.multiply(purchasePrice);
-                    orderItem.setPrice(price);
-                    orderAmount = orderAmount.add(price);
+                    orderItem.setTotalPrice(price);
+                    orderItem.setUnitPrice(purchasePrice);
+                    orderTotalPrice = orderTotalPrice.add(price);
                 } else if (product.getProductType() == ProductTypeEnum.FEED.getCode()) {
                     BigDecimal purchasePrice = contract == null ? BigDecimal.ZERO : contract.getFodderPrice();
                     BigDecimal price = orderItem.getQuantity().multiply(purchasePrice);
-                    orderItem.setPrice(price);
-                    orderAmount = orderAmount.add(price);
+                    orderItem.setTotalPrice(price);
+                    orderItem.setUnitPrice(purchasePrice);
+                    orderTotalPrice = orderTotalPrice.add(price);
                 } else if (product.getProductType() == ProductTypeEnum.SPROUT.getCode()) {
                     BigDecimal purchasePrice = contract == null ? BigDecimal.ZERO : contract.getBabychickPrice();
                     BigDecimal price = orderItem.getQuantity().multiply(purchasePrice);
-                    orderItem.setPrice(price);
-                    orderAmount = orderAmount.add(price);
+                    orderItem.setTotalPrice(price);
+                    orderItem.setUnitPrice(purchasePrice);
+                    orderTotalPrice = orderTotalPrice.add(price);
                 }
                 purchaseOrderItemsMapper.insert(orderItem);
             }
         }
         PurchaseOrder order = new PurchaseOrder();
-        order.setAmount(orderAmount);
+        order.setTotalPrice(orderTotalPrice);
         order.setId(orderId);
         order.setModifyTime(new Date());
         purchaseOrderMapper.updateByPrimaryKeySelective(order);

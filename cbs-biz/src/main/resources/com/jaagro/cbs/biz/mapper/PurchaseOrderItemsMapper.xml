@@ -9,7 +9,8 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="enable" property="enable" jdbcType="BIT" />
     <result column="unit" property="unit" jdbcType="INTEGER" />
-    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -41,7 +42,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, purchase_order_id, product_id, quantity, create_time, enable, unit, price
+    id, purchase_order_id, product_id, quantity, create_time, enable, unit, unit_price, 
+    total_price
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jaagro.cbs.api.model.PurchaseOrderItemsExample" >
     select
@@ -82,10 +84,10 @@
     </selectKey>
     insert into purchase_order_items (purchase_order_id, product_id, quantity, 
       create_time, enable, unit, 
-      price)
+      unit_price, total_price)
     values (#{purchaseOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{quantity,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=BIT}, #{unit,jdbcType=INTEGER}, 
-      #{price,jdbcType=DECIMAL})
+      #{unitPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.jaagro.cbs.api.model.PurchaseOrderItems" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -111,8 +113,11 @@
       <if test="unit != null" >
         unit,
       </if>
-      <if test="price != null" >
-        price,
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -134,8 +139,11 @@
       <if test="unit != null" >
         #{unit,jdbcType=INTEGER},
       </if>
-      <if test="price != null" >
-        #{price,jdbcType=DECIMAL},
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -166,8 +174,11 @@
       <if test="unit != null" >
         unit = #{unit,jdbcType=INTEGER},
       </if>
-      <if test="price != null" >
-        price = #{price,jdbcType=DECIMAL},
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -180,7 +191,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       enable = #{enable,jdbcType=BIT},
       unit = #{unit,jdbcType=INTEGER},
-      price = #{price,jdbcType=DECIMAL}
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
