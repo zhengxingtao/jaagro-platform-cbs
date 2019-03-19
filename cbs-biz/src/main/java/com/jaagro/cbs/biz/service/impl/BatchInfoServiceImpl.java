@@ -7,6 +7,8 @@ import com.jaagro.cbs.api.service.BatchInfoService;
 import com.jaagro.cbs.biz.mapper.BatchInfoMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt;
+import com.jaagro.cbs.biz.utils.RedisLock;
+import com.jaagro.cbs.biz.utils.RedisUtil;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,10 @@ public class BatchInfoServiceImpl implements BatchInfoService {
     private BreedingPlanMapperExt breedingPlanMapper;
     @Autowired
     private BreedingRecordMapperExt breedingRecordMapper;
+    @Autowired
+    private RedisUtil redis;
+    @Autowired
+    private RedisLock redisLock;
 
     /**
      * 获取前天的日期 yyy-mm-dd
@@ -44,6 +50,12 @@ public class BatchInfoServiceImpl implements BatchInfoService {
      */
     @Override
     public void batchInfo() {
+        //加锁
+        long time = System.currentTimeMillis() + 10 * 1000;
+        boolean success = redisLock.lock("Scheduled:redisLock:batchInfo", String.valueOf(time));
+        if (!success) {
+            throw new RuntimeException("请求正在处理中");
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = sdf.format(new Date());
         //从breedingRecord统计
@@ -82,6 +94,8 @@ public class BatchInfoServiceImpl implements BatchInfoService {
             batchInfoMapper.deleteByDate(todayDate);
             //批量插入
             batchInfoMapper.insertBatch(batchInfoList);
+
+            redis.del("Scheduled:redisLock:batchInfo");
         }
 
     }

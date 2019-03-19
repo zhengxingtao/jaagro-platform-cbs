@@ -2,6 +2,8 @@ package com.jaagro.cbs.biz.schedule;
 
 import com.jaagro.cbs.api.model.*;
 import com.jaagro.cbs.biz.mapper.*;
+import com.jaagro.cbs.biz.utils.RedisLock;
+import com.jaagro.cbs.biz.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class CoopDeviceVlaueService {
+public class CoopDeviceValueService {
 
     @Autowired
     private CoopDeviceMapperExt coopDeviceMapper;
@@ -35,13 +37,24 @@ public class CoopDeviceVlaueService {
     private BreedingBatchParameterMapperExt batchParameterMapper;
     @Autowired
     private DeviceValueHistoryMapperExt deviceValueHistoryMapper;
+    @Autowired
+    private RedisLock redisLock;
+    @Autowired
+    private RedisUtil redis;
 
     /**
      * 批次养殖情况汇总
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     @Transactional(rollbackFor = Exception.class)
-    public void batchInfo() {
+    public void coopDeviceValue() {
+        //加锁
+        long time = System.currentTimeMillis() + 10 * 1000;
+        boolean success = redisLock.lock("Scheduled:redisLock:coopDeviceValue", String.valueOf(time));
+        if (!success) {
+            throw new RuntimeException("请求正在处理中");
+        }
+
         List<DeviceValue> valueList = new ArrayList<>();
         //从breedingRecord统计
         List<DeviceValueHistory> historyList = deviceValueHistoryMapper.listHistoryByParams();
@@ -54,6 +67,8 @@ public class CoopDeviceVlaueService {
             }
             //批量插入
             deviceValueMapper.insertBatch(valueList);
+
+            redis.del("Scheduled:redisLock:coopDeviceValue");
         }
     }
 

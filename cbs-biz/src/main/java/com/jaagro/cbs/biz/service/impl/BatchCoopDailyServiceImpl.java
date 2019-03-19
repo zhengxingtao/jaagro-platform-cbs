@@ -8,6 +8,8 @@ import com.jaagro.cbs.api.service.BatchCoopDailyService;
 import com.jaagro.cbs.biz.mapper.BatchCoopDailyMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt;
+import com.jaagro.cbs.biz.utils.RedisLock;
+import com.jaagro.cbs.biz.utils.RedisUtil;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,10 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
     private BatchCoopDailyMapperExt batchCoopDailyMapper;
     @Autowired
     private BreedingRecordMapperExt breedingRecordMapper;
+    @Autowired
+    private RedisLock redisLock;
+    @Autowired
+    private RedisUtil redis;
 
     /**
      * 获取昨天的日期
@@ -48,6 +54,12 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
      */
     @Override
     public void batchCoopDaily() {
+        //加锁
+        long time = System.currentTimeMillis() + 10 * 1000;
+        boolean success = redisLock.lock("Scheduled:BatchCoopDailyService:batchCoopDaily", String.valueOf(time));
+        if (!success) {
+            throw new RuntimeException("请求正在处理中");
+        }
         String todayDate = getYesterday();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
@@ -98,6 +110,9 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
             batchCoopDailyMapper.deleteByDate(todayDate);
             //插入鸡舍养殖每日汇总
             batchCoopDailyMapper.batchInsert(dailyList);
+
+            //去锁
+            redis.del("Scheduled:BatchCoopDailyService:batchCoopDaily");
         }
     }
 }

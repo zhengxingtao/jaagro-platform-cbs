@@ -5,6 +5,8 @@ import com.jaagro.cbs.api.model.BreedingRecordDaily;
 import com.jaagro.cbs.api.service.BreedingRecordDailyService;
 import com.jaagro.cbs.biz.mapper.BreedingRecordDailyMapperExt;
 import com.jaagro.cbs.biz.mapper.BreedingRecordMapperExt;
+import com.jaagro.cbs.biz.utils.RedisLock;
+import com.jaagro.cbs.biz.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,23 @@ public class BreedingRecordDailyServiceImpl implements BreedingRecordDailyServic
     private BreedingRecordMapperExt breedingRecordMapper;
     @Autowired
     private BreedingRecordDailyMapperExt breedingRecordDailyMapper;
+    @Autowired
+    private RedisUtil redis;
+    @Autowired
+    private RedisLock redisLock;
 
     /**
      * 批次养殖记录表日汇总
      */
     @Override
     public void breedingRecordDaily() {
+        //加锁
+        long time = System.currentTimeMillis() + 10 * 1000;
+        boolean success = redisLock.lock("Scheduled:redisLock:breedingRecordDaily", String.valueOf(time));
+        if (!success) {
+            throw new RuntimeException("请求正在处理中");
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = sdf.format(new Date());
         //批次日汇总列表
@@ -50,6 +63,8 @@ public class BreedingRecordDailyServiceImpl implements BreedingRecordDailyServic
             breedingRecordDailyMapper.deleteByDate(todayDate);
             //批量插入
             breedingRecordDailyMapper.insertBatch(dailyList);
+
+            redis.del("Scheduled:redisLock:breedingRecordDaily");
         }
     }
 }
