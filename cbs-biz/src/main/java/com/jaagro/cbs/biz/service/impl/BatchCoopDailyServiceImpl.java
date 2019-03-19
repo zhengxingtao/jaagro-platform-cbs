@@ -60,7 +60,7 @@ public class BatchCoopDailyServiceImpl implements BatchCoopDailyService {
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }
-        String todayDate = getYesterday();
+        String todayDate = getDay();
         //鸡舍日汇总列表
         List<BatchCoopDaily> dailyList = new ArrayList<>();
         //从BreedingRecord统计
