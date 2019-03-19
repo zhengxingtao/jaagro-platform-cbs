@@ -80,9 +80,7 @@ public class ProductServiceImpl implements ProductService {
             condition.andSkuNoEqualTo(criteria.getSkuNo());
         }
         List<Integer> drugType = Arrays.asList(ProductTypeEnum.DRUG.getCode());
-        if (CollectionUtils.isEmpty(drugType)) {
-            condition.andProductTypeIn(drugType);
-        }
+        condition.andProductTypeIn(drugType);
         List<Product> products = productMapper.selectByExample(productExample);
         return new PageInfo(products);
     }
