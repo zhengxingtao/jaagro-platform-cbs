@@ -1,8 +1,11 @@
 package com.jaagro.cbs.biz.schedule;
 
 import com.jaagro.cbs.api.enums.PlanStatusEnum;
+import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
 import com.jaagro.cbs.api.model.BreedingPlanExample;
+import com.jaagro.cbs.api.model.PurchaseOrder;
+import com.jaagro.cbs.api.model.PurchaseOrderExample;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
 import com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt;
@@ -45,6 +48,23 @@ public class BreedingPlanScheduleService {
                     int dayAge = (int)breedingPlanService.getDayAge(planId);
                     // 当养殖计划进行到养殖结束日期前7天后并且所有的采购订单都已签收将养殖计划状态改成待出栏确认
                     if (dayAge >= breedingPlan.getBreedingDays()-7){
+                        PurchaseOrderExample purchaseOrderExample = new PurchaseOrderExample();
+                        purchaseOrderExample.createCriteria().andPlanIdEqualTo(planId)
+                                .andEnableEqualTo(Boolean.TRUE);
+                        List<PurchaseOrder> purchaseOrderList = purchaseOrderMapper.selectByExample(purchaseOrderExample);
+                        if (!purchaseOrderList.isEmpty()){
+                            boolean allSign = true;
+                            for (PurchaseOrder purchaseOrder : purchaseOrderList){
+                                if (PurchaseOrderStatusEnum.ALREADY_SIGNED.getCode() != purchaseOrder.getPurchaseOrderStatus()){
+                                    allSign = false;
+                                }
+                            }
+                            if (allSign){
+                                breedingPlan.setPlanStatus(PlanStatusEnum.SLAUGHTER_CONFIRM.getCode());
+                                breedingPlan.setModifyUserId(1);
+                                breedingPlanMapper.updateByPrimaryKeySelective(breedingPlan);
+                            }
+                        }
 
                     }
                 }
