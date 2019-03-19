@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 养殖大脑定时钟
@@ -51,13 +52,15 @@ public class BreedingBrainService {
     public void calculatePhaseTwoFoodWeight() {
         log.info("calculatePhaseTwoFoodWeight:定时钟执行开始");
         List<BreedingPlan> breedingPlanList = this.getBreedingPlanList("calculatePhaseTwoFoodWeight");
-        for (BreedingPlan breedingPlan : breedingPlanList) {
-            try {
-                breedingBrainService.calculatePhaseTwoFoodWeightById(breedingPlan);
-                breedingBrainService.calculatePhaseThreeFoodWeightById(breedingPlan);
-            } catch (Exception ex) {
-                log.error("第二阶段510饲料、511饲料自动生成养殖计划采购订单失败,planId:" + breedingPlan.getId() + ",原因：" + ex);
-                continue;
+        if (!CollectionUtils.isEmpty(breedingPlanList)){
+            for (BreedingPlan breedingPlan : breedingPlanList) {
+                try {
+                    breedingBrainService.calculatePhaseTwoFoodWeightById(breedingPlan);
+                    breedingBrainService.calculatePhaseThreeFoodWeightById(breedingPlan);
+                } catch (Exception ex) {
+                    log.error("第二阶段510饲料、511饲料自动生成养殖计划采购订单失败,planId:" + breedingPlan.getId() + ",原因：" + ex);
+                    continue;
+                }
             }
         }
         log.info("calculatePhaseTwoFoodWeight:定时钟执行结束");
@@ -73,26 +76,27 @@ public class BreedingBrainService {
     public void calculatePhaseFourFoodWeight() {
         log.info("calculatePhaseFourFoodWeight:定时钟执行开始");
         List<BreedingPlan> breedingPlanList = this.getBreedingPlanList("calculatePhaseFourFoodWeight");
-        for (BreedingPlan breedingPlan : breedingPlanList) {
-            try {
-                breedingBrainService.calculatePhaseFourFoodWeightById(breedingPlan);
-            } catch (Exception ex) {
-                log.error("第三阶段29->计划养殖天数的511饲料订单自动生成养殖计划采购订单失败,planId:" + breedingPlan.getId() + ",原因：" + ex);
-                continue;
+        if (!CollectionUtils.isEmpty(breedingPlanList)){
+            for (BreedingPlan breedingPlan : breedingPlanList) {
+                try {
+                    breedingBrainService.calculatePhaseFourFoodWeightById(breedingPlan);
+                } catch (Exception ex) {
+                    log.error("第三阶段29->计划养殖天数的511饲料订单自动生成养殖计划采购订单失败,planId:" + breedingPlan.getId() + ",原因：" + ex);
+                    continue;
+                }
             }
         }
         log.info("calculatePhaseFourFoodWeight:定时钟执行结束");
     }
 
     private List<BreedingPlan> getBreedingPlanList(String method) {
+        List<BreedingPlan> breedingPlanList = null;
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:redisLock:"+method, String.valueOf(time));
+        boolean success = redisLock.lock("Scheduled:redisLock:"+method, String.valueOf(time),10, TimeUnit.MINUTES);
         if (!success) {
-            throw new RuntimeException("请求正在处理中");
+            return breedingPlanList;
         }
-
-        List<BreedingPlan> breedingPlanList;
         //从redis里去取养殖计划
         String key = "BreedingPlanList-" + DateUtil.getStringDateShort();
         String breedingPlanListJson = redis.get(key);

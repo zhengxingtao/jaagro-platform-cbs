@@ -9,7 +9,7 @@
         <include refid="Base_Column_List"/>
         from breeding_plan
         <where>
-            1=1
+            enable=1
             <if test="customerIds!=null">
                 and customer_id IN
                 <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
@@ -44,6 +44,7 @@
         <include refid="Base_Column_List"/>
         from breeding_plan
         where customer_id = #{customerId,jdbcType=INTEGER}
+        and enable = 1
         order by create_time desc
     </select>
 
@@ -52,12 +53,14 @@
         select distinct id
         from breeding_plan
         where customer_id = #{customerId,jdbcType=INTEGER}
+        and enable = 1
     </select>
     <select id="listByCustomerId" resultType="com.jaagro.cbs.api.dto.farmer.BreedingPlanDetailDto">
         SELECT
         <include refid="Base_Column_List"/>
         FROM breeding_plan
         WHERE customer_id = #{customerId,jdbcType=INTEGER}
+        and enable = 1
     </select>
     <select id="listPurchaseOrderPreset" resultType="com.jaagro.cbs.api.dto.order.ReturnPurchaseOrderPresetDto"
             parameterType="com.jaagro.cbs.api.dto.order.PurchaseOrderPresetCriteriaDto">
@@ -68,7 +71,7 @@
         po.plan_execute_time planExecuteTime,po.plan_delivery_time planDeliveryTime ,po.signer_id signerId
         from breeding_plan bp inner join purchase_order po on bp.id=po.plan_id
         <where>
-            1=1
+            enable=1
             <if test="customerIds!=null">
                 and bp.customer_id IN
                 <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
@@ -91,7 +94,7 @@
         inner join breeding_standard_parameter bsp on (bbp.param_id=bsp.id)
         inner join breeding_standard bs on (bsp.standard_id=bs.id )
         <where>
-            1=1
+            enable=1
             <if test="customerIds!=null">
                 and bp.customer_id IN
                 <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
@@ -106,5 +109,15 @@
             </if>
             and plan_status in (2,3,4,5,6)
         </where>
+    </select>
+    <select id="listToSlaughterConfirm" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM breeding_plan
+        WHERE
+        enable = 1
+        AND plan_status = 3
+        AND plan_time &lt;= CURRENT_DATE() - (
+        plan_time - (breeding_days - 7)
+        )
     </select>
 </mapper>
