@@ -14,6 +14,7 @@ import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
+import com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -42,6 +43,8 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
     private UserClientService userClientService;
     @Autowired
     private BreedingFarmerService breedingFarmerService;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
 
     /**
      * 采购预置列表
@@ -161,6 +164,7 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
      */
     @Override
     public List<ReturnPurchaseOrderManageDto> purchaseOrderManage(PurchaseOrderManageCriteria criteria) {
+
         return null;
     }
 }
