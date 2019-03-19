@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.service.BatchCoopDailyService;
 import com.jaagro.cbs.api.service.BatchInfoService;
 import com.jaagro.cbs.api.service.BreedingRecordDailyService;
+import com.jaagro.cbs.biz.schedule.BreedingPlanScheduleService;
 import com.jaagro.utils.BaseResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,8 @@ public class ScheduleController {
     private BatchCoopDailyService batchCoopDailyService;
     @Autowired
     private BreedingRecordDailyService breedingRecordDailyService;
+    @Autowired
+    private BreedingPlanScheduleService breedingPlanScheduleService;
 
     @ApiOperation("鸡舍养殖每日汇总")
     @PostMapping("/batchCoopDaily")
@@ -50,5 +53,12 @@ public class ScheduleController {
     public BaseResponse batchInfo() {
         batchInfoService.batchInfo();
         return BaseResponse.successInstance("");
+    }
+
+    @ApiOperation("养殖计划状态变更")
+    @PostMapping("/breedingPlanProcess")
+    public BaseResponse breedingPlanProcess(){
+        breedingPlanScheduleService.breedingPlanProcess();
+        return BaseResponse.successInstance("定时触发成功");
     }
 }
