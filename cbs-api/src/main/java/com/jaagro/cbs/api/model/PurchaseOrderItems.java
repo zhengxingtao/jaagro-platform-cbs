@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/15
+ * @author :gavinwang
+ * @date :2019/03/19
  */
 @Data
 @NoArgsConstructor
@@ -50,9 +50,14 @@ public class PurchaseOrderItems implements Serializable {
     private Integer unit;
 
     /**
+     * 单价
+     */
+    private BigDecimal unitPrice;
+
+    /**
      * 价格=quantity * prodcuct.purchase_price
      */
-    private BigDecimal price;
+    private BigDecimal totalPrice;
 
     private static final long serialVersionUID = 1L;
 }

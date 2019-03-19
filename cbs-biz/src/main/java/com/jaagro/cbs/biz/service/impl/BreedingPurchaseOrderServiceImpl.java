@@ -4,6 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.order.*;
 import com.jaagro.cbs.api.dto.plan.CustomerInfoParamDto;
+import com.jaagro.cbs.api.dto.supplychain.PurchaseOrderManageCriteria;
+import com.jaagro.cbs.api.dto.supplychain.ReturnPurchaseOrderManageDto;
 import com.jaagro.cbs.api.enums.PackageUnitEnum;
 import com.jaagro.cbs.api.enums.PurchaseOrderStatusEnum;
 import com.jaagro.cbs.api.model.BreedingPlan;
@@ -12,6 +14,7 @@ import com.jaagro.cbs.api.service.BreedingFarmerService;
 import com.jaagro.cbs.api.service.BreedingPlanService;
 import com.jaagro.cbs.api.service.BreedingPurchaseOrderService;
 import com.jaagro.cbs.biz.mapper.BreedingPlanMapperExt;
+import com.jaagro.cbs.biz.mapper.PurchaseOrderMapperExt;
 import com.jaagro.cbs.biz.service.UserClientService;
 import com.jaagro.constant.UserInfo;
 import com.jaagro.utils.BaseResponse;
@@ -40,6 +43,8 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
     private UserClientService userClientService;
     @Autowired
     private BreedingFarmerService breedingFarmerService;
+    @Autowired
+    private PurchaseOrderMapperExt purchaseOrderMapper;
 
     /**
      * 采购预置列表
@@ -148,5 +153,18 @@ public class BreedingPurchaseOrderServiceImpl implements BreedingPurchaseOrderSe
             }
         }
         return returnPurchaseOrderPresetDetailsDto;
+    }
+
+    /**
+     * 供应链采购订单列表
+     *
+     * @param criteria
+     * @return
+     * @author @Gao.
+     */
+    @Override
+    public List<ReturnPurchaseOrderManageDto> purchaseOrderManage(PurchaseOrderManageCriteria criteria) {
+
+        return null;
     }
 }

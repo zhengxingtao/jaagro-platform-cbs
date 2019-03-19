@@ -73,4 +73,10 @@ public interface BreedingPlanMapperExt extends BaseMapper<BreedingPlan, Breeding
      * @return
      */
     List<ReturnBreedingParamTemplateDto> listBreedingParamTemplate(BreedingParamTemplateCriteria criteria);
+
+    /**
+     * 查看可能需要从养殖中到待出栏确认的养殖计划
+     * @return
+     */
+    List<BreedingPlan> listToSlaughterConfirm();
 }
