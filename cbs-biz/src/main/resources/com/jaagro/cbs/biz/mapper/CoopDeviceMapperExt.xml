@@ -9,7 +9,7 @@
       enable = false
     where coop_id = #{coopId,jdbcType=INTEGER}
   </update>
-    <select id="getCoopIdBydeviceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="getCoopIdByDeviceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM

@@ -1,6 +1,5 @@
 package com.jaagro.cbs.biz.mapper;
 
-import com.jaagro.cbs.api.model.Coop;
 import com.jaagro.cbs.api.model.CoopDevice;
 import com.jaagro.cbs.api.model.CoopDeviceExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
@@ -31,5 +30,5 @@ public interface CoopDeviceMapperExt extends BaseMapper<CoopDevice, CoopDeviceEx
      * @param deviceId
      * @return
      */
-    Coop getCoopIdBydeviceId(@Param("deviceId") Integer deviceId);
+    CoopDevice getCoopIdByDeviceId(@Param("deviceId") Integer deviceId);
 }

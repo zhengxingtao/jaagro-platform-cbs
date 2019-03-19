@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,23 +51,26 @@ public class CoopDeviceValueService {
         log.info("coopDeviceValue:定时钟执行开始");
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:redisLock:coopDeviceValue", String.valueOf(time),null,null);
+        boolean success = redisLock.lock("Scheduled:redisLock:coopDeviceValue", String.valueOf(time), null, null);
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }
 
-        List<DeviceValue> valueList = new ArrayList<>();
         //从breedingRecord统计
-        List<DeviceValueHistory> historyList = deviceValueHistoryMapper.listHistoryByParams();
+        List<DeviceValue> historyList = deviceValueHistoryMapper.listHistoryByParams();
         if (!CollectionUtils.isEmpty(historyList)) {
-            for (DeviceValueHistory history : historyList) {
+            for (DeviceValue history : historyList) {
                 //直接先删掉表的的原纪录
                 deviceValueMapper.deleteByValue(history);
                 //检测是否需要警报
                 deviceAlarm(history);
+                history.setCreateTime(new Date());
             }
-            //批量插入
-            deviceValueMapper.insertBatch(valueList);
+            if (!CollectionUtils.isEmpty(historyList)) {
+                //批量插入
+                deviceValueMapper.insertBatch(historyList);
+            }
+
 
             redis.del("Scheduled:redisLock:coopDeviceValue");
         }
@@ -79,10 +82,10 @@ public class CoopDeviceValueService {
      *
      * @param history
      */
-    private void deviceAlarm(DeviceValueHistory history) {
-        Coop coop = coopDeviceMapper.getCoopIdBydeviceId(history.getDeviceId());
-        if (coop != null) {
-            Integer planId = batchPlantCoopMapper.getPlanIdByCoopId(coop.getId());
+    private void deviceAlarm(DeviceValue history) {
+        CoopDevice coopDevice = coopDeviceMapper.getCoopIdByDeviceId(history.getDeviceId());
+        if (coopDevice != null) {
+            Integer planId = batchPlantCoopMapper.getPlanIdByCoopId(coopDevice.getCoopId());
             if (planId != null) {
                 BreedingBatchParameterExample parameterExample = new BreedingBatchParameterExample();
                 parameterExample.createCriteria()
@@ -98,12 +101,12 @@ public class CoopDeviceValueService {
                             sb.append(parameter.getLowerLimit()).append("-").append(parameter.getUpperLimit());
                             DeviceAlarmLog alarmLog = new DeviceAlarmLog();
                             alarmLog
-                                    .setCoopId(coop.getId())
+                                    .setCoopId(coopDevice.getCoopId())
                                     .setCurrentValue(currentValue)
                                     .setDayAge(parameter.getDayAge())
                                     .setDeviceId(history.getDeviceId())
                                     .setPlanId(parameter.getPlanId())
-                                    .setPlantId(coop.getPlantId())
+                                    .setPlantId(coopDevice.getPlantId())
                                     .setParamStandardValue(sb.toString());
                             alarmLogMapper.insertSelective(alarmLog);
                         }

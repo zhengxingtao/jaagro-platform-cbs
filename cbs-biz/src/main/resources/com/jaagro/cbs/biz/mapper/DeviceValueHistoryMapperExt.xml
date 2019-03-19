@@ -14,7 +14,7 @@
         ) t limit 1
 
     </select>
-    <select id="listHistoryByParams" resultType="com.jaagro.cbs.api.model.DeviceValueHistory">
+    <select id="listHistoryByParams" resultType="com.jaagro.cbs.api.model.DeviceValue">
         SELECT
         <include refid="Base_Column_List"/>
         FROM

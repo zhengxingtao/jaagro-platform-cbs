@@ -13,8 +13,7 @@
         </selectKey>
         insert into breeding_record_daily (plan_id, batch_no, day_age,
         record_type, breeding_value, unit,
-        notes,create_user_id
-        )
+        notes,create_user_id)
         values
         <foreach collection="dailyList" item="item" separator=",">
             (#{item.planId,jdbcType=INTEGER}, #{item.batchNo,jdbcType=VARCHAR}, #{item.dayAge,jdbcType=INTEGER},
