@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NullPointerException.class)
     public BaseResponse authorizationExceptionHandler(Exception e) {
         log.error(e.getMessage(), e);
-        return BaseResponse.errorInstance(ResponseStatusCode.UNAUTHORIZED_ERROR.getCode(), e.getMessage());
+        return BaseResponse.errorInstance(ResponseStatusCode.QUERY_DATA_ERROR.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(value=MethodArgumentNotValidException.class)
