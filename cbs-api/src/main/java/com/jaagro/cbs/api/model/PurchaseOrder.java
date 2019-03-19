@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/15
+ * @author :gavinwang
+ * @date :2019/03/19
  */
 @Data
 @NoArgsConstructor
@@ -55,7 +55,7 @@ public class PurchaseOrder implements Serializable {
     /**
      * 订单总金额
      */
-    private BigDecimal amount;
+    private BigDecimal totalPrice;
 
     /**
      * 状态(1-已下单 ,2－待送达 ,3-已签收)

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * @author :gaoxin
- * @date :2019/03/15
+ * @author :gavinwang
+ * @date :2019/03/19
  */
 @Data
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class Product implements Serializable {
     private String productName;
 
     /**
-     * 订单货物类型（1: 种苗 2: 饲料 3: 药品）
+     * 订单货物类型（1: 种苗 2: 饲料 3: 药品 4: 疫苗）
      */
     private Integer productType;
 
