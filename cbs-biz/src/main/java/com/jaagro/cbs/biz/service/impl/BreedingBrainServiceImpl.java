@@ -184,7 +184,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
         //饲料采购第一阶段区间配置
         MaterialConfig feedConfig = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.FEED.getCode());
         MaterialConfig sproutConfig = getMaterialConfig(PurchaseOrderPhaseEnum.PHASE_ONE.getCode(), ProductTypeEnum.SPROUT.getCode());
-        BatchContract batchContract =  getBatchContractByPlanId(planId);
+        BatchContract batchContract = getBatchContractByPlanId(planId);
 
         if (null == feedConfig) {
             throw new NullPointerException("请先配置第一阶段日龄区间与需要采购的饲料产品");
@@ -213,7 +213,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             //3. 保存订单明细
             Integer orderId = purchaseOrder.getId();
             List<PurchaseOrderItems> orderItems = this.getPurchaseOrderItems(feedConfig.getProductId(), PhaseOneWeight);
-            this.savePurchaseOrderItems(orderId, orderItems,batchContract);
+            this.savePurchaseOrderItems(orderId, orderItems, batchContract);
             phaseOneOrders.add(purchaseOrder);
         }
         //种苗采购第一阶段区间配置
@@ -229,7 +229,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             //3. 保存订单明细
             Integer orderId = purchaseOrder.getId();
             List<PurchaseOrderItems> orderItems = this.getPurchaseOrderItems(sproutConfig.getProductId(), planChickenQuantity);
-            this.savePurchaseOrderItems(orderId, orderItems,batchContract);
+            this.savePurchaseOrderItems(orderId, orderItems, batchContract);
 
             phaseOneOrders.add(purchaseOrder);
         }
@@ -261,7 +261,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             throw new Exception("第二阶段日龄区间与需要采购的产品配置错误");
         }
         if (currentDayAgeLong == ageDay12) {
-            BatchContract batchContract =  getBatchContractByPlanId(planId);
+            BatchContract batchContract = getBatchContractByPlanId(planId);
             //获取第12日龄存栏数
             BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, ageDay12);
             Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
@@ -287,7 +287,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 //3. 保存订单明细
                 Integer orderId = purchaseOrder.getId();
                 List<PurchaseOrderItems> orderItems = this.getPurchaseOrderItems(feedConfig.getProductId(), PhaseTwo1Weight);
-                this.savePurchaseOrderItems(orderId, orderItems,batchContract);
+                this.savePurchaseOrderItems(orderId, orderItems, batchContract);
 
                 phaseTwoOrders.add(purchaseOrder);
             } else {
@@ -327,7 +327,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             throw new Exception("第二阶段日龄区间与需要采购的产品配置错误");
         }
         if (currentDayAgeLong == ageDay12) {
-            BatchContract batchContract =  getBatchContractByPlanId(planId);
+            BatchContract batchContract = getBatchContractByPlanId(planId);
             //获取第12日龄存栏数
             BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, ageDay12);
             Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
@@ -352,7 +352,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 //3. 保存订单明细
                 Integer orderId = purchaseOrder.getId();
                 List<PurchaseOrderItems> orderItems = this.getPurchaseOrderItems(feedConfigPhaseThree.getProductId(), PhaseTwo2Weight);
-                this.savePurchaseOrderItems(orderId, orderItems,batchContract);
+                this.savePurchaseOrderItems(orderId, orderItems, batchContract);
 
                 phaseTwoOrders.add(purchaseOrder);
             } else {
@@ -397,7 +397,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             throw new Exception("第四阶段日龄区间与需要采购的产品配置错误");
         }
         if (currentDayAgeLong == ageDay26) {
-            BatchContract batchContract =  getBatchContractByPlanId(planId);
+            BatchContract batchContract = getBatchContractByPlanId(planId);
             //获取第12日龄存栏数
             BatchInfoBo ageDay12BatchInfoBo = getDeadAmountByPlanIdAndDayAge(planId, feedConfigPhaseTwo.getDayAgeStart() - 3);
             Integer ageDay12LivingQuantity = ageDay12BatchInfoBo.getCurrentAmount();
@@ -438,7 +438,7 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
                 //3. 保存订单明细
                 Integer orderId = purchaseOrder.getId();
                 List<PurchaseOrderItems> orderItems = this.getPurchaseOrderItems(feedConfigPhaseFour.getProductId(), PhaseFourWeight);
-                this.savePurchaseOrderItems(orderId, orderItems,batchContract);
+                this.savePurchaseOrderItems(orderId, orderItems, batchContract);
 
                 phaseTwoOrders.add(purchaseOrder);
             } else {
@@ -514,57 +514,57 @@ public class BreedingBrainServiceImpl implements BreedingBrainService {
             //鸡苗订单单位
             if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_SPROUT_PREFIX) + "-01";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(plan.getPlanTime(), -2));
-                purchaseOrder.setPlanDeliveryTime(plan.getPlanTime());
-                purchaseOrder.setPurchaseName("鸡苗采购 - 全部鸡苗配送");
-                purchaseOrder.setNotes("鸡苗采购 - 全部鸡苗配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(plan.getPlanTime(), -2))
+                        .setPlanDeliveryTime(plan.getPlanTime())
+                        .setPurchaseName("鸡苗采购 - 全部鸡苗配送")
+                        .setNotes("鸡苗采购 - 全部鸡苗配送");
             }
         } else if (productType == ProductTypeEnum.FEED.getCode()) {
             if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-01";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
-                purchaseOrder.setPlanDeliveryTime(calculateDate);
-                purchaseOrder.setPurchaseName("饲料采购 - 第一次饲料510配送");
-                purchaseOrder.setNotes("饲料采购 - 第一次饲料510配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, -2))
+                        .setPlanDeliveryTime(calculateDate)
+                        .setPurchaseName("饲料采购 - 第一次饲料510配送")
+                        .setNotes("饲料采购 - 第一次饲料510配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_TWO.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-02";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
-                purchaseOrder.setPurchaseName("饲料采购 - 第二次饲料510配送");
-                purchaseOrder.setNotes("饲料采购 - 第二次饲料510配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, 1))
+                        .setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3))
+                        .setPurchaseName("饲料采购 - 第二次饲料510配送")
+                        .setNotes("饲料采购 - 第二次饲料510配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_THREE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-03";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
-                purchaseOrder.setPurchaseName("饲料采购 - 第二次饲料511配送");
-                purchaseOrder.setNotes("饲料采购 - 第二次饲料511配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, 1))
+                        .setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3))
+                        .setPurchaseName("饲料采购 - 第二次饲料511配送")
+                        .setNotes("饲料采购 - 第二次饲料511配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_FOUR.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_FOOD_PREFIX) + "-04";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, 1));
-                purchaseOrder.setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3));
-                purchaseOrder.setPurchaseName("饲料采购 - 第三次饲料511配送");
-                purchaseOrder.setNotes("饲料采购 - 第三次饲料511配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, 1))
+                        .setPlanDeliveryTime(DateUtils.addDays(calculateDate, 3))
+                        .setPurchaseName("饲料采购 - 第三次饲料511配送")
+                        .setNotes("饲料采购 - 第三次饲料511配送");
             }
         } else if (productType == ProductTypeEnum.DRUG.getCode()) {
             if (phase == PurchaseOrderPhaseEnum.PHASE_ONE.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_DRUG_PREFIX) + "-01";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
-                purchaseOrder.setPlanDeliveryTime(calculateDate);
-                purchaseOrder.setPurchaseName("药品采购 - 第一次药品配送");
-                purchaseOrder.setNotes("药品采购 - 第一次药品配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, -2))
+                        .setPlanDeliveryTime(calculateDate)
+                        .setPurchaseName("药品采购 - 第一次药品配送")
+                        .setNotes("药品采购 - 第一次药品配送");
             } else if (phase == PurchaseOrderPhaseEnum.PHASE_TWO.getCode()) {
                 String purchaseNo = sequenceCodeUtils.genSeqCode(PO_DRUG_PREFIX) + "-02";
-                purchaseOrder.setPurchaseNo(purchaseNo);
-                purchaseOrder.setPlanExecuteTime(DateUtils.addDays(calculateDate, -2));
-                purchaseOrder.setPlanDeliveryTime(calculateDate);
-                purchaseOrder.setPurchaseName("药品采购 - 第二次药品配送");
-                purchaseOrder.setNotes("药品采购 - 第二次药品配送");
+                purchaseOrder.setPurchaseNo(purchaseNo)
+                        .setPlanExecuteTime(DateUtils.addDays(calculateDate, -2))
+                        .setPlanDeliveryTime(calculateDate)
+                        .setPurchaseName("药品采购 - 第二次药品配送")
+                        .setNotes("药品采购 - 第二次药品配送");
 
             }
         }

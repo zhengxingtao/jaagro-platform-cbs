@@ -7,7 +7,7 @@
     <select id="listByCriteria" parameterType="com.jaagro.cbs.api.dto.product.ListProductCriteria" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM product
-        WHERE 1 = 1
+        WHERE enable = 1
         <if test="productName != null and productName != ''">
             <![CDATA[and (product_name like concat('%',#{productName},'%') )]]>
         </if>
