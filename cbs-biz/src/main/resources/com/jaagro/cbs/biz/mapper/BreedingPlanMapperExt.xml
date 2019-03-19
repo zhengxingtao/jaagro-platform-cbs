@@ -94,7 +94,7 @@
         inner join breeding_standard_parameter bsp on (bbp.param_id=bsp.id)
         inner join breeding_standard bs on (bsp.standard_id=bs.id )
         <where>
-            enable=1
+            bp.enable=1
             <if test="customerIds!=null">
                 and bp.customer_id IN
                 <foreach collection="customerIds" open="(" separator="," close=")" item="customerId">
