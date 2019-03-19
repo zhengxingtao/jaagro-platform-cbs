@@ -82,7 +82,7 @@
             r.plan_id,
             r.batch_no,
             r.day_age,
-            SUM( r.breeding_value ) AS breeding_value,
+            CASE WHEN r.record_type = 1 THEN SUM( r.breeding_value ) END AS breeding_value,
             r.unit,
             r.ENABLE,
             p.technician_id AS technician_id,
