@@ -9,7 +9,7 @@
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
     <result column="purchase_no" property="purchaseNo" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="INTEGER" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
     <result column="purchase_order_status" property="purchaseOrderStatus" jdbcType="INTEGER" />
     <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
     <result column="plan_delivery_time" property="planDeliveryTime" jdbcType="DATE" />
@@ -55,7 +55,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, customer_id, plan_id, signer_id, batch_no, purchase_no, product_type, amount, 
+    id, customer_id, plan_id, signer_id, batch_no, purchase_no, product_type, total_price, 
     purchase_order_status, supplier_id, plan_delivery_time, delivery_time, signer_time, 
     notes, enable, create_time, create_user_id, modify_time, modify_user_id, order_phase, 
     plan_execute_time, purchase_name
@@ -99,7 +99,7 @@
     </selectKey>
     insert into purchase_order (customer_id, plan_id, signer_id, 
       batch_no, purchase_no, product_type, 
-      amount, purchase_order_status, supplier_id, 
+      total_price, purchase_order_status, supplier_id, 
       plan_delivery_time, delivery_time, signer_time, 
       notes, enable, create_time, 
       create_user_id, modify_time, modify_user_id, 
@@ -107,7 +107,7 @@
       )
     values (#{customerId,jdbcType=INTEGER}, #{planId,jdbcType=INTEGER}, #{signerId,jdbcType=INTEGER}, 
       #{batchNo,jdbcType=VARCHAR}, #{purchaseNo,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, 
-      #{amount,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{purchaseOrderStatus,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, 
       #{planDeliveryTime,jdbcType=DATE}, #{deliveryTime,jdbcType=TIMESTAMP}, #{signerTime,jdbcType=TIMESTAMP}, 
       #{notes,jdbcType=VARCHAR}, #{enable,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, 
@@ -138,8 +138,8 @@
       <if test="productType != null" >
         product_type,
       </if>
-      <if test="amount != null" >
-        amount,
+      <if test="totalPrice != null" >
+        total_price,
       </if>
       <if test="purchaseOrderStatus != null" >
         purchase_order_status,
@@ -203,8 +203,8 @@
       <if test="productType != null" >
         #{productType,jdbcType=INTEGER},
       </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=DECIMAL},
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
       </if>
       <if test="purchaseOrderStatus != null" >
         #{purchaseOrderStatus,jdbcType=INTEGER},
@@ -277,8 +277,8 @@
       <if test="productType != null" >
         product_type = #{productType,jdbcType=INTEGER},
       </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
       </if>
       <if test="purchaseOrderStatus != null" >
         purchase_order_status = #{purchaseOrderStatus,jdbcType=INTEGER},
@@ -333,7 +333,7 @@
       batch_no = #{batchNo,jdbcType=VARCHAR},
       purchase_no = #{purchaseNo,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=INTEGER},
-      amount = #{amount,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
       purchase_order_status = #{purchaseOrderStatus,jdbcType=INTEGER},
       supplier_id = #{supplierId,jdbcType=INTEGER},
       plan_delivery_time = #{planDeliveryTime,jdbcType=DATE},

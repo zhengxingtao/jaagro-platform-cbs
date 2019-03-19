@@ -1,22 +1,23 @@
-package com.jaagro.cbs.api.model;
+package com.jaagro.cbs.api.dto.supplychain;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
- * @author :gavinwang
- * @date :2019/03/19
- */
+ * @description: 供应链采购订单列表
+ * @author: @Gao.
+ * @create: 2019-03-19 10:39
+ **/
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors(chain = true)
-public class PurchaseOrder implements Serializable {
+public class ReturnPurchaseOrderManageDto {
     /**
      * 养殖采购订单表id
      */
@@ -55,7 +56,7 @@ public class PurchaseOrder implements Serializable {
     /**
      * 订单总金额
      */
-    private BigDecimal totalPrice;
+    private BigDecimal amount;
 
     /**
      * 状态(1-已下单 ,2－待送达 ,3-已签收)
@@ -126,6 +127,4 @@ public class PurchaseOrder implements Serializable {
      * 采购名称
      */
     private String purchaseName;
-
-    private static final long serialVersionUID = 1L;
 }

@@ -8,7 +8,6 @@ import com.jaagro.cbs.biz.utils.DateUtil;
 import com.jaagro.cbs.biz.utils.JsonUtils;
 import com.jaagro.cbs.biz.utils.RedisLock;
 import com.jaagro.cbs.biz.utils.RedisUtil;
-import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -121,7 +120,7 @@ public class BreedingBrainService {
             breedingPlanList = JsonUtils.jsonToList(breedingPlanListJson, BreedingPlan.class);
         }
 
-        redis.del("Scheduled:redisLock:"+method);
+        redisLock.unLock("Scheduled:redisLock:"+method);
         return breedingPlanList;
     }
 
