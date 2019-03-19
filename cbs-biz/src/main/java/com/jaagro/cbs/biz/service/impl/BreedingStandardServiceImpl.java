@@ -245,6 +245,8 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
             result.addAll(initParameterTypeDtoSet);
         }
         List<ParameterTypeDto> parameterTypeDtoList = new ArrayList<>(result);
+        // 排序
+        Collections.sort(parameterTypeDtoList,Comparator.comparingInt(ParameterTypeDto ::getDisplayOrder));
         return parameterTypeDtoList;
     }
 
