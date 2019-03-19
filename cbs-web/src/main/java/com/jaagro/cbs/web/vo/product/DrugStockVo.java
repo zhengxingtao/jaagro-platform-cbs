@@ -40,6 +40,11 @@ public class DrugStockVo implements Serializable {
     private String imageUrl;
 
     /**
+     * 库存数量
+     */
+    private BigDecimal stockQuantity;
+
+    /**
      * SKU编码
      */
     private String skuNo;
@@ -58,11 +63,6 @@ public class DrugStockVo implements Serializable {
      * 规格
      */
     private String specification;
-
-    /**
-     * 商品备注
-     */
-    private String notes;
 
     /**
      * 创建时间

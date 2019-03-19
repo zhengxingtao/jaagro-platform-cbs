@@ -4,9 +4,12 @@ import com.github.pagehelper.PageInfo;
 import com.jaagro.cbs.api.dto.product.CreateProductDto;
 import com.jaagro.cbs.api.dto.product.ListDrugCriteria;
 import com.jaagro.cbs.api.dto.product.ListProductCriteria;
+import com.jaagro.cbs.api.enums.CapacityUnitEnum;
+import com.jaagro.cbs.api.enums.PackageUnitEnum;
 import com.jaagro.cbs.api.enums.ProductTypeEnum;
 import com.jaagro.cbs.api.model.Product;
 import com.jaagro.cbs.api.service.ProductService;
+import com.jaagro.cbs.biz.service.OssSignUrlClientService;
 import com.jaagro.cbs.web.vo.product.DrugStockVo;
 import com.jaagro.utils.BaseResponse;
 import com.jaagro.utils.ResponseStatusCode;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +41,12 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OssSignUrlClientService ossSignUrlClientService;
 
     @ApiOperation("获取产品列表")
     @PostMapping("/listProductByCriteria")
-    public BaseResponse listProductByCriteria(@RequestBody @Validated ListProductCriteria criteria){
+    public BaseResponse listProductByCriteria(@RequestBody @Validated ListProductCriteria criteria) {
         return BaseResponse.successInstance(productService.listByCriteria(criteria));
     }
 
@@ -77,16 +83,21 @@ public class ProductController {
                     sb.append(product.getProductCapacity());
                 }
                 if (product.getCapacityUnit() != null) {
-                    sb.append(product.getCapacityUnit());
+                    sb.append(CapacityUnitEnum.getDescByCode(product.getCapacityUnit()));
                 }
                 if (product.getPackageUnit() != null) {
-                    sb.append(product.getPackageUnit());
+                    sb.append("/").append(PackageUnitEnum.getDescByCode(product.getPackageUnit()));
                 }
                 drugStockVo.setSpecification(sb.toString());
+                String[] strArray = {product.getImageUrl()};
+                List<URL> urls = ossSignUrlClientService.listSignedUrl(strArray);
+                if (!CollectionUtils.isEmpty(urls)) {
+                    drugStockVo.setImageUrl(urls.get(0).toString());
+                }
                 drugStockVos.add(drugStockVo);
             }
         }
         pageInfo.setList(drugStockVos);
-        return BaseResponse.successInstance(ResponseStatusCode.OPERATION_SUCCESS);
+        return BaseResponse.successInstance(pageInfo);
     }
 }
