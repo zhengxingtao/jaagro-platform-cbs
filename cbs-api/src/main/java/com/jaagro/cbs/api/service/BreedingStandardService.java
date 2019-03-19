@@ -113,4 +113,9 @@ public interface BreedingStandardService {
      */
     void configurationDrugs(ValidList<BreedingStandardDrugListDto> drugList);
 
+    /**
+     * 逻辑删除养殖参数模板
+     * @param standardId
+     */
+    void delBreedingStandard(Integer standardId);
 }
