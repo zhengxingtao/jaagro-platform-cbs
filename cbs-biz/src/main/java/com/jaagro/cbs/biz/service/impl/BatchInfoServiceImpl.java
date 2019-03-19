@@ -52,7 +52,7 @@ public class BatchInfoServiceImpl implements BatchInfoService {
     public void batchInfo() {
         //加锁
         long time = System.currentTimeMillis() + 10 * 1000;
-        boolean success = redisLock.lock("Scheduled:redisLock:batchInfo", String.valueOf(time));
+        boolean success = redisLock.lock("Scheduled:redisLock:batchInfo", String.valueOf(time),null,null);
         if (!success) {
             throw new RuntimeException("请求正在处理中");
         }
