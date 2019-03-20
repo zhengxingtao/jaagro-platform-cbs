@@ -157,7 +157,7 @@
             </trim>
         </trim>
         where id in
-        <foreach collection="coopList" separator="," item="i" index="index" close=")" open="(">
+        <foreach collection="parameterList" separator="," item="i" index="index" close=")" open="(">
             #{i.id}
         </foreach>
     </update>

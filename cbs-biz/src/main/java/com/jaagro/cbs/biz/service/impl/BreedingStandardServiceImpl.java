@@ -409,6 +409,20 @@ public class BreedingStandardServiceImpl implements BreedingStandardService {
         }
     }
 
+    /**
+     * 逻辑删除养殖参数模板
+     * @param standardId
+     */
+    @Override
+    public void delBreedingStandard(Integer standardId){
+        BreedingStandard breedingStandard = breedingStandardMapper.selectByPrimaryKey(standardId);
+        if (breedingStandard == null){
+            throw new RuntimeException("养殖模板id="+standardId+"不存在");
+        }
+        breedingStandardMapper.deleteByPrimaryKey(standardId);
+        standardParameterMapper.deleteByStandardId(standardId);
+    }
+
     private BreedingStandardDrug generateStandardDrug(BreedingStandardDrugListDto dto,Integer currentUserId){
         BreedingStandardDrug drug = new BreedingStandardDrug();
         drug.setBreedingStandardId(dto.getStandardId())
