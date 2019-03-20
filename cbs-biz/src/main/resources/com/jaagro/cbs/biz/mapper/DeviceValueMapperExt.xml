@@ -13,12 +13,12 @@
         </selectKey>
         insert into device_value (device_id, value_type, current_value)
         values
-        <foreach collection="valueList" item="item">
-            (#{item.deviceId,jdbcType=INTEGER}, #{item.valueType,jdbcType=INTEGER},
-            #{item.currentValue,jdbcType=DECIMAL})
+        <foreach collection="valueList" item="item" separator=",">
+            (#{item.deviceId,jdbcType=INTEGER},
+            #{item.valueType,jdbcType=INTEGER},#{item.currentValue,jdbcType=DECIMAL})
         </foreach>
     </insert>
-    <delete id="deleteByValue" parameterType="java.lang.Integer">
+    <delete id="deleteByValue" parameterType="com.jaagro.cbs.api.model.DeviceValue">
         delete from device_value
         where device_id = #{deviceId,jdbcType=INTEGER}
         and value_type = #{valueType,jdbcType=INTEGER}
