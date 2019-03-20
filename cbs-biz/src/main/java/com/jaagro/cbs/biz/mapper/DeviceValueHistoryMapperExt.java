@@ -1,12 +1,12 @@
 package com.jaagro.cbs.biz.mapper;
 
-import javax.annotation.Resource;
-
+import com.jaagro.cbs.api.model.DeviceValue;
 import com.jaagro.cbs.api.model.DeviceValueHistory;
 import com.jaagro.cbs.api.model.DeviceValueHistoryExample;
 import com.jaagro.cbs.biz.mapper.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -33,5 +33,5 @@ public interface DeviceValueHistoryMapperExt extends BaseMapper<DeviceValueHisto
      *
      * @return
      */
-    List<DeviceValueHistory> listHistoryByParams();
+    List<DeviceValue> listHistoryByParams();
 }
