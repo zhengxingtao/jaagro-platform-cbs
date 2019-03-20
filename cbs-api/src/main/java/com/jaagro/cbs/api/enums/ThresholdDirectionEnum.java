@@ -9,8 +9,8 @@ public enum ThresholdDirectionEnum {
     /**
      * 临界值方向(1->=,2<=)
      */
-    ML(1, "", "毫升"),
-    G(2, "g", "克");
+    MORE_THAN(1, "MORE_THAN", "大于等于"),
+    LESS_THAN(2, "LESS_THAN", "小于等于");
     private int code;
     private String type;
     private String desc;
